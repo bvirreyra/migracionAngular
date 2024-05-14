@@ -1,0 +1,518 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="container-fluid">
+  <div class="row" name="pnlListaCites" id="pnlListaCites">
+    <div
+      class="content content-success"
+      name="pnlListaCites"
+      id="pnlListaCites"
+    >
+      <div class="content-header with-border">
+        <h3 class="content-title text-green">
+          <strong>CITES - UPRE</strong>
+        </h3>
+      </div>
+      <div class="content-body">
+        <div class="rowlocal">
+          <div
+            class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10"
+          >
+            <div class="panel panel-info">
+              <div class="panel-heading text-center">Tipo de Cites</div>
+              <div class="panel-body">
+                <div class="row">
+                  <table
+                    class="table table-primary table-striped table-condensed table-hover"
+                  >
+                    <thead>
+                      <tr>
+                        <th class="text-center">Nro.</th>
+                        <th>Unidad/Tipo</th>
+                        <th>Descripción</th>
+                        <th>Abreviatura</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Seleccione...</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let row_registros of dtsCites; let i = index">
+                        <td class="text-center">{{ i + 1 }}</td>
+                        <td>
+                          {{ row_registros._nombre }} /
+                          {{ row_registros._sigla }}
+                        </td>
+                        <td>{{ row_registros._descripcion }}</td>
+                        <td>{{ row_registros._abreviatura }}</td>
+                        <td
+                          class="text-center"
+                          *ngIf="row_registros._id_estado == 1"
+                        >
+                          Habilitado
+                        </td>
+                        <td
+                          class="text-center"
+                          *ngIf="row_registros._id_estado != 1"
+                        >
+                          Inhabilitado
+                        </td>
+                        <td class="text-center">
+                          <button
+                            *ngIf="row_registros._id_estado == 1"
+                            class="btn btn-info btn-circle-sm"
+                            title="Ver Cites"
+                            type="button"
+                            (click)="pre_lista_especifica(row_registros)"
+                          >
+                            <i class="fa fa-share" aria-hidden="true"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" name="pnlListaCiteEspecifico" id="pnlListaCiteEspecifico">
+    <div
+      class="content content-success"
+      name="pnlListaCiteEspecifico"
+      id="pnlListaCiteEspecifico"
+    >
+      <div class="content-header with-border">
+        <h3 class="content-title text-green">
+          <strong>CITES: {{ cite.descripcion }}</strong>
+        </h3>
+        <div class="pull-right">
+          <button
+            *ngIf="(cite.tipo == 11 && s_idrol == 70) || cite.tipo != 11"
+            type="button"
+            class="btn btn-success"
+            (click)="pre_estado_cite('INSERTAR', [])"
+          >
+            Nuevo Registro
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger btn-circle-sm"
+            style="margin-left: 2rem;"
+            (click)="InicioCites()"
+          >
+            <span class="glyphicon glyphicon-arrow-left"></span>
+          </button>
+        </div>
+      </div>
+      <div class="content-body">
+        <div class="rowlocal">
+          <div class="form-group col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <label class="control-label col-sm-2" for="busqueda"
+              >Gestión:</label
+            >
+            <div class="col-sm-4">
+              <input
+                class="form-control"
+                type="number"
+                name="gestion_busqueda"
+                id="gestion_busqueda"
+                [(ngModel)]="gestion_busqueda"
+                (change)="listaEspecificaCite()"
+              />
+            </div>
+            <!-- <div class="col-sm-4">
+              <button
+                class="btn btn-info"
+                type="button"
+                (click)="listaEspecificaCite()"
+                title="Filtrar CITE por gestión"
+              >
+                <i class="fa fa-search" aria-hidden="true"></i> Buscar
+              </button>
+            </div> -->
+          </div>
+          <div class="col-sm-12 col-lg-8">
+            <button
+              class="btn btn-info pull-right"
+              (click)="listaEspecificaCite()"
+              title="Refrescar Listado"
+            >
+              <i class="fa fa-refresh" aria-hidden="true"></i> Recargar
+            </button>
+            <button
+              *ngIf="cite.tipo == 11"
+              class="btn btn-info pull-right"
+              (click)="reportesCitesAuditoria('02')"
+              title="Reporte Alertas"
+              style="margin-right: 2rem;"
+            >
+              <i class="fa fa-print" aria-hidden="true"></i> Reporte Alertas
+            </button>
+            <button
+              *ngIf="cite.tipo == 11"
+              class="btn btn-info pull-right"
+              (click)="reportesCitesAuditoria('01')"
+              title="Reporte General"
+              style="margin-right: 2rem;"
+            >
+              <i class="fa fa-file-o" aria-hidden="true"></i> Reporte General
+            </button>
+            <div *ngIf="cite.tipo == 11">
+              <input
+                class="form-control pull-right"
+                style="display: inline-block;width: 150px; margin-right: 2rem;"
+                id="desde"
+                type="date"
+                [(ngModel)]="f2"
+                min="{{f1}}"
+              />
+              <label class="control-label pull-right" style="margin: 0.8rem 1rem 0 0;" for="desde">Fecha Fin: </label>
+              <input
+                class="form-control pull-right"
+                style="display: inline-block;width: 150px; margin-right: 2rem;"
+                id="desde"
+                type="date"
+                [(ngModel)]="f1"
+                max="{{f2}}"
+              />
+              <label class="control-label pull-right" style="margin: 0.8rem 1rem 0 0;" for="desde">Fecha Inicio: </label>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="panel panel-info">
+              <div class="panel-body">
+                <div class="row" *ngIf="cite?.tipo != 11">
+                  <table
+                    class="table table-primary table-striped table-condensed table-hover dt-CitesEspecifico"
+                  >
+                    <thead>
+                      <tr>
+                        <th width="10%" class="text-center">Nro. Cite</th>
+                        <th width="10%">Cite</th>
+                        <th width="40%">Asunto/Referencia</th>
+                        <th width="10%">Fecha de Registro</th>
+                        <th width="10%" class="text-center">Estado</th>
+                        <th width="20%" class="text-center">Opciones</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      <tr
+                        *ngFor="
+                          let row_registros of dtsEspecificoCites;
+                          let i = index
+                        "
+                      >
+                        <td width="10%" class="text-center">
+                          {{ row_registros._numero_cite }}
+                        </td>
+                        <td width="10%">{{ cite.sigla }}</td>
+                        <td width="40%">
+                          {{ row_registros._asunto_referencia }}
+                        </td>
+                        <td width="10%">
+                          {{
+                            row_registros._fecha_registro | date : "dd/MM/yyyy"
+                          }}
+                        </td>
+                        <td width="10%" class="text-center">
+                          {{ row_registros._estado }}
+                        </td>
+                        <td width="20%" class="text-center">
+                          <div
+                            class="pull-right"
+                            *ngIf="row_registros._id_estado == 3"
+                          >
+                            <button
+                              class="btn btn-warning btn-circle-sm"
+                              type="button"
+                              (click)="pre_estado_cite('EDITAR', row_registros)"
+                              title="Editar CITE"
+                            >
+                              <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                            <button
+                              class="btn btn-danger btn-circle-sm"
+                              type="button"
+                              (click)="pre_estado_cite('ANULAR', row_registros)"
+                              title="Anular CITE"
+                            >
+                              <i class="fa fa-times-circle"></i>
+                            </button>
+                            <button
+                              class="btn btn-success btn-circle-sm"
+                              type="button"
+                              (click)="
+                                pre_estado_cite('CONFIRMAR', row_registros)
+                              "
+                              title="Confirmar CITE"
+                            >
+                              <i class="fa fa-check-circle-o"></i>
+                            </button>
+                          </div>
+                          <!-- <div class="pull-right" *ngIf='row_registros._id_estado != 3'>
+                                                    <button class="btn btn-primary btn-circle-sm" type="button" (click)="adjuntarArchivo()">
+                                                        <i class="fa fa-paperclip"></i>
+                                                    </button>
+                                                </div> -->
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div *ngIf="cite?.tipo == 11">
+                  <table
+                    class="table table-primary table-striped table-condensed table-hover dt-auditoria"
+                  >
+                    <thead>    
+                      <tr>
+                        <th width="5%" class="text-center">ID</th>
+                        <th width="10%">Cite</th>
+                        <th width="10%">Cite Padre</th>
+                        <th width="15%">Asunto/Referencia</th>
+                        <th width="10%">Informe</th>
+                        <th width="7%">Fecha CITE</th>
+                        <th width="7%">Fecha Respuesta</th>
+                        <th width="5%" class="text-center">Estado</th>
+                        <th width="16%">Proyectos</th>
+                        <th width="15%" class="text-center">Opciones</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      <tr *ngFor="let row of dtsCitesAuditoria;let i = index"
+                      [ngClass]="{'bg-warning': row.gestion != gestion_busqueda,'bg-success': row.estadocp == 'FINAL'}">
+                        <td width="5%" class="text-center">{{row.id_cite}}</td>
+                        <td width="10%">{{row.codigo}}</td>
+                        <td width="10%">{{row.codigo_padre}}</td>
+                        <td width="15%">{{row.referencia}}</td>
+                        <td width="10%">{{row.informe}}</td>
+                        <td width="7%">{{row.fecha_registro | date : "dd/MM/yyyy"}}</td>
+                        <td width="7%">{{row.fecha_respuesta | date : "dd/MM/yyyy"}}</td>
+                        <td width="5%" class="text-center">{{ row.estado_auditado }}</td>
+                        <!-- <td width="10%">
+                            <div *ngFor="let r of row.proyecto;let i = index">
+                                {{i+1}}. {{r.nombreproyecto}} - {{r.id_sgp}}
+                            </div>
+                        </td> -->
+                        <td width="16%">{{row.id_sgp}}. {{row.nombreproyecto}}</td>
+                        <td width="15%">
+                          <div class="botonera">
+                            <button class="btn btn-info" (click)="pre_estado_cite('VISTA', row)" title="Ver Auditoria">
+                              <i class="fa fa-eye"></i>
+                            </button>
+                            <button *ngIf="row.estadocp != 'FINAL' && s_idrol == 70" class="btn btn-warning"(click)="editarCitesAuditoria(row.id_cite,row.codigo_padre)" title="Editar CITE">
+                              <i class="fa fa-edit"></i>
+                            </button>
+                            <button *ngIf="row.estadocp == 'INICIAL' && s_idrol == 70 && row.estado_auditado!='INFORME DE AUDITORIA CUMPLIDO SEGÚN CONVENIO'" class="btn btn-success"(click)="pre_estado_cite('REITERAR', row.codigo,row.id_proyecto)" title="Reiterativa" >
+                              <i class="fa fa-retweet"></i>
+                            </button>
+                            <button *ngIf="row.estadocp != 'FINAL' && s_idrol == 70"  class="btn"(click)="pre_estado_cite('RESPUESTA', row)" title="Registrar Respuesta"
+                            [ngClass]="{'btn-info': row.detalle_respuesta,'btn-grey': !row.detalle_respuesta}">
+                              <i class="fa fa-save"></i>
+                            </button>
+                            <button *ngIf="row.estadocp == 'INICIAL' && s_idrol == 70 && row.estado_auditado!='INFORME DE AUDITORIA CUMPLIDO SEGÚN CONVENIO'"  class="btn btn-danger"(click)="pre_estado_cite('ELIMINAR', row)" title="Eliminar Proyecto de CITE" >
+                              <i class="fa fa-trash"></i>
+                            </button>
+                          </div>
+                          <div style="width: 100%; margin-top: 1rem;">
+                            <button *ngIf="row.estadocp == 'INICIAL' && s_idrol == 70 && row.estado_auditado!='INFORME DE AUDITORIA CUMPLIDO SEGÚN CONVENIO'"  class="btn btn-primary btn btn-block"(click)="pre_estado_cite('FINALIZAR', row)" title="Finalizar Proyecto de CITE" >
+                              <i class="fa fa-stop-circle"></i>
+                               FINALIZAR
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="modal fade"
+    id="pnl_AnulaConfirmaCite"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="pnl_AnulaConfirmaCite"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pnl_AnulaConfirmaCite">
+            <b>{{ opcionCite }} CITE # {{ detalleCite.numero_cite }}</b>
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="busqueda"
+                >Fecha Registro:</label
+              >
+              <div class="col-sm-8">
+                <input
+                  class="form-control"
+                  type="date"
+                  name="FechaInicio"
+                  id="FechaInicio"
+                  [(ngModel)]="detalleCite.fecha_registro"
+                  disabled
+                />
+              </div>
+            </div>
+            <div
+              *ngIf="opcionCite == 'EDITAR' || opcionCite == 'INSERTAR'"
+              class="form-group"
+            >
+              <label class="control-label col-sm-3" for="busqueda"
+                >Asunto o Referencia:</label
+              >
+              <div class="col-sm-8">
+                <textarea
+                  class="form-control"
+                  id="asunto_referencia"
+                  maxlength="250"
+                  rows="6"
+                  name="asunto_referencia"
+                  [(ngModel)]="detalleCite.asunto_referencia"
+                ></textarea>
+              </div>
+            </div>
+            <div
+              *ngIf="opcionCite != 'EDITAR' && opcionCite != 'INSERTAR'"
+              class="form-group"
+            >
+              <label class="control-label col-sm-3" for="busqueda"
+                >Asunto o Referencia:</label
+              >
+              <div class="col-sm-8">
+                <textarea
+                  class="form-control"
+                  id="asunto_referencia"
+                  maxlength="250"
+                  rows="4"
+                  name="asunto_referencia"
+                  [(ngModel)]="detalleCite.asunto_referencia"
+                  disabled
+                ></textarea>
+              </div>
+            </div>
+            <div *ngIf="opcionCite == 'ANULAR'" class="form-group">
+              <label class="control-label col-sm-3" for="busqueda"
+                >Descripción de Anulación:</label
+              >
+              <div class="col-sm-8">
+                <textarea
+                  class="form-control"
+                  id="m_nombreproyecto"
+                  maxlength="200"
+                  rows="5"
+                  name="m_nombreproyecto"
+                  [(ngModel)]="detalleCite.descripcion"
+                ></textarea>
+              </div>
+            </div>
+            <div *ngIf="opcionCite == 'CONFIRMAR'" class="form-group">
+              <label class="control-label col-sm-3" for="busqueda"
+                >Descripción de Confirmación:</label
+              >
+              <div class="col-sm-8">
+                <textarea
+                  class="form-control"
+                  id="m_nombreproyecto"
+                  maxlength="200"
+                  rows="5"
+                  name="m_nombreproyecto"
+                  [(ngModel)]="detalleCite.descripcion"
+                ></textarea>
+              </div>
+            </div>
+            <div *ngIf="opcionCite != 'INSERTAR'" class="form-group">
+              <label class="control-label col-sm-3" for="busqueda"
+                >Estado Actual:</label
+              >
+              <div class="col-sm-8">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="FechaFin"
+                  id="FechaFin"
+                  [(ngModel)]="detalleCite.estado"
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Cerrar
+          </button>
+          <button
+            *ngIf="opcionCite != 'INSERTAR'"
+            type="button"
+            class="btn btn-primary"
+            (click)="aprobar_operacion()"
+          >
+            {{ opcionCite }} REGISTRO
+          </button>
+          <button
+            *ngIf="opcionCite == 'INSERTAR'"
+            type="button"
+            class="btn btn-primary"
+            (click)="pre_registroCite()"
+          >
+            GUARDAR REGISTRO
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--modal auditoria-->
+<div class="modal fade" name="modalAuditoria" id="modalAuditoria" tabindex="-1" role="dialog" aria-hidden="true" (blur)="listaEspecificaCite()">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <app-correspondencia-auditoria *ngIf="mostrarAuditoria" [elIdCite]="elIdCiteAuditoria" [abreviatura]="laAbreviatura" [elCodigoPadre]="elCodigoPadre"
+        [elCiteProyecto]="elCiteProyecto" (messageEvent)="recibeMensaje($event)" [elFidProyecto]="elFidProyecto" [laGestion]="gestion_busqueda"></app-correspondencia-auditoria>
+    </div>
+</div>

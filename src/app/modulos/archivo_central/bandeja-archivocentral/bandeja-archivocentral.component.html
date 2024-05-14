@@ -1,0 +1,212 @@
+<div *ngIf="pnl_bandejaprincipal == true">
+  <div
+    class="container-fluid bg-trasparent my-4 p-3"
+    style="position: relative"
+  >
+    <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
+      <div class="col-lg-4">
+        <div class="card h-100 shadow-sm" style="border-radius: 0 0 5px 5px;">
+          <div class="bg-primary text-white text-center" style="font-weight: 700; font-size: x-large;">Financiera</div>
+          <img
+            src="../../../../assets/imagenes/archivo_central/Financiera.png"
+            class="card-img-top"
+            alt="..."
+          />
+          <div class="card-body" style="padding: 10px;">
+            <!-- <div class="clearfix mb-3">
+              <span class="float-start badge rounded-pill bg-primary"
+                >ASUS Rog</span
+              >
+              <span class="float-end price-hp">12354.00€</span>
+            </div> -->
+            <h5 class="card-title">
+              Registro de documentos sobre contratos, supervisiones, fiscalizaciones, etc.
+            </h5>
+            <div class="text-center my-4">
+              <button class="btn btn-warning btn-block" style="border-radius: 0 0 5px 5px; font-size: large;" (click)="paneles('ARCHIVO FINANCIERO')">
+                Ingresar...
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="bg-primary text-white text-center" style="font-weight: 700; font-size: x-large;">Técnica</div>
+          <img
+            src="../../../../assets/imagenes/archivo_central/Tecnica.png"
+            class="card-img-top"
+            alt="..."
+          />
+          <div class="card-body" style="padding: 10px;">
+            <!-- <div class="clearfix mb-3">
+              <span class="float-start badge rounded-pill bg-primary"
+                >ASUS Rog</span
+              >
+              <span class="float-end price-hp">12354.00€</span>
+            </div> -->
+            <h5 class="card-title">
+              Registro, agrupación y ubicación para el archivo de la documentación de cada Proyecto.
+            </h5>
+            <div class="text-center my-4">
+              <button
+                class="btn btn-warning btn-block"
+                type="button"
+                (click)="paneles('ARCHIVO TECNICO')"
+                style="border-radius: 0 0 5px 5px; font-size: large;"
+              >
+                Ingresar...
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="bg-primary text-white text-center" style="font-weight: 700; font-size: x-large;">Jurídica</div>
+          <img
+            src="../../../../assets/imagenes/archivo_central/Legal.png"
+            class="card-img-top"
+            alt="..."
+          />
+          <div class="card-body" style="padding: 10px;">
+            <!-- <div class="clearfix mb-3">
+              <span class="float-start badge rounded-pill bg-primary"
+                >ASUS Rog</span
+              >
+              <span class="float-end price-hp">12354.00€</span>
+            </div> -->
+            <h5 class="card-title">
+              Registro de documentos y ubicación de convenios, adendas, etc.
+            </h5>
+            <div class="text-center my-4">
+              <button class="btn btn-warning btn-block" type="button" (click)="paneles('ARCHIVO JURIDICO')"
+                style="border-radius: 0 0 5px 5px; font-size: large;">
+                Ingresar...
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="pnl_archivotecnico || pnl_archivojuridico || pnl_archivofinanciero">
+  <div>
+    <button
+      type="button"
+      class="btn btn-primary pull-left"
+      title="Volver Panel"
+      (click)="paneles('PANEL_PRINCIPAL')"
+    >
+      <i class="fa fa-reply fa-2x"> </i>
+    </button>
+  </div>
+  <div
+    class="container-fluid bg-trasparent my-4 p-3"
+    style="position: relative"
+  >
+    <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
+      <div class="col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="bg-primary text-white text-center" style="font-weight: 700; font-size: x-large;">Occidente</div>
+          <img
+            src="../../../../assets/imagenes/archivo_central/region_occidente.png"
+            class="card-img-top"
+            alt="..."
+          />
+          <div class="card-body" style="padding: 10px;">
+            <!-- <div class="clearfix mb-3">
+              <span class="float-start badge rounded-pill bg-primary"
+                >ASUS Rog</span
+              >
+              <span class="float-end price-hp">12354.00€</span>
+            </div> -->
+            <h5 class="card-title">
+              Proyectos pertenecientes a los departamentos de La Paz, Oruro y Potosí.
+            </h5>
+            <div class="text-center my-4">
+              <button
+                class="btn btn-warning btn-block"
+                type="button"
+                (click)="paneles('CABECERA_ARCHIVO', 'OCCIDENTE')"
+                style="border-radius: 0 0 5px 5px; font-size: large;"
+              >
+                Ingresar...
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="bg-primary text-white text-center" style="font-weight: 700; font-size: x-large;">Centro</div>
+          <img
+            src="../../../../assets/imagenes/archivo_central/region_centro.png"
+            class="card-img-top"
+            alt="..."
+          />
+          <div class="card-body" style="padding: 10px;">
+            <!-- <div class="clearfix mb-3">
+              <span class="float-start badge rounded-pill bg-primary"
+                >ASUS Rog</span
+              >
+              <span class="float-end price-hp">12354.00€</span>
+            </div> -->
+            <h5 class="card-title">
+              Proyectos pertenecientes a los departamentos de Cochabamba, Chuquisaca y Tarija.
+            </h5>
+            <div class="text-center my-4">
+              <button
+                class="btn btn-warning btn-block"
+                type="button"
+                (click)="paneles('CABECERA_ARCHIVO', 'CENTRO')"
+                style="border-radius: 0 0 5px 5px; font-size: large;"
+              >
+                Ingresar...
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="bg-primary text-white text-center" style="font-weight: 700; font-size: x-large;">Oriente</div>
+          <img
+            src="../../../../assets/imagenes//archivo_central/region_oriente.png"
+            class="card-img-top"
+            alt="..."
+          />
+          <div class="card-body" style="padding: 10px;">
+            <!-- <div class="clearfix mb-3">
+              <span class="float-start badge rounded-pill bg-primary"
+                >ASUS Rog</span
+              >
+              <span class="float-end price-hp">12354.00€</span>
+            </div> -->
+            <h5 class="card-title">
+              Proyectos pertenecientes a los departamentos de Pando, Beni y Santa Cruz.
+            </h5>
+            <div class="text-center my-4">
+              <button
+                class="btn btn-warning btn-block"
+                type="button"
+                (click)="paneles('CABECERA_ARCHIVO', 'ORIENTE')"
+                style="border-radius: 0 0 5px 5px; font-size: large;"
+              >
+                Ingresar...
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="pnl_detalleArchivo == true">
+  <app-bandeja-registro
+    [region]="region"
+    [tipoArchivo]="tipoArchivo"
+    (messageEvent)="receiveMessage($event)"
+  ></app-bandeja-registro>
+</div>

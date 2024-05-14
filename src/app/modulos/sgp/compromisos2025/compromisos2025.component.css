@@ -1,0 +1,222 @@
+.dt-proyectos tfoot input{
+  width: 100% !important;
+}
+.dt-proyectos tfoot {
+  display: table-header-group !important;
+}
+
+.containerCris{
+  width: 95%;
+  text-align: center;
+  padding: 10px 10px;
+  margin: 0 auto;
+}
+
+.titulo{
+    color: #0250bb;/*#337ab7;#3c8dbc;*/
+    text-align: center;
+    font-size:xx-large;
+}
+.info2{
+    color: #1a3a66;/*#337ab7;#3c8dbc;*/
+    font-size:x-large;
+}
+
+.linea {
+    border-top: 2px solid #3c8dbc;
+    height: 2px;
+    padding: 0;
+    margin: 10px auto;
+}
+
+.slider{
+  display: inline-flexbox;
+}
+
+th{
+  cursor: pointer;
+}
+
+.media-avg{
+  margin-left: 1rem;
+  color: orangered;
+}
+
+.alerta{
+  font-weight: bold;
+  font-style: italic;
+  color: orangered;
+  font-size: x-large;
+}
+
+.rutas{
+  font-style: italic;
+  color: #0250bb;
+  font-size: medium;
+  text-align: center;
+}
+
+.votos{
+  font-style: italic;
+  color: #0250bb;
+  font-size: medium;
+  display: inline;
+}
+
+.videos-frame{
+  width: 560px;
+}
+
+iframe{
+  height: 315px;
+}
+
+.poblacion{
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(255, 214, 168);
+  padding: 0 5px;
+  border: 1px solid rgb(189, 106, 12);
+  border-radius: 4px;
+}
+
+.financiamiento{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  background-color: rgb(255, 214, 168);
+  padding: 5px;
+  border: 1px solid rgb(189, 106, 12);
+  border-radius: 4px;
+  color: #1a3a66;
+}
+
+/* label > i {
+  color: orangered;
+} */
+
+.info{
+  width: 100%;
+  height: 100%;
+  background-color: aliceblue;
+  border-radius: 4px;
+  border: 1px solid rgb(25, 30, 78);
+  color: #337ab7;
+  position: relative;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  padding: 5px;
+  text-align: center;
+}
+
+.fade-in {
+	opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 0.5s;
+}
+
+.info label {
+  display: block;
+  font-weight: 400;
+  width: 100%;
+  border-radius: 4px;
+  text-align: center;
+  font-size: large;
+}
+.info label i {
+  font-style: italic;
+  font-weight: 800;
+}
+
+.info-titulo{
+  font-weight: 500;
+  background-color: #6b91b3;
+  color: azure;
+  width: 100%;
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* .info-grid{
+  display: grid;
+  justify-items: center;
+  font-size: x-large;
+} */
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+@media (max-width:500px){
+  .slider{
+    display: inline-flexbox;
+    width: 80%;
+  }
+  .videos-frame{
+    width: 260px;
+  }
+  iframe{
+    height: 155px;
+  }
+  .titulo{
+    color: #0250bb;/*#337ab7;#3c8dbc;*/
+    text-align: center;
+    font-size:large;
+  }
+  .info2{
+    color: #1a3a66;/*#337ab7;#3c8dbc;*/
+    font-size:medium;
+  }
+  .dt-proyectos{
+    overflow-x: auto;
+  }
+  .alerta{
+    font-weight: bold;
+    font-style: italic;
+    color: orangered;
+    font-size: large;
+    padding-left: 2rem;
+  }
+
+  .info label i {
+   display: block; 
+  }
+  /*probando*/
+  /* .dt-proyectos thead{
+        display: none;
+    }
+    .dt-proyectos, .dt-proyectos tbody, .dt-proyectos tr, .dt-proyectos td{
+        display: block;
+        width: 100%;
+    }
+    .dt-proyectos tr{
+        margin-bottom: 15px;
+        border-top: #0250bb 5px solid;
+    }
+    .dt-proyectos tbody tr td{
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+    .dt-proyectos td:before{
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 15px;
+        font-weight: 600;
+        font-size: 14px;
+        text-align: left;
+    }
+    .dt-proyectos td{
+      overflow-wrap: break-word;
+    } */
+}
+

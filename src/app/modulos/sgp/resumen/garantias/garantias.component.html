@@ -1,0 +1,72 @@
+<div *ngFor="let row_reg of dts_boletas | orderBy:'fecha_inicio_validez':true;" class="col-lg-4" >   
+  
+    <div [ngClass]="{'panel panel-danger':row_reg.estado_vigencia=='VENCIDA','panel panel-success':row_reg.estado_vigencia=='VIGENTE'}">  
+      <div class="panel-heading">BOLETA {{row_reg.estado_vigencia}} - {{row_reg.nombre}}</div>
+      <div class="body" >
+            <div class="row">
+              <label class="col-form-label col-sm-2">Tipo</label>
+              <div class="col-sm-10">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="tipodoc_{{row_reg.id_boleta}}" id="tipodoc_{{row_reg.id_boleta}}" [checked]="row_reg.tipo_documento=='BOLETA'" > Boleta            
+                  <input class="form-check-input" type="radio" name="tipodoc_{{row_reg.id_boleta}}" id="tipodoc_{{row_reg.id_boleta}}" [checked]="row_reg.tipo_documento=='POLIZA'"> Poliza
+                </div>            
+              </div>
+            </div>      
+          <div class="form-group" class="col-lg-6">
+            <div>
+                <label for="Gestion">Número:</label>
+            </div>
+            <div>
+              <input class="form-control" id="m_numeroboleta" maxlength="200" rows="4"
+              name="m_numeroboleta" value="{{row_reg.numero}}"
+              >
+            </div>
+        </div>
+          <div class="form-group" class="col-lg-6">
+            <div>
+                <label for="Gestion">Monto en (Bs):</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon">Bs.</span>
+              <input class="form-control" id="m_montoboleta" maxlength="200" rows="4"
+              name="m_montoboleta" value="{{row_reg.monto | number: '0.2-2'  | formatoDecimal  }}"
+              >
+            </div>
+        </div>
+        <div class="form-group" class="col-lg-6">
+          <div>
+              <label for="Gestion">Fecha inicio de validez</label>
+          </div>
+          <div>
+            <input class="form-control" id="m_fechainicio" maxlength="200" rows="4"
+            name="m_fechainicio" value="{{row_reg.fecha_inicio_validez | date:'dd/MM/yyyy'}}"
+            >
+          </div>
+      </div>
+        <div class="form-group" class="col-lg-6">
+          <div>
+              <label for="Gestion">Fecha fin de validez</label>
+          </div>
+          <div>
+            <input class="form-control" id="m_fechafin" maxlength="200" rows="4"
+            name="m_fechafin" value="{{row_reg.fecha_fin_validez | date:'dd/MM/yyyy'}}"
+            >
+          </div>
+      </div>
+        
+        <div>
+          <app-upload-file 
+            inputTipoDocumento="boletas" 
+            inputCodigoProy={{m_codigoproyecto}} 
+            inputVista="false"
+            inputTipoImagen="documento" 
+            inputSrc='' 
+            inputNombre={{row_reg.doc_boleta}}
+            (enviaPadre)="refrescaPadre($event)" 
+            inputAccion='VISUALIZAR'>
+          </app-upload-file>
+        </div>
+        
+      </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div style="text-align: left;" *ngIf="!eliminar">
+  <form  [formGroup]="formAnticipo" (ngSubmit)="registrarAnticipo()">
+    <div class="row">
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="anticipo">Monto Anticipo:</label>
+        <div class="input-group">
+          <span class="input-group-addon">Bs.</span>
+          <input class="form-control" type="number" name="anticipo" placeholder="Monto Anticipo" formControlName="anticipo" min="1" max="100000000" required>
+          <span style="color:tomato;" *ngIf="formAnticipo.controls['anticipo'].touched && formAnticipo.controls['anticipo'].errors?.required">Este campo es requerido</span>
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="fechaPago">Fecha Pago:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+          <input class="form-control" type="date" name="fechaPago" formControlName="fechaPago" maxlength="10" required>
+          <span style="color:tomato;" *ngIf="formAnticipo.controls['fechaPago'].touched && formAnticipo.controls['fechaPago'].errors?.required">Este campo es requerido</span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-12 col-lg-12 col-md-12">
+        <label for="detalleAnticipo">Detalle Anticipo:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+          <textarea class="form-control" name="detalleAnticipo" placeholder="Detalle Anticipo" id="detalleAnticipo" cols="30" rows="2" formControlName="detalleAnticipo" required></textarea>
+          <span style="color:tomato;" *ngIf="formAnticipo.controls['detalleAnticipo'].touched && formAnticipo.controls['detalleAnticipo'].errors?.required">Este campo es requerido</span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-12 col-lg-12 col-md-12 text-right">
+        <button class="btn btn-success" type="submit"  [disabled]="formAnticipo.invalid">
+          <div *ngIf="!editar">Registrar Anticipo</div>
+          <div *ngIf="editar">Actualizar Anticipo</div>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

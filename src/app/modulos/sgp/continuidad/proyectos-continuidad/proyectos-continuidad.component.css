@@ -1,0 +1,12 @@
+.dt-proyectos tfoot input{
+    width: 100% !important;
+}
+.dt-proyectos tfoot {
+    display: table-header-group !important;
+}
+
+.titulo{
+    color: #0250bb;/*#3c8dbc;*/
+    text-align: right;
+    font-size: medium;
+  }

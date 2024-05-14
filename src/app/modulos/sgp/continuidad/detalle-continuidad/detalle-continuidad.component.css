@@ -1,0 +1,8 @@
+.bg-secondary {
+  background: rgb(51, 51, 50);
+}
+.map {
+  width: 100%;
+  height: 400px;
+  /* box-shadow: 5px 5px 5px #888; */
+}

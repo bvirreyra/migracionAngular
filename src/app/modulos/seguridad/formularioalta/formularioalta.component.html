@@ -1,0 +1,199 @@
+<button type="button" routerLink='/'>
+  <i class="fa fa-reply fa-3x" aria-hidden="true"></i>
+</button>
+
+<div class="row"  *ngIf="validacionMat==true" class="pnl_formulario">
+
+  <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-3">
+    <div class="panel panel-success">
+      <div class="panel-heading text-center">Formulario de registro de Usuario</div>
+      <div class="panel-body">
+        <div class="row">
+          
+          <div class="form-horizontal ">
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="ci">Matricula:</label>
+              <input type="text" autofocus [textMask]="{mask:maskMatricula}" class="form-control" placeholder="Matricula" id="matricula"
+                name="matricula" #matricula="ngModel" [(ngModel)]="validacionmatricula.MAT" ngControl="matricula" pattern="(\d{2}\-\d{4}\s[A-Za-z]{3})"
+                required>
+              <div *ngIf="matricula.invalid && (matricula.dirty || matricula.touched)">
+                <span class="help-block error" *ngIf="matricula.touched && !matricula.valid">
+                  <i class="fa fa-times-circle-o"></i> La matricula es requerida y debe tener el siguiente formato "12-0282 FFF"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-md-6">
+            <button *ngIf="insertar==true" type="button" class="btn btn-primary btn-block" name="btn_registro" id="btn_registro" (click)="onSubmit()">
+              <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Validar Datos</button>
+          </div>
+          <div class="col-md-6">
+            <button type="button" class="btn btn-default btn-block" id="btn_busqueda" name="btn_busqueda" (click)="VolverPanelPrincipal()">
+              <i class="fa fa-undo" aria-hidden="true"></i> Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!--validacion de la matricula del beneficiario-->
+  <div class="row ">
+    <div class=" alineacion-center tituloespecialidades ">
+      Formulario de registro de Usuario
+    </div>
+  </div>
+
+  <div class="row ">
+    <div class="rowlocal">
+      <div class="col-xl-3 col-lg-3 col-sm-3 alineacion_der">
+        <strong>Matricula: </strong>
+      </div>
+
+      <div class="col-xl-7 col-lg-7 col-sm-7 alineacion_izq">
+        <input type="text" autofocus [textMask]="{mask:maskMatricula}" class="inputfor" placeholder="Matricula" id="matricula" name="matricula"
+          #matricula="ngModel" [(ngModel)]="validacionmatricula.MAT" ngControl="matricula" pattern="(\d{2}\-\d{4}\s[A-Za-z]{3})"
+          required>
+        <div class=" alert alert-danger" *ngIf="matricula.touched && !matricula.valid">La matricula es requerida y debe tener el siguiente formato "12-0282 FFF"</div>
+      </div>
+    </div>
+    <div class="rowlocal">
+      <div class="col-xl-3 col-lg-3 col-sm-3 alineacion_der">
+        <strong>CI: </strong>
+      </div>
+      <div class="col-xl-7 col-lg-7 col-sm-7 alineacion_izq">
+        <input type="number" class="inputfor" placeholder="Cedula de Identidad" name="ci" #ci="ngModel" [(ngModel)]="validacionmatricula.DOC_ID"
+          ngControl="ci" pattern="([0-9]+)" required>
+        <div class="alert alert-danger" *ngIf="!ci.valid && ci.touched">
+          El campo es requerido
+        </div>
+      </div>
+    </div>
+    <div class="rowlocal">
+      <div class="col-xl-3 col-lg-3 col-sm-3 alineacion_der">
+        <strong>Fecha de Nacimiento: </strong>
+      </div>
+      <div class="col-xl-7 col-lg-7 col-sm-7 alineacion_izq">
+        <input type="text" id="fechanacimiento" name="fechanacimiento" placeholder="dd-mm-yyyy" #fechanacimiento="ngModel" [(ngModel)]="validacionmatricula.FECHA_NACIMIENTO"
+          appCalendario="fechanacimiento" readonly>
+      </div>
+    </div>
+    <div class="rowlocal">
+      <div class="col-xl-12 col-lg-12 col-sm-12">
+        <button class="btn-tarjeta" type="button" (click)="onSubmit()">Validar Datos</button>
+      </div>
+    </div>
+  </div>
+  <div class="row ">
+    <div class="col-xl-12 col-lg-12 col-sm-12">
+      <div class="alert alert-info" *ngIf="msgAtencionMat==true">
+        <strong>Info!</strong> Señor beneficiario, su cuenta ya se encuentra creada, se envio los datos de su cuenta a su correo
+        electronico. Si no puede ingresar al sistema por favor contáctese con el área de Sistemas de la "Caja Bancaria Estatal
+        de Salud".
+        <br/>Correo Electrónico: info_cbes@cbes.org.bo
+      </div>
+      <div class="alert alert-warning" *ngIf="msgCuidadoMat==true">
+        <strong>Atención!</strong> Señor beneficiario no se puede dar curso a la creación de su cuenta, por favor apersonarse al
+        área de “AFILIACIÓN“.</div>
+
+      <div class="alert alert-danger" *ngIf="msgErrorMat==true">
+        <strong>Alerta!</strong> Señor beneficiario, no se encuentra registrado en la base de datos de la institución, verifique
+        si ingreso los datos de forma correcta.
+        <br/>Caso contrario por favor contáctese con el área de Sistemas de la "Caja Bancaria Estatal de Salud. Correo Electrónico:
+        info_cbes@cbes.org.bo
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="altaFormulario==true" class="pnl_formulario">
+  <div class="row ">
+    <div class=" alineacion-center tituloespecialidades ">
+      Formulario de creación de Usuario
+    </div>
+  </div>
+  <div class="row">
+    <div class="rowlocal">
+      <div class="col-xl-3 col-lg-3 col-sm-3 alineacion_der">
+        <strong>Datos del Beneficiario</strong>
+      </div>
+      <div class="col-xl-7 col-lg-7 col-sm-7 alineacion_izq">
+        <input type="text" class="inputfor" name="datospersonales" value={{datospersonales}} readonly={{estadocontrol}}>
+      </div>
+    </div>
+
+    <div class="rowlocal" *ngIf="datosusuario.ACCION=='MODIFICAR'">
+      <div class="col-xl-3 col-lg-3 col-sm-3 alineacion_der alineacion_der">
+        <strong>Contraseña: </strong>
+      </div>
+      <div class="col-xl-7 col-lg-7 col-sm-7 alineacion_izq">
+        <input type="password" name="password" class="inputfor" placeholder="Contraseña" #password="ngModel" [(ngModel)]="datosusuario.PASSWORD"
+          ngControl="password" pattern="(([A-Za-z0-9].{1})(.){3,12}([A-Za-z0-9]{1}))" required>
+        <div class="alert alert-danger" *ngIf="password.touched && !password.valid">La contraseña no debe empezar ni terminar con caracteres especiales, la cantidad de caracteres como mínimo 6 y máximo
+          15.
+        </div>
+      </div>
+    </div>
+    <div class="rowlocal" *ngIf="datosusuario.ACCION=='MODIFICAR'">
+      <div class="col-xl-3 col-lg-3 col-sm-3 alineacion_der">
+        <strong>Repetir Contraseña: </strong>
+      </div>
+      <div class="col-xl-7 col-lg-7 col-sm-7 alineacion_izq">
+        <input type="password" class="inputfor" name="confirmarpassword" placeholder="Confirmar Contraseña" #confirmarpassword="ngModel"
+          [(ngModel)]="datosusuario.CONFIRMACIONPASSWORD" ngControl="password" pattern="(([A-Za-z0-9].{1})(.){3,12}([A-Za-z0-9]{1}))"
+          required>
+        <div class="alert alert-danger" *ngIf="confirmarpassword.touched && !confirmarpassword.valid">La contraseña no debe empezar ni terminar con caracteres especiales, la cantidad de caracteres como mínimo 6 y máximo
+          15.
+        </div>
+        <div class="alert alert-danger" *ngIf="msgPassDistintos==true">La contraseña que ingreso no coincide.</div>
+      </div>
+    </div>
+    <div class="rowlocal">
+
+      <div class="col-xl-3 col-lg-3 col-sm-3 alineacion_der">
+        <strong>Correo Electronico: </strong>
+      </div>
+      <div class="col-xl-3 col-lg-3 col-sm-3 alineacion_izq">
+        <!-- <input type="text" class="inputfor" name="email" placeholder="Correo electronico" #email="ngModel" [(ngModel)]="datosusuario.CORREO"
+        ngControl="email" pattern="(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}\.[a-zA-Z]{2,6})" required> -->
+        <input type="text" class="inputfor" name="email" placeholder="Correo electronico" #email="ngModel" [(ngModel)]="datosusuario.CORREO"
+          ngControl="email" required>
+        <div class="alert alert-danger" *ngIf="!email.valid && email.touched">
+          El campo es requerido
+        </div>
+      </div>
+    </div>
+    <div class="rowlocal">
+      <div class="col-xl-12 col-lg-12 col-sm-12 alineacion_center">
+        <button *ngIf="email.valid" type="submit" name="submit2" (click)="onSubmitusuario()" class="btn-tarjeta">Registrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!--Mensajes del sistema de la validacion del registro de usuarios-->
+<div class="row">
+  <div class="pnl_formulario" *ngIf="msgOkAlta==true">
+    <div class=" alineacion-center tituloespecialidades ">
+      Datos de alta del usuario
+    </div>
+    <div class="alert alert-success">
+
+
+      <strong>Exito!</strong> Señor beneficiario, su cuenta fue creada de forma correcta con los siguientes datos:
+      <br/>
+      <strong>Usuario: </strong>{{usr}}
+      <br/>
+      <strong>Contraseña: </strong>{{pass}}
+      <br/>
+      <div style="text-align:center">
+        <a routerLink='/login'>Ingresar al Sistema</a>
+      </div>
+    </div>
+  </div>
+</div>

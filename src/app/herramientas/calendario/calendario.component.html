@@ -1,0 +1,49 @@
+<button
+  type="button"
+  class="btn btn-info btn-md"
+  name="btnCalendario"
+  id="btnCalendario"
+  (click)="btnCalendario()"
+>
+  <i class="fa fa-calendar" aria-hidden="true" title="Calendario"></i>
+</button>
+<div *ngIf="pnlCalendario == true">
+  <div class="wrapper-calendar">
+    <div class="header-calendar">
+      <div>
+        <button (click)="changeMonth(-1)" class="btn-prev">Antes</button>
+      </div>
+      <h1>{{ dateSelect | date: "MMM" | uppercase }}</h1>
+      <div>
+        <button (click)="changeMonth(1)" class="btn-next">Siguiente</button>
+      </div>
+      <select
+        class="form-control"
+        style="width: 80px"
+        [(ngModel)]="gestion"
+        (ngModelChange)="changeYear()"
+      >
+        <option *ngFor="let row of dts_gestiones" [ngValue]="row">
+          {{ row }}
+        </option>
+      </select>
+    </div>
+    <ol>
+      <li *ngFor="let day of week" class="day-name">{{ day | slice: 0:3 }}</li>
+
+      <li
+	  	*ngFor="let day of monthSelect;let i=index; let first = first"
+		[ngClass]="{'fondoazul':i+1==dia}"
+		  id="dia_{{i}}"		  	  
+		  (click)="clickDay(day)"
+        [style.gridColumnStart]="first ? day?.indexWeek : 'auto'"
+        
+      >
+        <span>{{ day?.value }}</span>
+      </li>
+    </ol>
+  </div>
+
+  <hr />
+  <div>Fecha: {{ dateValue | date }}</div>
+</div>

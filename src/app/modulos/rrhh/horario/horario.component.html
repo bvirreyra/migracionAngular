@@ -1,0 +1,854 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#horario" aria-controls="horario" role="tab" data-toggle="tab"
+        >Horarios</a
+      >
+    </li>
+    <li role="presentation">
+      <a
+        href="#excepcion"
+        aria-controls="excepcion"
+        role="tab"
+        data-toggle="tab"
+        >Horarios Excepcionales</a
+      >
+    </li>
+    <!-- <li role="presentation">
+      <a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"
+        >Messages</a
+      >
+    </li>
+    <li role="presentation">
+      <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab"
+        >Settings</a
+      >
+    </li> -->
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="horario">
+      <div class="content-body">
+        <!-- <div class="rowlocal"> -->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="panel panel-success">
+            <div class="panel-heading text-center">
+              <i class="glyphicon glyphicon-time"></i> Horarios Registrados
+            </div>
+            <div class="panel-body table">
+              <!-- INICIO TABLA-->
+              <button
+                class="btn btn-primary"
+                data-toggle="modal"
+                data-target="#modalHorario"
+                title="Registrar Nuevo Horario"
+              >
+                <i class="glyphicon glyphicon-plus"></i> Nuevo Horario
+              </button>
+              <br /><br />
+              <table
+                class="table table-primary table-striped table-condensed table-hover dt-horarios"
+              >
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Id TipoHorario</th>
+                    <th>Horario</th>
+                    <th>Hora Ingreeso 1</th>
+                    <th>Hora Salida 1</th>
+                    <th>Hora Ingreso 2</th>
+                    <th>Hora Salida 2</th>
+                    <th>Minutos Tolerancia 1</th>
+                    <th>Minutos Tolerancia 2</th>
+                    <th>Estado</th>
+                    <th>Opcion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let row_registros of dts_tipoHorario; let i = index"
+                  >
+                    <td>{{ row_registros.id }}</td>
+                    <td>{{ row_registros.IdTipoHorario }}</td>
+                    <td>{{ row_registros.DescripcionTipoHorario }}</td>
+                    <td>{{ row_registros.HoraIngreso1 }}</td>
+                    <td>{{ row_registros.HoraSalida1 }}</td>
+                    <td>{{ row_registros.HoraIngreso2 }}</td>
+                    <td>{{ row_registros.HoraSalida2 }}</td>
+                    <td>{{ row_registros.MinutosTolerancia1 }}</td>
+                    <td>{{ row_registros.MinutosTolerancia2 }}</td>
+                    <td>
+                      {{ row_registros.Estado == true ? "ALTA" : "BAJA" }}
+                    </td>
+                    <td>
+                      <button
+                        class="btn btn-primary"
+                        type="button"
+                        name="btnSelect"
+                        id="btnSelect"
+                        title="Desplegar Usuarios con este Horario"
+                        (click)="
+                          muestraDetalleFuncionarios(
+                            row_registros.IdTipoHorario
+                          )
+                        "
+                      >
+                        <i class="glyphicon glyphicon-hand-right"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- FIN TABLA-->
+            </div>
+          </div>
+        </div>
+        <div name="pnlGrupo" id="pnlGrupo" *ngIf="pnlGrupo">
+          <div class="row"></div>
+          <div class="content-body">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <button
+                class="btn btn-primary"
+                type="button"
+                data-toggle="modal"
+                data-target="#modalGrupoFuncionario"
+              >
+                <i class="glyphicon glyphicon-pencil"></i> Cambiar Grupo
+              </button>
+            </div>
+            <!-- <div class="rowlocal"> -->
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <div class="panel panel-success">
+                <div class="panel-heading text-center">
+                  Grupo de Funcionarios
+                </div>
+                <div class="panel-body table">
+                  <!-- INICIO TABLA-->
+                  <div class="row">
+                    <table
+                      class="table table-primary table-striped table-condensed table-hover dt-detalle"
+                    >
+                      <tfoot>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Funcionario</th>
+                          <th>Horario</th>
+                          <th>GrupoHorario</th>
+                          <th>Estado</th>
+                          <th>Fecha Desde</th>
+                          <th>Biometrico</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          *ngFor="let row_registros of dts_grupo; let i = index"
+                        >
+                          <td>{{ i + 1 }}</td>
+                          <td>{{ row_registros.Nombre }}</td>
+                          <td>{{ row_registros.TipoHorario }}</td>
+                          <td>{{ row_registros.GrupoFuncionario }}</td>
+                          <td>
+                            {{ row_registros.Estado == 1 ? "ALTA" : "BAJA" }}
+                          </td>
+                          <td>{{ row_registros.FechaDesde }}</td>
+                          <td>{{ row_registros.IdUsuario }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- FIN TABLA-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="excepcion">
+      <div class="content-body">
+        <!-- <div class="rowlocal"> -->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="panel panel-success">
+            <div class="panel-heading text-center">
+              <i class="glyphicon glyphicon-time"></i> Horarios Excepcionales
+              Registrados
+            </div>
+            <div class="pull-right">
+              <button
+                class="btn btn-success btn-circle-sm"
+                type="button"
+                title="Actualizar Bandeja"
+                (click)="listahorarioExcepcion()"
+              >
+                <span class="glyphicon glyphicon-refresh"></span>
+              </button>
+            </div>
+            <div class="panel-body">
+              <button
+                class="btn btn-danger"
+                data-toggle="modal"
+                data-target="#modalExcepcion"
+                title="Registrar Nuevo Horario Excepcional"
+                (click)="abrirModal()"
+              >
+                <i class="glyphicon glyphicon-plus"></i> Nueva Excepcion
+              </button>
+              <br /><br />
+              <!-- INICIO TABLA-->
+              <table
+                class="table table-primary table-striped table-condensed table-hover dt-excepcion"
+              >
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Horario</th>
+                    <th>Usuario</th>
+                    <th>Biometrico</th>
+                    <th>Fecha Desde</th>
+                    <th>Fecha Hasta</th>
+                    <th>Hora Ingreso 1</th>
+                    <th>Hora Salida 1</th>
+                    <th>Hora Ingreso 2</th>
+                    <th>Hora Salida 2</th>
+                    <th>Dia(L-M-M-J-V)</th>
+                    <th>Estado</th>
+                    <th>Fec. Reg. Excepcion</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let row_registros of dts_horarioExcepcion;
+                      let i = index
+                    "
+                  >
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ row_registros.Descripcion }}</td>
+                    <td>{{ row_registros.Nombre }}</td>
+                    <td>{{ row_registros.Biometrico }}</td>
+                    <td>{{ row_registros.FechaDesde }}</td>
+                    <td>{{ row_registros.FechaHasta }}</td>
+                    <td>{{ row_registros.HoraIngreso1 }}</td>
+                    <td>{{ row_registros.HoraSalida1 }}</td>
+                    <td>{{ row_registros.HoraIngreso2 }}</td>
+                    <td>{{ row_registros.HoraSalida2 }}</td>
+                    <td>{{ row_registros.DiasAplica }}</td>
+                    <td>
+                      {{ row_registros.Estado == true ? "ALTA" : "BAJA" }}
+                    </td>
+                    <td>
+                      {{ row_registros.FechaRegistro }}
+                    </td>
+                    <td
+                      *ngIf="
+                        (row_registros.FechaRegistro
+                          | diferenciaenDiasEntrefechas
+                            : 'string'
+                            : dtsFechaSrv
+                            : 'date') < llave ||
+                        dts_permisos['_administrador_plataforma'] == false
+                      "
+                    >
+                      <button
+                        class="btn btn-warning btn-circle-sm"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#modalExcepcion"
+                        title="Actualizar"
+                        (click)="datosModal(row_registros, 'U')"
+                      >
+                        <span class="glyphicon glyphicon-pencil"></span>
+                      </button>
+                      <button
+                        class="btn btn-danger btn-circle-sm"
+                        type="button"
+                        title="Eliminar"
+                        (click)="EliminarExcepcion(row_registros, 'D')"
+                      >
+                        <span class="glyphicon glyphicon-remove"></span>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- FIN TABLA-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div role="tabpanel" class="tab-pane" id="messages">c</div>
+    <div role="tabpanel" class="tab-pane" id="settings">d</div> -->
+  </div>
+</div>
+
+<!-- INICIO MODAL HORARIO -->
+<div
+  class="modal"
+  name="modalHorario"
+  id="modalHorario"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">NUEVO HORARIO</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4" for="busqueda"
+                  >Descripcion Horario:</label
+                >
+                <div class="col-sm-6">
+                  <input
+                    type="text"
+                    id="descripcionHorario"
+                    class="form-control"
+                    name="descripcionHorario"
+                    [(ngModel)]="tipoHorario.descripcionHorario"
+                    maxlength="50"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Hora Ingreso/Salida 1:</label
+              >
+              <div class="col-sm-3">
+                <input
+                  class="form-control"
+                  type="time"
+                  name="horaIngreso1"
+                  id="horaIngreso1"
+                  autocomplete="off"
+                  [(ngModel)]="tipoHorario.horaIngreso1"
+                />
+              </div>
+              <div class="col-sm-3">
+                <input
+                  class="form-control"
+                  type="time"
+                  name="horaSalida1"
+                  id="horaSalida1"
+                  autocomplete="off"
+                  [(ngModel)]="tipoHorario.horaSalida1"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Hora Ingreso/Salida 2:</label
+              >
+              <div class="col-sm-3">
+                <input
+                  class="form-control"
+                  type="time"
+                  name="horaIngreso2"
+                  id="horaIngreso2"
+                  autocomplete="off"
+                  [(ngModel)]="tipoHorario.horaIngreso2"
+                />
+              </div>
+              <div class="col-sm-3">
+                <input
+                  class="form-control"
+                  type="time"
+                  name="horaSalida2"
+                  id="horaSalida2"
+                  autocomplete="off"
+                  [(ngModel)]="tipoHorario.horaSalida2"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Minutos Tolerancia 1-2</label
+              >
+              <div class="col-sm-3">
+                <input
+                  class="form-control"
+                  type="number"
+                  name="minutosTolerancia1"
+                  id="number"
+                  autocomplete="off"
+                  [(ngModel)]="tipoHorario.minutosTolerancia1"
+                />
+              </div>
+              <div class="col-sm-3">
+                <input
+                  class="form-control"
+                  type="number"
+                  name="minutosTolerancia2"
+                  id="minutosTolerancia2"
+                  autocomplete="off"
+                  [(ngModel)]="tipoHorario.minutosTolerancia2"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          name="btnRegistrar"
+          id="btnRegistrar"
+          (click)="insertarHorario()"
+        >
+          Registrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL HORARIO-->
+
+<!-- INICIO MODAL GRUPO FUNCIONARIO -->
+<div
+  class="modal"
+  name="modalGrupoFuncionario"
+  id="modalGrupoFuncionario"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">
+          CAMBIO DE HORARIO GRUPO
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Grupo Funcionario:</label
+              >
+              <div class="col-sm-7">
+                <select
+                  id="idGrupoFuncionario"
+                  class="form-control"
+                  name="idGrupoFuncionario"
+                  [(ngModel)]="grupoHorario_Usuario.idGrupoFuncionario"
+                  disabled
+                >
+                  <option
+                    *ngFor="let row_grupoFuncionario of dts_grupoFuncionario"
+                    [ngValue]="row_grupoFuncionario.IdGrupoFuncionario"
+                  >
+                    {{
+                      row_grupoFuncionario.DescripcionGrupoFuncionario +
+                        "-" +
+                        row_grupoFuncionario.Observacion
+                    }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Tipo Horario:</label
+              >
+              <div class="col-sm-7">
+                <select
+                  id="idTipoHorario"
+                  class="form-control"
+                  name="idTipoHorario"
+                  [(ngModel)]="grupoHorario_Usuario.idTipoHorarioAnterior"
+                  (change)="changeTipoHorario()"
+                  disabled
+                >
+                  <option
+                    *ngFor="let row_grupoFuncionario of dts_tipoHorarioActual"
+                    [ngValue]="row_grupoFuncionario.IdTipoHorario"
+                  >
+                    {{ row_grupoFuncionario.DescripcionTipoHorario }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Usuarios Grupo:</label
+              >
+              <div class="col-sm-7">
+                <select
+                  id="idUsuario"
+                  class="form-control"
+                  name="idUsuario"
+                  [(ngModel)]="grupoHorario_Usuario.idUsuario"
+                >
+                  <option value="0">TODOS</option>
+                  <option
+                    *ngFor="
+                      let row_grupoFuncionario of dts_grupoFuncionarioModificacion
+                    "
+                    [ngValue]="row_grupoFuncionario.IdUsuario"
+                  >
+                    {{ row_grupoFuncionario.Nombre }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Tipo Horario Nuevo:</label
+              >
+              <div class="col-sm-7">
+                <select
+                  id="idUsuario"
+                  class="form-control"
+                  name="idUsuario"
+                  [(ngModel)]="grupoHorario_Usuario.idTipoHorario"
+                >
+                  <option
+                    *ngFor="let row_grupoFuncionario of dts_tipoHorarioDestino"
+                    [ngValue]="row_grupoFuncionario.IdTipoHorario"
+                  >
+                    {{ row_grupoFuncionario.DescripcionTipoHorario }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Fecha Desde</label
+              >
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="date"
+                  name="fechaDesde"
+                  id="fechaDesde"
+                  autocomplete="off"
+                  [(ngModel)]="grupoHorario_Usuario.fechaDesde"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          name="btnRegistrar"
+          id="btnRegistrar"
+          (click)="insertarGrupoUsuario()"
+        >
+          Registrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL GRUPO FUNCIONARIO-->
+
+<!-- INICIO MODAL EXCEPCION -->
+<div
+  class="modal fade"
+  name="modalExcepcion"
+  id="modalExcepcion"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  data-backdrop="static"
+  data-keyboard="false"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Nueva Excepcion</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4" for="busqueda"
+                  >Tipo Excepcion:</label
+                >
+                <div class="col-sm-6">
+                  <select
+                    type="text"
+                    id="tipoPermiso"
+                    class="form-control"
+                    name="tipoPermiso"
+                    [(ngModel)]="horarioExcepcion.idTipoPermiso"
+                  >
+                    <option
+                      *ngFor="let row_permiso of dts_tipoPermiso"
+                      [ngValue]="row_permiso.IdTipoPermiso"
+                    >
+                      {{ row_permiso.Descripcion }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group">
+                <label class="control-label col-sm-4" for="busqueda"
+                  >Funcionario:</label
+                >
+                <div class="input-group">
+                  <ng-select2
+                    id="usuarioBiometrico"
+                    name="usuarioBiometrico"
+                    [width]="300"
+                    [data]="dts_usuarioSQLCombo"
+                    [(ngModel)]="horarioExcepcion.idUsuarioBiometrico"
+                  ></ng-select2>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Fecha Desde</label
+              >
+              <div class="col-sm-6">
+                <input
+                  class="form-control"
+                  min="{{ fechaValida | date : 'yyyy-MM-dd' }}"
+                  type="date"
+                  name="fechaDesde"
+                  id="fechaDesde"
+                  autocomplete="off"
+                  [(ngModel)]="horarioExcepcion.fechaDesde"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Fecha Hasta</label
+              >
+              <div class="col-sm-6">
+                <input
+                  class="form-control"
+                  min="{{ horarioExcepcion.fechaDesde | date : 'yyyy-MM-dd' }}"
+                  type="date"
+                  name="fechaHasta"
+                  id="fechaHasta"
+                  autocomplete="off"
+                  [(ngModel)]="horarioExcepcion.fechaHasta"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Dias Aplica</label
+              >
+              <div class="col-sm-6">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="inlineCheckbox1"
+                  value="option1"
+                  [(ngModel)]="diasAplica.lunes"
+                />
+                <label class="form-check-label" for="inlineCheckbox1"
+                  >Lunes</label
+                >
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="inlineCheckbox2"
+                  value="option2"
+                  [(ngModel)]="diasAplica.martes"
+                />
+                <label class="form-check-label" for="inlineCheckbox2"
+                  >Martes</label
+                >
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="inlineCheckbox3"
+                  value="option3"
+                  [(ngModel)]="diasAplica.miercoles"
+                />
+                <label class="form-check-label" for="inlineCheckbox3"
+                  >Miercoles</label
+                >
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="inlineCheckbox4"
+                  value="option4"
+                  [(ngModel)]="diasAplica.jueves"
+                />
+                <label class="form-check-label" for="inlineCheckbox4"
+                  >Jueves</label
+                >
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="inlineCheckbox5"
+                  value="option5"
+                  [(ngModel)]="diasAplica.viernes"
+                />
+                <label class="form-check-label" for="inlineCheckbox5"
+                  >Viernes</label
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Hora Ingreso/Salida 1:</label
+              >
+              <div class="col-sm-3">
+                <input
+                  class="form-control"
+                  type="time"
+                  name="horaIngreso1"
+                  id="horaIngreso1"
+                  autocomplete="off"
+                  [(ngModel)]="horarioExcepcion.horaIngreso1"
+                />
+              </div>
+              <div class="col-sm-3">
+                <input
+                  class="form-control"
+                  type="time"
+                  name="horaSalida1"
+                  id="horaSalida1"
+                  autocomplete="off"
+                  [(ngModel)]="horarioExcepcion.horaSalida1"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Hora Ingreso/Salida 2:</label
+              >
+              <div class="col-sm-3">
+                <input
+                  class="form-control"
+                  type="time"
+                  name="horaIngreso2"
+                  id="horaIngreso2"
+                  autocomplete="off"
+                  [(ngModel)]="horarioExcepcion.horaIngreso2"
+                />
+              </div>
+              <div class="col-sm-3">
+                <input
+                  class="form-control"
+                  type="time"
+                  name="horaSalida2"
+                  id="horaSalida2"
+                  autocomplete="off"
+                  [(ngModel)]="horarioExcepcion.horaSalida2"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+          (click)="limpiarModalmodalExcepcion()"
+        >
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          name="btnRegistrarEx"
+          id="btnRegistrarEx"
+          (click)="insertarHorarioExcepcion()"
+        >
+          Registrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning"
+          name="btnModificarEx"
+          id="btnModificarEx"
+          (click)="modificarHorarioExcepcion()"
+        >
+          Modificar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL HORARIO-->

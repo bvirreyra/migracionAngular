@@ -1,0 +1,189 @@
+<div id="pnl_gridview1" name="pnl_gridview">
+  <!-- <div class="page-header" style="text-align:center">
+    <h2>Asignacion del Presupuesto por Gestion</h2>
+  </div> -->
+
+  <div class="panel panel-primary">
+
+    <div class="panel-heading clearfix" *ngIf="s_idrol==4">
+      <!-- <button type="button" class="btn btn-success pull-right" title="Nueva Ficha" (click)="paneles('FORMULARIO')"><i
+          class="fa fa-plus">Nueva Asignacion
+        </i></button> -->
+    </div>
+    <div class="panel-body">      
+      <table class="table table-condensed table-hover table-responsive dt-ListaFichaTecnica" name="tblFT" id="tblFT">
+      <!-- <table class="table"> -->
+        <thead>
+          <tr>
+            <th>Nro.</th>
+            <th>Gestion</th>
+            <th>Departamento</th>
+            <th>Provincia</th>
+            <th>Municipio</th>
+            <th>Areas</th>
+            <th>Nombre de Proyecto</th>
+            <th>Tipo Ejecución</th>
+            <th>Numero Convenio</th>
+            <th>Fecha Convenio</th>
+            <th>Estado Proyecto</th>
+            <th>Seleccione...</th>
+          </tr>
+        </thead>  
+        <tfoot>
+          <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+          </tr>
+      </tfoot>    
+        <tbody>
+          <tr *ngFor="let row_registros of dts_listabandeja_fichatecnica; let i = index;">
+
+            <td>{{row_registros.id}}</td>
+            <td>{{row_registros.gestion}}</td>
+            <td>{{row_registros.departamento}}</td>
+            <td>{{row_registros.provincia}}</td>
+            <td>{{row_registros.municipio}}</td>
+            <td>{{row_registros.area}}</td>
+            <td>{{row_registros.nombre_proyecto_compromiso}}</td>
+            <td>{{row_registros.entidad}}</td>
+            <td>{{row_registros.numero_documento}}</td>
+            <td>{{row_registros.fecha_documento | date: 'dd/MM/yyyy'}}</td>
+            <td>{{row_registros.estado_proyecto}}</td>
+            <td>
+              <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-warning btn-md" (click)="lista_presupuestos(row_registros)">
+                  <i class="fa fa-edit" aria-hidden="true" title="Ingresar Proyecto"></i>
+                </button>
+                <!-- <a title="Descargar Reporte" *ngIf="row_registros._usuario_tec!='' && row_registros._usuario_fin!='' "
+                                      class="btn btn-success   btn-md" target="_blank" ti
+                                      href="{{url_reporte}}/rptInformeFinanciero.php?id={{row_registros._id_seg}}"><i
+                                          class="fa fa-file-pdf-o" aria-hidden="true" ></i></a> -->
+
+                <!-- <button *ngIf="s_idrol==4" type="button" class="btn btn-danger btn-md"
+                                      (click)="elimina_seguimiento(row_registros._id_seg)" title="Eliminar Registro">
+                                      <i class="fa fa-times" aria-hidden="true"></i>
+                                  </button> -->
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div id="pnl_gridview2" name="pnl_gridview2">
+  <div class="page-header" style="text-align:center">
+    <h2>Asignacion del Presupuesto por Gestion</h2>
+    <h3>{{m_nombreproyecto}}</h3>
+  </div>
+  <div>
+      <button type="button" class="btn btn-primary  pull-left" title="Volver Panel" name="btnVolverGv"
+          id="btnVolverGv" (click)="paneles('VER_GRIDVIEW1')"><i class="fa fa-reply fa-2x">
+          </i></button>
+  </div>
+
+
+  <div class="panel panel-primary">
+
+    <div class="panel-heading clearfix">
+      <button type="button" class="btn btn-success pull-right" title="Nuevo Presupuesto" (click)="PreInsertarPresupuesto()"><i
+          class="fa fa-plus">Nuevo Presupuesto
+        </i></button>
+    </div>
+    <div class="panel-body">
+      <table class="table table-condensed table-hover dt-ListaPresupuestoAsignado" name="ListaPresupuestoAsignado" id="ListaPresupuestoAsignado">
+        <thead>
+          <tr>            
+            <th>Gestion</th>
+            <th>Presupuesto</th>
+            <th>Estado</th>
+            <th>Usuario Registro</th>
+            <th>Fecha Registro</th>
+            <th>Seleccione...</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row_registros of dts_listapresupuestoasignado; let i = index;" [ngClass]="{'bg-info':row_registros.id_estado=='19','bg-success':row_registros.id_estado=='21','bg-warning':row_registros.id_estado=='20','bg-danger':row_registros.id_estado=='23' || row_registros.id_estado=='22'}">            
+            <td>{{row_registros.gestion}}</td>
+            <td>{{row_registros.presupuesto}}</td>
+            <td>{{row_registros.descripciondetalleclasificador}}</td>
+            <td>{{row_registros.username}}</td>
+            <td>{{row_registros.fecha_registro | date: 'dd/MM/yyyy HH:mm'}}</td>
+            <td>
+              <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-warning btn-md" (click)="PreEditarPresupuesto(row_registros)">
+                  <i class="fa fa-edit" aria-hidden="true" title="Actualizar Registro"></i>
+                </button>
+                <!-- <a title="Descargar Reporte" *ngIf="row_registros._usuario_tec!='' && row_registros._usuario_fin!='' "
+                                      class="btn btn-success   btn-md" target="_blank" ti
+                                      href="{{url_reporte}}/rptInformeFinanciero.php?id={{row_registros._id_seg}}"><i
+                                          class="fa fa-file-pdf-o" aria-hidden="true" ></i></a> -->
+
+                <button *ngIf="i===0" type="button" class="btn btn-danger btn-md"
+                  (click)="EliminaPresupuesto(row_registros.id)" title="Eliminar Registro">
+                  <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="modal fade" style="overflow-y: scroll; " id="modalFormulario" name="modalFormulario" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <form name="form" #f="ngForm">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" id="gridSystemModalLabel">Ingresar un Presupuesto Nuevo</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group ">
+            <div>
+              <label for="Gestion">Gestion:</label>
+            </div>
+            <div>           
+              <input type="text" class="form-control"  id="m_gestion" name="m_gestion"   [(ngModel)]="m_gestion" #gestion="ngModel"
+              onKeyDown="A(event,this.form.m_presupuesto)" minlength="4" required/>
+              <span *ngIf="!gestion.valid && gestion.touched">La gestión es obligatorio</span>
+              
+      
+            </div>
+          </div>
+          <div class="form-group ">
+            <div>
+              <label for="Gestion">Presupuesto:</label>
+            </div>
+            <div>
+              <input class="form-control" id="m_presupuesto" name="m_presupuesto" [(ngModel)]="m_presupuesto" 
+                onKeyDown="A(event,this.form.btnRegistrar)" required/>
+               
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-warning" data-dismiss="modal">Cerrar</button>
+          <button type="button" name="btnRegistrarPresupuesto" id="btnRegistrarPresupuesto" class="btn btn-success" (click)="InsertarPresupuesto()" [disabled]="f.invalid" >Guardar Registro</button>
+          <button type="button" name="btnEditarPresupuesto" id="btnEditarPresupuesto" class="btn btn-success" (click)="EditarPresupuesto()" [disabled]="f.invalid" >Editar Registro</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

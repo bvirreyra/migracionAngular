@@ -1,0 +1,285 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<!-- BANDEJA ITEMS -->
+<div
+  class="container-fluid"
+  *ngIf="pnl_items == true"
+  id="pnl_items"
+  name="pnl_items"
+>
+  <div class="col-lg-3">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 flex-wrap">
+      <div class="panel panel-primary">
+        <div class="panel-heading clearfix">PLANOS DEL PROYECTO</div>
+        <div class="panel-body">
+          <app-upload-file
+            inputTipoDocumento="planos_proyecto"
+            [inputCodigoProy]="m_codigoproyecto_seguimiento"
+            inputVista="false"
+            [inputTipoImagen]="confPlanos.inputTipoImagen"
+            [inputSrc]="confPlanos.inputSrc"
+            [inputNombre]="confPlanos.inputNombre"
+            [inputAccion]="confPlanos.inputAccion"
+            (enviaPadre)="manejoArchivos($event)"
+          >
+          </app-upload-file>
+        </div>
+      </div>
+    </div>
+    <button
+      type="button"
+      class="btn btn-success btn-block"
+      title="Terminar Proceso"
+      (click)="paneles('TERMINAR_PROCESO', dts_registro)"
+    >
+      Terminar Proceso
+    </button>
+  </div>
+  <div class="col-lg-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading clearfix">
+        <div class="row">
+          <button
+            type="button"
+            class="btn btn-primary pull-left"
+            title="Volver Panel"
+            name="btnVolverGv"
+            id="btnVolverGv"
+            (click)="paneles('CIERRA_BANDEJA_ITEMS')"
+          >
+            <i class="fa fa-reply fa-2x"> </i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger pull-right"
+            title="Eliminar Items"
+            name="btnEliminarItems"
+            id="btnEliminarItems"
+            (click)="paneles('ELIMINAR_ITEMS')"
+          >
+            <i class="fa fa-trash fa-2x"> </i>
+          </button>
+          {{ m_nombreproyecto }}
+        </div>
+      </div>
+      <div
+        class="row"
+        id="itemcss"
+        name="itemcss"
+        style="overflow-y: auto; height: 80vh"
+      >
+        <div
+          class="container-fluid"
+          *ngFor="
+            let row_registros of dts_items | groupBy : 'nombre_mod';
+            let x = index
+          "
+        >
+          <table>
+            <tr>
+              <td>{{ row_registros.key }}</td>
+            </tr>
+            <tr>
+              <td>
+                <table class="table table-condensed table-hover dt-items">
+                  <thead>
+                    <tr>
+                      <th>Nro.</th>
+                      <th>Nombre</th>
+                      <th>Unidad Medida</th>
+                      <th>Cantidad</th>
+                      <!-- <th>Seleccione...</th> -->
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <!-- <td></td> -->
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let row_registros2 of row_registros.value;
+                        let i = index
+                      "
+                    >
+                      <td>{{ row_registros2.nro_item }}</td>
+                      <td>
+                        <textarea
+                          class="form-control"
+                          id="nombre_item{{ row_registros2.id_item }}"
+                          name="nombre_item{{ row_registros2.id_item }}"
+                          value="{{ row_registros2.nombre }}"
+                          rows="2"
+                          cols="60"
+                          disabled="true"
+                        >
+                        </textarea>
+                      </td>
+                      <td>
+                        <select
+                          id="detalle_unidadmedida{{ row_registros2.id_item }}"
+                          class="form-control"
+                          name="detalle_unidadmedida{{
+                            row_registros2.id_item
+                          }}"
+                          value="{{ row_registros2.des_unidadmedida }}"
+                          (change)="
+                            seleccion_unidadmedida(row_registros2.id_item)
+                          "
+                          disabled="true"
+                        >
+                          <option
+                            *ngFor="let row_unidadmedida of dts_unidadmedida"
+                            [ngValue]="row_unidadmedida.codigo"
+                          >
+                            {{ row_unidadmedida.descripcion }}
+                          </option>
+                        </select>
+                        <input
+                          type="hidden"
+                          class="form-control"
+                          id="codigo_unidadmedida{{ row_registros2.id_item }}"
+                          name="codigo_unidadmedida{{ row_registros2.id_item }}"
+                          value="{{ row_registros2.unidad_medida }}"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="item_cantidad{{ row_registros2.id_item }}"
+                          name="item_cantidad{{ row_registros2.id_item }}"
+                          value="{{ row_registros2.cantidad }}"
+                          disabled="true"
+                        />
+                      </td>
+                      <!-- <td>
+                  <button
+                    type="button"
+                    class="btn btn-warning btn-md"
+                    (click)="pre_editaitems(row_registros2.id_item)"
+                  >
+                    <i class="fa fa-edit" aria-hidden="true" title="Editar"></i>
+                  </button>
+                </td> -->
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <button
+          type="button"
+          class="btn btn-primary pull-left"
+          title="Volver Panel"
+          name="btnVolverGv"
+          id="btnVolverGv"
+          (click)="paneles('CIERRA_BANDEJA_ITEMS')"
+        >
+          <i class="fa fa-reply fa-2x"> </i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 flex-wrap">
+      <div class="panel panel-primary">
+        <div class="panel-heading clearfix">
+          ESPECIFICACIONES TECNICAS DEL PROYECTO
+        </div>
+        <div class="panel-body">
+          <app-upload-file
+            inputTipoDocumento="especificaciones_tecnicas"
+            [inputCodigoProy]="m_codigoproyecto_seguimiento"
+            inputVista="false"
+            [inputTipoImagen]="confEspecificacionesTecnicas.inputTipoImagen"
+            [inputSrc]="confEspecificacionesTecnicas.inputSrc"
+            [inputNombre]="confEspecificacionesTecnicas.inputNombre"
+            [inputAccion]="confEspecificacionesTecnicas.inputAccion"
+            (enviaPadre)="manejoArchivos($event)"
+          >
+          </app-upload-file>
+        </div>
+      </div>
+    </div>
+    <button
+      type="button"
+      class="btn btn-success btn-block"
+      title="Terminar Proceso"
+      (click)="paneles('TERMINAR_PROCESO', dts_registro)"
+    >
+      Terminar Proceso
+    </button>
+  </div>
+</div>
+
+<div *ngIf="pnl_items == false">
+  <!-- IMPORTAR ITEMS -->
+
+  <div class="container-fluid">
+    <div class="col-lg-offset-3 col-lg-5">
+      <div class="panel panel-primary">
+        <div class="panel-heading clearfix">IMPORTAR ITEM'S</div>
+        <div class="panel-body">
+          <div class="alert alert-info">
+            <i class="fa fa-info-circle"></i>
+            Puede importar los Items desde un archivo en formato ods
+          </div>
+
+          <div style="display: flex; justify-content: space-around">
+            <app-upload-file
+              inputTipoDocumento="modelo_items"
+              inputCodigoProy="sd"
+              inputVista="false"
+              inputTipoImagen="aa"
+              inputSrc=""
+              inputNombre="items.ods"
+              inputAccion="VISUALIZAR"
+              [inputEstiloBotones]="dts_estiloBotones"
+              inputBotonDescargar="Modelo ODS"
+              (enviaPadre)="refrescaLista($event)"
+            >
+            </app-upload-file>
+            <app-upload-file
+              inputTipoDocumento="manual_ods"
+              inputCodigoProy="sd"
+              inputVista="false"
+              inputTipoImagen="aa"
+              inputSrc=""
+              inputNombre="manual_ods.pdf"
+              inputAccion="VISUALIZAR"
+              [inputEstiloBotones]="dts_estiloBotones"
+              inputBotonDescargar="Manual ODS"
+              (enviaPadre)="refrescaLista($event)"
+            >
+            </app-upload-file>
+          </div>
+          <div class="row"></div>
+          <div style="width: 100%">
+            <br />
+            <app-upload-file
+              inputTipoDocumento="importaItems"
+              [inputCodigoProy]="m_idseguimiento"
+              inputVista="false"
+              inputTipoImagen="aa"
+              inputSrc=""
+              inputNombre="Nuevo Archivo"
+              inputAccion="BASE64"
+              (enviaPadre)="importarItems($event)"
+            >
+            </app-upload-file>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+div.center-div
+{
+    margin-left: auto;
+    margin-right: auto;
+}
+tr>th
+{
+    text-align: center;
+    vertical-align: middle;
+    background-color: #CADEC7;
+}
+div.center {text-align: center;}
+

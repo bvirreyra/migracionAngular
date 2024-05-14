@@ -1,0 +1,9 @@
+.dt-cargo tfoot input{
+    width: 100% !important;
+}
+.dt-cargo tfoot {
+    display: table-header-group !important;
+}
+.dt-UsuarioExterno tfoot {
+    display: table-header-group !important;
+}

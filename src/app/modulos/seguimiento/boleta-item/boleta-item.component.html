@@ -1,0 +1,238 @@
+<div id="pnl_gridview" name="pnl_gridview">
+  <table class="dt-seguimiento">
+    <thead>
+      <tr>
+        <th>Nro.</th>
+        <th>Departamento</th>
+        <th>Nro Convenio</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Monto total</th>
+        <th>Plazo ejecución</th>
+        <th>Código de acceso</th>
+        <th>Usuario Asignado</th>
+        <th>Rol Asignado</th>
+        <th>Estado Proyecto</th>
+        <th>Boletas</th>
+        <th>Items</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr *ngFor="let row_registros of dts_seguimiento; let i = index;">
+        <td>{{i+1}}</td>
+        <td>{{row_registros.departamento}}</td>
+        <td>{{row_registros.nro_convenio}}</td>
+        <td>{{row_registros.nombre}}</td>
+        <td>{{row_registros.tipo}}</td>
+        <td>{{row_registros.monto_total}}</td>
+        <td>{{row_registros.plazo_ejecucion}}</td>
+        <td>{{row_registros.codigo}}</td>
+        <td>{{row_registros.nombrecompleto_tecnico}}</td>
+        <td>{{row_registros.nomb_rol}}</td>
+        <td>{{row_registros.descripcion_estado_proyecto}}</td>
+        <td>
+          <button
+            *ngIf="row_registros.estado_proyecto=='REGISTRO_GARANTIAS_CIFE' || row_registros.estado_proyecto=='REGISTRO_GARANTIAS_MAE' "
+            type="button" class="btn btn-primary btn-md"
+            (click)="listaBoletas(row_registros.id_proyecto,row_registros.nombre)">
+            <i class="fa fa-id-card" aria-hidden="true" title="Boletas"></i>
+          </button>
+        </td>
+        <td>
+          <button type="button" class="btn btn-warning btn-md"
+            (click)="listaitems(row_registros.id_proyecto,row_registros.nombre)">
+            <i class="fa fa-file-text" aria-hidden="true" title="Item"></i>
+          </button>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div id="pnl_gridview_boletas" name="pnl_gridview_boletas">
+  <div class="row">
+    <button type="button" class="btn btn-primary  pull-left" title="Volver Panel" name="btnVolverGv" id="btnVolverGv"
+      (click)="paneles('VER_GRIDVIEW')"><i class="fa fa-reply fa-2x">
+      </i></button>
+  </div>
+  <div class="row">
+    <div class="page-header">
+      <h2>{{m_nombreproyecto}}</h2>
+    </div>
+    <table class="table table-condensed table-hover dt-boletas">
+      <thead>
+        <tr>
+          <th>Nro.</th>
+          <th>Tipo Boleta</th>
+          <th>Numero</th>
+          <th>Monto</th>
+          <th>Fecha Inicio</th>
+          <th>Fecha Fin</th>
+          <th>Fecha Creación</th>
+          <th>Fecha Modificación</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr *ngFor="let row_registros of dts_boletas; let i = index;">
+          <td>{{i+1}}</td>
+          <td>{{row_registros.tipo_boleta}}</td>
+          <td>{{row_registros.numero}}</td>
+          <td>{{row_registros.monto}}</td>
+          <td>{{row_registros.fecha_inicio_validez | date:'dd/MM/yyyy'}}</td>
+          <td>{{row_registros.fecha_fin_validez | date: 'dd/MM/yyyy'}}</td>
+          <td>{{row_registros._fecha_creacion| date: 'dd/MM/yyyy'}}</td>
+          <td>{{row_registros._fecha_modificacion| date: 'dd/MM/yyyy'}}</td>
+          <td>
+            <button *ngIf="row_registros.estado=='ACTIVO'" type="button" class="btn btn-danger btn-md"
+              (click)="preeliminar(row_registros.id_boleta)">
+              <i class="fa fa-trash-o" aria-hidden="true" title="Eliminar"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modalConfirmacion" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">:::ATENCIÓN:::</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="alert alert-danger">
+        Está apunto de eliminar una boleta:
+        <br>
+        <strong>==></strong>
+        <br>
+      </div>
+      <div class="alert alert-warning">
+        <p>, ¿se encuentra seguro?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="eliminaboleta()">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="pnl_gridview_items" name="pnl_gridview_items">
+  <div class="row">
+    <button type="button" class="btn btn-primary  pull-left" title="Volver Panel" name="btnVolverGv" id="btnVolverGv"
+      (click)="paneles('VER_GRIDVIEW')"><i class="fa fa-reply fa-2x">
+      </i></button>
+  </div>
+  <div class="row">
+    <div class="page-header">
+      <h2>{{m_nombreproyecto}}</h2>
+    </div>
+    <div *ngFor="let row_registros of dts_items | groupBy:'nombre_mod';let x=index ">
+      <tr>
+        <td>{{row_registros.key}}</td>
+      </tr>
+      <tr>
+        <td>
+          <table class="table table-condensed table-hover dt-items">
+            <thead>
+              <tr>
+                <th>Nro.</th>
+                <th>Nombre</th>
+                <th>Unidad Medida</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Estado</th>               
+                <th>Seleccione...</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              
+
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row_registros2 of row_registros.value; let i = index;">                
+                <td>{{row_registros2.nro_item}}</td>
+                <td>{{row_registros2.nombre}}</td>
+                <td>
+                    <select id="item_unidadmedida{{row_registros2.id_item}}" class="form-control" name="item_unidadmedida{{row_registros2.id_item}}" 
+                    value="{{row_registros2.unidad_medida}}">                    
+                    <option *ngFor="let row_unidadmedida of dts_unidadmedida"
+                    [ngValue]="row_unidadmedida.codigo">{{row_unidadmedida.codigo}}
+                    </option>
+                    
+                </select>
+                  
+
+                </td>
+                <td>
+                    <input type="number" class="form-control" id="item_cantidad{{row_registros2.id_item}}" name="item_cantidad{{row_registros2.id_item}}" value={{row_registros2.cantidad}}>
+                </td>
+                <td>
+                    <input type="number" class="form-control" id="item_preciounitario{{row_registros2.id_item}}" name="item_preciounitario{{row_registros2.id_item}}" value={{row_registros2.precio_unitario}}>                  
+                </td>                
+                <td>
+                    <select id="item_estado{{row_registros2.id_item}}" class="form-control" name="item_estado{{row_registros2.id_item}}"
+                    value="{{row_registros2.estado}}">
+                    <option value='0' disabled="item_estado =='0'">Seleccione...</option>
+                    <option value="ACTIVO">ACTIVO</option>
+                    <option value="CERRADO" >CERRADO</option>
+                </select> 
+                </td>                
+                <td>
+                  <button type="button" class="btn btn-warning btn-md"  (click)="pre_editaitems(row_registros2.id_item)"                   >
+                    <i class="fa fa-edit" aria-hidden="true" title="Editar"></i>                    
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </div>
+
+  </div>
+</div>

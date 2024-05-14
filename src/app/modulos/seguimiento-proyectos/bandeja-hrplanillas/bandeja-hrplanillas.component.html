@@ -1,0 +1,141 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+
+<div style="margin: 2rem;">
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <span class="fa fa-briefcase"></span> Bandeja HR - Proyectos
+    </div>
+    <div class="panel-body" style="text-align: left;">
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-2">
+          <label class="control-label" for="busqueda">Gestión: </label>
+          <select class="form-control" [(ngModel)]="gestionSel" (ngModelChange)="recargarBandeja()">
+            <option *ngFor="let row of gestiones" [ngValue]="row">
+              {{ row }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group col-sm-12 col-lg-2">
+          <label class="control-label" for="busqueda">Estado: </label>
+          <select class="form-control" [(ngModel)]="tipoSel" (ngModelChange)="recargarBandeja()">
+            <option value="EnProceso">En Proceso</option>
+            <option value="Terminado">Terminado</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-12 col-lg-7">
+          <label class="control-label" for="busqueda">Proyecto: </label>
+          <input class="form-control" type="text" autocomplete="off" name="proyecto" id="proyecto" #proyecto
+            list="listaProyectos" (input)="filtrarHRProyectos(proyecto.value)" [disabled]="tipoSel == 'EnProceso'">
+          <datalist id="listaProyectos" class="datalist">
+            <div *ngFor="let row of dtsProyectos;">
+              <option class="form-control" value={{row.formateado}} label={{row.formateado}}>
+            </div>
+          </datalist>
+        </div>
+        <div class="form-group col-sm-12 col-lg-1">
+          <button class="btn btn-success btn-block" style="margin-top: 2.5rem;" (click)="reporteDTS(dtsRelaciones)"><i class="fa fa-print"></i> Reporte</button>
+        </div>
+      </div>
+      <!-- <div *ngIf="mostrarChart" style="width: 60%;text-align: center;margin: 0 auto;">
+        <button class="btn btn-warning btn-block" (click)="mostrarChart=false"><i class="fa fa-th"></i> Ocultar Gráfica</button>
+      </div> -->
+      <div style="overflow-x: auto;" *ngIf="mostrarGrid">
+        <table class="table table-responsive table-condensed table-hover table-striped dt-bandeja" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="max-width: 80px;">Opciones</th>
+              <th>ID</th>
+              <th style="max-width: 100px;">Código SGP</th>
+              <th style="max-width: 120px;">Departamento</th>
+              <th style="max-width: 120px;">Municipio</th>
+              <th>Nombre Proyecto</th>
+              <th>Nº HR Gestión</th>
+              <th>Referencia</th>
+              <th>Usuario DE:</th>
+              <th>Tipo</th>
+              <th>Tiempos</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td style="max-width: 100px;"></td>
+              <td style="max-width: 120px;">
+                <select #departamento id="v_departamento" style="max-width: 120px;" (change)="filtrarDinamico('v_departamento',departamento.value)">
+                  <option *ngFor="let row of departamentos" [ngValue]="row.v_departamento">{{ row.v_departamento }}</option>
+                </select>
+              </td>
+              <td style="max-width: 120px;">
+                <select #municipio id="v_municipio" style="max-width: 120px;" (change)="filtrarDinamico('v_municipio',municipio.value)">
+                  <option *ngFor="let row of municipios" [ngValue]="row.v_municipio">{{ row.v_municipio }}</option>
+                </select>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsRelaciones">
+              <td class="botonera">
+                <button class="btn btn-info" title="Ver Proveidos" (click)="abrirChartProveido(row)">
+                  <span class="fa fa-eye"></span>
+                </button>
+              </td>
+              <td>{{ row.id_correspondencia}}</td>
+              <td style="max-width: 100px;">{{ row.id_sgp}} </td>
+              <td style="max-width: 120px;">{{ row.v_departamento}}</td>
+              <td style="max-width: 120px;">{{ row.v_municipio}}</td>
+              <td>{{ row.nombreproyecto}}</td>
+              <td>{{ row.nro_hr}} / {{ row.gestion}}</td>
+              <td>{{ row.referencia}}</td>
+              <td>{{ row.usuario_de}}</td>
+              <td>{{ row.tipo}}</td>
+              <td style="text-align: right;">
+                <p *ngFor="let r of row.tiempo" title="{{row.usuario}}"
+                  [ngClass]="{ 'bg-danger': r.unidad == row.unidad_act}">
+                  {{r.unidad}}: {{r.unidad == row.unidad_act ? (row.tiempo_act - row.tiempo_total) + (r.dias - r.puntos) :r.dias - r.puntos}}
+                </p>
+                <p><strong> TOTAL: {{row.tiempo_act || row.tiempo_total}}</strong></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- <div id="verChart" style="margin: 2rem 0; padding: 0 2rem" *ngIf="mostrarChart">
+      <app-chart-proveidos [numero]="numCorrespondencia" [gestion]="gestionSel"></app-chart-proveidos>
+    </div> -->
+  </div>
+</div>
+
+<!--modal Chart Proveidos -->
+<div
+  class="modal fade"
+  tabindex="-1"
+  name="modalChart"
+  id="modalChart"
+  role="dialog"
+  aria-labelledby="exampleModalDocumento"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" style="width: 90%;" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad; color: white">
+        <button class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">Relación Tiempos Proveídos</h5>
+      </div>
+      <div class="modal-body">
+        <app-chart-proveidos *ngIf="mostrarChart" [numero]="numCorrespondencia" [gestion]="gestionSel"></app-chart-proveidos>
+      </div>
+    </div>
+  </div>
+</div>

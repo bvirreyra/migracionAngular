@@ -1,0 +1,114 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div *ngIf="pnl_gridview == true" id="pnl_gridview" name="pnl_gridview">
+  <div class="panel-heading clearfix">
+    <button
+      type="button"
+      class="btn btn-success btn-md pull-right"
+      (click)="paneles('ACTUALIZAR_BANDEJA_PROYECTOS')"
+    >
+      <i class="fa fa-refresh" aria-hidden="true" title="Ver Proyectos"></i>
+    </button>
+  </div>
+
+  <table class="dt-seguimiento" style="width: 100%">
+    <thead>
+      <tr>
+        <th>Nro.</th>
+        <th>Departamento</th>
+        <th>Municipio</th>
+        <th>Nro Convenio</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Monto total</th>
+        <th>Plazo ejecución</th>
+        <th>Código de acceso</th>
+        <th>Usuario Asignado</th>
+        <th>Rol Asignado</th>
+        <th>Estado Proyecto</th>
+        <th>Procesar...</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr *ngFor="let row_registros of dts_listaproyectos; let i = index">
+        <td>{{ row_registros.id_proyecto }}</td>
+        <td>{{ row_registros.departamento }}</td>
+        <td>{{ row_registros.municipio }}</td>
+        <td>{{ row_registros.nro_convenio }}</td>
+        <td>{{ row_registros.nombre }}</td>
+        <td>{{ row_registros.tipo }}</td>
+        <td>{{ row_registros.monto_total }}</td>
+        <td>{{ row_registros.plazo_ejecucion }}</td>
+        <td>{{ row_registros.codigo }}</td>
+        <td>{{ row_registros.nombrecompleto_tecnico }}</td>
+        <td>{{ row_registros.nomb_rol }}</td>
+        <td>{{ row_registros.descripcion_estado_proyecto }}</td>
+        <td>
+          <!-- <button
+            type="button"
+            class="btn btn-success btn-md"
+            (click)="
+              equipotecnico(row_registros.id_proyecto, row_registros.nombre)
+            "
+          >
+            <i class="fa fa-eye" aria-hidden="true" title="Equipo Tecnico"></i>
+          </button> -->
+          <button
+            type="button"
+            class="btn btn-primary btn-md"
+            (click)="paneles('CERTIFICACION_PRESUPUESTARIA', row_registros)"
+          >
+            <i
+              class="fa fa-hand-o-right"
+              aria-hidden="true"
+              title="Procesar..."
+            ></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- CERTIFICACION PRESUPUESTARIA -->
+<div *ngIf="pnl_certificacionpresupuestaria == true">
+  <div id="pnl_listaderecho" name="pnl_listaderecho" class="card card-body">
+    <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+      <div class="content-header with-border">
+        <h3 class="content-title text-green">
+          <strong
+            >CERTIFICACIÓN PRESUPUESTARIA - PROYECTO:
+            <b>{{ inputDts.nombre }}</b></strong
+          >
+        </h3>
+        <button
+          type="button"
+          class="btn btn-primary pull-left"
+          title="Volver a Bandeja"
+          (click)="paneles('VER_PANELPROYECTOS')"
+        >
+          <i class="fa fa-reply"></i>
+        </button>
+      </div>
+      <app-certificacion-presupuestaria [inputDts]="inputDts">
+      </app-certificacion-presupuestaria>
+    </div>
+  </div>
+</div>

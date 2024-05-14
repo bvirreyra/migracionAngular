@@ -1,0 +1,479 @@
+<div
+  *ngIf="pnl_listacontratos == true"
+  id="pnl_listacontratos"
+  name="pnl_listacontratos"
+  class="card card-body"
+>
+  <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+    <div class="content-header with-border">
+      <h3 class="content-title text-green">
+        <strong
+          >CONTRATO(S) - PROYECTO: <b>{{ nombre_proyecto }}</b></strong
+        >
+      </h3>
+      <div class="pull-right">
+        <button
+          class="btn btn-primary"
+          type="button"
+          (click)="paneles('NUEVO_CONTRATO')"
+          [disabled]="camposHabilitados._solicitud_administrador"
+        >
+          <i
+            class="fa fa-plus-square"
+            aria-hidden="true"
+            title="Agregar Contrato"
+          ></i>
+        </button>
+      </div>
+    </div>
+    <div class="content-body">
+      <div class="row">
+        <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+        <div class="col-lg-offset-2 col-lg-8">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">CONTRATO(S)</div>
+            <div class="panel-body">
+              <!--LISTA GRIDVIEW AMPLIACION DE PLAZO-->
+              <table
+                class="table table-condensed table-responsive table-hover dt-listacontrato"
+              >
+                <thead>
+                  <tr>
+                    <th>Nro.</th>
+                    <th>Nit</th>
+                    <th>Razon Social</th>
+                    <th>Fecha Suscripcion</th>
+                    <th>Monto Total</th>
+                    <th>Monto Upre</th>
+                    <th>Monto Contraparte</th>
+                    <th>Plazo Ejecucion</th>
+                    <th>Detalle</th>
+                    <th>Adjunto</th>
+                    <th>.::.</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let row_contratos of dts_listacontratos;
+                      let i = index
+                    "
+                  >
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ row_contratos.nit }}</td>
+                    <td>{{ row_contratos.razon_social }}</td>
+                    <td>
+                      {{ row_contratos.fecha_contrato | date: "dd/MM/yyyy" }}
+                    </td>
+                    <td>
+                      {{
+                        row_contratos.monto | number: "0.2-2" | formatoDecimal
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        row_contratos.monto_upre
+                          | number: "0.2-2"
+                          | formatoDecimal
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        row_contratos.monto_contraparte
+                          | number: "0.2-2"
+                          | formatoDecimal
+                      }}
+                    </td>
+                    <td>{{ row_contratos.plazo }}</td>
+                    <td>{{ row_contratos.detalle }}</td>
+                    <td>
+                      <div *ngIf="!(row_contratos.archivo_adjunto === '')">
+                        <div class="text-center">
+                          <app-upload-file
+                            inputTipoDocumento="contrato_siga"
+                            inputCodigoProy="sin"
+                            inputVista="false"
+                            inputTipoImagen=""
+                            inputSrc=""
+                            inputNombre="{{ row_contratos.archivo_adjunto }}"
+                            inputAccion="VISUALIZAR"
+                            inputBotonDescargar=""
+                          >
+                          </app-upload-file>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        class="btn btn-warning btn-md"
+                        (click)="paneles('EDITA_CONTRATO', row_contratos)"
+                        [disabled]="camposHabilitados._solicitud_administrador"
+                        
+                      >
+                        <i
+                          class="fa fa-edit"
+                          aria-hidden="true"
+                          title="Modificar Contrato"
+                        ></i></button
+                      ><br />
+                      <button                        
+                      type="button"
+                      class="btn btn-info btn-md"
+                      (click)="paneles('CONCILIA_CONTRATO', row_contratos)" 
+                      [disabled]="camposHabilitados._solicitud_administrador"                       
+                    >
+                      <i
+                        class="fa fa-gg"
+                        aria-hidden="true"
+                        title="Conciliar Contrato"
+                      ></i></button
+                    ><br />
+                      <button
+                        *ngIf="i==0"
+                        type="button"
+                        class="btn btn-danger btn-md"
+                        (click)="paneles('ELIMINA_CONTRATO', row_contratos)"  
+                        [disabled]="camposHabilitados._solicitud_administrador"                      
+                      >
+                        <i
+                          class="fa fa-trash"
+                          aria-hidden="true"
+                          title="Eliminar ampliación"
+                        ></i></button
+                      ><br />
+                     
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content-footer"></div>
+  </div>
+</div>
+<!-- INICIO MODAL CONTRATO -->
+<div
+  *ngIf="pnl_formulariocontrato==true"
+  class="modal fade"
+  name="modalFormulario"
+  id="modalFormulario"
+  data-backdrop="static"
+  data-keyboard="false"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">        
+        <button          
+          type="button"     
+          class="close text-white"  
+          aria-label="Close"   
+          (click)="cerrarFormulario()"        
+        ><span>&times;</span>
+        </button>
+        <h4 class="modal-title">Contrato</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="form-horizontal">
+              <div name="pnlDatosContrato" id="pnlDatosContrato">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="monto"
+                      >Nit:
+                    </label>
+                    <div class="col-sm-6">
+                      <input
+                        class="form form-control"
+                        id="nit"
+                        name="nit"
+                        [(ngModel)]="contrato.nit"
+                        onKeyDown="A(event,this.form.btnBuscarEmpresa)"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      class="btn btn-warning btn-md"
+                      name="btnBuscarEmpresa"
+                      id="btnBuscarEmpresa"
+                      (click)="datosEmpresa()"
+                    >
+                      <i
+                        class="fa fa-search"
+                        aria-hidden="true"
+                        title="Buscar Empresa"
+                      ></i>
+                    </button>
+                    
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="monto"
+                      >
+                    </label>
+                    <div class="col-sm-6">
+                      <label class="checkbox-inline" >
+                        <input
+                          id="vistaRazonSocial"
+                          name="vistaRazonSocial"
+                          type="checkbox"
+                          class="text-left"
+                          [(ngModel)]="vistaRazonSocial"
+                          
+                        />
+                        Registro Manual
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="monto"
+                      >Nombre Empresa:
+                    </label>
+                    <div class="col-sm-6">
+                      <input
+                        type="text"
+                        minlength="1"
+                        class="form form-control"
+                        id="nombre_empresa"
+                        name="nombre_empresa"
+                        #nombre_empresa="ngModel"
+                        [(ngModel)]="contrato.razon_social"                        
+                        [disabled]=!vistaRazonSocial                        
+                        onKeyDown="A(event,this.form.tipo)"
+                        required
+                      />
+                      <span
+                      style="color: tomato"
+                      *ngIf="nombre_empresa.touched && contrato.razon_social.length<=0"
+                      >Este campo es requerido</span
+                    >                   
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="monto"
+                      >Tipo:
+                    </label>
+                    <div class="col-sm-6">
+                      <select id="tipo" class="form-control" name="tipo" [(ngModel)]="contrato.tipo" [disabled]="true">                        
+                        <option value='CONTRATO'>CONTRATO</option>                        
+                        <option value='CONCILIACION'>CONCILIACIÓN</option>
+                    </select>
+                    </div>
+                  </div>                
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="monto"
+                      >Monto Total (Bs):
+                    </label>
+                    <div class="col-sm-6">
+                      <input
+                        class="form form-control"
+                        id="monto"
+                        name="monto"
+                        [(ngModel)]="contrato.monto"
+                        onKeyDown="A(event,this.form.monto_contraparte_beneficiario)"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="monto"
+                      >Monto Contraparte Beneficiario(Bs):
+                    </label>
+                    <div class="col-sm-6">
+                      <input
+                        class="form form-control"
+                        id="monto_contraparte_beneficiario"
+                        name="monto_contraparte_beneficiario"
+                        [(ngModel)]="contrato.monto_contraparte_beneficiario"
+                        onKeyDown="A(event,this.form.monto_contraparte_gobernacion)"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="monto"
+                      >Monto Contraparte Gobernacion (Bs):
+                    </label>
+                    <div class="col-sm-6">
+                      <input
+                        class="form form-control"
+                        id="monto_contraparte_gobernacion"
+                        name="monto_contraparte_gobernacion"
+                        [(ngModel)]="contrato.monto_contraparte_gobernacion"
+                        onKeyDown="A(event,this.form.monto_contraparte_municipio)"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="monto"
+                      >Monto Contraparte Municipio(Bs):
+                    </label>
+                    <div class="col-sm-6">
+                      <input
+                        class="form form-control"
+                        id="monto_contraparte_municipio"
+                        name="monto_contraparte_municipio"
+                        [(ngModel)]="contrato.monto_contraparte_municipio"
+                        onKeyDown="A(event,this.form.plazo)"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left"
+                      >Plazo:
+                    </label>
+                    <div class="col-sm-6">
+                      <input
+                        class="form form-control"
+                        id="plazo"
+                        name="plazo"
+                        [(ngModel)]="contrato.plazo"
+                        onKeyDown="A(event,this.form.fecha_contrato)"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label
+                      class="control-label col-sm-4 text-left"
+                      for="fecha aprobacion"
+                      >Fecha Suscripcion:
+                    </label>
+                    <div class="col-sm-6">                    
+                      <div class="input-group">
+                        <span class="input-group-addon"
+                          ><i class="glyphicon glyphicon-calendar"></i
+                        ></span>
+                        <input
+                          class="form-control"
+                          id="fecha_contrato"
+                          name="fecha_contrato"
+                          #fecha_contrato="ngModel"
+                          [(ngModel)]="contrato.fecha_contrato"
+                          type="date"
+                          onKeyDown="A(event,this.form.detalle)"
+                          (input)="validacionFormulario()"
+                          required
+                        />
+                        <span
+                          style="color: tomato"
+                          *ngIf="
+                            fecha_contrato.touched && !fecha_contrato.valid
+                          "
+                          >Este campo es requerido</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label
+                      class="control-label col-sm-4 text-left"
+                      for="detalle"
+                      >Detalle:
+                    </label>
+                    <div class="col-sm-6">
+                      <textarea
+                        style="resize: none"
+                        id="detalle"
+                        name="detalle"
+                        class="form form-control"
+                        rows="6"
+                        maxlength="2000"
+                        [(ngModel)]="contrato.detalle"
+                        (input)="validacionFormulario()"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label
+                      class="control-label col-sm-4 text-left"
+                      for="telefonos"
+                      >Archivo Adjunto:
+                    </label>
+                    <div class="col-sm-6">
+                      <app-upload-file
+                            inputTipoDocumento="contrato_siga"
+                            inputCodigoProy="{{id_sgp}}"
+                            inputVista="false"
+                            inputTipoImagen="aa"
+                            inputSrc=""
+                            inputNombre="{{contrato.archivo_adjunto}}"
+                            inputAccion="{{inputAccion}}"
+                            inputEstadoBoton="{{estadoBoton}}"
+                            (enviaPadre)="refrescaLista($event)"
+                          >
+                          </app-upload-file>
+                      <!-- <label for="">Formatos Permitidos (pdf)</label> -->
+
+                      <!-- <input
+                        type="file"
+                        class="form-control"
+                        id="inputArchivo"
+                        name="inputArchivo"
+                        (change)="handleFileInput($event.target.files)"
+                        required
+                      /> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="cerrarFormulario()"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FIN MODAL CONTRATO-->

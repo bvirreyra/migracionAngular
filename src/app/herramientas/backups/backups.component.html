@@ -1,0 +1,147 @@
+<div class="panel panel-primary">
+  <div class="panel-heading text-center">
+    <span class="fa fa-server"></span> Respaldos de Funcionarios
+    <div style="overflow-x: auto">
+      <button class="btn btn-success pull-right" style="padding: 2px 10px; margin-top: -2px;" (click)="abrirFormBackup()" >
+        <span class="fa fa-plus-circle" title="Crear registro de respaldo"></span> Nuevo Backup
+      </button>
+      <button class="btn btn-success pull-left" style="padding: 2px 10px; margin-top: -2px" (click)="reporteGeneral()" data-toggle="modal" data-target="#modalFV" title="Listado general de respaldos">Reporte <i class="glyphicon glyphicon-print"></i>
+      </button>
+    </div>
+  </div> 
+  <div class="panel-body" style="text-align: left;">
+    <div class="table table-responsive">
+      <div style="overflow-x: auto;">
+        <table class="table table-responsive table-condensed table-hover table-striped dt-backups " style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="width: 140px;">Opciones</th>
+              <th>ID</th>
+              <th>Funcionario</th>
+              <th>Backup</th>
+              <th style="max-width: 200px;">Observación</th>
+              <th>ruta</th>
+              <th>Registrado por</th>
+              <th>Fecha Registro</th>
+              <th>Modificado por</th>
+              <th>fecha Modificación</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsBackups; let i = index">
+              <td class="botonera">
+                  <button class="btn btn-warning" title="Editar" (click)="abrirFormBackup(row)">
+                    <span class="fa fa-pencil"></span>
+                  </button>
+                  <button class="btn btn-success" title="Reporte" (click)="generarReporte(row.id_backup, row.nombre_backup)">
+                    <span class="fa fa-file-pdf-o"></span>
+                  </button>
+                  <button [disabled]="!(row.idUsuario==row.usr_registro || idUsuario==row.usr_modifica)" class="btn btn-danger" title="Eliminar" (click)="registrarBackup(row.id_backup)">
+                    <span class="fa fa-ban"></span>
+                  </button>
+              </td>
+              <td>{{ row.id_backup}}</td>
+              <td>{{ row.funcionario}}</td>
+              <td>{{ row.nombre_backup}}</td>
+              <td style="max-width: 200px; word-wrap: break-word;">{{ row.observacion}}</td>
+              <td style="display: block;"><div style="color: #337ab7;">{{ row.ruta}}</div></td> 
+              <td>{{ row.usuario_registro}}</td>
+              <td>{{ row.fecha_registro|date : "dd/MM/yyyy HH:mm"}}</td>
+              <td style="width: 140px;">{{ row.usuario_modifica}}</td>
+              <td>{{ row.fecha_modifica|date : "dd/MM/yyyy HH:mm"}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>   
+    </div>  
+  </div>
+</div>
+<!--modal backup func -->
+<div class="modal fade" tabindex="-1"  name="modalBackup" id="modalBackup" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!backupEditar">Crear Backup</div><div *ngIf="backupEditar">Actualizar Backup</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formBackups" (ngSubmit)="registrarBackup()">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12">
+                <label for="tipo">Funcionario a Respaldar:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-address-card"></i></span>
+                  <input list="listaFuncionarios" class="form-control" type="text" name="funcionario" placeholder="Nombre Servidor Respaldado" formControlName="funcionario" maxlength="100"[readOnly]="backupEditar" autofocus>
+                  <span style="color:tomato;" *ngIf="formBackups.controls['funcionario'].touched && formBackups.controls['funcionario'].errors?.required">Este campo es requerido</span>
+                    <datalist id="listaFuncionarios" class="datalist">
+                    <div *ngFor="let row of dtsFuncionariosActivos; let i = index;">
+                    <option class="form-control" value={{row.funcionario}} label={{row.funcionario}}>
+                    </div>
+                  </datalist>
+                </div>
+
+              </div>
+            </div>
+            <div class="row" *ngIf="backupEditar">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="descripcion">Nombre de Backup:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                  <input class="form-control" type="text" name="nombre_backup" formControlName="nombre_backup" min="100" max="9999" value="465" readonly>
+                  <span style="color:tomato;" *ngIf="formBackups.controls['nombre_backup'].touched && formBackups.controls['nombre_backup'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="usuario">Observaciones:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+                  <input class="form-control" type="text" name="observacion" formControlName="observacion" maxlength="500" required [autofocus]="backupEditar" >
+                  <span style="color:tomato;" *ngIf="formBackups.controls['observacion'].touched && formBackups.controls['observacion'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="backupEditar">  
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="clave">Ruta:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                  <input class="form-control" type="text" name="ruta" formControlName="ruta" maxlength="100" readonly>
+                  <span style="color:tomato;" *ngIf="formBackups.controls['ruta'].touched && formBackups.controls['ruta'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formBackups.invalid || formBackups.pristine">
+                  <div *ngIf="!backupEditar"><span class="fa fa-floppy-o"></span> Crear Backup</div>
+                  <div *ngIf="backupEditar"><span class="fa fa-check"></span> Actualizar Backup</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

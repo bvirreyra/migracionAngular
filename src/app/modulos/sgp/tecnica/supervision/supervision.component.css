@@ -1,0 +1,6 @@
+.dt-listasupervision tfoot input{
+    width: 100% !important;
+}
+.dt-listasupervision tfoot {
+    display: table-header-group !important;
+}

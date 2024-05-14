@@ -1,0 +1,83 @@
+<div *ngIf="cargando" class="loading">
+    <div class="spin"></div>
+</div>
+<div id="pnl_correspondencia" name="pnl_correspondencia">
+    <div class="panel panel-primary">
+        <div class="panel-heading clearfix">{{m_titulo}}
+            <button type="button" class="btn btn-success btn-md pull-right" title="Ver Correspondencia" (click)="VerBandeja()">
+        <i class="fa fa-refresh" aria-hidden="true">Bandeja</i>
+      </button>
+            <button type="button" class="btn btn-warning btn-md pull-right" title="Correspondencia Terminada" (click)="ListaCorrespondenciaTerminada()">
+        <i class="fa fa-address-card-o" aria-hidden="true">Correspondencia
+          Terminada</i>
+      </button>
+            <button type="button" class="btn btn-info btn-md pull-right" title="Proveidos Enviados" (click)="ListaProveidosEnviados()">
+        <i class="fa fa-address-book-o" aria-hidden="true">Proveidos Enviados</i>
+      </button>
+            <button type="button" class="btn btn-primary btn-md pull-right" title="Correspondencia Enviada" (click)="ListaCorrespondenciaEnviada()">
+        <i class="fa fa-newspaper-o" aria-hidden="true">Correspondencia Enviada</i>
+      </button>
+        </div>
+        <div class="row form-group col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <label class="control-label col-sm-4" for="busqueda">Gestión:</label>
+            <div class="col-sm-7">
+                <input class="form-control" type="text" name="m_gestion" id="m_gestion" [(ngModel)]="m_gestion">
+            </div>
+        </div>
+        <div class="row panel-body col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <table class="table dt-correspondenciaenviada">
+                <thead>
+                    <tr>
+                        <th>Nro.</th>
+                        <th>Referencia</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Tipo</th>
+                        <th>Estado</th>
+                        <th>Usuario De</th>
+                        <th>Usuario Para</th>
+                        <th>Seleccione...</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr *ngFor="let row_correspondencia of dts_correspondenciaenviada; let i = index;" [ngClass]="{'bg-danger':row_correspondencia.Dias>'0' && row_correspondencia.PlazoDias<='0','bg-warning':row_correspondencia.Dias>'0' && row_correspondencia.PlazoDias<='5','bg-info':row_correspondencia.Dias>'0' && row_correspondencia.PlazoDias<='10'}">
+                        <td>{{row_correspondencia.numero}}</td>
+                        <td>{{row_correspondencia.referencia}}</td>
+                        <td>{{row_correspondencia.fecha| date: 'dd/MM/yyyy'}}</td>
+                        <td>{{row_correspondencia.hora.substring(0,8)}}</td>
+                        <td>{{row_correspondencia.tipo}}</td>
+                        <td>{{row_correspondencia.estado}}</td>
+                        <td>{{row_correspondencia.nombre_de}}</td>
+                        <td>{{row_correspondencia.nombre_para}}</td>
+                        <td>
+                            <div>
+                                <button class="btn btn-warning" title="Descargar Hoja de Ruta" (click)="generarReporte(row_correspondencia,'01')"><i class="fa fa-address-card-o" aria-hidden="true"></i></button>
+                                <!-- <a title="Descargar Hoja de Ruta" class="btn btn-warning   btn-md" target="_blank" href="{{url_reporte}}/modulos/sipta/rptHojadeRuta.php?gestion={{row_correspondencia.Gestion}}&nro={{row_correspondencia.Nro}}&pag=5"><i
+                    class="fa fa-address-card-o" aria-hidden="true"></i></a> -->
+                                <!-- <a title="Descargar Reporte" class="btn btn-danger   btn-md" target="_blank" href="{{url_reporte}}/modulos/sipta/rptHistorialProveidos.php?gestion={{row_correspondencia.Gestion}}&nro={{row_correspondencia.Nro}}"><i
+                    class="fa fa-file-pdf-o" aria-hidden="true"></i></a> -->
+                                <button *ngIf="vbtn_bitacora" class="btn btn-danger" title="Descargar Reporte" (click)="generarReporte(row_correspondencia,'02')"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+                    <!-- <a *ngIf="vbtn_bitacora==true" title="Descargar Reporte" class="btn btn-danger   btn-md" target="_blank" href="{{url_reporte}}/modulos/sipta/rptHistorialProveidos.php?gestion={{m_gestion}}&nro={{m_nrohojaderuta}}"><i
+                        class="fa fa-file-pdf-o" aria-hidden="true"></i></a> -->
+                                <button class="btn btn-success" title="Descargar Página" (click)="generarReporte(row_correspondencia,'03')"><i class="fa fa-address-card-o" aria-hidden="true"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

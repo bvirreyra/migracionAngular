@@ -1,0 +1,222 @@
+<div class="navi">
+  <!-- Boton Responsivo "SIGA" -->
+  <label class="barra" (click)="responsivo()"
+    ><i class="fa fa-bars"></i> SIGA</label
+  >
+  <!-- Menu Superior despegable -->
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      <li
+        class="dropdown"
+        *ngFor="let row_nivel1 of menu_modulo1; let i = index"
+      >
+        <a
+          href="javascript:0"
+          class="dropdown-toggle"
+          data-toggle="dropdown"
+          role="button"
+          aria-haspopup="true"
+          aria-expanded="false"
+          ><i class="fa fa-file-text-o fa-lg"></i> {{ row_nivel1._descripcion }}
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li
+            class="dropdown-submenu"
+            *ngFor="let row_nivel2 of menu_modulo2; let i = index"
+          >
+            <a
+              *ngIf="
+                row_nivel2._ruta == './' &&
+                row_nivel1._idmenu == row_nivel2._idmenusuperior
+              "
+              (click)="abrirMenu($event)"
+              tabindex="-1"
+              href="javascript:0"
+              >{{ row_nivel2._descripcion }}</a
+            >
+            <a
+              *ngIf="
+                row_nivel2._ruta != './' &&
+                row_nivel1._idmenu == row_nivel2._idmenusuperior
+              "
+              (click)="cerrarMenuPadre($event)"
+              tabindex="-1"
+              routerLink="{{ row_nivel2._ruta }}"
+              >{{ row_nivel2._descripcion }}2</a
+            >
+            <ul class="dropdown-menu">
+              <li
+                class="dropdown-submenu"
+                *ngFor="let row_nivel3 of menu_modulo3; let i = index"
+              >
+                <a
+                  *ngIf="
+                    row_nivel3._ruta == './' &&
+                    row_nivel2._idmenu == row_nivel3._idmenusuperior
+                  "
+                  (click)="abrirMenu2($event)"
+                  tabindex="-1"
+                  href="javascript:0"
+                  >{{ row_nivel3._descripcion }}</a
+                >
+                <a
+                  *ngIf="
+                    row_nivel3._ruta != './' &&
+                    row_nivel2._idmenu == row_nivel3._idmenusuperior
+                  "
+                  (click)="cerrarMenuPadre($event)"
+                  tabindex="-1"
+                  routerLink="{{ row_nivel3._ruta }}"
+                  >{{ row_nivel3._descripcion }}3</a
+                >
+                <ul class="dropdown-menu">
+                  <li
+                    *ngFor="let row_nivel4 of menu_modulo4"
+                    (click)="cerrarMenuPadre($event)"
+                  >
+                    <a
+                      *ngIf="row_nivel3._idmenu == row_nivel4._idmenusuperior"
+                      tabindex="-1"
+                      routerLink="{{ row_nivel4._ruta }}"
+                      >{{ row_nivel4._descripcion }}4</a
+                    >
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <!-- Datos de Rol y Usuario -->
+  <ul>
+    <li>
+      <label *ngIf="s_rol != undefined" class=""
+        >Rol: <strong>{{ s_rol }} </strong></label
+      >
+    </li>
+    <li>
+      <label class=""
+        >Usuario: <strong>{{ s_nomuser }} </strong></label
+      >
+    </li>
+    <li>
+      <button
+        class="btn btn-warning"
+        title="Cerrar Sesión"
+        (click)="cerrarsesion()"
+      >
+        <i class="fa fa-power-off"></i>
+      </button>
+    </li>
+  </ul>
+</div>
+
+<div id="panelMenu" class="contenedor-menu">
+  <div class="accordion-menu">
+    <ul>
+      <!-- <label class="titulo">MÓDULOS</label> -->
+      <div class="titulo" style="display: flex; justify-content: space-around">
+        <p>M</p>
+        <p>O</p>
+        <p>D</p>
+        <p>U</p>
+        <p>L</p>
+        <p>O</p>
+        <p>S</p>
+      </div>
+      <div *ngIf="dtsMenu">
+        <li
+          *ngFor="
+            let row_modulos of dtsMenu | filtra : '_idmenusuperior' : null
+          "
+        >
+          <div
+            *ngIf="row_modulos._tipo_menu == 'menu_horizontal'"
+            class="dropdownlink"
+            id="menu{{ row_modulos._idmenu }}"
+            title="{{ row_modulos._nombre_modulo }}"
+            (click)="menuAcordeon(row_modulos)"
+          >
+            <i class="{{ row_modulos._icono }}" aria-hidden="true"></i>
+            {{ row_modulos._nombre_modulo }}
+            <i
+              class="fa fa-chevron-right"
+              id="flecha{{ row_modulos._idmenu }}"
+              aria-hidden="true"
+            ></i>
+          </div>
+          <div
+            *ngIf="row_modulos._tipo_menu == 'menu_vertical'"
+            class="dropdownlink"
+            id="menu{{ row_modulos._idmenu }}"
+            title="{{ row_modulos._nombre_modulo }}"
+            (click)="link_vertical(row_modulos)"
+          >
+            <i class="{{ row_modulos._icono }}" aria-hidden="true"></i>
+            {{ row_modulos._nombre_modulo }}
+            <i
+              class="fa fa-chevron-right"
+              id="flecha{{ row_modulos._idmenu }}"
+              aria-hidden="true"
+            ></i>
+          </div>
+          <ul class="submenuItems ocultar" id="sub{{ row_modulos._idmenu }}">
+            <li
+              *ngFor="
+                let row_menu of dtsMenu
+                  | filtra : '_idmenusuperior' : row_modulos._idmenu
+              "
+            >
+              <a
+                id="a{{ row_menu._idmenu }}"
+                (click)="link_horizontal(row_menu)"
+                >{{ row_menu._descripcion }}</a
+              >
+            </li>
+          </ul>
+        </li>
+      </div>
+      <li>
+        <div
+          class="dropdownlink"
+          title="Cerrar Sesión"
+          (click)="menuAcordeon('admin')"
+        >
+          <i class="fa fa-cog" aria-hidden="true"></i> Administracion Cuenta
+          <i
+            class="fa fa-chevron-right"
+            id="flechaAdmin"
+            aria-hidden="true"
+          ></i>
+        </div>
+        <ul class="submenuItems ocultar" id="adminSub">
+          <li *ngIf="s_tipo == 'UPRE'">
+            <a (click)="cambiapassword()">Cambiar Contraseña</a>
+          </li>
+          <li><a (click)="cerrarsesion()">Cerrar Sesion</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="contenedor-principal" id="principal">
+  <div
+    *ngIf="pnlBienvenida == true"
+    class="bs-callout bs-callout-success saludo"
+  >
+    <h1 style="margin-left: 2rem;">
+      Bienvenidos al
+      <strong>"Sistema Integrado de Gestión Administrativa" (SIGA).</strong>
+      <br>
+      Seleccione del menú de la parte izquierda el módulo requerido.
+    </h1>
+  </div>
+  <div id="componentes">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+<!--Container Main end-->

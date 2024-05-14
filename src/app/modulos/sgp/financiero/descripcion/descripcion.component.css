@@ -1,0 +1,17 @@
+.puntero{
+    cursor: pointer;
+}
+
+.campo{
+    font-size: smaller;
+}
+
+.valor{
+    color: #1761a7;
+    font-style: italic;
+}
+
+.grupo{
+    display: inline-block;
+    margin-right: 1rem;
+}

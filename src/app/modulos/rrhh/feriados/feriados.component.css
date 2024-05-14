@@ -1,0 +1,6 @@
+.dt-feriado tfoot input {
+    width: 100% !important;
+  }
+  .dt-feriado tfoot {
+    display: table-header-group !important;
+  }

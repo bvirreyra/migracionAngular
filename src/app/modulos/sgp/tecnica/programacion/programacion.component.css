@@ -1,0 +1,6 @@
+.dt-monitoreo-compromiso tfoot input{
+    width: 100% !important;
+  }
+  .dt-monitoreo-compromiso tfoot {
+    display: table-header-group !important;
+  }

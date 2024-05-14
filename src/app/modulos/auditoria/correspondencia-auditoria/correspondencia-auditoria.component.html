@@ -1,0 +1,383 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="contenedor">
+  <div class="panel panel-primary" *ngIf="!elCiteProyecto">
+    <div class="panel-heading" style="text-align: center;">
+      <!-- <span class="fa fa-id-card-o"></span> Correspondencia Auditoria - {{laGestion}} -->
+      <span class="fa fa-id-card-o"></span> Correspondencia Auditoria
+      <select
+        class="pull-right iform-control"
+        title="Gestión del CITE"
+        [(ngModel)]="laGestion"
+        style="color: #1f425f"
+      >
+        <option *ngFor="let row of dtsGestiones" [ngValue]="row">
+          {{ row }}
+        </option>
+      </select>
+      <!-- <button class="btn btn-info pull-right" style="padding: 2px 20px; margin-top: -4px;" data-toggle="modal" data-target="#modalEmpresas">
+        <i class="fa fa-plus"></i> Buscar NIT
+      </button> -->
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-6">
+          <label for="cite">CITE:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-file"></i> </span>
+            <input class="form-control" type="text" name="cite" [(ngModel)]="correspondencia.codigo" placeholder="UPRE/" maxlength="50" [disabled]="!elIdCite">
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-6">
+          <label for="cite">CITE Padre:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-file-o"></i> </span>
+            <input class="form-control" type="text" name="cite" [(ngModel)]="correspondencia.codigo_padre" placeholder="UPRE/" maxlength="50" list="listaCites" [disabled]="true">
+            <datalist id="listaCites" class="datalist">
+              <option *ngFor="let row of dtsCodigosPadre;" class="form-control" value={{row.codigo}} label="{{row.codigo}}">
+            </datalist>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-12">
+          <label for="referencia">Referencia o Asunto:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-outdent"></i> </span>
+            <input class="form-control" type="text" name="referencia" [(ngModel)]="correspondencia.referencia" placeholder="REF." maxlength="150" autofocus>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="row">
+        <div class="form-group col-sm-12 col-lg-6">
+          <label for="tipo">Tipo:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+            <select class="form-control" id="tipo" name="tipo" #grupo (change)="cambiarGrupoEstados(grupo.value)">
+              <option *ngFor="let row of dtsGrupoEstados" [ngValue]="row.agrupa_clasificador" [selected]="row.agrupa_clasificador == 'INICIAL'">{{row.agrupa_clasificador}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-6">
+          <label for="estado">Estado:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-recycle"></i> </span>
+            <select class="form-control" id="estado" name="estado" [(ngModel)]="correspondencia.estado">
+              <option *ngFor="let row of dtsEstadosFiltrados" [ngValue]="row.descripciondetalleclasificador">{{row.descripciondetalleclasificador}}</option>
+            </select>
+          </div>
+        </div>
+      </div> -->
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-12">
+          <label for="resumen">Resumen:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-align-justify"></i> </span>
+            <textarea class="form-control" type="text" name="resumen" [(ngModel)]="correspondencia.resumen" placeholder="Resumen documento" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-6">
+          <label for="fecha_registro">Fecha Registro CITE:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i> </span>
+            <input class="form-control" type="date" name="fecha_registro" [(ngModel)]="correspondencia.fecha_registro" min="{{fecha_min_reiterativa}}" (change)="cambairGestion()">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-6">
+          <button class="btn btn-secondary btn-block" id="cerrar" (click)="sendMessage('CERRANDO')" data-dismiss="modal" style="margin-top: 2.3rem;"  >Cerrar</button>
+        </div>
+        <div class="form-group col-sm-12 col-lg-6">
+          <button class="btn btn-success btn-block" style="margin-top: 2.3rem;" (click)="crudCorrespondenciaAuditoria()" >{{elIdCite? 'Actualizar': 'Registrar'}}</button>
+        </div>
+      </div>
+      <div *ngIf="correspondencia.id_cite>0">
+        <div class="row">
+          <div class="form-group col-sm-12 col-lg-12">
+            <label for="proyecto">Seleccione Proyecto Referencia:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-briefcase"></i> </span>
+              <input class="form-control" type="text" autocomplete="off" name="proyecto" id="proyecto" #proyecto list="listaProyectos" (input)="crudCorrAuditoriaProyecto(proyecto.value,'I')">
+              <datalist id="listaProyectos" class="datalist">
+                <div *ngFor="let row of dtsProyectos;">
+                  <option class="form-control" value={{row.formateado}} label={{row.formateado}}>
+                </div>
+              </datalist>
+            </div>
+          </div>
+        </div>
+        <div style="overflow-y: auto;max-height: 260px;">
+          <label for="" class="cantidad">{{dtsProyectosCorrespondecia.length}} Proyecto(s) Relacionado(s)</label>
+          <table
+            class="table table-responsive table-condensed table-striped table-hover dt-proyectos"
+            id="tabladocs"
+            style="font-size: 10pt;"
+            *ngIf="dtsProyectosCorrespondecia.length>0"
+          >
+            <thead>
+              <tr style="font-size: 12pt;">
+                <th>Proyectos Relacionados</th>
+                <th>Anular</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let row of dtsProyectosCorrespondecia; let i = index"
+                [ngClass]="{ 'bg-danger': row.activo == 0 }"
+              >
+                <td>{{row.id_sgp}}. {{ row.nombre }}</td>
+                <td>
+                  <button *ngIf="dtsProyectosCorrespondecia.length>1" class="btn btn-danger" (click)="crudCorrAuditoriaProyecto(row.id_cite_proyecto,'D')" title="Anular">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row" style="margin: 1.4rem 0 0 0;">
+          <div class="form-group col-sm-12 col-lg-12 col-md-12" style="border: 1px solid #2c7fdf;padding-bottom: 2rem;" >
+            <div class="form-group col-sm-9 col-lg-9">
+              <label for="inputArchivo">Informe digital:</label>
+              <input class="form-control" type="file"accept="application/pdf" id="inputArchivo" name="inputArchivo" 
+              (change)="handleFileInput($event.target.files)">
+            </div>
+            <div class="form-group col-sm-3 col-lg-3">
+              <button class="btn btn-info btn-block" (click)="subirAnexo()" id="subearchivo" style="margin-top: 2.5rem;" title="Subir Archivo">
+                <span class="glyphicon glyphicon-open"></span> Adjuntar
+              </button>
+            </div>
+            <div style="margin: 0 auto;" *ngIf="correspondencia.informe?.length>5">
+              <app-upload-file
+                  inputTipoDocumento="auditoria"
+                  inputCodigoProy="{{ elIdCite }}"
+                  inputVista="false"
+                  inputTipoImagen="documento"
+                  inputSrc=""
+                  inputNombre="InformeAuditoria_{{elIdCite}}.pdf"
+                  inputAccion="VISUALIZAR"
+                  inputBotonGuardar="true"
+                  [disabled]="false"
+                ></app-upload-file>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-primary" *ngIf="elCiteProyecto && elCiteProyecto.tipo != 'VISTA'">
+    <div class="panel-heading" style="text-align: center;">
+      <span class="fa fa-id-card-o"></span> Respuesta Informe Proyecto: {{elCiteProyecto?.id_sgp}}
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-3">
+          <label for="hr">HR:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-outdent"></i> </span>
+            <input class="form-control" type="text" name="hr" [(ngModel)]="cite_proyecto.hr_respuesta" placeholder="Nº HR" maxlength="6" onkeypress="return permite(event, 'solo_num')" autofocus>
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-9">
+          <label for="detalle">Detalle Respuesta:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-outdent"></i> </span>
+            <input class="form-control" type="text" name="detalle" [(ngModel)]="cite_proyecto.detalle_respuesta" placeholder="Detalle Respuesta" maxlength="250" autofocus>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-6">
+          <label for="fecha_respuesta">Fecha Respuesta:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i> </span>
+            <input class="form-control" type="date" name="fecha_respuesta" [(ngModel)]="cite_proyecto.fecha_respuesta" min="{{fecha_min_respuesta}}">
+          </div>
+        </div>
+      </div>
+      <div style="overflow-y: auto;max-height: 260px;">
+        <label for="" class="cantidad">{{dtsProyectosCorrespondecia.length}} Proyecto(s) Relacionado(s)</label>
+        <table
+          class="table table-responsive table-condensed table-striped table-hover dt-proyectos"
+          id="tabladocs"
+          style="font-size: 10pt;"
+          *ngIf="dtsProyectosCorrespondecia.length>0"
+        >
+          <thead>
+            <tr style="font-size: 12pt;">
+              <th style="min-width: 300px;">Proyecto</th>
+              <th>
+                <select
+                  title="Estado Auditoria Todos"
+                  (change)="cambiarEstadosRespuestas(estados.value)"
+                  style="color: #1f425f;max-width: 200px;"
+                  #estados
+                  [disabled]="dtsProyectosCorrespondecia[0]?.estadocp == 'REITERADO'"
+                >
+                  <option *ngFor="let row of dtsEstados" [ngValue]="row.descripciondetalleclasificador">
+                    {{ row.descripciondetalleclasificador }}
+                  </option>
+                </select>
+              </th>
+              <th class="text-center">Marcar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of dtsProyectosCorrespondecia">
+              <td style="min-width: 300px;">{{row.id_sgp}}. {{ row.nombre }}</td>
+              <td>
+                <select
+                  title="Estado Auditoria"
+                  (change)="cambiarEstadosRespuestas(proyecto.value,row.id_cite_proyecto)"
+                  style="color: #1f425f; max-width: 200px;"
+                  [(value)]="row.estado"
+                  #proyecto
+                  [disabled]="row.estadocp=='REITERADO'"
+                >
+                  <option *ngFor="let row of dtsEstados" [(ngValue)]="row.descripciondetalleclasificador">
+                    {{ row.descripciondetalleclasificador }}
+                  </option>
+                </select>
+              </td>
+              <td class="text-center">
+                <input type="checkbox" [(ngModel)]="row.marcado">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row" style="margin: 1.4rem 0 0 0;">
+        <div class="form-group col-sm-12 col-lg-12 col-md-12" style="border: 1px solid #2c7fdf;padding-bottom: 2rem;" >
+          <div class="form-group col-sm-9 col-lg-9">
+            <label for="inputArchivo">Informe digital Respuesta:</label>
+            <input class="form-control" type="file"accept="application/pdf" id="inputArchivo" name="inputArchivo" 
+            (change)="handleFileInput($event.target.files)">
+          </div>
+          <div class="form-group col-sm-3 col-lg-3">
+            <button class="btn btn-info btn-block" (click)="subirAnexo()" style="margin-top: 2.5rem;" title="Subir Archivo">
+              <span class="glyphicon glyphicon-open"></span> Adjuntar
+            </button>
+          </div>
+          <div style="margin: 0 auto;" *ngIf="cite_proyecto.informe_respuesta?.length>5">
+            <app-upload-file
+                inputTipoDocumento="auditoria_respuesta"
+                inputCodigoProy="{{cite_proyecto.id_cite }}"
+                inputVista="false"
+                inputTipoImagen="documento"
+                inputSrc=""
+                inputNombre="{{cite_proyecto.informe_respuesta}}"
+                inputAccion="VISUALIZAR"
+                inputBotonGuardar="true"
+                [disabled]="false"
+              ></app-upload-file>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-6">
+          <button class="btn btn-secondary btn-block" id="cerrar" (click)="sendMessage('CERRANDO')" data-dismiss="modal" style="margin-top: 2.3rem;"  >Cerrar</button>
+        </div>
+        <div class="form-group col-sm-12 col-lg-6">
+          <button class="btn btn-success btn-block" style="margin-top: 2.3rem;" (click)="actualizarRespuesta()" >{{cite_proyecto.id_cite_proyecto ? 'Actualizar': 'Registrar'}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-primary" *ngIf="elCiteProyecto && elCiteProyecto.tipo == 'VISTA' && proyect">
+    <div class="panel-heading" style="text-align: center;">
+      <span class="fa fa-id-card-o"></span> Histórico Auditoría Proyecto: {{elCiteProyecto?.id_sgp}}
+    </div>
+    <div class="panel-body">
+      <div class="cabecera">
+        <h3>{{proyect.nombreproyecto}} - {{proyect.id_sgp}}</h3>
+        <h5><strong>Departamento:</strong> {{proyect.departamento}}</h5>
+        <h5><strong>Provincia:</strong> {{proyect.provincia}}</h5>
+        <h5><strong>Municipio:</strong> {{proyect.municipio}}</h5>
+        <div>
+          <p><strong>Gestión:</strong> {{proyect.gestion}}</p>
+          <p><strong>Nro Convenio:</strong> {{proyect.nro_convenio}}</p>
+          <p><strong>Fecha Convenio:</strong> {{proyect.fc}}</p>
+        </div>
+      </div>
+      <div *ngFor="let row of dtsHistoricoProyecto">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">{{row.codigo}}</h3>
+            <h4 class="card-subtitle">{{row.referencia}}</h4>
+            <div>
+              <h4 class="card-subtitle">{{row.fr}}</h4>
+              <button *ngIf="row.informe" class="btn btn-info" title="Descargar" (click)="obtenerArchivo(row.informe,'auditoria',row.id_cite)"><i class="fa fa-print"></i> Informe</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <p>Estado:  <kbd>{{row.estado_auditado}}</kbd></p>
+            <p>Respuesta:</p>
+            <div *ngIf="row.detalle_respuesta">
+              <p>HR: {{row.hr_respuesta }}</p>
+              <p>Detalle: {{row.detalle_respuesta }}</p>
+              <p>Fecha: {{row.fir}}</p>
+              <button *ngIf="row.informe_respuesta" class="btn btn-info" title="Descargar" (click)="obtenerArchivo(row.informe_respuesta,'auditoria_respuesta',row.id_cite)"><i class="fa fa-print"></i> Informe</button>
+            </div>
+            <strong *ngIf="!row.detalle_respuesta">SIN RESPUESTA REGISTRADA</strong>
+            <i class="fa fa-file-pdf-o icon"></i>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-6">
+          <button class="btn btn-secondary btn-block" id="cerrar" (click)="sendMessage('CERRANDO')" data-dismiss="modal" style="margin-top: 2.3rem;"  >Cerrar</button>
+        </div>
+        <div class="form-group col-sm-12 col-lg-6">
+          <button class="btn btn-info btn-block" (click)="reportesCitesAuditoria('03',proyect.id_proyecto)" data-dismiss="modal" style="margin-top: 2.3rem;"  >Reporte Histórico</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal busqueda -->
+<div
+  class="modal fade"
+  tabindex="-1"
+  name="modalBusqueda"
+  id="modalBusqueda"
+  role="dialog"
+  aria-labelledby="exampleModalTipo"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad; color: white">
+        <button
+          type="button"
+          class="close text-white"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">
+          Buscar Correspondencía Auditoría
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-group col-sm-12 col-lg-12">
+            <label for="referencia">Referencia/CITE:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-map-marker"></i> </span>
+              <input class="form-control" type="text" name="referencia"  list="auditados" #cor (change)="filtrarAuditados(cor.value)" autofocus>
+              <datalist id="auditados" class="datalist">
+                <option *ngFor="let row of dtsProyectosAuditados;" class="form-control" value={{row.id_cite}} label="{{row.referencia}} - {{row.codigo}}">
+              </datalist>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

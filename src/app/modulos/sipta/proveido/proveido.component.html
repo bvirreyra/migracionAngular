@@ -1,0 +1,1161 @@
+<div id="pnl_correspondencia" name="pnl_correspondencia">
+  <div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+      BANDEJA HOJA DE RUTA
+      <button
+        type="button"
+        class="btn btn-success btn-md pull-right"
+        (click)="Listacorrespondencia()"
+        title="Ver Correspondencia"
+      >
+        <i class="fa fa-refresh" aria-hidden="true"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn-warning btn-md pull-right"
+        (click)="ListaCorrespondenciaTerminada()"
+        title="Correspondencia Terminada"
+      >
+        <i class="fa fa-address-card-o" aria-hidden="true"
+          >Correspondencia Terminada</i
+        >
+      </button>
+      <button
+        type="button"
+        class="btn btn-info btn-md pull-right"
+        (click)="ListaProveidosEnviados()"
+        title="Proveidos Enviados"
+      >
+        <i class="fa fa-address-book-o" aria-hidden="true"
+          >Proveidos Enviados</i
+        >
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary btn-md pull-right"
+        (click)="ListaCorrespondenciaEnviada()"
+        title="Correspondencia Enviada"
+      >
+        <i class="fa fa-newspaper-o" aria-hidden="true"
+          >Correspondencia Enviada</i
+        >
+      </button>
+    </div>
+    <div class="panel-body">
+      <table class="table dt-correspondencia">
+        <thead>
+          <tr>
+            <th>Nro.</th>
+            <th style="width: 500px">Referencia</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Usuario Interno De</th>
+            <th>Usuario Externo De</th>
+            <th>Seleccione...</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+        <tbody>
+          <tr
+            *ngFor="
+              let row_correspondencia of dts_correspondencia;
+              let i = index
+            "
+            [ngClass]="{
+              'bg-danger':
+                row_correspondencia.dias > '0' &&
+                row_correspondencia.plazo_dias <= '0',
+              'bg-warning':
+                row_correspondencia.dias > '0' &&
+                row_correspondencia.plazo_dias <= '5',
+              'bg-info':
+                row_correspondencia.dias > '0' &&
+                row_correspondencia.plazo_dias <= '10'
+            }"
+          >
+            <td>{{ row_correspondencia.numero }}</td>
+            <td style="width: 500px">{{ row_correspondencia.referencia }}</td>
+            <td>{{ row_correspondencia.fecha | date : "dd/MM/yyyy" }}</td>
+            <td>{{ row_correspondencia.hora.substring(0, 8) }}</td>
+            <td>{{ row_correspondencia.tipo }}</td>
+            <td>{{ row_correspondencia.estado }}</td>
+            <td>{{ row_correspondencia.nombre_de }}</td>
+            <td *ngIf="row_correspondencia.tipo == 'Externa'">
+              {{ row_correspondencia.usuario_externo }}
+            </td>
+            <td *ngIf="row_correspondencia.tipo == 'Interna'"></td>
+            <td>
+              <div class="botonera">
+                <button
+                  *ngIf="
+                    row_correspondencia.estado_respuesta == 'Enviado' &&
+                    row_correspondencia.estado_situacion == 'Recibido' &&
+                    row_correspondencia.estado_recibido == 'EnEspera'
+                  "
+                  type="button"
+                  class="btn btn-danger btn-md"
+                  title="Ver Correspondencia"
+                  (click)="VerCorrespondenciaPre(row_correspondencia)"
+                >
+                  <i class="fa fa-low-vision" aria-hidden="true"></i>
+                </button>
+                <button
+                  *ngIf="
+                    row_correspondencia.estado_respuesta == 'NoAplica' &&
+                    row_correspondencia.estado_situacion == 'Recibido'
+                  "
+                  type="button"
+                  class="btn btn-danger btn-md"
+                  title="Ver Correspondencia"
+                  (click)="VerCorrespondenciaPre(row_correspondencia)"
+                >
+                  <i class="fa fa-low-vision" aria-hidden="true"></i>
+                </button>
+
+                <button
+                  *ngIf="
+                    row_correspondencia.estado_respuesta == 'Enviado' &&
+                    row_correspondencia.estado_situacion == 'Leido' &&
+                    row_correspondencia.estado_recibido == 'EnEspera'
+                  "
+                  type="button"
+                  class="btn btn-warning btn-md"
+                  title="Ver Correspondencia"
+                  (click)="VerCorrespondenciaPre(row_correspondencia)"
+                >
+                  <i class="fa fa-edit" aria-hidden="true"></i>
+                </button>
+                <button
+                  *ngIf="
+                    row_correspondencia.estado_respuesta == 'NoAplica' &&
+                    row_correspondencia.estado_situacion == 'Leido'
+                  "
+                  type="button"
+                  class="btn btn-warning btn-md"
+                  title="Ver Correspondencia"
+                  (click)="VerCorrespondenciaPre(row_correspondencia)"
+                >
+                  <i class="fa fa-edit" aria-hidden="true"></i>
+                </button>
+
+                <button
+                  *ngIf="
+                    row_correspondencia.estado_respuesta == 'Enviado' &&
+                    row_correspondencia.estado_situacion == 'Leido' &&
+                    row_correspondencia.estado_recibido == 'Recibido'
+                  "
+                  type="button"
+                  class="btn btn-success btn-md"
+                  title="Ver Correspondencia"
+                  (click)="VerCorrespondenciaPre(row_correspondencia)"
+                >
+                  <i class="fa fa-edit" aria-hidden="true"></i>
+                </button>
+                <button
+                  *ngIf="
+                    row_correspondencia.estado_respuesta == 'Recibido' &&
+                    row_correspondencia.estado_situacion == 'Leido'
+                  "
+                  type="button"
+                  class="btn btn-success btn-md"
+                  title="Ver Correspondencia"
+                  (click)="VerCorrespondenciaPre(row_correspondencia)"
+                >
+                  <i class="fa fa-edit" aria-hidden="true"></i>
+                </button>
+                <button
+                  *ngIf="row_correspondencia.flujo"
+                  type="button"
+                  class="btn btn-warning btn-md"
+                  (click)="paneles('ANEXO_FLUJO', row_correspondencia)"
+                >
+                  <i
+                    class="fa fa-files-o"
+                    aria-hidden="true"
+                    title="Revisión Flujo"
+                  ></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div
+  class="content content-success"
+  name="pnl_FormularioCorrespondencia"
+  id="pnl_FormularioCorrespondencia"
+>
+  <div class="content-header with-border">
+    <h3 class="content-title text-green">
+      <strong>FORMULARIO - HOJA DE RUTA</strong>
+    </h3>
+    <div class="pull-right">
+      <button
+        type="button"
+        class="btn btn-danger btn-circle-sm"
+        (click)="volverpanelinicio()"
+      >
+        <span class="glyphicon glyphicon-arrow-left"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="content-body">
+    <div class="rowlocal">
+      <div
+        class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10"
+      >
+        <div class="panel panel-success">
+          <div class="panel-heading text-center">
+            Datos Hoja de Ruta ==> {{ m_hoja_ruta }}
+          </div>
+          <div class="panel-body">
+            <!-- DATOS CABECERA DE LA HOJA DE RUTA /////////////////////////////////-->
+            <div class="row">
+              <div class="form-horizontal">
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Fecha:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      name="fecha"
+                      id="fecha"
+                      [(ngModel)]="m_fecha"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Hora:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="time"
+                      name="m_hora"
+                      id="m_hora"
+                      [(ngModel)]="m_hora"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >CITE:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="m_cite"
+                      id="m_cite"
+                      [(ngModel)]="m_cite"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Remitente:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="m_remitente"
+                      id="m_remitente"
+                      [(ngModel)]="m_remitente"
+                      disabled
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Destinatario:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="m_destinatario"
+                      id="m_destinatario"
+                      [(ngModel)]="m_destinatario"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Tipo Documento:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="m_tipodocumentohr"
+                      id="m_tipodocumentohr"
+                      [(ngModel)]="m_tipodocumentohr"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Plazo en Dias:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="m_plazodias"
+                      id="m_plazodias"
+                      [(ngModel)]="m_plazodias"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Referencia:</label
+                  >
+                  <div class="col-sm-7">
+                    <textarea
+                      class="form-control"
+                      type="text"
+                      name="referencia"
+                      id="referencia"
+                      maxlength="500"
+                      rows="4"
+                      [(ngModel)]="m_referencia"
+                      onKeyDown="A(event,this.form.anexos)"
+                      disabled
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Anexos:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="m_anexo"
+                      id="m_anexo"
+                      [(ngModel)]="m_anexo"
+                      onKeyDown="A(event,this.form.fecha)"
+                      disabled
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Observacion:</label
+                  >
+                  <div class="col-sm-7">
+                    <textarea
+                      class="form-control"
+                      type="text"
+                      name="m_observacion"
+                      id="m_observacion"
+                      maxlength="500"
+                      rows="4"
+                      [(ngModel)]="m_observacion"
+                      disabled
+                    >
+                    </textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- SE VISUALIZA EL PROVEIDO -->
+<div class="content content-success" name="pnl_proveidos" id="pnl_proveidos">
+  <div class="content-header with-border">
+    <h3 class="content-title text-green">
+      <strong>PROVEIDO</strong>
+    </h3>
+    <!-- <div class="pull-right">
+            <button type="button" class="btn btn-danger btn-circle-sm" (click)="paneles('VER_INICIO')">
+                <span class="glyphicon glyphicon-arrow-left"></span></button>
+            </div> -->
+  </div>
+  <div class="content-body">
+    <div class="rowlocal">
+      <div
+        class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10"
+      >
+        <div class="panel panel-success">
+          <!-- <div class="panel-heading text-center">Listado de Proveidos</div> -->
+          <div class="panel-body">
+            <div class="row">
+              <table
+                class="table table-primary table-striped table-condensed table-hover dt-proveido"
+              >
+                <thead>
+                  <tr>
+                    <th width="2%">Nro Proveido</th>
+                    <th width="10%">De</th>
+                    <th width="10%">Para</th>
+                    <th width="30%">Contenido</th>
+                    <th width="2%">Tiempo</th>
+                    <th width="20%">Fecha</th>
+                    <th width="20%">Fecha limite de Respuesta</th>
+                    <!-- <th width="10%">Fecha Recibido</th>
+                                        <th width="10%">Fecha Respuesta</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let row_proveido of dts_proveidoUltimo;
+                      let i = index
+                    "
+                  >
+                    <td width="2%">{{ row_proveido.indice_proveido }}</td>
+                    <td width="10%">{{ row_proveido.nombre_usuario_de }}</td>
+                    <td width="10%">{{ row_proveido.nombre_usuario_para }}</td>
+                    <td width="30%">
+                      {{ row_proveido.tipo_proveido }} -
+                      {{ row_proveido.contenido }}
+                    </td>
+                    <td width="2%">{{ row_proveido.tiempo }}</td>
+                    <td width="20%">
+                      {{ row_proveido.fecha | date : "dd/MM/yyyy" }}
+                      {{ row_proveido.hora.substring(0, 8) }}
+                    </td>
+                    <td width="20%">
+                      {{ row_proveido.fecha_tope | date : "dd/MM/yyyy" }}
+                    </td>
+
+                    <!-- <td width="10%">{{m_fecha}} {{m_hora}}</td>
+                                        <td width="10%">{{row_proveido.FechaRecibido | date: 'dd/MM/yyyy'}} {{row_proveido.HoraRecibido}}
+                                        </td>
+                                        <td width="10%">{{row_proveido.FechaRespuesta| date: 'dd/MM/yyyy'}} {{row_proveido.HoraRespuesta}}
+                                        </td> -->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" name="pnlBotonesRecepcion" id="pnlBotonesRecepcion">
+  <div class="form-horizontal">
+    <div class="col-xs-12" *ngIf="m_tipocabeceraproveido == 'CABECERA'">
+      <button
+        *ngIf="m_estadorespuesta == 'Recibido' && m_estadosituacion == 'Leido'"
+        id="terminar"
+        data-toggle="modal"
+        data-target="#modalTerminarCorrespondencia"
+        class="btn btn-primary pull-right"
+        title="Terminar"
+        Style="width: 100px;"
+      >
+        Terminar
+      </button>
+      <button
+        *ngIf="m_estadorespuesta == 'NoAplica' && m_estadosituacion == 'Leido'"
+        id="recibido"
+        class="btn btn-success pull-right"
+        title="Recibido"
+        Style="width: 150px;"
+        name="Recibido"
+        (click)="correspondenciaRecibida()"
+      >
+        Recibir
+      </button>
+      <button
+        *ngIf="m_estadorespuesta == 'Recibido' && m_estadosituacion == 'Leido'"
+        id="nuevoproveido"
+        class="btn btn-warning pull-right"
+        title="Nuevo Proveido"
+        Style="width: 150px;"
+        name="nuevoproveido"
+        (click)="paneles('NUEVO_PROVEIDO')"
+      >
+        Nuevo Proveido
+      </button>
+    </div>
+    <div class="col-xs-12" *ngIf="m_tipocabeceraproveido == 'PROVEIDO'">
+      <button
+        *ngIf="
+          m_estadorespuesta == 'Enviado' &&
+          m_estadosituacion == 'Leido' &&
+          m_estadorecibido == 'Recibido'
+        "
+        data-toggle="modal"
+        data-target="#modalTerminarCorrespondencia"
+        id="terminar"
+        class="btn btn-primary pull-right"
+        title="Terminar"
+        Style="width: 100px;"
+      >
+        Terminar
+      </button>
+      <button
+        *ngIf="
+          m_estadorespuesta == 'Enviado' &&
+          m_estadosituacion == 'Leido' &&
+          m_estadorecibido == 'EnEspera'
+        "
+        id="recibido"
+        class="btn btn-success pull-right"
+        title="Recibido"
+        Style="width: 150px;"
+        name="Recibido"
+        (click)="correspondenciaRecibida()"
+      >
+        Recibir
+      </button>
+      <button
+        *ngIf="
+          m_estadorespuesta == 'Enviado' &&
+          m_estadosituacion == 'Leido' &&
+          m_estadorecibido == 'Recibido'
+        "
+        id="nuevoproveido"
+        class="btn btn-warning pull-right"
+        title="Nuevo Proveido"
+        Style="width: 150px;"
+        name="nuevoproveido"
+        (click)="paneles('NUEVO_PROVEIDO')"
+      >
+        Nuevo Proveido
+      </button>
+    </div>
+  </div>
+</div>
+<!-- HISTORIAL DE PROVEIDOS -->
+<div name="pnlHistorialProveidos" id="pnlHistorialProveidos">
+  <a
+    class="btn btn-primary"
+    data-toggle="collapse"
+    href="#collapseHistorialProvedios"
+    role="button"
+    aria-expanded="false"
+    aria-controls="collapseHistorialProvedios"
+  >
+    Historial Proveidos
+  </a>
+  <div
+    class="collapse"
+    id="collapseHistorialProvedios"
+    name="collapseHistorialProvedios"
+  >
+    <table
+      class="table table-primary table-striped table-condensed table-hover dt-historialProveidos"
+    >
+      <thead>
+        <tr>
+          <th>Id Proveido</th>
+          <th>Emisor</th>
+          <th>Receptor</th>
+          <th>Contenido</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Fecha Recibido</th>
+          <th>Hora Recibido</th>
+          <th>Fecha Respuesta</th>
+          <th>Hora Respuesta</th>
+          <th>Estado Respuesta</th>
+          <th>Estado Situación</th>
+          <th>Estado Recibido</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let row_registros of dtsListaHistorialProveidos;
+            let i = index
+          "
+        >
+          <td>{{ row_registros.indice_proveido }}</td>
+          <td>{{ row_registros.nombre_usuario_de }}</td>
+          <td>{{ row_registros.nombre_usuario_para }}</td>
+          <td>{{ row_registros.contenido }}</td>
+          <td>{{ row_registros.fecha | date : "dd/MM/yyyy" }}</td>
+          <td>{{ row_registros.hora.substring(0, 8) }}</td>
+          <td>{{ row_registros.fecha_recibido | date : "dd/MM/yyyy" }}</td>
+          <td>{{ row_registros.hora_recibido.substring(0, 8) }}</td>
+          <td>{{ row_registros.fecha_respuesta | date : "dd/MM/yyyy" }}</td>
+          <td>{{ row_registros.hora_respuesta.substring(0, 8) }}</td>
+          <td>{{ row_registros.estado_respuesta }}</td>
+          <td>{{ row_registros.estado_situacion }}</td>
+          <td>{{ row_registros.estado_recibido }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ////////////////inicio de nuevo proveido /////////////////////////////////-->
+<div
+  class="content content-success"
+  name="pnl_nuevoproveido"
+  id="pnl_nuevoproveido"
+>
+  <div class="content-header with-border">
+    <h3 class="content-title text-green">
+      <strong>Nuevo Proveido</strong>
+    </h3>
+    <div class="pull-right">
+      <button
+        type="button"
+        class="btn btn-danger btn-circle-sm"
+        (click)="paneles('VER_CORRESPONDENCIA')"
+      >
+        <span class="glyphicon glyphicon-arrow-left"></span>
+      </button>
+    </div>
+    <div class="content-body">
+      <div class="rowlocal">
+        <div
+          class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10"
+        >
+          <div class="panel panel-success">
+            <div class="panel-heading text-center">
+              Datos Hoja de Ruta ==> {{ m_hoja_ruta }}
+            </div>
+            <div class="panel-body">
+              <!-- DATOS CABECERA DE LA HOJA DE RUTA /////////////////////////////////-->
+              <div class="row">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="busqueda"
+                      >Referencia HR:</label
+                    >
+                    <div class="col-sm-7">
+                      <textarea
+                        class="form-control"
+                        type="text"
+                        name="referencia"
+                        id="referencia"
+                        maxlength="500"
+                        rows="2"
+                        [(ngModel)]="m_referencia"
+                        onKeyDown="A(event,this.form.anexos)"
+                        disabled
+                      >
+                      </textarea>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="busqueda"
+                      >Ref. Proveido Anterior:</label
+                    >
+                    <div class="col-sm-7">
+                      <textarea
+                        class="form-control"
+                        type="text"
+                        name="m_ContenidoAnterior"
+                        id="m_ContenidoAnterior"
+                        maxlength="500"
+                        rows="2"
+                        [(ngModel)]="m_ContenidoAnterior"
+                        disabled
+                      >
+                      </textarea>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="busqueda"
+                      >De:</label
+                    >
+                    <div class="col-sm-7">
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="nombre_usuario"
+                        id="nombre_usuario"
+                        [(ngModel)]="nombre_usuario"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <!-- <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Para:</label>
+                                        <div class="col-sm-7">
+                                            <select id="m_para" class="form-control" name="m_para" [(ngModel)]="m_para">
+                                                <option *ngFor="let row_usuario of dts_usuario; let i = index;"
+                                                    [ngValue]="row_usuario.IdUsuario">
+                                                    {{row_usuario.nombre_completo_usuario}}</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="busqueda"
+                      >Para:</label
+                    >
+                    <div class="col-sm-7">
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="m_para"
+                        id="m_para"
+                        list="ListaPara"
+                        [(ngModel)]="m_para"
+                        (keypress)="BusquedaUsuario(m_para)"
+                        autocomplete="off"
+                        (blur)="ValidaDestinatario()"
+                      />
+                      <datalist id="ListaPara" class="datalist">
+                        <div *ngFor="let row_usuarios of dts_usuario">
+                          <option
+                            class="form-control"
+                            value="{{ row_usuarios.nombre_completo_usuario }}"
+                            label="{{ row_usuarios.nombre_completo_usuario }}"
+                          ></option>
+                        </div>
+                      </datalist>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="busqueda"
+                      >Con Tiempo:</label
+                    >
+                    <div class="col-sm-7">
+                      <select
+                        id="m_tiempo"
+                        class="form-control"
+                        name="m_tiempo"
+                        [(ngModel)]="m_tiempo"
+                      >
+                        <option value="0">SIN LIMITE</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="busqueda"
+                      >Item:</label
+                    >
+                    <div class="col-sm-7">
+                      <select
+                        id="m_item"
+                        class="form-control"
+                        name="m_item"
+                        [(ngModel)]="m_item"
+                      >
+                        <option
+                          *ngFor="let row_item of dts_item; let i = index"
+                          [ngValue]="row_item.id_detalle"
+                        >
+                          {{ row_item.descripciondetalleclasificador }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="busqueda"
+                      >Contenido:</label
+                    >
+                    <div class="col-sm-7">
+                      <textarea
+                        class="form-control"
+                        type="text"
+                        name="m_contenido"
+                        id="m_contenido"
+                        maxlength="500"
+                        rows="4"
+                        [(ngModel)]="m_contenido"
+                      >
+                      </textarea>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <div class="row">
+                      <div class="form-horizontal">
+                        <div class="col-xs-12 center-block">
+                          <button
+                            *ngIf="m_contenido != '' && m_auxDestinatario != 0"
+                            type="button"
+                            class="btn btn-success btn-block"
+                            value="INSERTAR"
+                            name="btnInsertar"
+                            id="btnInsertar"
+                            (click)="Verifica()"
+                          >
+                            Guardar Proveido
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- INICIO MODAL modalguardar -->
+<div
+  class="modal fade"
+  id="pnl_Guardarregistros"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="Insertar_NuevoProveido"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Insertar_NuevoProveido">
+          <b>NUEVO PROVEIDO</b>
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="limpiaContador()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">Esta seguro de Guardar Registros</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="insertarNuevoProveido()"
+        >
+          Guardar Registros
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL modalguardar -->
+<!----------------------------------inicio panel anexo--------------------------------------------------------------->
+<div class="content content-success" name="pnl_anexos" id="pnl_anexos">
+  <div
+    class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10"
+  >
+    <!--div>
+      <button type="button" class="btn btn-primary  pull-left"
+      title="Volver Inicio" name="volver" id="volver" (click)="paneles('VER_INICIO')">
+        <i class="fa fa-reply fa-2x"></i></button>
+    </div-->
+    <div class="panel panel-success">
+      <div class="panel-heading text-center">
+        HOJA DE RUTA: {{ m_hoja_ruta }}
+      </div>
+
+      <div class="form-horizontal">
+        <div class="form-group">
+          <label class="control-label col-sm-3" for="busqueda">ANEXO:</label>
+          <div class="col-sm-7">
+            <select
+              id="anexo"
+              class="form-control"
+              name="anexo"
+              [(ngModel)]="m_anexo"
+            >
+              <option
+                *ngFor="let row_documento of dts_Documentos; let i = index"
+                [ngValue]="row_documento.descripciondetalleclasificador"
+              >
+                {{ row_documento.descripciondetalleclasificador }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-3">DESCRIPCION:</label>
+          <div class="col-sm-7">
+            <textarea
+              class="form-control"
+              id="m_descripcion"
+              maxlength="180"
+              rows="4"
+              name="m_descripcion"
+              [(ngModel)]="m_descripcion"
+            ></textarea>
+          </div>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-primary pull-right"
+            value="CERRAR"
+            name="btnCerrar"
+            id="btnCerrar"
+            (click)="volverpanelinicio()"
+            title="Cerrar HR"
+          >
+            Cerrar
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-success pull-right"
+            value="INSERTAR"
+            name="btnInsertarAnexo"
+            id="btnInsertarAnexo"
+            (click)="InsertarAnexo()"
+            title="Guardar Anexos"
+          >
+            Guardar Anexos
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-success pull-right"
+            value="INSERTAR"
+            name="btnModificarAnexo"
+            id="btnModificarAnexo"
+            (click)="editarAnexo()"
+            title="Modificar Anexos"
+          >
+            Modificar Anexos
+          </button>
+        </div>
+        <hr />
+        <div class="panel-body">
+          <table class="table table-condensed table-hover dt-nuevoanexo">
+            <thead>
+              <tr>
+                <th>Nro.</th>
+                <th>Documento</th>
+                <th>Descripcion</th>
+                <th>Seleccione...</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row_anexos of dts_Anexo; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ row_anexos.documento }}</td>
+                <td>{{ row_anexos.descripcion }}</td>
+                <td>
+                  <div>
+                    <button
+                      *ngIf="row_anexos.usuario_registro == s_usu_id"
+                      type="button"
+                      class="btn btn-warning btn-md"
+                      (click)="editaranexoPre(row_anexos)"
+                    >
+                      <i
+                        class="fa fa-edit"
+                        aria-hidden="true"
+                        title="Modificar Registro"
+                      ></i>
+                    </button>
+                    <button
+                      *ngIf="row_anexos.usuario_registro == s_usu_id"
+                      type="button"
+                      class="btn btn-danger"
+                      (click)="eliminar_anexo(row_anexos)"
+                    >
+                      <i
+                        class="glyphicon glyphicon-remove"
+                        aria-hidden="true"
+                        title="Eliminar Anexo"
+                      ></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!----------------------------------final panel anexo--------------------------------------------------------------->
+<!-- INICIO MODAL TERMINAR -->
+<div
+  class="modal fade"
+  id="modalTerminarCorrespondencia"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTerminarCorrespondencia"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Insertar_NuevoProveido">
+          <b>TERMINAR CORRESPONDENCIA</b>
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Esta seguro de Terminar la Correspondencia
+        <textarea
+          class="form-control"
+          type="text"
+          name="m_respuesta"
+          id="m_respuesta"
+          maxlength="500"
+          rows="4"
+          [(ngModel)]="m_respuesta"
+        ></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          *ngIf="m_respuesta != ''"
+          type="button"
+          class="btn btn-primary"
+          (click)="terminar_correspondencia()"
+        >
+          Terminar Correspondencia
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FLUJO -->
+<div
+  *ngIf="pnl_Flujo == true"
+  class="modal fullscreen-modal fade"
+  id="pnl_Flujo"
+  name="pnl_Flujo"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="Insertar_NuevoProveido"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Insertar_NuevoProveido">
+          <b>REGISTRAR FLUJO</b>
+        </h5>
+        <button
+          type="button"
+          class="close"
+          (click)="paneles('CERRAR_FLUJO')"
+          aria-label="Close"
+          (click)="limpiaContador()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-revision
+          [idProyecto]="id_proyectFlujo"
+          [tipoLista]="tipoLista"
+          [consulta]="modoConsulta"
+          [idCorrespondencia]="elIdCorrespondencia"
+          [idProveido]="elidProveido"
+        ></app-revision>
+        <div style="margin: 2rem 0; padding: 0 2rem">
+          <app-chart-proveidos
+            [numero]="fhr"
+            [gestion]="fgestion"
+          ></app-chart-proveidos>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="paneles('CERRAR_FLUJO')"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="paneles('CERRAR_FLUJO')"
+    >
+      Cerrar
+    </button>
+  </div>
+</div>

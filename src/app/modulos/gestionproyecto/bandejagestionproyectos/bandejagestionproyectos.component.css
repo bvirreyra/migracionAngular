@@ -1,0 +1,6 @@
+.dt-seguimiento tfoot input{
+    width: 100% !important;
+}
+.dt-seguimiento tfoot {
+    display: table-header-group !important;
+}

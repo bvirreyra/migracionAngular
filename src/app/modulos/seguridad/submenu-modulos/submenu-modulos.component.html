@@ -1,0 +1,187 @@
+<nav
+  class="navbar navbar-default navbar-static-top bg-cbes reduce-nav"
+  style="top: 0px; position: sticky"
+>
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button
+        type="button"
+        class="navbar-toggle collapsed"
+        data-toggle="collapse"
+        data-target="#bs-example-navbar-collapse-1"
+        aria-expanded="false"
+      >
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a
+        class="navbar-brand reduce"
+        href="javascript:0"
+        routerLink="/home/{{ s_idcon }}"
+        *ngIf="s_idcon"
+      >
+        <i class="fa fa-home"></i> SIGA
+      </a>
+      <a
+        class="navbar-brand reduce"
+        href="javascript:0"
+        routerLink="/empresa/{{ s_ruta_inicio }}"
+        *ngIf="s_ruta_inicio"
+      >
+        <i class="fa fa-home"></i> SIGA2
+      </a>
+      <a
+        class="navbar-brand reduce"
+        href="javascript:0"
+        routerLink="/empresamae/{{ s_ruta_inicio_mae }}"
+        *ngIf="s_ruta_inicio_mae"
+      >
+        <i class="fa fa-home"></i> SIGAA3
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li
+          class="dropdown"
+          *ngFor="let row_nivel1 of menu_modulo1; let i = index"
+        >
+          <a
+            href="javascript:0"
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+            ><i class="fa fa-file-text-o"></i> {{ row_nivel1._descripcion }}
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li
+              class="dropdown-submenu"
+              *ngFor="let row_nivel2 of menu_modulo2; let i = index"
+            >
+              <a
+                *ngIf="
+                  row_nivel2._ruta == './' &&
+                  row_nivel1._idmenu == row_nivel2._idmenusuperior
+                "
+                (click)="abrirMenu($event)"
+                tabindex="-1"
+                href="javascript:0"
+                >{{ row_nivel2._descripcion }}</a
+              >
+              <a
+                *ngIf="
+                  row_nivel2._ruta != './' &&
+                  row_nivel1._idmenu == row_nivel2._idmenusuperior
+                "
+                (click)="cerrarMenuPadre($event)"
+                tabindex="-1"
+                routerLink="{{ row_nivel2._ruta }}"
+                [queryParams]="{ parametros_url: row_nivel2._ruta_parametros }"
+                >{{ row_nivel2._descripcion }}</a
+              >
+              <ul class="dropdown-menu">
+                <li
+                  class="dropdown-submenu"
+                  *ngFor="let row_nivel3 of menu_modulo3; let i = index"
+                >
+                  <a
+                    *ngIf="
+                      row_nivel3._ruta == './' &&
+                      row_nivel2._idmenu == row_nivel3._idmenusuperior
+                    "
+                    (click)="abrirMenu2($event)"
+                    tabindex="-1"
+                    href="javascript:0"
+                    >{{ row_nivel3._descripcion }}</a
+                  >
+                  <a
+                    *ngIf="
+                      row_nivel3._ruta != './' &&
+                      row_nivel2._idmenu == row_nivel3._idmenusuperior
+                    "
+                    (click)="cerrarMenuPadre($event)"
+                    tabindex="-1"
+                    routerLink="{{ row_nivel3._ruta }}"
+                    [queryParams]="{
+                      com: url_comprobante,
+                      mat: dts_datosasegurado
+                    }"
+                    >{{ row_nivel3._descripcion }}</a
+                  >
+                  <ul class="dropdown-menu">
+                    <li
+                      *ngFor="let row_nivel4 of menu_modulo4"
+                      (click)="cerrarMenuPadre($event)"
+                    >
+                      <a
+                        *ngIf="row_nivel3._idmenu == row_nivel4._idmenusuperior"
+                        tabindex="-1"
+                        routerLink="{{ row_nivel4._ruta }}"
+                        [queryParams]="{
+                          com: url_comprobante,
+                          mat: dts_datosasegurado
+                        }"
+                        >{{ row_nivel4._descripcion }}</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <label class="info"
+            >Rol: <strong>{{ s_rol }}</strong></label
+          >
+        </li>
+        <li>
+          <label class="info"
+            >Usuario: <strong>{{ s_nom }}</strong></label
+          >
+        </li>
+        <li>
+          <button
+            class="btn btn-warning info"
+            title="Cerrar Sesión"
+            (click)="cerrarsesion()"
+          >
+            <i class="fa fa-power-off"></i>
+          </button>
+        </li>
+        <!-- <li class="dropdown">  
+                    
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <div class="pull-right"><strong >Rol:</strong> {{s_rol}}</div>
+            <br/><strong>Usuario:
+            </strong> {{s_nom}} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li>
+              <button type="button" routerLink='/' class="btn btn-danger btn-sm btn-block">
+                <i class="fa fa-ban"></i> Cerrar Sesion.
+              </button>
+            </li>
+          </ul>
+        </li> -->
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container-fluid -->
+</nav>
+
+<!-- <app-header-main></app-header-main> -->
+<!-- <app-busquedabeneficiario [inputMatricula]="inputMatricula" (outputdtsdatosasegurado)="cargarDtsdatosasegurdo($event)"></app-busquedabeneficiario> -->
+<!-- <app-ce-bandejacitas  (outputdtsdatosasegurado)="cargarDtsdatosasegurdo($event)"></app-ce-bandejacitas> -->
+<!-- <app-ce-bandejacitas (outputdtsdatosasegurado)="cargarDtsdatosasegurdo($event)" (outputcomprobante)="cargarComprobante($event)"></app-ce-bandejacitas> -->
+
+<router-outlet></router-outlet>

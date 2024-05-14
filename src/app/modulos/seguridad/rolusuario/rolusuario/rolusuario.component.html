@@ -1,0 +1,523 @@
+<div class="container-fluid">
+  <form action="" name="form">
+    <div class="row">
+      <!-- BUSCADOR DE HOJA DE RUTAS -->
+      <div
+        class="content content-success"
+        name="pnl_busqueda"
+        id="pnl_busqueda"
+      >
+        <div class="content-header with-border">
+          <h3 class="content-title text-green">
+            <strong>ROL-USUARIO - LISTA DE ROL-USUARIO</strong>
+          </h3>
+        </div>
+        <div class="content-body">
+          <div class="rowlocal">
+            <div
+              class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"
+            >
+              <div class="panel panel-success">
+                <div class="panel-heading text-center">
+                  Busqueda de Rol-Usuario
+                </div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="form-horizontal">
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Rol:</label
+                        >
+                        <div class="col-sm-7">
+                          <select
+                            id="idrol"
+                            class="form-control"
+                            name="idrol"
+                            [(ngModel)]="m_idrol"
+                          >
+                            <option
+                              *ngFor="
+                                let row_roles of dts_ListaRoles;
+                                let i = index
+                              "
+                              [ngValue]="row_roles.idrol"
+                            >
+                              {{ row_roles.nombre }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Usuario:</label
+                        >
+                        <div class="col-sm-7">
+                          <select
+                            id="idsusuario"
+                            class="form-control"
+                            name="idsusuario"
+                            [(ngModel)]="m_idusuario"
+                          >
+                            <option
+                              *ngFor="
+                                let row_usuarios of dts_ListaUsuarios1;
+                                let i = index
+                              "
+                              [ngValue]="row_usuarios.usu_id"
+                            >
+                              {{ row_usuarios.usu_nom }}
+                              {{ row_usuarios.usu_app }}
+                              {{ row_usuarios.usu_apm }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="panel-footer">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <button
+                              type="button"
+                              class="btn btn-primary btn-block"
+                              id="BuscarRolUsuario"
+                              name="BuscarRolUsuario"
+                              (click)="BuscarRolUsuario()"
+                            >
+                              <i class="fa fa-search" aria-hidden="true"></i>
+                              Buscar
+                            </button>
+                          </div>
+                          <div class="col-md-6">
+                            <button
+                              type="button"
+                              class="btn btn-default btn-block"
+                              id="LimpiarBusqueda"
+                              name="LimpiarBusqueda"
+                              (click)="LimpiarBusqueda()"
+                            >
+                              <i class="fa fa-eraser" aria-hidden="true"></i>
+                              Limpiar
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-footer"></div>
+      </div>
+      <!-- FIN DE BUSCADOR DE HOJA DE RUTA -->
+
+      <!-- LISTADO PROVEIDOS -->
+      <div
+        *ngIf="pnlListaProveidos == true"
+        class="content content-success"
+        name="pnl_hjproveidos"
+        id="pnl_hjproveidos"
+      >
+        <div class="content-header with-border">
+          <div class="pull-left">
+            <button
+              class="btn btn-danger btn-circle-sm"
+              type="button"
+              data-toggle="modal"
+              data-target="#modalNuevoRolUsuario"
+              (click)="FormNuevoRolUsuario()"
+            >
+              Nuevo Permiso
+            </button>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary pull-right"
+            (click)="descargarFormularioFAS09()"
+          >
+            <i class="fa fa-file-pdf-o" aria-hidden="true"></i> Descargar FAS09
+          </button>
+        </div>
+        <div class="content-body">
+          <div class="rowlocal">
+            <div
+              class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10"
+            >
+              <div class="panel panel-success">
+                <div class="panel-heading text-center">
+                  Listado de Rol-Usuario
+                </div>
+                <div class="panel-body">
+                  <!-- INICIO TABLA-->
+                  <div class="row">
+                    <table
+                      class="table table-primary table-striped table-condensed table-hover dt-Proveidos"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Id RolUser</th>
+                          <th>Rol</th>
+                          <th>Usuario</th>
+                          <th>Estado</th>
+                          <th>Editar</th>
+                          <th>Eliminar</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          *ngFor="
+                            let row_registros of dts_ListaUsuarios;
+                            let i = index
+                          "
+                        >
+                          <td>{{ row_registros.id }}</td>
+                          <td>
+                            {{ row_registros.idrol }}-{{
+                              row_registros.nom_rol
+                            }}
+                          </td>
+                          <td>{{ row_registros.nom_usuario }}</td>
+                          <td>{{ row_registros.id_estado }}</td>
+                          <td>
+                            <button
+                              class="btn btn-info btn-circle-sm"
+                              type="button"
+                              data-toggle="modal"
+                              data-target="#modalEditarProveido"
+                              (click)="MuetraRolUsuario(row_registros)"
+                            >
+                              <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              class="btn btn-danger btn-circle-sm"
+                              type="button"
+                              data-toggle="modal"
+                              data-target="#modalEliminaRegistro"
+                              (click)="EliminarRegistro(row_registros)"
+                            >
+                              <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- FIN TABLA-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- FIN FIN LISTADO PROVEIDO -->
+
+      <!-- INICIO MODAL modalEditarProveido -->
+
+      <!-- FIN MODAL modalEditarProveido -->
+      <!-- INICIO MODAL modalEliminaProveido -->
+      <div
+        class="modal fade"
+        *ngIf="pnlModalEliminaRegistro == true"
+        name="modalEliminaRegistro"
+        id="modalEliminaRegistro"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">
+                :::ATENCIÓN:::
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="alert alert-danger">
+              <p>Está apunto de eliminar el registro.</p>
+              <p>¿Se encuentra seguro?</p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Cerrar
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="EliminaRegistroActual(dtsRegitroProveido.id)"
+              >
+                Aceptar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- FIN MODAL modalEliminaProveido -->
+
+      <!-- INICIO MODAL modalEditarProveido -->
+      <div
+        class="modal fade"
+        *ngIf="pnlModalEditarProveido == true"
+        name="modalEditarProveido"
+        id="modalEditarProveido"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">
+                :::EDITAR ROL-USUARIO:::
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="busqueda"
+                      >Rol:</label
+                    >
+                    <div class="col-sm-7">
+                      <select
+                        id="e_idrol"
+                        class="form-control"
+                        name="e_idrol"
+                        [(ngModel)]="e_idrol"
+                      >
+                        <option
+                          *ngFor="
+                            let row_roles of dts_ListaRoles;
+                            let i = index
+                          "
+                          [ngValue]="row_roles.idrol"
+                        >
+                          {{ row_roles.nombre }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="busqueda"
+                      >Usuario:</label
+                    >
+                    <div class="col-sm-7">
+                      <select
+                        id="e_idusuario"
+                        class="form-control"
+                        name="e_idusuario"
+                        [(ngModel)]="e_idusuario"
+                      >
+                        <option
+                          *ngFor="
+                            let row_usuarios of dts_ListaUsuarios1;
+                            let i = index
+                          "
+                          [ngValue]="row_usuarios.usu_id"
+                        >
+                          {{ row_usuarios.usu_nom }} {{ row_usuarios.usu_app }}
+                          {{ row_usuarios.usu_apm }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="busqueda"
+                      >Estado:</label
+                    >
+                    <div class="col-sm-7">
+                      <select
+                        id="e_estado"
+                        class="form-control"
+                        name="e_estado"
+                        [(ngModel)]="e_estado"
+                      >
+                        <option value=""></option>
+                        <option value="1">ACTIVO</option>
+                        <option value="2">INACTIVO</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Cerrar
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                name="btnEditarRolUsuario"
+                id="btnEditarRolUsuario"
+                (click)="ActualizaRolUsuario()"
+              >
+                Actualizar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- FIN MODAL modalEditarProveido -->
+
+      <!-- INICIO MODAL Nuevo usuario -->
+      <div
+        class="modal fade"
+        *ngIf="pnlModalNuevoRolUsuario == true"
+        name="modalNuevoRolUsuario"
+        id="modalNuevoRolUsuario"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">
+                :::NUEVO ROL-USUARIO:::
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="rol">Rol:</label>
+                    <div class="col-sm-7">
+                      <select
+                        id="rol"
+                        class="form-control"
+                        name="rol"
+                        [(ngModel)]="e_idrol"
+                      >
+                        <option
+                          *ngFor="
+                            let row_roles of dts_ListaRoles;
+                            let i = index
+                          "
+                          [ngValue]="row_roles.idrol"
+                        >
+                          {{ row_roles.nombre }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="busqueda"
+                      >Usuario:</label
+                    >
+                    <div class="col-sm-7">
+                      <select
+                        id="e_idusuario"
+                        class="form-control"
+                        name="e_idusuario"
+                        [(ngModel)]="e_idusuario"
+                      >
+                        <option
+                          *ngFor="
+                            let row_usuarios of dts_ListaUsuarios1;
+                            let i = index
+                          "
+                          [ngValue]="row_usuarios.usu_id"
+                        >
+                          {{ row_usuarios.usu_nom }} {{ row_usuarios.usu_app }}
+                          {{ row_usuarios.usu_apm }}
+                        </option>
+                      </select>
+
+                      <input
+                        class="form-control"
+                        type="hidden"
+                        name="e_fecha"
+                        id="e_fecha"
+                        list="browsers"
+                        [(ngModel)]="e_fecha"
+                        autocomplete="off"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="busqueda"
+                      >Estado:</label
+                    >
+                    <div class="col-sm-7">
+                      <select
+                        id="e_estado"
+                        class="form-control"
+                        name="e_estado"
+                        [(ngModel)]="e_estado"
+                      >
+                        <option value=""></option>
+                        <option value="1">ACTIVO</option>
+                        <option value="2">INACTIVO</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Cerrar
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                name="InsertaNuevoRolUsuario"
+                id="InsertaNuevoRolUsuario"
+                (click)="InsertaNuevoRolUsuario()"
+              >
+                Registrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- FIN MODAL modal Nuevo Usuario -->
+    </div>
+  </form>
+</div>

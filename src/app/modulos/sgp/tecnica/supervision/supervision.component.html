@@ -1,0 +1,185 @@
+<div *ngIf="pnl_listasupervisiones==true" id="pnl_listasupervisiones" name="pnl_listasupervisiones"
+  class="card card-body">
+  <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+    <div class="content-header with-border">
+      <h3 class="content-title text-green">
+        <strong>SUPERVISION - TECNICA PROYECTO: <b>{{ nombre_proyecto }}</b></strong>
+      </h3>
+      <div class="pull-right">
+        <button class="btn btn-primary" type="button" (click)="paneles('NUEVA_SUPERVISION')" *ngIf="habilitaAdicion"
+          [disabled]="camposHabilitados._tecnica">
+          <i class="fa fa-plus-square" aria-hidden="true" title="Nueva Supervision"></i>
+        </button>
+      </div>
+    </div>
+    <div class="content-body">
+      <div class="row">
+        <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+        <div class="col-lg-offset-2 col-lg-8">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+              LISTADO DE SUPERVISIONES
+            </div>
+            <div class="panel-body">
+              <!--LISTA GRIDVIEW SUPERVISION-->
+              <table class="table table-condensed table-hover dt-listasupervision">
+                <thead>
+                  <tr>
+                    <th>Nro.</th>
+                    <th>Fecha Registro</th>
+                    <th>Registro Usuario</th>
+                    <th>Avance Físico</th>
+                    <th>Informe</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr *ngFor="
+                      let row_registros of dts_listasupervision;
+                      let i = index
+                    ">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      {{ row_registros.fecha_registro | date: "dd/MM/yyyy" }}
+                    </td>
+                    <td>{{ row_registros.nombre_completo | uppercase }}</td>
+                    <td>{{ row_registros.avance_fisico }}</td>
+                    <td style="text-align: justify">
+                      {{ row_registros.detalle | uppercase }}
+                    </td>
+                    <td>
+                      <button *ngIf="row_registros.diferenciadias <= 1" type="button" class="btn btn-warning btn-md"
+                        (click)="abrirEdicion(row_registros)" [disabled]="camposHabilitados._tecnica">
+                        <i class="fa fa-edit" aria-hidden="true" title="Modificar supervisión"></i></button><br />
+                      <button *ngIf="row_registros.diferenciadias <= 1 || camposHabilitados._administrador==false" type="button" class="btn btn-danger btn-md"
+                        (click)="abrirEliminacion(row_registros)" [disabled]="camposHabilitados._tecnica">
+                        <i class="fa fa-trash" aria-hidden="true" title="Eliminar supervisión"></i></button><br />
+                      
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content-footer"></div>
+  </div>
+</div>
+
+<!-- INICIO MODAL SUPERVISION -->
+<div class="modal fade" name="modalSupervision" id="modalSupervision" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Nueva Supervisión</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="porcentaje">Porcentaje Avance Físico:</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" id="porcentajeEntrada" name="porcentajeEntrada"
+                    [(ngModel)]="supervision.avancefisico" />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="informe">Informe:
+                </label>
+                <div class="col-sm-6">
+                  <textarea style="resize: none" class="form form-control" rows="6" maxlength="2000"
+                    [(ngModel)]="supervision.informe"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button type="button" class="btn btn-warning" name="btnModificar" id="btnModificar"
+          (click)="actualizarValidaPorcentaje()">
+          Modificar
+        </button>
+        <button type="button" class="btn btn-primary" name="btnRegistrar" id="btnRegistrar"
+          (click)="insertarValidaPorcentaje()">
+          Registrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL SUPERVISION-->
+
+<!-- INICIO MODAL ELIMINACION -->
+<div class="modal fade" id="modalEliminacion" name="modalEliminacion" tabindex="-1" role="dialog"
+  aria-labelledby="Eliminar_proveido" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><b>ALERTA</b></h5>
+      </div>
+      <div class="modal-body">
+        Está seguro que desea Eliminar el registro seleccionado?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button type="button" class="btn btn-primary" (click)="eliminaSupervision()">
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL ELMINACION-->
+<!-- INICIO MODAL CONFIRMACION -->
+<div class="modal fade" id="modalConfirmacion" name="modalConfirmacion" tabindex="-1" role="dialog"
+  aria-labelledby="Eliminar_proveido" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><b>ALERTA</b></h5>
+      </div>
+      <div class="modal-body">
+        El porcentaje ingresado es menor al último registrado anteriormente,
+        está seguro de realizar el registro/actualización?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button type="button" id="btnModConfirmar" name="btnModConfirmar" class="btn btn-primary"
+          (click)="actualizaSupervision()">
+          Confirmar
+        </button>
+        <button id="btnRegConfirmar" name="btnRegConfirmar" type="button" class="btn btn-primary"
+          (click)="insertaSupervision()">
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL CONFIRMACION-->

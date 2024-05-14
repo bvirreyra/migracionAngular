@@ -1,0 +1,799 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+
+<!-- <div *ngIf="pnl_detalle">
+  <app-proyectos-continuidad [inputDts]="dtsDetalle" [valor]="tituloGrilla" (messageEvent)="recibeMensaje($event)">
+  </app-proyectos-continuidad>
+</div> -->
+<div *ngIf="componente">
+  <!-- PROYETOS PARA ENTREGA general-->
+
+  <div class="containerCris" *ngIf="false">
+    <div style="text-align: left">
+      <div>
+        <button
+          class="btn btn-danger btn-block"
+          (click)="habilitaPaneles('PROYECTO_ENTREGA_GENERAL')"
+          type="button"
+        >
+          Proyectos Para Entrega en General
+        </button>
+      </div>
+      <div *ngIf="pnl_proyectos_general">
+        <div *ngIf="pnl_tarjetas_general">
+          <div class="row">
+            <div class="form-group">
+              <div class="col col-xs-12 col-sm-6 col-lg-4">
+                <label>DEPARTAMENTO</label>
+                <select
+                  class="form form-control"
+                  [(ngModel)]="filtroDpto"
+                  (ngModelChange)="filtrarDepartamento()"
+                >
+                  <option
+                    *ngFor="let row of dts_departamento; let i = index"
+                    [ngValue]="row.departamento"
+                  >
+                    {{ row.departamento }}
+                  </option>
+                </select>
+              </div>
+              <div class="col col-xs-12 col-sm-6 col-lg-4">
+                <label>MUNICIPIO</label>
+                <select
+                  class="form form-control"
+                  [(ngModel)]="filtroMunicipio"
+                  (ngModelChange)="filtrarMunicipio()"
+                >
+                  <option
+                    *ngFor="let row of dts_municipio; let i = index"
+                    [ngValue]="row.municipio"
+                  >
+                    {{ row.municipio }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <label class="titulo"
+            >Proyectos para entrega - {{ totalFisico100 }}
+          </label>
+          <!-- <app-tarjeta class="col col-xs-12 col-sm-6 col-lg-4" [inputDts]="dtsFisico100" [valor]="'PROYECTOS PARA ENTREGA'" [color]="'rojo'"
+                [saldo]="false" [panel]="'PARA-ENTREGA'" (messageEvent)="recibeMensaje($event)"></app-tarjeta> -->
+          <app-tarjeta
+            class="col col-xs-12 col-sm-6 col-lg-3"
+            [inputDts]="dtsInternoConcluidos"
+            [valor]="'PROYECTOS PAGADOS TOTALMENTE'"
+            [color]="'azul'"
+            [saldo]="false"
+            [panel]="'PARA-ENTREGA-100'"
+            (messageEvent)="recibeMensaje($event)"
+          ></app-tarjeta>
+          <app-tarjeta
+            class="col col-xs-12 col-sm-6 col-lg-3"
+            [inputDts]="dtsInternoMayor80"
+            [valor]="'AVANCE FINANCIERO MAYOR A 80%'"
+            [color]="'amarillo'"
+            [panel]="'PARA-ENTREGA-MAYOR'"
+            [saldo]="true"
+            (messageEvent)="recibeMensaje($event)"
+          ></app-tarjeta>
+          <app-tarjeta
+            class="col col-xs-12 col-sm-6 col-lg-3"
+            [inputDts]="dtsInternoMenor80"
+            [valor]="'AVANCE FINANCIERO MENOR A 80%'"
+            [color]="'rojo'"
+            [panel]="'PARA-ENTREGA-MENOR'"
+            [saldo]="true"
+            (messageEvent)="recibeMensaje($event)"
+          ></app-tarjeta>
+          <app-tarjeta
+            class="col col-xs-12 col-sm-6 col-lg-3"
+            [inputDts]="dts_proyectos2025"
+            [valor]="'PROYECTOS SOLICITADOS'"
+            [color]="'plomo'"
+            [saldo]="false"
+            [panel]="'SOLICITADOS'"
+            (messageEvent)="recibeMensaje($event)"
+          ></app-tarjeta>
+          <!-- </div> -->
+
+          <!-- <div *ngIf="pnl_parametros">
+        <app-parametros [inputDts]="inputDts" [valor]="panelDetalle" (messageEvent)="recibeMensaje($event)">
+        </app-parametros>
+      </div> -->
+        </div>
+        <div
+          style="display: flexbox; padding: 1rem 0"
+          *ngIf="pnl_detalle_general"
+        >
+          <app-proyectos-continuidad
+            [inputDts]="dtsDetalle"
+            [valor]="tituloDetalle"
+            (messageEvent)="recibeMensaje($event)"
+          >
+          </app-proyectos-continuidad>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- SELECCION PERIODO PRESIDENCIAL -->
+  <div class="containerCris" *ngIf="false">
+    <div class="row">
+      <div class="form-group col-sm-3 col-lg-3 col-md-3">
+        <label class="control-label text-left">Periodo Presidencial:</label>
+        <select
+          id="periodo_presidencial"
+          name="periodo_presidencial"
+          class="form-control"
+          [(ngModel)]="m_periodopresidencial"
+          (ngModelChange)="filtraPeriodoPresidencial()"
+        >
+          <option>Seleccione...</option>
+          <option value="TODOS">TODOS</option>
+          <option
+            *ngFor="
+              let row_periodopresidencial of dts_periodopresidencial;
+              let i = index
+            "
+            [ngValue]="row_periodopresidencial.id_periodo"
+          >
+            {{ row_periodopresidencial.nombre_completo }}
+            {{ row_periodopresidencial.fecha_inicio | date : "yyyy/MM" }} -
+            {{ row_periodopresidencial.fecha_fin | date : "yyyy/MM" }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <!-- FIN SELECCION PERIODO PRESIDENCIAL -->
+
+  <div class="row"></div>
+  <!-- PROYETOS ENTREGADOS -->
+  <div
+    class="containerCris"
+    *ngIf="camposHabilitados._apk_vista_proyectos_entregados == false"
+  >
+    <div style="text-align: left">
+      <div col col-xs-8 col-sm-8 col-md-8 col-lg-8>
+        <button
+          class="btn btn-coral btn-block"
+          (click)="habilitaPaneles('PROYECTO_ENTREGADO')"
+          type="button"
+        >
+          Proyectos Entregados
+        </button>
+      </div>
+      <div *ngIf="pnl_proyectos_entregados == true">
+        <div *ngIf="pnl_listaproyecto">
+          <div *ngIf="pnl_tarjetaProyectosEntregados == true">
+            <div *ngIf="inputDts">
+              <app-desglose
+                [dts_registro]="dts_listaProyectos"
+                [finicio]="finicio | date : 'yyyy-MM-dd'"
+                [ffin]="ffin | date : 'yyyy-MM-dd'"
+              ></app-desglose>
+              <app-tarjeta
+                [inputDts]="dtsEntregados"
+                [valor]="'PROYECTOS ENTREGADOS'"
+                [color]="'plomo'"
+                [saldo]="false"
+                [panel]="'GRILLA-ENTREGADOS'"
+                (messageEvent)="recibeMensaje($event)"
+              ></app-tarjeta>
+            </div>
+          </div>
+        </div>
+        <div class="row"></div>
+        <div *ngIf="pnl_parametros">
+          <app-parametros
+            [inputDts]="inputDts"
+            [valor]="panelDetalle"
+            (messageEvent)="recibeMensaje($event)"
+          >
+          </app-parametros>
+        </div>
+        <div *ngIf="pnl_detalle">
+          <app-proyectos-continuidad
+            [inputDts]="dtsDetalle"
+            [valor]="tituloGrilla"
+            (messageEvent)="recibeMensaje($event)"
+          >
+          </app-proyectos-continuidad>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- FIN PROYECTOS ENTREGADOS -->
+  <div class="row"></div>
+  <!-- PROYETOS PARA ENTREGA -->
+  <div
+    class="containerCris"
+    *ngIf="camposHabilitados['_apk_vista_proyectos_paraentrega'] == false"
+  >
+    <div style="text-align: left">
+      <div
+        col
+        col-xs-8
+        col-sm-8
+        col-md-8
+        col-lg-8
+        offset-xs-2
+        offset-sm-2
+        offset-md-2
+        offset-lg-2
+      >
+        <button
+          class="btn btn-success btn-block"
+          (click)="habilitaPaneles('PROYECTO_PARA_ENTREGA')"
+          type="button"
+        >
+          Proyectos Para Entrega
+        </button>
+      </div>
+      <div *ngIf="pnl_proyectos_paraentrega == true">
+        <div *ngIf="pnl_listaproyecto">
+          <div
+            class="col col-xs-12 col-sm-6 col-md-6 col-lg-4"
+            *ngIf="pnl_tarjetaProyectosAvanceFisico100 == true"
+          >
+            <div *ngIf="inputDts">
+              <app-tarjeta
+                [inputDts]="dtsFisico100"
+                [valor]="'PROYECTOS PARA ENTREGA'"
+                [color]="'verde'"
+                [saldo]="false"
+                [panel]="'PARAMETROS-100'"
+                (messageEvent)="recibeMensaje($event)"
+              ></app-tarjeta>
+            </div>
+          </div>
+        </div>
+
+        <div class="row"></div>
+        <div *ngIf="pnl_parametros">
+          <app-parametros
+            [inputDts]="dtsFisico100"
+            [valor]="panelDetalle"
+            (messageEvent)="recibeMensaje($event)"
+          >
+          </app-parametros>
+        </div>
+        <div *ngIf="pnl_detalle">
+          <app-proyectos-continuidad
+            [inputDts]="dtsDetalle"
+            [valor]="tituloGrilla"
+            (messageEvent)="recibeMensaje($event)"
+          >
+          </app-proyectos-continuidad>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row"></div>
+
+  <!-- FIN PROYETOS PARA ENTREGA -->
+  <!-- PROYETOS EN EJECUCION LUCHO-->
+  <div
+    class="containerCris"
+    *ngIf="camposHabilitados['_apk_vista_proyectos_ejecucion_lucho'] == false"
+  >
+    <div style="text-align: left">
+      <div col col-xs-8 col-sm-8 col-md-8 col-lg-8>
+        <button
+          class="btn btn-info btn-block"
+          (click)="habilitaPaneles('PROYECTO_EN_EJECUCION')"
+          type="button"
+        >
+          Proyectos Lucho
+          <i class="fa fa-star fa-lg"> </i>
+        </button>
+      </div>
+      <div *ngIf="pnl_proyectos_ejecucion == true">
+        <div
+          *ngIf="pnl_listaproyecto"
+          name="pnl_listaproyecto"
+          id="pnl_listaproyecto"
+        >
+          <div class="col-sm-12 col-lg-12 col-md-12">
+            <div *ngIf="inputDts">
+              <app-barras
+                [titulos]="titulosBarDep"
+                [series]="seriesBarDep"
+                [periodos]="periodosBarDep"
+                [alto]="alto"
+                [colores]="coloresDeptos"
+                (messageEvent)="recibeMensaje($event, 'bardep')"
+              ></app-barras>
+            </div>
+          </div>
+          <div class="row"></div>
+          <div class="col-sm-12 col-lg-6 col-md-6">
+            <table
+              class="table table-condensed table-hover dt-reporte"
+              style="font-size: 9pt"
+            >
+              <thead>
+                <tr>
+                  <th>DEPARTAMENTO</th>
+                  <th style="text-align: right">CANTIDAD</th>
+                  <th style="text-align: right">%</th>
+                  <th style="text-align: right">MONTO CONVENIO</th>
+                  <th style="text-align: right">MONTO UPRE</th>
+                  <th style="text-align: right">MONTO CONTRAPARTE</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of dtsDatos; let x = index">
+                  <td id="dep{{ x + 1 }}">{{ row.departamento }}</td>
+                  <td style="text-align: right">{{ row.cantidad }}</td>
+                  <td style="text-align: right">
+                    {{
+                      (row.cantidad * 100) / inputDts.length
+                        | number : "0.2-2"
+                        | formatoDecimal
+                    }}
+                    %
+                  </td>
+                  <td style="text-align: right">
+                    {{ row.monto_convenio | number : "0.2-2" | formatoDecimal }}
+                  </td>
+                  <td style="text-align: right">
+                    {{ row.monto_upre | number : "0.2-2" | formatoDecimal }}
+                  </td>
+                  <td style="text-align: right">
+                    {{
+                      row.monto_contraparte | number : "0.2-2" | formatoDecimal
+                    }}
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td style="text-align: right"><STRONG>TOTAL</STRONG></td>
+                  <td style="text-align: right"></td>
+                  <td style="text-align: right"></td>
+                  <td style="text-align: right"></td>
+                  <td style="text-align: right"></td>
+                  <td style="text-align: right"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <div class="col-sm-12 col-lg-6 col-md-6">
+            <table
+              class="table table-condensed table-hover dt-sector"
+              style="font-size: 9pt"
+            >
+              <thead>
+                <tr>
+                  <th>AREA</th>
+                  <th style="text-align: right">CANTIDAD</th>
+                  <th style="text-align: right">%</th>
+                  <th style="text-align: right">MONTO CONVENIO</th>
+                  <th style="text-align: right">MONTO UPRE</th>
+                  <th style="text-align: right">MONTO CONTRAPARTE</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row_sector of dtsSector; let x = index">
+                  <td>{{ row_sector.area }}</td>
+                  <td style="text-align: right">{{ row_sector.cantidad }}</td>
+                  <td style="text-align: right">
+                    {{
+                      (row_sector.cantidad * 100) / inputDts.length
+                        | number : "0.2-2"
+                        | formatoDecimal
+                    }}
+                    %
+                  </td>
+                  <td style="text-align: right">
+                    {{
+                      row_sector.monto_convenio
+                        | number : "0.2-2"
+                        | formatoDecimal
+                    }}
+                  </td>
+                  <td style="text-align: right">
+                    {{
+                      row_sector.monto_upre | number : "0.2-2" | formatoDecimal
+                    }}
+                  </td>
+                  <td style="text-align: right">
+                    {{
+                      row_sector.monto_contraparte
+                        | number : "0.2-2"
+                        | formatoDecimal
+                    }}
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td style="text-align: right"><STRONG>TOTAL</STRONG></td>
+                  <td style="text-align: right"></td>
+                  <td style="text-align: right"></td>
+                  <td style="text-align: right"></td>
+                  <td style="text-align: right"></td>
+                  <td style="text-align: right"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div class="row"></div>
+          <div class="col col-xs-12 col-sm-6 col-md-6 col-lg-8">
+            <div *ngIf="inputDts">
+              <app-filtra-campos
+                [inputDts]="dts_listaProyectos"
+                [filtros]="filtros"
+                (respuestaPadre)="recibeDataMensaje($event)"
+              >
+              </app-filtra-campos>
+            </div>
+          </div>
+          <div class="row"></div>
+          <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <div *ngIf="inputDts">
+              <app-tarjeta
+                [inputDts]="dts_EjecucionPeriodoVigente"
+                [valor]="'PROYECTOS CON CONVENIO'"
+                [color]="'verde'"
+                [panel]="'GRILLA-VIGENTES'"
+                [saldo]="true"
+                [buscador]="true"
+                (messageEvent)="recibeMensaje($event)"
+              >
+              </app-tarjeta>
+            </div>
+          </div>
+          <div class="col col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <div *ngIf="dts_listaProyectos_en_ejecucion">
+              <app-tarjeta
+                [inputDts]="dts_listaProyectos_en_ejecucion"
+                [valor]="'PROYECTOS EN EJECUCION'"
+                [color]="'rojo'"
+                [panel]="'GRILLA-EJECUCION'"
+                [saldo]="true"
+                [buscador]="true"
+                (messageEvent)="recibeMensaje($event)"
+              >
+              </app-tarjeta>
+            </div>
+          </div>
+        </div>
+        <div class="row"></div>
+        <div *ngIf="pnl_detalle">
+          <app-proyectos-continuidad
+            [inputDts]="dts_detallePeriodoActual"
+            [valor]="tituloGrilla"
+            (messageEvent)="recibeMensaje($event)"
+          >
+          </app-proyectos-continuidad>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--FIN PROYECTOS EN EJECUCION LUCHO -->
+
+  <div class="row"></div>
+
+  <!-- SOLICITUD DE PROYECTOS -->
+  <div
+    class="containerCris"
+    *ngIf="camposHabilitados['_apk_vista_solicitud_proyectos'] == false"
+  >
+    <div style="text-align: left">
+      <div col col-xs-8 col-sm-8 col-md-8 col-lg-8>
+        <button
+          class="btn btn-success btn-block"
+          (click)="habilitaPaneles('PROYECTOS_CONTINUIDAD')"
+          type="button"
+        >
+          Solicitud de Proyectos
+        </button>
+      </div>
+      <div *ngIf="pnl_grillaDinamica">
+        <app-compromisos2025
+          [departamentoInput]="filtroDpto"
+          [municipioInput]="filtroMunicipio.replace('TODOS', '')"
+        ></app-compromisos2025>
+      </div>
+    </div>
+  </div>
+  <!-- DASHBOARD MONIOREO -->
+  <div
+    class="containerCris"
+    *ngIf="camposHabilitados['_apk_vista_monitoreo_compromisos'] == false"
+  >
+    <div style="text-align: left">
+      <div col col-xs-8 col-sm-8 col-md-8 col-lg-8>
+        <button
+          class="btn btn-teal btn-block"
+          (click)="habilitaPaneles('MONITOREO_COMPROMISOS')"
+        >
+          Monitoreo de Compromisos
+        </button>
+      </div>
+      <div *ngIf="pnl_dashboard">
+        <app-monitoreo-v5
+          [fechaIni]="finicio"
+          [fechaFin]="ffin"
+        ></app-monitoreo-v5>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <hr width="80%" size="20" color="#4D4FD5" />
+  </div>
+
+  <!-- PROYETOS EN EJECUCION GESTIONES ANTERIORES-->
+  <div
+    class="containerCris"
+    *ngIf="
+      camposHabilitados['_apk_vista_proyectos_ejecucion_anteriores'] == false
+    "
+  >
+    <div style="text-align: left">
+      <div col col-xs-8 col-sm-8 col-md-8 col-lg-8>
+        <button
+          class="btn btn-plomo btn-block"
+          (click)="habilitaPaneles('PROYECTO_EN_EJECUCION_ANTERIORES')"
+          type="button"
+        >
+          Proyectos en Ejecución Gestiones Anteriores
+        </button>
+      </div>
+      <div *ngIf="pnl_proyectos_ejecucion_anteriores == true">
+        <div *ngIf="pnl_listaproyecto">
+          <div
+            class="col col-xs-12 col-sm-6 col-md-6 col-lg-4"
+            *ngIf="pnl_tarjetaProyectosAvanceFisicoMayor80 == true"
+          >
+            <div *ngIf="inputDts">
+              <app-tarjeta
+                [inputDts]="dtsMayor80"
+                [valor]="'PROYECTOS CON AVANCE FÍSICO MAYOR A 80%'"
+                [color]="'amarillo'"
+                [panel]="'GRILLA-MAYOR80'"
+                [saldo]="true"
+                (messageEvent)="recibeMensaje($event)"
+              >
+              </app-tarjeta>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="pnl_listaproyecto">
+          <div
+            class="col col-xs-12 col-sm-6 col-md-6 col-lg-4"
+            *ngIf="pnl_tarjetaProyectosAvanceFisicoMenor80 == true"
+          >
+            <div *ngIf="inputDts">
+              <app-tarjeta
+                [inputDts]="dtsMenor80"
+                [valor]="'PROYECTOS CON AVANCE FÍSICO MENOR A 80%'"
+                [color]="'rojo'"
+                [panel]="'GRILLA-MENOR80'"
+                [saldo]="true"
+                (messageEvent)="recibeMensaje($event)"
+              ></app-tarjeta>
+            </div>
+          </div>
+        </div>
+
+        <div class="row"></div>
+        <div *ngIf="pnl_parametros">
+          <app-parametros
+            [inputDts]="inputDts"
+            [valor]="panelDetalle"
+            (messageEvent)="recibeMensaje($event)"
+          >
+          </app-parametros>
+        </div>
+        <div *ngIf="pnl_detalle">
+          <app-proyectos-continuidad
+            [inputDts]="dtsDetalle"
+            [valor]="tituloGrilla"
+            (messageEvent)="recibeMensaje($event)"
+          >
+          </app-proyectos-continuidad>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--FIN PROYECTOS EN EJECUCION GESTIONES ANTERIORES -->
+  <div class="row"></div>
+  <!-- PROYETOS CONCLUIDOS CON OBS. TECNICA -->
+  <div
+    class="containerCris"
+    *ngIf="
+      camposHabilitados._apk_vista_proyectos_concluidos_observados == false
+    "
+  >
+    <div style="text-align: left">
+      <div col col-xs-8 col-sm-8 col-md-8 col-lg-8>
+        <button
+          class="btn btn-warning btn-block"
+          (click)="habilitaPaneles('PROYECTO_CON_OBSERVACION')"
+          type="button"
+        >
+          Proyectos Concluidos con Observación Técnica
+        </button>
+      </div>
+      <div *ngIf="pnl_proyectos_observacion_tecnica == true">
+        <div *ngIf="pnl_listaproyecto">
+          <div
+            class="col col-xs-12 col-sm-6 col-md-6 col-lg-4"
+            *ngIf="pnl_tarjetaProyectosObservadosV1 == true"
+          >
+            <div *ngIf="inputDts">
+              <app-tarjeta
+                [inputDts]="dtsFisicoObservado"
+                [valor]="'PROYECTOS CON AVANCE FÍSICO 100% OBSERVADOS'"
+                [color]="'azul'"
+                [panel]="'GRILLA-OBSERVADOS'"
+                [saldo]="false"
+                (messageEvent)="recibeMensaje($event)"
+              >
+              </app-tarjeta>
+            </div>
+          </div>
+        </div>
+        <div class="row"></div>
+        <div *ngIf="pnl_parametros">
+          <app-parametros
+            [inputDts]="inputDts"
+            [valor]="panelDetalle"
+            (messageEvent)="recibeMensaje($event)"
+          >
+          </app-parametros>
+        </div>
+        <div *ngIf="pnl_detalle">
+          <app-proyectos-continuidad
+            [inputDts]="dtsDetalle"
+            [valor]="tituloGrilla"
+            (messageEvent)="recibeMensaje($event)"
+          >
+          </app-proyectos-continuidad>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="col col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="pnl_tarjetaProyectosObservadosV2==true">
+    <div *ngIf="inputDts">
+      <app-tarjeta [inputDts]="dtsObservados" [valor]="'PROYECTOS CON OBSERVACIÓN'" [color]="'azul'"
+        [panel]="'GRILLA-OBSERVADOS'" [saldo]="false" (messageEvent)="recibeMensaje($event)"></app-tarjeta>
+    </div>
+  </div> -->
+  </div>
+  <!-- FIN PROYETOS CONCLUIDOS CON OBS. TECNICA -->
+
+  <!-- BUSCADOR GENERAL DE PROYETOS DE CONTINUIDAD -->
+  <div
+    class="containerCris"
+    *ngIf="camposHabilitados['_apk_vista_buscador_proyectos'] == false"
+  >
+    <div style="text-align: left">
+      <div col col-xs-8 col-sm-8 col-md-8 col-lg-8>
+        <button
+          class="btn btn-primary btn-block"
+          (click)="habilitaPaneles('BUSCA_GENERAL_PROYECTO')"
+          type="button"
+        >
+          Buscador General de Proyectos
+        </button>
+      </div>
+      <div *ngIf="pnl_detalleGeneral == true">
+        <!-- <div *ngIf="grillaGeneral"> -->
+        <div>
+          <div>
+            <div class="row">
+              <div class="form-group">
+                <div class="col col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                  <label class="col-sm-3">DEPARTAMENTO</label>
+                  <select
+                    class="form form-control"
+                    [(ngModel)]="filtroDpto"
+                    #device
+                    (ngModelChange)="filtrarDepartamento()"
+                  >
+                    <option
+                      *ngFor="let row of dts_departamento; let i = index"
+                      [ngValue]="row.departamento"
+                    >
+                      {{ row.departamento }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                  <label class="col-sm-3">MUNICIPIO</label>
+                  <select
+                    class="form form-control"
+                    [(ngModel)]="filtroMunicipio"
+                    #device
+                    (ngModelChange)="filtrarMunicipio()"
+                  >
+                    <option
+                      *ngFor="let row of dts_municipio; let i = index"
+                      [ngValue]="row.municipio"
+                    >
+                      {{ row.municipio }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br /><br />
+          <div *ngIf="pnl_gridview == true">
+            <app-proyectos-continuidad
+              [inputDts]="dtsDetalleGeneral"
+              [valor]="'GENERAL'"
+              (messageEvent)="recibeMensaje($event)"
+            >
+            </app-proyectos-continuidad>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- FIN SOLICITUD DE PROYECTOS -->
+  <div class="row">
+    <hr width="80%" size="20" color="#4D4FD5" />
+  </div>
+  <!-- LISTA EMPRESAS -->
+  <div
+    class="containerCris"
+    *ngIf="camposHabilitados['_apk_vista_datos_empresas'] == false"
+  >
+    <div style="text-align: left">
+      <div col col-xs-8 col-sm-8 col-md-8 col-lg-8>
+        <button
+          class="btn btn-empresas btn-block"
+          (click)="habilitaPaneles('LISTA_EMPRESAS')"
+          type="button"
+        >
+          Datos de Empresas
+        </button>
+      </div>
+      <div *ngIf="pnl_Empresas == true">
+        <app-empresas-proyecto> </app-empresas-proyecto>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN LISTA EMPRESAS -->
+
+<!-- <div class="containerCris">
+  <div *ngIf="pnl_listaproyecto">
+    <div style="text-align: left;">
+     
+     // tarjetas
+      <div class="row">
+        <div class="col col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="pnl_tarjetaProyectosConcluidos==true">
+          <div *ngIf="inputDts">
+            <app-tarjeta [inputDts]="dtsConcluidos" [valor]="'PROYECTOS CONCLUIDOS'" [color]="'azul'" [saldo]="false" (messageEvent)="recibeMensaje($event)"></app-tarjeta>
+          </div>
+        </div>        
+      
+
+        <div class="col col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="pnl_tarjetaProyectosListosParaEntrega==true">
+          <div *ngIf="inputDts">
+            <app-tarjeta [inputDts]="dtsListos" [valor]="'PROYECTOS LISTOS PARA ENTREGA'" [color]="'verde'"
+              [panel]="'PARAMETROS-LISTOS'" [saldo]="false" (messageEvent)="recibeMensaje($event)"></app-tarjeta>
+          </div>
+        </div>
+
+
+
+
+      </div>
+
+
+    </div>
+  </div>
+</div> -->

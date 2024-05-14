@@ -1,0 +1,44 @@
+<div *ngIf="pnl_formulario==true">
+<div class="form-group col-lg-12 col-md-12 col-sm-12">
+  <div>
+    <label>Estado del Proyecto:</label>
+  </div>
+  <div>
+    <select id="m_estado_proyecto" class="form-control" name="m_estado_proyecto"  
+      [(ngModel)]="dts_formulario.id_estado"            
+      (ngModelChange)="cambiosFormulario()"
+      [disabled]="camposHabilitados._tecnica"
+      >
+      <option value="0" 
+       >
+        Seleccione...
+      </option>
+      <option *ngFor="let row_estProy of dts_ListaEstadoProyecto; let i = index" 
+        [ngValue]="row_estProy.id_detalle" 
+        >
+        {{ row_estProy.descripciondetalleclasificador }}
+      </option>
+    </select>
+  </div>
+</div>
+<div class="form-group col-lg-12 col-md-12 col-sm-12">
+  <div>
+    <label>Detalle de la Observacion:</label>
+  </div>
+  <div>
+    <textarea class="form-control" id="m_observacionProyecto" maxlength="550" name="m_observacionProyecto" rows="5"
+      autocomplete="off" [(ngModel)]="dts_formulario.observacion" 
+      (ngModelChange)="cambiosFormulario()"
+      [disabled]="camposHabilitados._tecnica"
+      >
+    </textarea>
+  </div>
+  <button type="button" class="btn btn-primary btn-block" name="btn_registro_observacion" id="btn_registro_observacion"
+    (click)="RegistrarObservacion()"
+    [disabled]="camposHabilitados._tecnica"
+    >
+    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Registrar
+  </button>
+ 
+</div>
+</div>

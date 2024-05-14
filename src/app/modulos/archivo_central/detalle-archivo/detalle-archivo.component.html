@@ -1,0 +1,172 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="panel-heading clearfix">
+  <div class="text-left col-md-6">
+    <button
+      type="button"
+      class="btn btn-primary pull-left"
+      title="Volver anterior"
+      (click)="volver()"
+    >
+      <i class="fa fa-reply fa-2x"> </i>
+    </button>
+  </div>
+</div>
+<div>
+  <!--LISTA GRIDVIEW SISTENCIAS-->
+  <div class="table table-responsive">
+    <table
+      class="table table-responsive table-condensed table-hover dt-listadetalle"
+      style="font-size: 8pt"
+    >
+      <thead>
+        <tr class="text-center">
+          <th>Nro.</th>
+          <th>Tipo Contenedor</th>
+          <th>Codigo Contenedor</th>
+          <th>Caja</th>
+          <th>Caja</th>
+          <th>Cambiar contenedor</th>
+          <th style="text-align: center;">Des Agrupar</th>
+          <th style="text-align: center;">Mod. Documentos</th>
+          <th>Reportes</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr *ngFor="let row_registros of dts_listadetalle; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ row_registros.contenedor }}</td>
+          <td>{{ row_registros.codigo_contenedor }}</td>
+          <td>{{ row_registros.caja }}</td>
+          <td>
+            <div *ngIf="row_registros.caja == ''">
+              <input
+                type="checkbox"
+                id="chk_{{ i }}"
+                name="{{ row_registros.codigo_contenedor }}"
+                value="{{ row_registros.codigo_contenedor }}"
+              />
+            </div>
+          </td>
+          <td>
+            <div *ngIf="row_registros.caja != ''">
+              <div class="form-group">
+                <div class="input-group">
+                  <select
+                    id="select_{{ i }}"
+                    class="form-control form-control-sm"
+                    width="150px"
+                  >
+                    <option value="0" disabled="item_estado =='0'">
+                      Seleccione...
+                    </option>
+                    <option
+                      *ngFor="let row_reg of dts_listacontenedor; let i = index"
+                      [ngValue]="row_registros.contenedor"
+                    >
+                      {{ row_reg.contenedor }}
+                    </option>
+                  </select>
+                  <button
+                    [disabled]="habilitaguardado"
+                    type="button"
+                    class="btn btn-success"
+                    (click)="
+                      preActualizarAgrupacion(
+                        row_registros.codigo_contenedor,
+                        row_registros.caja,
+                        i
+                      )
+                    "
+                  >
+                    Cambiar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td style="text-align: center;">
+            <button
+              type="button"
+              class="btn btn-danger pull-right"
+              (click)="EliminaAgrupacion(row_registros.codigo_contenedor)"
+              [disabled]="habilitaguardado"
+            >
+              <span class="glyphicon glyphicon-level-up"></span>
+              Des Agrupar
+            </button>
+          </td>
+          <td style="text-align: center;">
+            <button
+              type="button"
+              title="Modificar Documentos"
+              class="btn btn-warning pull-right"
+              (click)="
+                abrirFormulario(
+                  row_registros.fid_cabecera,
+                  row_registros.codigo_contenedor,
+                  row_registros.contenedor
+                )
+              "
+            >
+              <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+          </td>
+          <td>
+            <a
+              title="Reporte de Lomo"
+              class="btn btn-warning btn-md"
+              target="_blank"
+              href="{{
+                url_reporte
+              }}/modulos/archivocentral/rptLomo.php?idcabecera={{
+                row_registros.fid_cabecera
+              }}&codigo={{ row_registros.codigo_contenedor }}"
+              ><i class="fa fa-file-pdf-o" aria-hidden="true"></i
+            ></a>
+            <a
+              *ngIf="
+                row_registros.caja != '' &&
+                row_registros.caja != null &&
+                row_registros.caja != undefined
+              "
+              title="Reporte Caja"
+              class="btn btn-success btn-md"
+              target="_blank"
+              href="{{
+                url_reporte
+              }}/modulos/archivocentral/rptCaja.php?codigo={{row_registros.caja}}&id={{row_registros.fid_cabecera}}"
+              ><i class="fa fa-file-pdf-o" aria-hidden="true"></i
+            ></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!--AGRUPAR -->
+  <div class="panel-heading clearfix">
+    <button
+      type="button"
+      class="btn btn-success pull-right"
+      (click)="paneles('AGRUPAR')"
+      [disabled]="habilitaguardado"
+    >
+      <span class="glyphicon glyphicon-paperclip"></span>
+      Generar Contenedor
+    </button>
+  </div>
+</div>

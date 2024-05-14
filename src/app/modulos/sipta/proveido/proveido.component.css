@@ -1,0 +1,32 @@
+.dt-correspondencia tfoot input {
+    width: 100% !important;
+}
+
+.dt-correspondencia tfoot {
+    display: table-header-group !important;
+}
+
+.dt-nuevoanexo tfoot input {
+    width: 100% !important;
+}
+
+.dt-nuevoanexo tfoot {
+    display: table-header-group !important;
+}
+
+.color_celeste {
+    background-color: #07BFCF;
+}
+
+.color_verde {
+    background-color: #07CF84;
+}
+
+.botonera{
+    display: flex;
+    justify-content: space-around;
+}
+.panel-heading button{
+    margin-left: 1rem;
+    padding: 4px 15px;
+}

@@ -1,0 +1,7 @@
+.dt-asistencia tfoot input {
+  width: 100% !important;
+}
+
+.dt-asistencia tfoot {
+  display: table-header-group !important;
+}

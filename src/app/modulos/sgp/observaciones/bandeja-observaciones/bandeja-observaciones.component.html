@@ -1,0 +1,36 @@
+<!-- BARRA DE BOTONES  -->
+<div>
+  <button type="button" class="btn btn-primary pull-left" title="Volver Panel" name="btnVolverGv" id="btnVolverGv"
+    (click)="paneles('VER_PANELPROYECTOS')">
+    <i class="fa fa-reply fa-2x"> </i>
+  </button>
+</div>
+<div class="pull-right">
+  <button class="btn btn-primary" type="button" (click)="paneles('OBSERVACION_EMPRESA')">
+    Observacion Empresa
+  </button>
+
+</div>
+<div class="pull-right">
+  <button class="btn btn-primary" type="button" (click)="paneles('OBSERVACION_MAE')">
+    Observacion Mae
+  </button>
+
+</div>
+<div class="row"></div>
+
+<!--  FIN BARRA DE BOTONES  -->
+<!-- LISTADO DE OBSERVACIONES POR EMPRESA -->
+<div>
+  <div *ngIf="pnl_observacionEmpresa == true">
+    <app-registro-observacion [inputDts]="inputDts" filtro="EMPRESA"></app-registro-observacion>
+  </div>
+</div>
+<!-- FIN DEL LISTADO DE OBSERVACIONES POR EMPRESA -->
+<!-- LISTADO DE OBSERVACIONES POR MAE -->
+<div>
+  <div *ngIf="pnl_observacionMae == true">
+    <app-registro-observacion [inputDts]="inputDts" filtro="MAE"></app-registro-observacion>
+  </div>
+</div>
+<!-- LISTADO DE OBSERVACIONES POR MAE -->

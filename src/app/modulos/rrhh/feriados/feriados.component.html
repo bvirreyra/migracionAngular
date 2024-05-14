@@ -1,0 +1,191 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="content-body">
+  <!-- <div class="rowlocal"> -->
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="panel panel-success">
+      <div class="panel-heading text-center">
+        <i class="glyphicon glyphicon-time"></i> Feriados Registrados
+      </div>
+      <div class="panel-body table">
+        <!-- INICIO TABLA-->
+        <!-- INICIO TABLA-->
+        <div class="row">
+          <button
+            class="btn btn-primary"
+            data-toggle="modal"
+            data-target="#modalFeriado"
+            (click)="abrirModal()"
+            title="Registrar Nuevo Feriado"
+          >
+            <i class="glyphicon glyphicon-calendar"></i> Nuevo Feriado
+          </button>
+        </div>
+        <br />
+        <div class="row">
+          <table
+            class="
+              table table-primary table-striped table-condensed table-hover
+              dt-feriado
+            "
+          >
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>FechaFeriado</th>
+                <th>Descripcion</th>
+                <th>Estado</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row_registros of dts_feriado; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ row_registros.FechaFeriadoS }}</td>
+                <td>{{ row_registros.Descripcion }}</td>
+                <td>
+                  {{ row_registros.Estado == 1 ? "ALTA" : "BAJA" }}
+                </td>
+                <td>
+                  <button style="margin-right: 1rem;"
+                    *ngIf="row_registros.Estado == 1"
+                    class="btn btn-warning btn-circle-sm"
+                    type="button"
+                    data-toggle="modal"
+                    data-target="#modalFeriado"
+                    title="Actualizar"
+                    (click)="datosModal(row_registros, 'U')"
+                  >
+                    <span class="glyphicon glyphicon-pencil"></span>
+                  </button>
+                  <button
+                    *ngIf="row_registros.Estado == 1"
+                    class="btn btn-danger btn.circle-sm"
+                    type="button"
+                    data-toggle="modal"
+                    data-target="#modalFeriado"
+                    title="Eliminar"
+                    (click)="datosModal(row_registros, 'D')"
+                  >
+                    <span class="glyphicon glyphicon-trash"></span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- FIN TABLA-->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INICIO MODAL FERIADO -->
+<div
+  class="modal fade"
+  name="modalFeriado"
+  id="modalFeriado"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">NUEVO FERIADO</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4" for="busqueda"
+                  >Descripcón Feriado:</label
+                >
+                <div class="col-sm-6">
+                  <input
+                    type="text"
+                    id="descripcionFeriado"
+                    class="form-control"
+                    name="descripcionFeriado"
+                    maxlength="100"
+                    [(ngModel)]="feriado.descripcion"
+                    [disabled]="habilitaEdicion"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Fecha:</label
+              >
+              <div class="col-sm-6">
+                <input
+                  class="form-control"
+                  type="date"
+                  name="fechaFeriado"
+                  id="fechaFeriado"
+                  autocomplete="off"
+                  [(ngModel)]="feriado.fechaFeriado"
+                  [disabled]="habilitaEdicion"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          name="btnRegistrar"
+          id="btnRegistrar"
+          (click)="insertarFeriado()"
+        >
+          Registrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning"
+          name="btnModificar"
+          id="btnModificar"
+          (click)="actualizarFeriado()"
+        >
+          Modificar
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          name="btnEliminar"
+          id="btnEliminar"
+          (click)="eliminarFeriado()"
+        >
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL FERIADO-->

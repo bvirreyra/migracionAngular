@@ -1,0 +1,86 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<!-- <div id="pnl_gridview_items" name="pnl_gridview_items"> -->
+<div>
+  <!--REFRESCA GRIDVIEW -->
+  <div class="panel-heading clearfix">
+    <button type="button" class="btn btn-success btn-md pull-right" (click)="paneles('VER_LISTAPROYECTOS')">
+        <i class="fa fa-refresh" aria-hidden="true" title="Ver Proyectos"></i>
+    </button>    
+</div>
+  <div class="row">
+    <div class="page-header">
+      <h2>{{m_titulo}}</h2>
+    </div>
+    <div>
+      <!-- <table class="table table-condensed table-hover dt-listaproyectos"> -->
+      <table class="dt-listaproyectos" border="1">
+        <thead>
+          <tr>
+            <th>Nro.</th>
+            <th>Gestion</th>
+            <th>Departamento</th>
+            <th>Provincia</th>
+            <th>Municipio</th>
+            <th>Cod Proyecto Fin</th>
+            <th width="400px">Nomb Proyecto Fin</th>
+            <th>Convenio Fin</th>
+            <th>Monto Upre Fin</th>
+            <th >Cod Proyecto Sgp</th>
+            <th width="400px">Nomb Proyecto Sgp</th>            
+            <th>Convenio Sgp</th>            
+            <th>Monto Upre Sgp</th>
+            <th >Plazo Ejecucion</th>            
+            <th>Estado Proy Sgp</th>
+                       
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>            
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            
+            
+          </tr>
+        </tfoot>
+        <tbody >
+          <!-- <tr *ngFor="let row_registros2 of row_registros.value; let i = index;"> -->
+          <tr *ngFor="let row_registros of dts_listaproyectos ;let x=index " >
+            <td>{{x+1}}</td>
+            <td>{{row_registros.gestion}}</td>
+            <td>{{row_registros.departamento}}</td>
+            <td>{{row_registros.provincia}}</td>
+            <td>{{row_registros.municipio}}</td>
+            <td class="col-financiera">{{row_registros.id_proyecto}}</td>
+            <td class="col-financiera">{{row_registros.nomb_finanzas}}</td>
+            <td class="col-financiera">{{row_registros.convenio_financiera}}</td>
+            <td class="col-financiera">{{row_registros.monto_upre_financiera}}</td>
+            <td class="col-sgp">{{row_registros.codigo_sgp}}</td>
+            <td class="col-sgp">{{row_registros.nomb_sgp}}</td>            
+            <td class="col-sgp">{{row_registros.convenio_sgp}}</td>            
+            <td class="col-sgp">{{row_registros.monto_financiamiento_upre}}</td>            
+            <td>{{row_registros.plazo_ejecucion}}</td>
+            <td>{{row_registros.estado_proyecto_sgp}}</td>
+            
+          </tr>               
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>

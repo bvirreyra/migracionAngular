@@ -1,0 +1,446 @@
+<div class="container-fluid">
+    <form action="" name="form">
+        <div class="row">
+            <!-- BUSCADOR DE USUARIOS -->
+            <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+                <div class="content-header with-border">
+                    <h3 class="content-title text-green">
+                        <strong>USUARIOS - LISTA DE USUARIOS</strong>
+                    </h3>
+                </div>
+                <div class="content-body">
+                    <div class="rowlocal ">
+                        <div
+                            class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4">
+                            <div class="panel panel-success">
+                                <div class="panel-heading text-center">B&uacute;squeda de Usuarios</div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-horizontal ">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda">Nombres:</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" type="text" name="nombres" id="nombres"
+                                                        [(ngModel)]="m_nombres">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda">Apellido
+                                                    Paterno:</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" type="text" name="apaterno"
+                                                        id="apaterno" [(ngModel)]="m_apaterno">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda">Apellido
+                                                    Materno:</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" type="text" name="amaterno"
+                                                        id="amaterno" [(ngModel)]="m_amaterno">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-primary btn-block"
+                                                            id="BuscarUsuarios" name="BuscarUsuarios"
+                                                            (click)="BuscarUsuarios()">
+                                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                                            Buscar</button>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-default btn-block"
+                                                            id="LimpiarBusqueda" name="LimpiarBusqueda"
+                                                            (click)="LimpiarBusqueda()">
+                                                            <i class="fa fa-eraser" aria-hidden="true"></i>
+                                                            Limpiar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-footer">
+
+                </div>
+            </div>
+            <!-- FIN BUSCADOR DE USUARIOS -->
+
+
+            <!-- LISTADO DE USUARIOS-->
+            <div *ngIf="pnlListaProveidos==true" class="content content-success" name="pnl_hjproveidos"
+                id="pnl_hjproveidos">
+                <div class="content-header with-border">
+                    <div class="pull-left">
+
+                        <button class="btn btn-danger btn-circle-sm" type="button" data-toggle="modal"
+                            data-target="#modalNuevoUsuario" (click)="FormNuevoUsuario()">
+                            <strong>+</strong>Nuevo Usuario</button>
+
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div class="rowlocal ">
+                        <div
+                            class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                            <div class="panel panel-success">
+                                <div class="panel-heading text-center">Listado de Usuarios</div>
+                                <div class="panel-body">
+                                    <!-- INICIO TABLA-->
+                                    <div class="row">
+                                        <table
+                                            class="table table-primary table-striped table-condensed table-hover dt-Proveidos">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id Usuario</th>
+                                                    <th>Nombres</th>
+                                                    <th>Apellido Paterno</th>
+                                                    <th>Apellido Materno</th>
+                                                    <th>Area</th>
+                                                    <th>Cargo</th>
+                                                    <th>Nro Interno</th>
+                                                    <th>Estado</th>
+                                                    <th>Editar</th>
+                                                    <!-- <th>Eliminar</th> -->
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                  <td></td>
+                                                  <td></td>
+                                                  <td></td>
+                                                  <td></td>
+                                                  <td></td>
+                                                  <td></td>
+                                                  <td></td>
+                                                  <td></td>
+                                                  <td></td>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                <tr *ngFor="let row_registros of dts_ListaUsuarios; let i = index ">
+                                                    <td>{{row_registros.usu_id}}</td>
+                                                    <td>{{row_registros.usu_nom}}</td>
+                                                    <td>{{row_registros.usu_app}}</td>
+                                                    <td>{{row_registros.usu_apm}}</td>
+                                                    <td>{{row_registros.usu_area}}</td>
+                                                    <td>{{row_registros.usu_cargo}}</td>
+                                                    <td>{{row_registros.nro_interno}}</td>
+                                                    <td>{{row_registros.id_estado}}</td>
+                                                    <td>
+                                                        <button class="btn btn-info btn-circle-sm" type="button"
+                                                            data-toggle="modal" data-target="#modalNuevoUsuario" (click)="MuetraUsuario(row_registros)"
+                                                            >
+                                                            <span class="glyphicon glyphicon-pencil" ></span>
+                                                        </button>
+                                                    </td>
+                                                    <!-- <td>
+                                                        <button class="btn btn-danger btn-circle-sm" type="button" data-toggle="modal" data-target="#modalEliminaRegistro" (click)="EliminarRegistro(row_registros)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                          </button>
+                                                    </td> -->
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- FIN TABLA-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIN  LISTADO USUARIOS -->
+
+            <!-- INICIO MODAL BAJA LOGICA USUARIO -->
+            <div class="modal fade" *ngIf="pnlModalEliminaRegistro==true" name="modalEliminaRegistro"
+                id="modalEliminaRegistro" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">:::ATENCIÓN:::</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="alert alert-danger">
+                            <p>Está apunto de eliminar el registro.</p>
+                            <p>¿Se encuentra seguro?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary"
+                                (click)="EliminaRegistroActual(dtsRegitroProveido.usu_id)">Aceptar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIN MODAL BAJA LOGICA USUARIO -->
+
+
+
+            <!-- INICIO MODAL FORMULARIO USUARIO -->
+            <div class="modal fade" name="modalFormularioUsuario" id="modalFormularioUsuario" tabindex="-1"
+                role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">{{m_tituloformulario}}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-horizontal ">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Nombres:</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="text" name="e_nombres" id="e_nombres"
+                                                list="browsers" [(ngModel)]="e_nombres" autocomplete="off" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Apellido Paterno:</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="text" name="e_apaterno" id="e_apaterno"
+                                                list="browsers" [(ngModel)]="e_apaterno" autocomplete="off">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Apellido Materno:</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="text" name="e_amaterno" id="e_amaterno"
+                                                list="browsers" [(ngModel)]="e_amaterno" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Cédula de
+                                            Identidad:</label>
+                                        <div class="col-sm-3">
+                                            <input class="form-control" type="number" name="m_ci" id="m_ci"
+                                                list="browsers" [(ngModel)]="m_ci" autocomplete="off">
+                                        </div>
+                                        <!-- <div class="col-sm-2">
+                                            <input class="form-check-label" type="radio" name="complemento" value="si" id="Tiene Complemento"> Sí
+                                            <input class="form-check-label" type="radio" name="complemento" value="si" id="Tiene Complemento" checked> No
+                                        </div> -->
+                                        <div class="col-sm-2">
+                                            <input class="form-control" type="text" name="e_complemento"
+                                                id="e_complemento" list="browsers" [(ngModel)]="e_complemento"
+                                                maxlength="2" autocomplete="off">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <select id="e_expedido" class="form-control" name="e_expedido"
+                                                [(ngModel)]="e_expedido" required>
+                                                <option value="CH">CH</option>
+                                                <option value="LP">LP</option>
+                                                <option value="CBBA">CBBA</option>
+                                                <option value="OR">OR</option>
+                                                <option value="PT">PT</option>
+                                                <option value="TJ">TJ</option>
+                                                <option value="SC">SC</option>
+                                                <option value="BN">BN</option>
+                                                <option value="PD">PD</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Fecha de
+                                            Nacimiento:</label>
+                                        <div class="col-sm-7">
+                                            <!-- <input class="form-control" type="text" placeholder="dd-mm-YYYY" name="m_fn" id="m_fn" [(ngModel)]="m_fn" autocomplete="off"> -->
+                                            <input class="form-control" type="date" name="fn" id="fn" [(ngModel)]="m_fn"
+                                                onKeyDown="A(event,this.form.prov_horarespuesta)">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Correo:</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="email" name="m_email" id="m_email"
+                                                [(ngModel)]="m_email" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Celular:</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="number" name="m_celular" id="m_celular"
+                                                [(ngModel)]="m_celular" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Dirección:</label>
+                                        <div class="col-sm-7">
+                                            <textarea class="form-control" cols="5" maxlength="255"
+                                                name="m_direcciondom" id="m_direcciondom" [(ngModel)]="m_direcciondom"
+                                                autocomplete="off"></textarea>
+                                        </div>
+
+                                    </div>
+                                    <hr>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Inmediato Superior:</label>
+                                        <div class="col-sm-7">
+                                            <select id="m_unidad" class="form-control" name="m_unidad"
+                                                [(ngModel)]="m_unidad" (change)="obtieneIdJefatura()"
+                                                onKeyDown="A(event,this.form.m_cargo)">
+                                                <option value='0' disabled="m_unidad =='0'">Seleccione...</option>
+                                                <option *ngFor="let row_registros of dts_listajefaturas"
+                                                    [ngValue]="row_registros.nombre">{{row_registros.nombre}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Cargo:</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="text" name="m_cargo" id="m_cargo"
+                                                list="ListaCargo" [(ngModel)]="m_cargo"
+                                                (keypress)=FiltraUnidadOrganizacional(m_cargo) (change)="IdUo()"
+                                                autocomplete="off">
+                                            <datalist id="ListaCargo" class="datalist">
+                                                <div *ngFor="let row_uo of dts_filtrounidadorganizacional">
+                                                    <option class="form-control" value={{row_uo.nombre}}
+                                                        label={{row_uo.nombre}}>
+                                                </div>
+                                            </datalist>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Responsable Preinversión
+                                            y/o Ejecución:</label>
+                                        <div class="col-sm-7">
+                                            <select id="m_responsablepreinversion" class="form-control"
+                                                name="m_responsablepreinversion"
+                                                [(ngModel)]="m_responsablepreinversion">
+                                                <option value='1'>HABILITADO</option>
+                                                <option value='0'>NO HABILITADO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Nombre Usuario:</label>
+                                        <div class="col-sm-4">
+                                            <input class="form-control" type="text" name="e_nusuario" id="e_nusuario"
+                                                list="browsers" [(ngModel)]="e_nusuario"   autocomplete="off">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <button type="button" class="btn btn-success" name="btnValidaUsuario"
+                                                id="btnValidaUsuario" (click)="verificaUsuarioSiga()">Validar</button>
+                                            {{msj_validausuario}}
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Password:</label>
+                                        <div class="col-sm-4">
+                                            <input class="form-control" type="text" class="input_normal" name="e_pass" id="e_pass"
+                                                list="browsers" [(ngModel)]="e_pass" autocomplete="off">
+
+                                            <input class="form-control" type="hidden" name="e_fecha" id="e_fecha"
+                                                list="browsers" [(ngModel)]="e_fecha" autocomplete="off">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Nro Interno:</label>
+                                        <div class="col-sm-3">
+                                            <input class="form-control" type="text" name="m_nrointerno" id="m_nrointerno"
+                                                list="browsers" [(ngModel)]="m_nrointerno" maxlength="10" autocomplete="off">
+                                        </div>                                       
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">PIN PBX:</label>
+                                        <div class="col-sm-3">
+                                            <input class="form-control" type="number" name="m_pinpbx" id="m_pinpbx"
+                                                list="browsers" [(ngModel)]="m_pinpbx" maxlength="4" autocomplete="off">
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <button type="button" class="btn btn-success" name="btnGenerar"
+                                                id="btnGenerar" (click)="generaPinPBX()">Generar</button>
+                                            <button type="button" class="btn btn-danger" name="btnRevertir"
+                                                id="btnRevertir"
+                                                (click)="this.m_pinpbx = this.m_pinpbx_anterior">Revertir</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Estado:</label>
+                                        <div class="col-sm-7">
+                                            <select id="e_estado" class="form-control" name="e_estado"
+                                                [(ngModel)]="e_estado">
+                                                <option value=''></option>
+                                                <option value='1'>ACTIVO</option>
+                                                <option value='2'>INACTIVO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            
+                                <button type="button" class="btn btn-primary" name="btnRegistrar" id="btnRegistrar"
+                                    (click)="InsertaNuevoUsuario()">Registrar</button>
+                                <button type="button" class="btn btn-primary" name="btnEditar" id="btnEditar"
+                                    (click)="ActualizaUsuario()">Actualizar</button>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIN MODAL FORMULARIO USUARIO -->
+
+
+
+
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="confirmaCambioPinPBX" tabindex="-1" role="dialog" aria-labelledby="confirmaCambioPinPBX"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Insertar_NuevoProveido"><b>ALERTA!</b></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="alert alert-info">
+                <p>Está por cambiar el PIN PBX de: <strong>{{m_pinpbx_anterior}}</strong> a:
+                    <strong>{{m_pinpbx}}</strong></p>
+                <p>Está seguro de realizar el cambio?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" (click)="confirmaCambioPin()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>

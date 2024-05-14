@@ -1,0 +1,12 @@
+.grid-lista{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+    gap: 1rem;
+}
+
+.linea {
+    border-top: 2px solid #3c8dbc;
+    height: 2px;
+    padding: 0;
+    margin: 10px auto;
+  }

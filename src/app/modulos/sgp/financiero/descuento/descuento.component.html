@@ -1,0 +1,72 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div style="text-align: left;" *ngIf="!eliminar">
+  <form  [formGroup]="formDescuento" (ngSubmit)="registrarDescuento()">
+    <div class="row">
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="busqueda">Tipo Descuento:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+          <select class="form-control" formControlName="tipoDescuento" required>
+            <option
+              *ngFor="let row of dts_tiposDescuento"
+              [ngValue]="row.id_detalle"
+            >
+              {{ row.descripciondetalleclasificador }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="montoDescuento">Monto Descuento:</label>
+        <div class="input-group">
+          <span class="input-group-addon">Bs.</span>
+          <input class="form-control" type="number" name="montoDescuento" placeholder="Monto Descuento" formControlName="montoDescuento" min="1" max="100000000" required>
+          <span style="color:tomato;" *ngIf="formDescuento.controls['montoDescuento'].touched && formDescuento.controls['montoDescuento'].errors?.required">Este campo es requerido</span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="fechaDescuento">Fecha Descuento:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+          <input class="form-control" type="date" name="fechaDescuento" formControlName="fechaDescuento" maxlength="10" required>
+          <span style="color:tomato;" *ngIf="formDescuento.controls['fechaDescuento'].touched && formDescuento.controls['fechaDescuento'].errors?.required">Este campo es requerido</span>
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="preventivo">Preventivo:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-file"></i></span>
+          <input class="form-control" type="text" name="preventivo" placeholder="Preventivo" formControlName="preventivo" maxlength="150" >
+          <!-- <span style="color:tomato;" *ngIf="formDescuento.controls['preventivo'].touched && formDescuento.controls['preventivo'].errors?.required">Este campo es requerido</span> -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="detalleDescuento">Detalle Descuento:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+          <textarea class="form-control" name="detalleDescuento" placeholder="Detalle Descuento" id="detalleDescuento" cols="30" rows="4" formControlName="detalleDescuento" required></textarea>
+          <span style="color:tomato;" *ngIf="formDescuento.controls['detalleDescuento'].touched && formDescuento.controls['detalleDescuento'].errors?.required">Este campo es requerido</span>
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="observacion">Observación:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-eye-open"></i></span>
+          <textarea class="form-control" name="observacion" placeholder="Observación" id="observacion" cols="30" rows="4" formControlName="observacion" ></textarea>
+          <!-- <span style="color:tomato;" *ngIf="formDescuento.controls['observacion'].touched && formDescuento.controls['observacion'].errors?.required">Este campo es requerido</span> -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-12 col-lg-12 col-md-12 text-right">
+        <button class="btn btn-success" type="submit"  [disabled]="formDescuento.invalid"><div *ngIf="!editar">Registrar Descuento</div><div *ngIf="editar">Actualizar Descuento</div></button>
+      </div>
+    </div>
+  </form>
+</div>

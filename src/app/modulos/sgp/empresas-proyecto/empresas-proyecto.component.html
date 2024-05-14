@@ -1,0 +1,201 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+
+<div class="row">
+  <div *ngIf="pnlTarjetas" name="pnlTarjetas" id="pnlTarjetas">
+    <div
+      id="tarjeta"
+      class="tarjeta azul col-sm-4 col-lg-4 col-md-6"
+      (click)="detallar('TOTAL_CONTRATOS')"
+    >
+      <h2>Total de Contratos</h2>
+      <h1>
+        {{ total_contratos[0].cantidad }}
+      </h1>
+      <span class="label"
+        >{{
+          total_contratos[0].monto_contrato | number : "0.2-2" | formatoDecimal
+        }}
+        Bs.</span
+      >
+      <hr style="border-top: 1px solid #eee" />
+    </div>
+    <div
+      id="tarjeta"
+      class="tarjeta verde col-sm-4 col-lg-4 col-md-6"
+      (click)="detallar('CONTRATOS_CIFE')"
+    >
+      <h2>Contratos por Upre</h2>
+      <h1>{{ total_contratoscife[0].cantidad }}</h1>
+      <span class="label"
+        >{{
+          total_contratoscife[0].monto_contrato
+            | number : "0.2-2"
+            | formatoDecimal
+        }}
+        Bs.</span
+      >
+      <hr style="border-top: 1px solid #eee" />
+    </div>
+    <div
+      id="tarjeta"
+      class="tarjeta amarillo col-sm-4 col-lg-4 col-md-6"
+      (click)="detallar('CONTRATOS_CIF')"
+    >
+      <h2>Contratos por Beneficiario</h2>
+      <h1>{{ total_contratoscif[0].cantidad }}</h1>
+      <span class="label"
+        >{{
+          total_contratoscif[0].monto_contrato
+            | number : "0.2-2"
+            | formatoDecimal
+        }}
+        Bs.</span
+      >
+      <hr style="border-top: 1px solid #eee" />
+    </div>
+  </div>
+</div>
+
+<!-- TARJETAS POR PERIODO PRESIDENCIAL -->
+<div class="row" *ngIf="pnlTarjetaPeriodoPresidencial">
+  <div class="clearfix" style="margin-bottom: 1rem">
+    <button
+      type="button"
+      class="btn btn-success btn-md pull-right"
+      (click)="retornar_tarjetas()"
+    >
+      <i class="fa fa-hand-o-left" aria-hidden="true" title="Retornar"></i>
+    </button>
+  </div>
+  <div *ngFor="let row of dts_periodospresidencialesagrupados">
+    <div class="col-sm-4 col-lg-4 col-md-6">
+      <app-empresas-periodopresidencial
+        [periodo_finicio]="row.fecha_inicio"
+        [periodo_ffin]="row.fecha_fin"
+        [periodo_titulo]="row.nombre_completo"
+        [dts_registros]="dts_listaEmpresasProyectos"
+        [dts_detalle]="dts_detalle"
+        (enviarPadreEmpresas)="recibeHijoEmpresas($event)"
+        (enviarPadreProyectos)="recibeHijoProyectos($event)"
+      >
+      </app-empresas-periodopresidencial>
+    </div>
+  </div>
+</div>
+<!-- FIN TARJETAS POR PERIODO PRESIDENCIAL -->
+<!--LISTA GRIDVIEW EMPRESAS NRO DE PROYECTOS-->
+<div *ngIf="pnl_detalle" name="pnlDetalle" id="pnlDetalle">
+  <div class="bg-primary text-white">
+    <h2>{{ titulo }}</h2>
+  </div>
+  <table
+    class="table table-responsive table-condensed table-hover dt-empresas"
+    style="font-size: 9pt"
+  >
+    <thead>
+      <tr>
+        <th>Nit</th>
+        <th>Razon Social</th>
+        <th>Departamento</th>
+        <th>Nro de Proyectos</th>
+        <th>Monto en Bs.</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+
+    <tbody>
+      <tr *ngFor="let row_registros of dts_detalle_hijo; let i = index">
+        <td>{{ row_registros.nit }}</td>
+        <td>{{ row_registros.razon_social }}</td>
+        <td>{{ row_registros.ciudad }}</td>
+        <td>{{ row_registros.nro_proyectos }}</td>
+        <td>
+          {{ row_registros.monto_contrato | number : "0.2-2" | formatoDecimal }}
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-primary btn-block"
+            title="Bandeja Items"
+            (click)="detallar('LISTA_PROYECTOS', row_registros.nit)"
+          >
+            <i class="fa fa-eye" aria-hidden="true"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!--FINAL LISTA GRIDVIEW EMPRESAS NRO DE PROYECTOS-->
+<!--LISTA GRIDVIEW EMPRESAS NRO DE PROYECTOS-->
+<div *ngIf="pnl_listaproyectos" name="pnlListaProyectos" id="pnlListaProyectos">
+  <div class="bg-primary text-white">
+    <h2>Lista de Proyectos</h2>
+  </div>
+  <!--RETORNA -->
+  <div class="clearfix" style="margin-bottom: 1rem">
+    <button
+      type="button"
+      class="btn btn-success btn-md pull-right"
+      (click)="retornar()"
+    >
+      <i class="fa fa-hand-o-left" aria-hidden="true" title="Retornar"></i>
+    </button>
+  </div>
+  <table
+    class="table table-responsive table-condensed table-hover dt-listaproyectos"
+    style="font-size: 9pt"
+  >
+    <thead>
+      <tr>
+        <th>Gestion</th>
+        <th>Departamento</th>
+        <th>Municipio</th>
+        <th>Nombre Proyecto</th>
+        <th>Nro Convenio</th>
+        <th>Fecha Convenio</th>
+        <th>Monto en Bs.</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+
+    <tbody>
+      <tr
+        *ngFor="let row_registros of dts_listaProyectosFiltrado; let i = index"
+      >
+        <td>{{ row_registros.gestion }}</td>
+        <td>{{ row_registros.departamento }}</td>
+        <td>{{ row_registros.municipio }}</td>
+        <td>{{ row_registros.nombreproyecto }}</td>
+        <td>{{ row_registros.nro_convenio }}</td>
+        <td>{{ row_registros.fecha_convenio | date : "dd/MM/yyyy" }}</td>
+        <td>
+          {{ row_registros.monto_contrato | number : "0.2-2" | formatoDecimal }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!--FINAL LISTA GRIDVIEW EMPRESAS NRO DE PROYECTOS-->

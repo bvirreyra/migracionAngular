@@ -1,0 +1,40 @@
+<div *ngIf="pnl_cierre_administrativo==true">
+  <div class="form-group " class="col-lg-4 col-md-4 col-sm-4">
+    <div>
+        <label for="Gestion">Estado Cierre Adminstrativo:</label>
+    </div>
+    <div>
+        
+        <input class="form-control" type="text" id="m_estadocierre" 
+            name="m_estadocierre" placeholder="Desembolso" [(ngModel)]="m_estadocierre"
+            >
+    </div>
+ </div>
+
+<div class="form-group " class="col-lg-8 col-md-8 col-sm-8">
+  <div>
+      <label for="Gestion">Detalle:</label>
+  </div>
+  <div>
+      <textarea
+      class="form-control" type="text" id="m_descripcion" 
+          name="m_descripcion" placeholder="Desembolso" [(ngModel)]="m_descripcion"
+      ></textarea>
+      
+  </div>
+</div>
+<div class="form-group " class="col-lg-8 col-md-8 col-sm-8">
+
+    <app-upload-file 
+    inputTipoDocumento="cierre_administrativo" 
+    inputCodigoProy='{{m_idproyecto}}'
+    inputVista="false"
+    inputTipoImagen="documento" 
+    inputSrc=''
+    inputNombre='{{m_nombre_archivo}}'
+    (enviaPadre)="refrescaPadre($event)"
+    inputAccion='VISUALIZAR'
+    >
+    </app-upload-file>
+  </div>
+</div>

@@ -1,0 +1,610 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="content content-success" name="pnl_cabecera" id="pnl_cabecera">
+  <div class="content-header with-border">
+    <h3 class="content-title text-green">
+      <strong>CREACION DE HOJA DE RUTA</strong>
+    </h3>
+  </div>
+  <div class="content-body">
+    <div class="rowlocal">
+      <div
+        class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10"
+      >
+        <div class="panel panel-success">
+          <div class="panel-heading text-center">CORRESPONDENCIA INTERNA</div>
+          <div class="panel-body"></div>
+          <div class="form-horizontal">
+            <div class="form-group">
+              <label class="control-label col-sm-3">REMITENTE:</label>
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="m_remitente"
+                  id="m_remitente"
+                  [(ngModel)]="m_remitente"
+                  disabled
+                />
+              </div>
+            </div>
+            <!-- <div class="form-group">
+                      <label class="control-label col-sm-3" for="busqueda">CITE:</label>
+                      <div class="col-sm-7">
+                      <input class="form-control" type="text" name="m_sumacite" id="m_sumacite"
+                      [(ngModel)]="m_sumacite"disabled>
+                      </div>
+                    </div> -->
+            <div class="form-group">
+              <label class="control-label col-sm-3">FECHA:</label>
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="m_fecha"
+                  id="m_fecha"
+                  [(ngModel)]="m_fecha_actual"
+                  autocomplete="off"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="busqueda"
+                >DESTINATARIO:</label
+              >
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="destinatario"
+                  id="destinatario"
+                  list="ListaDestinatario"
+                  [(ngModel)]="m_destinatario"
+                  (keypress)="BusquedaUsuario(m_destinatario)"
+                  autocomplete="off"
+                  (blur)="ValidaDestinatario()"
+                />
+                <datalist id="ListaDestinatario" class="datalist">
+                  <div *ngFor="let row_usuarios of dts_usuario">
+                    <option
+                      class="form-control"
+                      value="{{ row_usuarios.nombre_completo_usuario }}"
+                      label="{{ row_usuarios._nombre_completo_usuario }}"
+                    ></option>
+                  </div>
+                </datalist>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-3">LIMITAR DIAS:</label>
+              <div class="col-sm-7">
+                <select
+                  id="m_limitardias"
+                  class="form-control"
+                  name="m_limitardias"
+                  [(ngModel)]="m_limitardias"
+                >
+                  <option value="0">SIN LIMITE</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="15">15</option>
+                  <option value="16">16</option>
+                  <option value="17">17</option>
+                  <option value="18">18</option>
+                  <option value="19">19</option>
+                  <option value="20">20</option>
+                  <option value="21">21</option>
+                  <option value="22">22</option>
+                  <option value="23">23</option>
+                  <option value="24">24</option>
+                  <option value="25">25</option>
+                  <option value="26">26</option>
+                  <option value="27">27</option>
+                  <option value="28">28</option>
+                  <option value="29">29</option>
+                  <option value="30">30</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-3">TIPO DOCUMENTO:</label>
+              <div class="col-sm-7">
+                <select
+                  id="m_nombre"
+                  class="form-control"
+                  name="m_tipodocumentohc"
+                  [(ngModel)]="m_tipodocumentohc"
+                >
+                  <option
+                    *ngFor="
+                      let row_registros of dts_ListaTipoDocumentoHr;
+                      let i = index
+                    "
+                    [ngValue]="row_registros.descripciondetalleclasificador"
+                  >
+                    {{ row_registros.descripciondetalleclasificador }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group" *ngIf="verificaContiene()">
+              <div>
+                <label class="control-label col-sm-3">PROYECTO O CÓDIGO:</label>
+              </div>
+              <div class="col-sm-7">
+                <ng-select2
+                  name="nombreCompromisoPresidencial"
+                  [width]="600"
+                  [data]="dts_compromisosPresidenciales"
+                  [(ngModel)]="m_proyectosolicitud"
+                  [ngModelOptions]="{ standalone: true }"
+                  (ngModelChange)="validaEstructura()"
+                ></ng-select2>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="busqueda">ITEM:</label>
+              <div class="col-sm-7">
+                <select
+                  id="m_item"
+                  class="form-control"
+                  name="m_item"
+                  [(ngModel)]="m_item"
+                >
+                  <option
+                    *ngFor="let row_item of dts_item; let i = index"
+                    [ngValue]="row_item.id_detalle"
+                  >
+                    {{ row_item.descripciondetalleclasificador }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-3">REFERENCIA:</label>
+              <div class="col-sm-7">
+                <textarea
+                  class="form-control"
+                  id="m_referencia"
+                  maxlength="500"
+                  rows="4"
+                  name="m_referencia"
+                  [(ngModel)]="m_referencia"
+                ></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3">OBSERVACIONES:</label>
+              <div class="col-sm-7">
+                <textarea
+                  class="form-control"
+                  id="m_observaciones"
+                  maxlength="180"
+                  rows="4"
+                  name="m_observaciones"
+                  [(ngModel)]="m_observaciones"
+                ></textarea>
+              </div>
+            </div>
+
+            <div *ngIf="verificaContiene() == false">
+              <div
+                *ngIf="
+                  m_auxDestinatario != 0 &&
+                  m_referencia != undefined &&
+                  m_referencia != ''
+                "
+              >
+                <button
+                  type="button"
+                  class="btn btn-success btn-block"
+                  value="INSERTAR"
+                  name="btnInsertar"
+                  id="btnInsertar"
+                  title="Guardar Correspondencia"
+                  (click)="Verifica()"
+                >
+                  Guardar Correspondencia
+                </button>
+              </div>
+            </div>
+            <div *ngIf="verificaContiene() == true">
+              <div
+                *ngIf="
+                  m_auxDestinatario != 0 &&
+                  m_referencia != undefined &&
+                  m_referencia != '' &&
+                  m_proyectosolicitud != ''
+                "
+              >
+                <button
+                  type="button"
+                  class="btn btn-success btn-block"
+                  value="INSERTAR"
+                  name="btnInsertar"
+                  id="btnInsertar"
+                  title="Guardar Correspondencia"
+                  (click)="Verifica()"
+                >
+                  Guardar Correspondencia
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- INICIO MODAL modalguardar -->
+<div
+  class="modal fade"
+  id="pnl_Guardarregistros"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="Insertar_Correspondencia"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Insertar_Correspondencia">
+          <b>Correspondencia </b>
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">Esta seguro de Guardar Registros</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button type="button" class="btn btn-primary" (click)="listarCite()">
+          Guardar Registros
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL modalguardar -->
+<!----------------------------------panel anexo--------------------------------------------------------------->
+<div class="content content-success" name="pnl_anexos" id="pnl_anexos">
+  <div
+    class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10"
+  >
+    <!--div>
+      <button type="button" class="btn btn-primary  pull-left"
+      title="Volver Inicio" name="volver" id="volver" (click)="paneles('VER_INICIO')">
+        <i class="fa fa-reply fa-2x"></i></button>
+    </div-->
+    <div class="panel panel-success">
+      <div class="panel-heading text-center">
+        HOJA DE RUTA INTERNA :{{ m_hojaruta }}
+        <!-- <button type="button" class="btn btn-success pull-right"
+            (click)="paneles('NUEVA_PROVEIDO')">Crear Proveido
+          </button> -->
+      </div>
+
+      <div class="form-horizontal">
+        <div class="form-group">
+          <label class="control-label col-sm-3" for="busqueda">ANEXO:</label>
+          <div class="col-sm-7">
+            <select
+              id="anexo"
+              class="form-control"
+              name="anexo"
+              [(ngModel)]="m_anexo"
+            >
+              <option
+                *ngFor="let row_documento of dts_Documentos; let i = index"
+                [ngValue]="row_documento.descripciondetalleclasificador"
+              >
+                {{ row_documento.descripciondetalleclasificador }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-3">DESCRIPCION:</label>
+          <div class="col-sm-7">
+            <textarea
+              class="form-control"
+              id="m_descripcion"
+              maxlength="180"
+              rows="4"
+              name="m_descripcion"
+              [(ngModel)]="m_descripcion"
+            ></textarea>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="table table-condensed table-hover dt-anexo">
+            <thead>
+              <tr>
+                <th>Nro.</th>
+                <th>Documento</th>
+                <th>Descripcion</th>
+                <th>Seleccione...</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row_anexos of dts_Anexo; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ row_anexos.documento }}</td>
+                <td>{{ row_anexos.descripcion }}</td>
+                <td>
+                  <div>
+                    <button
+                      type="button"
+                      class="btn btn-warning btn-md"
+                      (click)="editaranexoPre(row_anexos)"
+                    >
+                      <i
+                        class="fa fa-edit"
+                        aria-hidden="true"
+                        title="Modificar Anexo"
+                      ></i>
+                    </button>
+                    <button
+                      *ngIf="row_anexos.usuario_registro == s_usu_id"
+                      type="button"
+                      class="btn btn-danger btn-circle-sm"
+                      (click)="eliminar_anexo(row_anexos)"
+                    >
+                      <i
+                        class="glyphicon glyphicon-remove"
+                        aria-hidden="true"
+                        title="Eliminar Anexo"
+                      ></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-success btn-block"
+            value="INSERTAR"
+            name="btnInsertarAnexo"
+            id="btnInsertarAnexo"
+            (click)="InsertarAnexo()"
+            title="Guardar Anexos"
+          >
+            Guardar Anexos
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-success btn-block"
+            value="INSERTAR"
+            name="btnModificarAnexo"
+            id="btnModificarAnexo"
+            (click)="editarAnexo()"
+            title="Modificar Anexos"
+          >
+            Modificar Anexos
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-primary btn-block"
+            value="CERRAR"
+            name="btnCerrarAnexo"
+            id="btnCerrarAnexo"
+            (click)="terminar_correspondencia()"
+            title="Cerrar"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!----------------------------------panel proveido de la correspondencia--------------------------------------->
+<div class="content content-success" name="pnl_proveido" id="pnl_proveido">
+  <div
+    class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10"
+  >
+    <div>
+      <button
+        type="button"
+        class="btn btn-primary pull-left"
+        title="Volver Inicio"
+        name="volver"
+        id="volver"
+        (click)="paneles('VER_ANEXO')"
+      >
+        <i class="fa fa-reply fa-2x"></i>
+      </button>
+    </div>
+    <div class="panel panel-success">
+      <div class="panel-heading text-center">
+        PROVEIDO DE LA CORRESPONDENCIA
+      </div>
+      <div class="panel-body"></div>
+      <div class="form-horizontal">
+        <div class="form-group">
+          <label class="control-label col-sm-3" for="busqueda">PROVEIDO:</label>
+          <div class="col-sm-7">
+            <select
+              id="m_item"
+              class="form-control"
+              name="m_item"
+              [(ngModel)]="m_item"
+            >
+              <option
+                *ngFor="let row_item of dts_item; let i = index"
+                [ngValue]="row_item.id_detalle"
+              >
+                {{ row_item.descripciondetalleclasificador }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-3"
+            >CONTENIDO O GLOSA DEL PROVEIDO:</label
+          >
+          <div class="col-sm-7">
+            <textarea
+              class="form-control"
+              id="m_contenido"
+              maxlength="180"
+              rows="4"
+              name="m_contenido"
+              [(ngModel)]="m_contenido"
+            ></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-3" for="busqueda"
+            >Con Tiempo:</label
+          >
+          <div class="col-sm-7">
+            <input
+              class="form-control"
+              type="number"
+              name="m_tiempo"
+              id="m_tiempo"
+              [(ngModel)]="m_tiempo"
+              min="0"
+              max="100"
+            />
+          </div>
+        </div>
+        <div class="panel-body">
+          <table
+            class="table table-condensed table-hover dt-listaitemcorrespondencia"
+          >
+            <thead>
+              <tr>
+                <th>Nro.</th>
+                <th>Nombre</th>
+                <th>Tiempo</th>
+                <th>Contenido</th>
+                <th>Seleccione...</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr
+                *ngFor="
+                  let row_proveido of dts_listaritemCorrespondencia;
+                  let i = index
+                "
+              >
+                <td>{{ i + 1 }}</td>
+                <td>{{ row_proveido.nombre }}</td>
+                <td>{{ row_proveido.tiempo }}</td>
+                <td>{{ row_proveido.contenido }}</td>
+                <td>
+                  <div>
+                    <button
+                      type="button"
+                      class="btn btn-warning btn-md"
+                      (click)="editarProveidoPre(row_proveido)"
+                    >
+                      <i
+                        class="fa fa-edit"
+                        aria-hidden="true"
+                        title="Modificar Registro"
+                      ></i>
+                    </button>
+                    <!--button type="button" class="btn btn-danger"(click)="eliminar_proveido(row_anexos)">
+                                          <i class="glyphicon glyphicon-remove" aria-hidden="true" title="Eliminar Proveido"></i>
+                                        </button-->
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-success btn-block"
+            value="INSERTAR"
+            name="btnInsertarProveido"
+            id="btnInsertarProveido"
+            (click)="InsertarProveido()"
+            title="Guardar Proveido"
+          >
+            Guardar Proveido
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-success btn-block"
+            value="INSERTAR"
+            name="btnModificarProveido"
+            id="btnModificarProveido"
+            (click)="editarproveido()"
+            title="Modificar Proveido"
+          >
+            Modificar Proveido
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-success btn-block"
+            value="INSERTAR"
+            name="btnTerminarCorrespondencia"
+            id="btnTerminarCorrespondencia"
+            (click)="terminar_correspondencia()"
+            title="Terminar Correspondencia"
+          >
+            Terminar Correspondencia
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

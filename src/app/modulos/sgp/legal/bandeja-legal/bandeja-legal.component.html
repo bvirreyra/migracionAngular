@@ -1,0 +1,162 @@
+<div>
+  <button
+    type="button"
+    class="btn btn-primary pull-left"
+    title="Volver Panel"
+    name="btnVolverGv"
+    id="btnVolverGv"
+    (click)="paneles('VER_PANELPROYECTOS')"
+  >
+    <i class="fa fa-reply fa-2x"> </i>
+  </button>
+</div>
+<div class="pull-right">
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="paneles('DATOS_GENERALES')"
+  >
+    Datos Generales
+  </button>
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="paneles('CONVENIO')"
+  >
+    Convenio
+  </button>
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="paneles('RESOLUCION_CONVENIO')"
+  >
+    Resolución de Convenio
+  </button>
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="paneles('ADENDA')"
+  >
+    Adendas
+  </button>
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="paneles('DERECHO_PROPIETARIO')"
+  >
+    Derecho Propietario
+  </button>
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="paneles('RATIFICACION CONVENIO')"
+  >
+    Ratificación Convenio
+  </button>
+</div>
+<div class="row"></div>
+<div>
+  <div
+    *ngIf="pnl_datosgenerales == true"
+    id="pnl_datosgenerales"
+    name="pnl_datosgenerales"
+  >
+    <app-datos-generales
+      [inputDts]="inputDts"
+      [opcion]="'EDI'"
+    ></app-datos-generales>
+  </div>
+</div>
+<div>
+  <div *ngIf="pnl_convenio== true" >
+    <app-convenio
+      [inputDts]="inputDts"
+    ></app-convenio>
+  </div>
+</div>
+<div>
+  <div *ngIf="pnl_resolucion_convenio== true" >
+    <app-resolucion-convenio
+    [inputDts]="inputDts"
+    ></app-resolucion-convenio>
+  </div>
+</div>
+<div>
+  <div *ngIf="pnl_adenda== true" >
+    <app-adenda
+      [inputDts]="inputDts"
+    ></app-adenda>
+  </div>
+</div>
+<div>
+  <div *ngIf="pnl_derecho_propietareio == true" id="derecho" name="derecho">
+    <app-derecho-propietario-legal
+      [inputDts]="inputDts"
+    ></app-derecho-propietario-legal>
+  </div>
+</div>
+
+<div>
+  <div
+    *ngIf="pnl_ratificacion_plazo == true"
+    id="ratificacion"
+    name="ratificacion"
+  >
+    <app-ratificacion-convenio
+      [inputDts]="inputDts"
+    ></app-ratificacion-convenio>
+  </div>
+</div>
+
+<!-- <div
+  *ngIf="pnl_galeriaimagenes == true"
+  id="pnl_galeriaimagenes"
+  name="pnl_galeriaimagenes"
+>
+  <hr width="100%" size="5" color="#FF0000" />
+  <div class="pull-right">
+    <button class="btn btn-primary" type="button">
+      <i class="fa fa-plus-square" aria-hidden="true" title="Nueva Imagen"></i>
+    </button>
+  </div>
+  <div class="row"></div>
+</div> -->
+<!-- Modal -->
+<!-- <div *ngIf="pnl_subirArchivoModal == true">
+  <div
+    class="modal fade"
+    id="modalUploadArchivo"
+    data-backdrop="static"
+    data-keyboard="false"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Subir Archivo</h5>
+          <button type="button" class="close" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="col-lg-12">
+            <app-upload-file
+              inputTipoDocumento="galeria_imagenes"
+              inputCodigoProy="id_sgp"
+              inputVista="false"
+              inputTipoImagen="imagen"
+              inputSrc=""
+              inputNombre="Nuevo Archivo"
+              inputAccion="SUBIR_ARCHIVO"
+            >
+            </app-upload-file>
+          </div>
+        </div>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+</div> -->

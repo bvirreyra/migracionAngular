@@ -1,0 +1,10 @@
+.dt-listacontrato tfoot input{
+    width: 100% !important;
+}
+.dt-listacontrato tfoot {
+    display: table-header-group !important;
+}
+.consulta{
+    color: #1d96ff;
+    font-weight: 800; 
+   }

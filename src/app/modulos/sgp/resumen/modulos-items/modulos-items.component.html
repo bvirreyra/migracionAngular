@@ -1,0 +1,79 @@
+<div id="pnl_gridview_items" name="pnl_gridview_items">
+  <div class="row">
+    <div class="page-header">
+      <h2>{{m_nombreproyecto}}</h2>
+    </div>
+    <div *ngFor="let row_registros of dts_items | groupBy:'nombre_mod';let x=index ">
+      <tr>
+        <td>{{row_registros.key}}</td>
+      </tr>
+      <tr>
+        <td>
+          <table class="table table-condensed table-hover dt-items">
+            <thead>
+              <tr>
+                <th>Nro.</th>
+                <th>Nombre</th>
+                <th>Unidad Medida</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Estado</th>               
+                <th>Seleccione...</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              
+
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row_registros2 of row_registros.value; let i = index;">                
+                <td>{{row_registros2.nro_item}}</td>
+                <td>{{row_registros2.nombre}}</td>
+                <td>
+                    <select id="item_unidadmedida{{row_registros2.id_item}}" class="form-control" name="item_unidadmedida{{row_registros2.id_item}}" 
+                    value="{{row_registros2.des_unidadmedida}}">                    
+                    <option *ngFor="let row_unidadmedida of dts_unidadmedida"
+                    [ngValue]="row_unidadmedida.codigo">{{row_unidadmedida.descripcion}}
+                    </option>
+                    
+                </select>
+                  
+
+                </td>
+                <td>
+                    <input type="number" class="form-control" id="item_cantidad{{row_registros2.id_item}}" name="item_cantidad{{row_registros2.id_item}}" value={{row_registros2.cantidad}}>
+                </td>
+                <td>
+                    <input type="number" class="form-control" id="item_preciounitario{{row_registros2.id_item}}" name="item_preciounitario{{row_registros2.id_item}}" value={{row_registros2.precio_unitario}}>                  
+                </td>                
+                <td>
+                    <select id="item_estado{{row_registros2.id_item}}" class="form-control" name="item_estado{{row_registros2.id_item}}"
+                    value="{{row_registros2.estado}}">
+                    <option value='0' disabled="item_estado =='0'">Seleccione...</option>
+                    <option value="ACTIVO">ACTIVO</option>
+                    <option value="CERRADO" >CERRADO</option>
+                </select> 
+                </td>                
+                <td>
+                  <button type="button" class="btn btn-warning btn-md"  (click)="pre_editaitems(row_registros2.id_item)"                   >
+                    <i class="fa fa-edit" aria-hidden="true" title="Editar"></i>                    
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </div>
+
+  </div>
+</div>

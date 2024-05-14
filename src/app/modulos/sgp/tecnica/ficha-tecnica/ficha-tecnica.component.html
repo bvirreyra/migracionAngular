@@ -1,0 +1,320 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>  
+<div *ngIf="pnl_listacontactos" id="pnl_listacontactos" name="pnl_listacontactos" class="card card-body">
+  <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+    <div class="content-header with-border">
+      <h3 class="content-title text-green">
+        <strong>FICHA TECNICA - PROYECTO: <b>{{ nombre_proyecto }}</b></strong>
+      </h3>
+    </div>
+    <div class="content-body">
+      <div class="row">
+       
+        <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+        <div class="col-lg-offset-2 col-lg-8">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">FICHA TECNICA PROTOCOLAR</div>
+            <div class="panel-body">
+              <div *ngIf="pnl_formulario">
+                <!-- <form id="form1" name="form1" #form="ngForm"> -->
+                  <!-- <form action="" method="post" enctype="multipart/form-data"> -->
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="control-label col-sm-4 text-left" for="porcentaje">Estado de Proyecto:</label>
+                        <div class="col-sm-6">
+                          <select class="form form-control" [(ngModel)]="ficha_tecnica.estadoficha" name="estado_ficha" id="estado_ficha"
+                          [disabled]="camposHabilitados._tecnica"
+                         >
+                            <option *ngFor="
+                                let row_reg of dts_estadoFichaTecnica;
+                                let i = index
+                              " [ngValue]="row_reg.descripciondetalleclasificador">
+                              {{ row_reg.descripciondetalleclasificador }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="control-label col-sm-4 text-left" for="informe">Autoridad:
+                        </label>
+                        <div class="col-sm-6">
+                          <input class="form form-control" maxlength="2000" [(ngModel)]="ficha_tecnica.autoridad" name="autoridad" id="autoridad" 
+                          [disabled]="camposHabilitados._tecnica"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="control-label col-sm-4 text-left" for="informe">Aspectos Relevantes:
+                        </label>
+                        <div class="col-sm-6">
+                          <textarea class="form form-control" maxlength="5000" rows="10" style="resize: none"
+                            autocomplete="off" [(ngModel)]="ficha_tecnica.aspectorelevante" name="aspectorelevante" id="aspectorelevante"
+                            [disabled]="camposHabilitados._tecnica"
+                            ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="control-label col-sm-4 text-left" for="informe">Monto Ejecutado Upre:
+                        </label>
+                        <div class="col-sm-6 input-group">                        
+                          <input type="text" name="montoejecutadoupre" id="montoejecutadoupre" class="form-control"                            
+                            [(ngModel)]="ficha_tecnica.monto_ejecutado_upre"
+                            [disabled]="camposHabilitados._tecnica"
+                            />
+                            <span class="input-group-addon">Bs.</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="control-label col-sm-4 text-left" for="informe">Monto Ejecutado Contraparte:
+                        </label>
+                        <div class="col-sm-6 input-group">                        
+                          
+                          <input type="text"  class="form-control" name="m_montoejecutadocontraparte" id="m_montoejecutadocontraparte"
+                            style="resize: none" autocomplete="off"
+                            [(ngModel)]="ficha_tecnica.monto_ejecutado_contraparte"
+                            [disabled]="camposHabilitados._tecnica"
+                            />
+                            <span class="input-group-addon">Bs.</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="control-label col-sm-4 text-left" for="informe">Fecha Concluida:
+                        </label>
+                        <div class="col-sm-6 input-group">
+                          <input type="date" maxlength="10" class="form-control" name="m_fechaconcluida" id="m_fechaconcluida"
+                            style="resize: none" autocomplete="off"
+                            [(ngModel)]="ficha_tecnica.fecha_concluida"
+                            [disabled]="camposHabilitados._tecnica"
+                            />
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                      
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="control-label col-sm-4 text-left" for="informe">Monto Pagado:
+                        </label>
+                        <div class="col-sm-6 input-group">
+                          <input type="text" class="form-control" name="m_montopagado" id="m_montopagado"
+                          style="resize: none" autocomplete="off"
+                          [(ngModel)]="ficha_tecnica.monto_pagado"
+                          [disabled]="camposHabilitados._tecnica"
+                          />
+                          <span class="input-group-addon">Bs.</span>
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="control-label col-sm-4 text-left" for="informe">Monto por Pagar:
+                        </label>
+                        <div class="col-sm-6 input-group">
+                          <input type="text" class="form-control" name="m_montoporpagar" id="m_montoporpagar"
+                          style="resize: none" autocomplete="off"
+                          [(ngModel)]="ficha_tecnica.monto_porpagar"
+                          [disabled]="camposHabilitados._tecnica"
+                          />
+                          <span class="input-group-addon">Bs.</span>
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="control-label col-sm-4 text-left" for="informe">Distancia en Km y Hrs:
+                        </label>
+                        <div class="col-sm-6 input-group">
+                          <textarea type="text" class="form-control" name="m_distancia_km" id="m_distancia_km"
+                          maxlength="5000" rows="10"
+                          style="resize: none" autocomplete="off"
+                          [(ngModel)]="ficha_tecnica.distancia_km"
+                          [disabled]="camposHabilitados._tecnica"
+                          ></textarea>                          
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="control-label col-sm-4 text-left" for="telefonos">Imagen Proyecto (1):
+                        </label>
+                        <div class="col-sm-6 input-group">
+                          <input class="form form-control" maxlength="2000" readonly (click)="abreGaleria(1)"
+                            [(ngModel)]="ficha_tecnica.rutaimagenuno" name="rutaimagenuno" id="rutaimagenuno"
+                            [disabled]="camposHabilitados._tecnica"
+                            />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="control-label col-sm-4 text-left" for="telefonos">Imagen Proyecto (2):
+                        </label>
+                        <div class="col-sm-6 input-group ">
+                          <input class="form form-control" maxlength="2000" readonly (click)="abreGaleria(2)"
+                            [(ngModel)]="ficha_tecnica.rutaimagendos" name="rutaimagendos" id="rutaimagendos" 
+                            
+                            [disabled]="camposHabilitados._tecnica"/>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-lg-offset-4 col-sm-6 text-center">
+                          <button *ngIf="btn_Registra==true" type="button" class="btn btn-success btn-block" title="Guardar Registro" [disabled]="
+                              ficha_tecnica.estadoficha == '' ||
+                              ficha_tecnica.autoridad == '' ||
+                              ficha_tecnica.aspectorelevante == '' ||
+                              ficha_tecnica.monto_ejecutado_upre == '' ||
+                              ficha_tecnica.monto_ejecutado_contraparte == '' ||
+                              ficha_tecnica.fecha_concluida == '' ||
+                              ficha_tecnica.monto_pagado == '' ||
+                              ficha_tecnica.monto_porpagar == '' ||
+                              ficha_tecnica.rutaimagenuno == '' ||
+                              ficha_tecnica.rutaimagendos == '' ||
+                              camposHabilitados._tecnica ==true
+                            " (click)="insertaFichaTecnica()">
+                            <i class="fa fa-save" aria-hidden="true"></i> Guardar
+                            Ficha
+                          </button>
+                          <button *ngIf="btn_Actualiza==true" type="button" class="btn btn-warning btn-block" title="Actualizar Registro" [disabled]="
+                              ficha_tecnica.estadoficha == '' ||
+                              ficha_tecnica.autoridad == '' ||
+                              ficha_tecnica.aspectorelevante == '' ||
+                              ficha_tecnica.monto_ejecutado_upre == '' ||
+                              ficha_tecnica.monto_ejecutado_contraparte == '' ||
+                              ficha_tecnica.fecha_concluida == '' ||
+                              ficha_tecnica.monto_pagado == '' ||
+                              ficha_tecnica.monto_porpagar == '' ||
+                              ficha_tecnica.rutaimagenuno == '' ||
+                              ficha_tecnica.rutaimagendos == '' ||
+                              camposHabilitados._tecnica ==true
+                            " (click)="actualizaFichaTecnica()">
+                            <i class="fa fa-save" aria-hidden="true"></i> Actualizar
+                            Ficha
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <!-- </form> -->
+                
+              </div>
+              <div *ngIf="pnl_descarga">
+                <div class="text-center" >
+                  <div class="row">
+                    <div class="upload_file">
+                      <div class="detalles">
+                        <div class="nombre">
+                          [FT] Ficha Tecnica_{{ id_sgp }}.pdf
+                        </div>
+                      </div>
+                      <div id="documento">
+                        <img src="../../../../../assets/imagenes/formulario.jpg" alt="Documento" width="200px"
+                          height="200px" />
+                        <div class="row"></div>
+                        <div>
+                          <div>
+                            <a type="button" class="btn btn-info btn-block" title="Descargar Archivo" href="{{
+                                url_reporte
+                              }}/modulos/sgp/rptFichaTecnica.php?id_proy={{
+                                this.ficha_tecnica.fidproyecto
+                              }}">
+                              <i class="fa fa-download" aria-hidden="true"></i>
+                              Descargar
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="camposHabilitados._administrador==false" class="row" style="text-align: left; margin: 1rem 0;">
+                    <button class="btn btn-success" style="width: 200px;" (click)="reporteFichaTecnicaExcel()">Ficha Técnica Excel</button>
+                  </div>
+                </div>
+              </div>
+              <div >
+                <div class="bg-primary text-white">Ficha Tecnica Preliminar</div>
+                <div class="text-center" >
+                  <div class="row">
+                    <div class="upload_file">
+                      <div class="detalles">
+                        <div class="nombre">
+                          Ficha Tecnica Preliminar
+                        </div>
+                      </div>
+                      <div id="documento">
+                        <img src="../../../../../assets/imagenes/sgp/fichatecnica_preliminar.png" alt="Documento" width="200px"
+                          height="200px" />
+                        <div class="row"></div>
+                        <div>
+                          <div>
+                            <a type="button" class="btn btn-info btn-block" title="Descargar Archivo" href="{{
+                                url_reporte
+                              }}/modulos/sgp/rptFichaTecnicaPreliminar.php?id_proy={{
+                                id_proyecto
+                              }}">
+                              <i class="fa fa-download" aria-hidden="true"></i>
+                              Descargar
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row" *ngIf="pnl_galeria">
+        <div class="content-body">
+          <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+          <div class="ol-lg-12">
+            <div class="panel panel-primary">
+              <div class="panel-heading text-center">
+                GALERIA DE IMAGENES DEL PROYECTO
+              </div>
+              <div class="panel-body">
+                <div *ngFor="
+                    let row_registro of dts_listaimagenes
+                      | orderBy: 'fecha_registro':true
+                  " class="col-lg-3">
+                  <app-upload-file *ngIf="flag_galeria == 1" 
+                    inputId={{row_registro.id}}
+                    inputTipoDocumento="galeria_imagenes"
+                    inputCodigoProy="{{ row_registro.id_sgp }}" inputVista="false" inputTipoImagen="imagen"
+                    inputSrc="{{ row_registro.archivo }}" inputNombre="{{ row_registro.archivo }}"
+                    inputAccion="SELECCIONAR" (enviaPadre)="obtieneNombreArchivoUno($event)">
+                  </app-upload-file>
+                  <app-upload-file *ngIf="flag_galeria == 2" inputTipoDocumento="galeria_imagenes"
+                    inputCodigoProy="{{ row_registro.id_sgp }}" inputVista="false" inputTipoImagen="imagen"
+                    inputSrc="{{ row_registro.archivo }}" inputNombre="{{ row_registro.archivo }}"
+                    inputAccion="SELECCIONAR" (enviaPadre)="obtieneNombreArchivoDos($event)">
+                  </app-upload-file>
+                </div>
+              </div>
+              <div class="content-footer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,294 @@
+<div class="container-fluid">
+    <div class="col-xs-12 col-md-4">
+        <div class="row">
+            <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+                <div class="content-header with-border">
+                    <h3 class="content-title text-green">
+                        <strong>UBICACIÓN - PERSONAL</strong>
+                    </h3>
+                </div>
+                <div class="content-body">
+                    <div class="rowlocal ">
+                        <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+                        <div class="col-xs-12 col-md-12">
+                            <div class="panel panel-success">
+                                <div class="panel-heading text-center">Filtros según criterios</div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="accordion" id="accordionExample">
+                                            <div class="card">
+                                                <div class="card-header" id="headingUno">
+                                                    <h2 class="mb-0">
+                                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseUno" aria-expanded="false" aria-controls="collapseUno">
+                                                            Detalle de Ubicación del Personal
+                                                        </button>
+                                                    </h2>
+                                                </div>
+                                                <div id="collapseUno" class="collapse" aria-labelledby="headingUno" data-parent="#accordionExample">
+                                                    <div class="card-body">
+                                                        <div>
+                                                            <table class="table table-condensed table-hover">
+                                                                <tr>
+                                                                    <th class="text-center">Nro. Personal Técnico</th>
+                                                                    <td class="text-center">{{m_contadorpersonal_tecnica}}</td>
+                                                                    <td class="text-center"><a title="Descargar Reporte" class="btn btn-danger  btn-xs" target="_blank" href="{{url_reporte}}/modulos/geopersonal/rptGeoPersonalTecnica.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th class="text-center">Nro. Personal Financiero</th>
+                                                                    <td class="text-center">{{m_contadorpersonal_financiera}}</td>
+                                                                    <td class="text-center"><a title="Descargar Reporte" class="btn btn-danger  btn-xs" target="_blank" href="{{url_reporte}}/modulos/geopersonal/rptGeoPersonalFinanciera.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th class="text-center">Nro. Personal Jurídico</th>
+                                                                    <td class="text-center">{{m_contadorpersonal_juridica}}</td>
+                                                                    <td class="text-center"><a title="Descargar Reporte" class="btn btn-danger  btn-xs" target="_blank" href="{{url_reporte}}/modulos/geopersonal/rptGeoPersonalJuridica.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></td>
+                                                                </tr>
+                                                               
+                                                                <tr>
+                                                                    <th class="text-center"><h4><strong>TOTAL PERSONAL</strong></h4></th>
+                                                                    <td class="text-center"><h4><strong>{{m_contadorpersonal}}</strong></h4></td>
+                                                                    <td class="text-center"><a title="Descargar Reporte" class="btn btn-danger   btn-md" target="_blank" href="{{url_reporte}}/modulos/geopersonal/rptGeoPersonal.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></td>
+                                                                </tr>
+                                                            </table>
+
+                                                            <!-- <p>
+                                                                <strong>Nro Personal Técnica</strong>: {{m_contadorpersonal_tecnica}}
+                                                                <a title="Descargar Reporte" class="btn btn-danger  btn-xs" target="_blank" href="{{url_reporte}}/modulos/geopersonal/rptGeoPersonalTecnica.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
+                                                                <br />
+                                                                <strong>Nro Personal Jurídica</strong>: {{m_contadorpersonal_juridica}}
+                                                                <a title="Descargar Reporte" class="btn btn-danger  btn-xs" target="_blank" href="{{url_reporte}}/modulos/geopersonal/rptGeoPersonalJuridica.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
+                                                                <br />
+                                                                <strong>Nro Personal Financiera</strong>: {{m_contadorpersonal_financiera}}
+                                                                <a title="Descargar Reporte" class="btn btn-danger  btn-xs" target="_blank" href="{{url_reporte}}/modulos/geopersonal/rptGeoPersonalFinanciera.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
+                                                            </p>
+                                                            <hr />
+                                                            <strong>Total Personal</strong>: {{m_contadorpersonal}}
+                                                            <a title="Descargar Reporte" class="btn btn-danger   btn-md" target="_blank" href="{{url_reporte}}/modulos/geopersonal/rptGeoPersonal.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
+                                                            <hr /> -->
+
+                                                            <div>
+                                                                <button type="button" class="btn btn-primary" id="btnTecnica" name="btnTecnica" (click)="listaTodo()">
+                                                                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                                All</button>
+                                                                <button type="button" class="btn btn-primary" id="btnTecnica" name="btnTecnica" (click)="listaTecnica()">
+                                                                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                                Técnica</button>
+                                                                <button type="button" class="btn btn-primary" id="btnFinanciera" name="btnFinanciera" (click)="listaFinanciera()">
+                                                                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                                Financiera</button>
+                                                                <button type="button" class="btn btn-primary" id="btnJuridica" name="btnJuridica" (click)="listaJuridica()">
+                                                                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                                Jurídica</button>
+                                                            </div>
+                                                            <br>
+                                                            <div align="center">
+                                                                <table class="dt-personal">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Nro.</th>
+                                                                            <th>Funcionario</th>
+                                                                            <th>Ver</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody *ngIf="tipoLista == 'All'">
+                                                                        <tr *ngFor="let row_registros of dts_listaGeoUbicaciones; let i = index;">
+                                                                            <td>{{i+1}}</td>
+                                                                            <td>{{row_registros.usu_nom}} {{row_registros.usu_app}} {{row_registros.usu_apm}}
+                                                                            </td>
+                                                                            <td>
+                                                                                <button type="button" class="btn btn-primary btn-md" (click)="obtieneMarcaPersonal(row_registros)">
+                                                                                    <i class="fa fa-users" aria-hidden="true" title="Equipo Tecnico"></i>
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                    <tbody *ngIf="tipoLista == 'Tecnica'">
+                                                                        <tr *ngFor="let row_registros of dts_listatecnica; let i = index;">
+                                                                            <td>{{i+1}}</td>
+                                                                            <td>{{row_registros.usu_nom}} {{row_registros.usu_app}} {{row_registros.usu_apm}}
+                                                                            </td>
+                                                                            <td>
+                                                                                <button type="button" class="btn btn-primary btn-md" (click)="obtieneMarcaPersonal(row_registros)">
+                                                                                    <i class="fa fa-users" aria-hidden="true" title="Equipo Tecnico"></i>
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                    <tbody *ngIf="tipoLista == 'Financiera'">
+                                                                        <tr *ngFor="let row_registros of dts_listafinanciera; let i = index;">
+                                                                            <td>{{i+1}}</td>
+                                                                            <td>{{row_registros.usu_nom}} {{row_registros.usu_app}} {{row_registros.usu_apm}}
+                                                                            </td>
+                                                                            <td>
+                                                                                <button type="button" class="btn btn-primary btn-md" (click)="obtieneMarcaPersonal(row_registros)">
+                                                                                    <i class="fa fa-users" aria-hidden="true" title="Equipo Tecnico"></i>
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                    <tbody *ngIf="tipoLista == 'Juridica'">
+                                                                        <tr *ngFor="let row_registros of dts_listajuridica; let i = index;">
+                                                                            <td>{{i+1}}</td>
+                                                                            <td>{{row_registros.usu_nom}} {{row_registros.usu_app}} {{row_registros.usu_apm}}
+                                                                            </td>
+                                                                            <td>
+                                                                                <button type="button" class="btn btn-primary btn-md" (click)="obtieneMarcaPersonal(row_registros)">
+                                                                                    <i class="fa fa-users" aria-hidden="true" title="Equipo Tecnico"></i>
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card">
+                                                <div class="card-header" id="headingDos">
+                                                    <h2 class="mb-0">
+                                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseDos" aria-expanded="false" aria-controls="collapseDos">
+                                                            Detalle de Ubicacion del Personal dia Lunes
+                                                        </button>
+                                                    </h2>
+                                                </div>
+                                                <div id="collapseDos" class="collapse" aria-labelledby="headingDos" data-parent="#accordionExample">
+                                                    <div class="card-body">
+                                                        <p>
+                                                            <strong>Nro Personal Técnica</strong>: {{m_contadorpersonallunes_tecnica}}
+                                                            <br />
+                                                            <strong>Nro Personal Juridica</strong>: {{m_contadorpersonallunes_juridica}}
+                                                            <br />
+                                                            <strong>Nro Personal Financiera</strong>: {{m_contadorpersonallunes_financiera}}
+                                                        </p>
+                                                        <hr />
+                                                        <strong>Total Personal</strong>: {{m_contadorpersonal_lunes}}
+                                                        <button type="button" class="btn btn-primary" (click)="puntosLunes()">
+                                                          <i class="fa fa-map-marker" aria-hidden="true"></i></button>
+                                                        <a title="Descargar Reporte" class="btn btn-danger   btn-md" target="_blank" href="{{url_reporte}}/modulos/geopersonal/rptGeoPersonalLunes.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
+                                                        <hr />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card">
+                                                <div class="card-header" id="headingMartes">
+                                                    <h2 class="mb-0">
+                                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseMartes" aria-expanded="false" aria-controls="collapseMartes">
+                                                            Detalle de Ubicacion del Personal dia Martes
+                                                        </button>
+                                                    </h2>
+                                                </div>
+                                                <div id="collapseMartes" class="collapse" aria-labelledby="headingMartes" data-parent="#accordionExample">
+                                                    <div class="card-body">
+                                                        <p>
+                                                            <strong>Nro Personal Técnica</strong>: {{m_contadorpersonalmartes_tecnica}}
+                                                            <br />
+                                                            <strong>Nro Personal Juridica</strong>: {{m_contadorpersonalmartes_juridica}}
+                                                            <br />
+                                                            <strong>Nro Personal Financiera</strong>: {{m_contadorpersonalmartes_financiera}}
+                                                        </p>
+                                                        <hr />
+                                                        <strong>Total Personal</strong>: {{m_contadorpersonal_martes}}
+                                                        <button type="button" class="btn btn-primary" (click)="puntosMartes()">
+                                                          <i class="fa fa-map-marker" aria-hidden="true"></i></button>
+                                                        <a title="Descargar Reporte" class="btn btn-danger   btn-md" target="_blank" href="{{url_reporte}}/modulos/geopersonal/rptGeoPersonalMartes.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
+                                                        <hr />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card">
+                                                <div class="card-header" id="headingMiercoles">
+                                                    <h2 class="mb-0">
+                                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseMiercoles" aria-expanded="false" aria-controls="collapseMiercoles">
+                                                            Detalle de Ubicacion del Personal dia Miercoles
+                                                        </button>
+                                                    </h2>
+                                                </div>
+                                                <div id="collapseMiercoles" class="collapse" aria-labelledby="headingMiercoles" data-parent="#accordionExample">
+                                                    <div class="card-body">
+                                                        <p>
+                                                            <strong>Nro Personal Técnica</strong>: {{m_contadorpersonalmiercoles_tecnica}}
+                                                            <br />
+                                                            <strong>Nro Personal Juridica</strong>: {{m_contadorpersonalmiercoles_juridica}}
+                                                            <br />
+                                                            <strong>Nro Personal Financiera</strong>: {{m_contadorpersonalmiercoles_financiera}}
+                                                        </p>
+                                                        <hr />
+                                                        <strong>Total Personal</strong>: {{m_contadorpersonal_miercoles}}
+                                                        <button type="button" class="btn btn-primary" (click)="puntosMiercoles()">
+                                                          <i class="fa fa-map-marker" aria-hidden="true"></i></button>
+                                                        <a title="Descargar Reporte" class="btn btn-danger   btn-md" target="_blank" href="{{url_reporte}}/modulos/geopersonal/rptGeoPersonalMiercoles.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
+                                                        <hr />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card">
+                                                <div class="card-header" id="headingJueves">
+                                                    <h2 class="mb-0">
+                                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseJueves" aria-expanded="false" aria-controls="collapseJueves">
+                                                            Detalle de Ubicacion del Personal dia Jueves
+                                                        </button>
+                                                    </h2>
+                                                </div>
+                                                <div id="collapseJueves" class="collapse" aria-labelledby="headingJueves" data-parent="#accordionExample">
+                                                    <div class="card-body">
+                                                        <p>
+                                                            <strong>Nro Personal Técnica</strong>: {{m_contadorpersonaljueves_tecnica}}
+                                                            <br />
+                                                            <strong>Nro Personal Juridica</strong>: {{m_contadorpersonaljueves_juridica}}
+                                                            <br />
+                                                            <strong>Nro Personal Financiera</strong>: {{m_contadorpersonaljueves_financiera}}
+                                                        </p>
+                                                        <hr />
+                                                        <strong>Total Personal</strong>: {{m_contadorpersonal_jueves}}
+                                                        <button type="button" class="btn btn-primary" (click)="puntosJueves()">
+                                                          <i class="fa fa-map-marker" aria-hidden="true"></i></button>
+                                                        <a title="Descargar Reporte" class="btn btn-danger   btn-md" target="_blank" href="{{url_reporte}}/modulos/geopersonal/rptGeoPersonalJueves.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
+                                                        <hr />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card">
+                                                <div class="card-header" id="headingViernes">
+                                                    <h2 class="mb-0">
+                                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseViernes" aria-expanded="false" aria-controls="collapseViernes">
+                                                            Detalle de Ubicacion del Personal dia Viernes
+                                                        </button>
+                                                    </h2>
+                                                </div>
+                                                <div id="collapseViernes" class="collapse" aria-labelledby="headingViernes" data-parent="#accordionExample">
+                                                    <div class="card-body">
+                                                        <p>
+                                                            <strong>Nro Personal Técnica</strong>: {{m_contadorpersonalviernes_tecnica}}
+                                                            <br />
+                                                            <strong>Nro Personal Juridica</strong>: {{m_contadorpersonalviernes_juridica}}
+                                                            <br />
+                                                            <strong>Nro Personal Financiera</strong>: {{m_contadorpersonalviernes_financiera}}
+                                                        </p>
+                                                        <hr />
+                                                        <strong>Total Personal</strong>: {{m_contadorpersonal_viernes}}
+                                                        <button type="button" class="btn btn-primary" (click)="puntosViernes()">
+                                                          <i class="fa fa-map-marker" aria-hidden="true"></i></button>
+                                                        <a title="Descargar Reporte" class="btn btn-danger   btn-md" target="_blank" href="{{url_reporte}}/modulos/geopersonal/rptGeoPersonalViernes.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
+                                                        <hr />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-8">
+        <div class="map" id="map" name="map"></div>
+    </div>
+</div>

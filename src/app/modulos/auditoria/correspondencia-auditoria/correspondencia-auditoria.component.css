@@ -1,0 +1,118 @@
+.contenedor{
+  display: flex;
+  justify-content: center;
+}
+
+.contenedor > .panel{
+  width: 80%;
+}
+
+
+@media screen and (max-width: 800px){
+  .contenedor > .panel{
+    width: 100%;
+  }
+}
+
+td>input[type=checkbox],td>label>input[type=checkbox] {
+  transform: scale(1.8);
+  accent-color: #14abf1;
+}
+
+.btn-secondary{
+  background-color: #6e7b6c;
+  color: white;
+}
+.btn-secondary:hover{
+  background-color: #82917f;
+}
+
+.btn-teal{
+  background-color: teal;
+}
+.cabecera{
+  background-color: #aec5dd;
+  border-radius: 12px;
+  border: 1px solid #4da0c7;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cabecera strong{
+  font-weight: 700;
+  font-style: italic;
+}
+.cabecera h5{
+  font-size: 1.5rem;
+  letter-spacing: 0.4rem;
+}
+
+.cabecera div{
+  display: flex;
+  justify-content: space-between;
+}
+
+/*******CARD*******/
+.card {
+  background-color: #cddbee;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.15);
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  border:1px solid steelblue
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-header {
+  border-bottom: 2px solid steelblue;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+}
+
+.card-title {
+  font-size: 24px;
+  margin: 0;
+  color: #343a40;
+}
+
+.card-subtitle {
+  font-size: 20px;
+  margin: 4px 0;
+  color: #6c757d;
+}
+
+.card-body {
+  font-size: 18px;
+  color: #495057;
+}
+
+.card-body p {
+  margin: 0 0 5px 0;
+}
+
+.card-body .icon {
+  position: absolute;
+  top: auto;
+  bottom: 5px;
+  right: 5px;
+  z-index: -1;
+  font-size: 180px;
+  color: rgba(0, 0, 0, 0.15);
+}
+
+.card-body div, .card-header div{
+  display: flex;
+  justify-content: space-between;
+}
+.card-body kbd {
+  background-color: #14abf1;
+  color:white;
+  padding: 5px 12px;
+  font-size: 2rem;
+  font-style: italic;
+}

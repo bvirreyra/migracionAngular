@@ -1,0 +1,23 @@
+.dt-CitesEspecifico tfoot input,.dt-auditoria tfoot input {
+    width: 100% !important;
+}
+
+.dt-CitesEspecifico tfoot,.dt-auditoria tfoot {
+    display: table-header-group !important;
+}
+
+.botonera{
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn-teal{
+    background-color: #01627e;
+    border-color: #033f50 ;
+    color: white;
+ }
+ .btn-grey{
+    background-color: #929ea0;
+    border-color:#656b6d; ;
+    color: white;
+ }

@@ -1,0 +1,94 @@
+  <div name="filtro_departamento"
+  id="filtro_departamento"
+  class="col col-xs-12 col-sm-6 col-md-6 col-lg-6"
+  >
+    <label class="col-sm-3">DEPARTAMENTO</label>
+    <div class="row"></div>
+    <select      
+      class="btn-block"      
+      [(ngModel)]="m_departamento"
+      (ngModelChange)="procesofiltros()"
+      [ngClass]="{'rojo':m_departamento == 'TODOS','verde':m_departamento != 'TODOS'}"
+    >
+      <option>TODOS</option>
+      <option
+        *ngFor="let row_departamento of dts_departamento; let i = index"
+        [ngValue]="row_departamento.departamento"
+      >
+        {{ row_departamento.departamento }}
+      </option>
+    </select>
+  </div>
+  <div name="filtro_municipio"
+  id="filtro_municipio" 
+  class="col col-xs-12 col-sm-6 col-md-6 col-lg-6"
+  >
+    <label class="col-sm-3">MUNICIPIO</label>
+    <div class="row"></div>
+    <select   
+    name="municipio" 
+    id="municipio" 
+    class="btn-block"      
+    [(ngModel)]="m_municipio"
+    (ngModelChange)="procesofiltros()"
+    [ngClass]="{'rojo':m_municipio == 'TODOS','verde':m_municipio != 'TODOS'}"
+
+    >
+      <option>TODOS</option>
+
+      <option
+        *ngFor="let row_municipio of dts_municipio; let i = index"
+        [ngValue]="row_municipio.municipio"
+      >
+        {{ row_municipio.municipio }}
+      </option>
+    </select>
+  </div>
+  <div name="filtro_area"
+  id="filtro_area"
+  class="col col-xs-12 col-sm-6 col-md-6 col-lg-6"
+  >
+    <label class="col-sm-3">AREA</label>
+    <div class="row"></div>
+    <select      
+      class="btn-block"      
+      [(ngModel)]="m_area"
+      (ngModelChange)="procesofiltros()"
+      [ngClass]="{'rojo':m_area == 'TODOS','verde':m_area != 'TODOS'}"
+    >
+      <option>TODOS</option>
+      <option
+        *ngFor="let row_area of dts_area; let i = index"
+        [ngValue]="row_area.area"
+      >
+        {{ row_area.area }}
+      </option>
+    </select>
+  </div>
+  <div name="filtro_tf"
+  id="filtro_area"
+  class="col col-xs-12 col-sm-6 col-md-6 col-lg-6"
+  >
+    <label class="col-sm-12">TIPO FINANCIAMIENTO</label>
+    <div class="row"></div>
+    <select      
+    class="btn-block"      
+      [(ngModel)]="m_tipofinanciamiento"
+      (ngModelChange)="procesofiltros()"
+      [ngClass]="{'rojo':m_tipofinanciamiento == 'TODOS','verde':m_tipofinanciamiento != 'TODOS'}"
+    >
+      <option>TODOS</option>
+      <option>CIF</option>
+      <option>CIFE</option>
+    </select>
+  </div>
+  <div class="row"></div>
+  <br>
+  <button
+        class="btn btn-success"
+        (click)="limpiaFiltros()"
+        type="button"
+      >
+        Limpiar Filtros
+      </button>
+

@@ -1,0 +1,229 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-center">
+    <span class="fa fa-envelope"></span> Listado de Consultas en Buzón
+    <button class="btn btn-success pull-right" style="padding: 2px 10px; margin-top: -2px;" (click)="abrirFormConsulta()" >
+      <span class="fa fa-plus-circle"></span> Nueva Consulta
+    </button>
+    <button class="btn btn-info pull-left" style="padding: 2px 10px; margin-top: -2px;" data-toggle="modal" data-target="#modalReporte" >
+      <span class="fa fa-printer"></span> Reporte Consultas
+    </button>
+  </div>
+  <div class="panel-body" style="text-align: left;">
+    <div class="table table-responsive">
+      <table class="table table-responsive table-condensed table-hover table-striped dt-consultas" style="font-size: 9pt;">
+        <thead>
+          <tr>
+            <th style="width: 120px;">Opciones</th>
+            <th>ID</th>
+            <th style="width: 100;">ID Proyecto</th>
+            <th>Nombre Proyecto</th>
+            <th style="width: 100;">Tipo Origen</th>
+            <th>Nombre Consultante</th>
+            <th>Teléfonos</th>
+            <th>Consulta</th>
+            <th>Fecha</th>
+            <th>Respuesta</th>
+            <th>Fecha Respuesta</th>
+            <th>Responsable</th>
+            <th>Estado</th>
+            <th>Observacion</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+        <tbody>
+          <tr *ngFor="let row of dtsConsultas; let i = index" [ngClass]="{'bg-warning': row.estado == 'PENDIENTE'}">
+            <td class="botonera">
+              <button class="btn btn-warning" title="Editar" (click)="abrirFormConsulta(row)">
+                <span class="fa fa-pencil"></span>
+              </button>
+              <button class="btn btn-danger" title="Eliminar" (click)="registrarConsulta(row)">
+                <span class="fa fa-trash"></span>
+              </button>
+            </td>
+            <td>{{row.id_buzon}}</td>
+            <td style="width: 100;">{{row.fid_proyecto}} </td>
+            <td>{{row.proyecto}}</td>
+            <td style="width: 100;">{{row.origen}}</td>
+            <td>{{row.consultante}}</td>
+            <td>{{row.telefono}}</td>
+            <td>{{row.consulta}}</td>
+            <td>{{row.fecha_registro | date:"dd/MM/yyyy"}}</td>
+            <td>{{row.respuesta}}</td>
+            <td>{{row.fecha_respuesta | date:"dd/MM/yyyy"}}</td>
+            <td>{{row.responsable}}</td>
+            <td>{{row.estado}}</td>
+            <td>{{row.observacion}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!--modal buzon -->
+<div class="modal fade" tabindex="-1"  name="modalConsulta" id="modalConsulta" role="dialog" aria-labelledby="exampleModalCorreo" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="elIdConsulta==0">Nueva Consulta</div><div *ngIf="elIdConsulta>0">Actualizar Consulta</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formConsulta" (ngSubmit)="registrarConsulta()">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12">
+                <label for="proyecto">Nombre Proyecto Referencia:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
+                  <input class="form-control" type="text" name="proyecto" placeholder="Seleccione Proyecto" formControlName="proyecto" maxlength="255" list="listaProyectos" autofocus>
+                  <datalist id="listaProyectos" class="datalist">
+                    <div *ngFor="let row of dtsProyectos; let i = index;">
+                      <option class="form-control" value={{row.nombreproyecto}} label={{row.nombreproyecto}}>
+                    </div>
+                  </datalist>
+                </div>
+              </div>
+              <span style="color:tomato;" *ngIf="formConsulta.controls['proyecto'].touched && formConsulta.controls['proyecto'].errors?.required">Este campo es requerido</span>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-3">
+                <label for="origen">Tipo Origen:</label>
+                <div class="input-group">
+                  <span class="input-group-addon" (click)="nuevoElemento()" title="Agregar Tipo" style="cursor: pointer;"><i class="fa fa-gear"></i></span>
+                    <select class="form-control" id="origen" formControlName="origen" aria-placeholder="seleccione...">
+                      <option *ngFor="let row of dtsTiposOrigen" [ngValue]="row.origen">{{row.origen}}</option>
+                  </select>
+                </div>
+                <span style="color:tomato;" *ngIf="formConsulta.controls['origen'].touched && formConsulta.controls['origen'].errors?.required">Este campo es requerido</span>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6">
+                <label for="consultante">Persona Consulta:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                  <input class="form-control" type="text" name="consultante" placeholder="Nombre de quien realiza la consulta" formControlName="consultante" maxlength="200" required >
+                </div>
+                <span style="color:tomato;" *ngIf="formConsulta.controls['consultante'].touched && formConsulta.controls['consultante'].errors?.required">Este campo es requerido</span>
+              </div>
+              <div class="form-group col-sm-12 col-lg-3">
+                <label for="telefono">Teléfonos Contacto:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                  <input class="form-control" type="text" name="telefono" placeholder="Números de contacto" formControlName="telefono" maxlength="100">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12">
+                <label for="consulta">Consulta:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-align-justify"></i></span>
+                  <textarea class="form-control" type="text" name="consulta" placeholder="Inserte la consulta detalladamente" rows="4" formControlName="consulta" maxlength="5000" required ></textarea>
+                </div>
+                <span style="color:tomato;" *ngIf="formConsulta.controls['consulta'].touched && formConsulta.controls['consulta'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="responsable">Responsable:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                  <input class="form-control" type="text" name="responsable" placeholder="Unidad, area o cargo del responsable de la respuesta" formControlName="responsable" maxlength="200" list="listaCargos">
+                  <datalist id="listaCargos" class="datalist">
+                    <div *ngFor="let row of dtsCargos; let i = index;">
+                      <option class="form-control" value={{row.responsable}} label={{row.responsable}}>
+                    </div>
+                  </datalist>
+                </div>
+                <span style="color:tomato;" *ngIf="formConsulta.controls['responsable'].touched && formConsulta.controls['responsable'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12">
+                <label for="respuesta">Respuesta:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-align-justify"></i></span>
+                  <textarea class="form-control" type="text" name="respuesta" placeholder="Inserte la consulta" rows="4" formControlName="respuesta" maxlength="5000"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12">
+                <label for="observacion">Observación:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-align-justify"></i></span>
+                  <textarea class="form-control" type="text" name="observacion" placeholder="Inserte la observación" rows="4" formControlName="observacion" maxlength="5000"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formConsulta.invalid || formConsulta.pristine">
+                  <div *ngIf="!elIdConsulta"><span class="fa fa-floppy-o"></span> Registrar Consulta</div>
+                  <div *ngIf="elIdConsulta"><span class="fa fa-check"></span> Actualizar Consulta</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal fechas reporte -->
+<div class="modal fade" tabindex="-1"  name="modalReporte" id="modalReporte" role="dialog" aria-labelledby="exampleModalCorreo" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">Seleccione rango de fechas </h5>
+      </div>
+      <div class="modal-body">
+        <div class="row" style="padding: 1rem 2rem;">
+          <div class="form-group pull-left">
+            <label for="f1">Fecha Desde:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              <input type="date" name="f1" id="f1" [(ngModel)]="reporteF1" class="form-control" max="{{maxFecha}}" (change)="rangoFechas('04')">
+            </div>
+          </div>
+          <div class="form-group pull-right">
+            <label for="f2">Fecha Hasta:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              <input type="date" name="f2" id="f2" [(ngModel)]="reporteF2" class="form-control" min="{{minFecha}}" (change)="rangoFechas('04')">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

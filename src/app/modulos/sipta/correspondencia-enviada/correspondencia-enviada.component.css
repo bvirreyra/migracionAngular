@@ -1,0 +1,7 @@
+.dt-correspondenciaenviada tfoot input {
+    width: 100% !important;
+}
+
+.dt-correspondenciaenviada tfoot {
+    display: table-header-group !important;
+}

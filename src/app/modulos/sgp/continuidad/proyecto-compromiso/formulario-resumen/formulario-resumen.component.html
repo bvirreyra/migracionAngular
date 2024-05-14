@@ -1,0 +1,395 @@
+<div *ngIf="pnlFormulario == true">
+  <div class="panel-heading clearfix">
+    <button
+      *ngIf="btnReporteResumen == true"
+      type="button"
+      class="btn btn-danger pull-right btn-md"
+      title="Reporte Resumen Tecnico"
+      (click)="rptResumenTecnico(tipoReporte, dts_registro.id_compromiso)"
+    >
+      <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+    </button>
+  </div>
+  <form #f="ngForm" action="" enctype="multipart/form-data">
+    <div class="row">
+      <div class="form-horizontal">
+        <div class="form-group">
+          <label class="control-label col-sm-4" for="busqueda"
+            >Nro Beneficiarios:</label
+          >
+          <div class="col-sm-7">
+            <input
+              class="form-control"
+              type="number"
+              name="nro_beneficiarios"
+              id="nro_beneficiarios"
+              #nro_beneficiarios="ngModel"
+              [(ngModel)]="datos_resumen.nro_beneficiarios"
+              (ngModelChange)="calculos()"
+              onKeyDown="A(event,this.form.descripcion_beneficiarios)"
+              autocomplete="off"
+              required
+            />
+            <span
+              style="color: tomato"
+              *ngIf="!nro_beneficiarios.valid && nro_beneficiarios.touched"
+              >El dato es requerido</span
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-4" for="busqueda"
+            >Descripcion Beneficiarios:</label
+          >
+          <div class="col-sm-7">
+            <input
+              class="form-control"
+              type="text"
+              name="descripcion_beneficiarios"
+              id="descripcion_beneficiarios"
+              #descripcion_beneficiarios="ngModel"
+              [(ngModel)]="datos_resumen.descripcion_beneficiarios"
+              onKeyDown="A(event,this.form.nro_beneficiarios_indirectos)"
+              autocomplete="off"
+              required
+            />
+            <span
+              style="color: tomato"
+              *ngIf="
+                !descripcion_beneficiarios.valid &&
+                descripcion_beneficiarios.touched
+              "
+              >El dato es requerido</span
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-4" for="busqueda"
+            >Nro Beneficiarios Indirectos:</label
+          >
+          <div class="col-sm-7">
+            <input
+              class="form-control"
+              type="number"
+              name="nro_beneficiarios_indirectos"
+              id="nro_beneficiarios_indirectos"
+              #nro_beneficiarios_indirectos="ngModel"
+              [(ngModel)]="datos_resumen.nro_beneficiarios_indirectos"
+              onKeyDown="A(event,this.form.descripcion_beneficiarios_indirectos)"
+              autocomplete="off"
+              required
+            />
+            <span
+              style="color: tomato"
+              *ngIf="
+                !nro_beneficiarios_indirectos.valid &&
+                nro_beneficiarios_indirectos.touched
+              "
+              >El dato es requerido</span
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-4" for="busqueda"
+            >Descripcion Beneficiarios Indirectos:</label
+          >
+          <div class="col-sm-7">
+            <input
+              class="form-control"
+              type="text"
+              name="descripcion_beneficiarios_indirectos"
+              id="descripcion_beneficiarios_indirectos"
+              #descripcion_beneficiarios_indirectos="ngModel"
+              [(ngModel)]="datos_resumen.descripcion_beneficiarios_indirectos"
+              onKeyDown="A(event,this.form.costo_proyecto)"
+              autocomplete="off"
+              required
+            />
+            <span
+              style="color: tomato"
+              *ngIf="
+                !descripcion_beneficiarios_indirectos.valid &&
+                descripcion_beneficiarios_indirectos.touched
+              "
+              >El dato es requerido</span
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-sm-4" for="busqueda"
+            >Costo Proyecto (Bs):</label
+          >
+          <div class="col-sm-7">
+            <input
+              class="form-control"
+              type="text"
+              name="costo_proyecto"
+              id="costo_proyecto"
+              #costo_proyecto="ngModel"
+              [(ngModel)]="datos_resumen.costo_proyecto"
+              (ngModelChange)="calculos()"
+              onKeyDown="A(event,this.form.superficie_terreno)"
+              autocomplete="off"
+              required
+            />
+            <span
+              style="color: tomato"
+              *ngIf="!costo_proyecto.valid && costo_proyecto.touched"
+              >El dato es requerido</span
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-4" for="busqueda"
+            >Superficie Terreno (m2):</label
+          >
+          <div class="col-sm-7">
+            <input
+              class="form-control"
+              type="text"
+              name="superficie_terreno"
+              id="superficie_terreno"
+              #superficie_terreno="ngModel"
+              [(ngModel)]="datos_resumen.superficie_terreno"
+              onKeyDown="A(event,this.form.superficie_construida)"
+              autocomplete="off"
+              required
+            />
+            <span
+              style="color: tomato"
+              *ngIf="!superficie_terreno.valid && superficie_terreno.touched"
+              >El dato es requerido</span
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-4" for="busqueda"
+            >Superficie Construida (m2):</label
+          >
+          <div class="col-sm-7">
+            <input
+              class="form-control"
+              type="text"
+              name="superficie_construida"
+              id="superficie_construida"
+              #superficie_construida="ngModel"
+              [(ngModel)]="datos_resumen.superficie_construida"
+              (ngModelChange)="calculos()"
+              onKeyDown="A(event,this.form.alcance)"
+              autocomplete="off"
+              required
+            />
+            <span
+              style="color: tomato"
+              *ngIf="
+                !superficie_construida.valid && superficie_construida.touched
+              "
+              >El dato es requerido</span
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-sm-4" for="busqueda"
+            >Costo (Bs/m2):</label
+          >
+          <div class="col-sm-7">
+            <input
+              class="form-control"
+              type="text"
+              name="costo_metro_cuadrado"
+              id="costo_metro_cuadrado"
+              #costo_metro_cuadrado="ngModel"
+              [(ngModel)]="datos_resumen.costo_metro_cuadrado_sus"
+              onKeyDown="A(event,this.form.costo_por_beneficiario)"
+              autocomplete="off"
+              readonly
+              required
+            />
+            <span
+              style="color: tomato"
+              *ngIf="
+                !costo_metro_cuadrado.valid && costo_metro_cuadrado.touched
+              "
+              >El dato es requerido</span
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-4" for="busqueda"
+            >Costo por Beneficiario (Bs/Benef):</label
+          >
+          <div class="col-sm-7">
+            <input
+              class="form-control"
+              type="text"
+              name="costo_por_beneficiario"
+              id="costo_por_beneficiario"
+              #costo_por_beneficiario="ngModel"
+              [(ngModel)]="datos_resumen.costo_por_beneficiario"
+              onKeyDown="A(event,this.form.alcance)"
+              autocomplete="off"
+              readonly
+              required
+            />
+            <span
+              style="color: tomato"
+              *ngIf="
+                !costo_por_beneficiario.valid && costo_por_beneficiario.touched
+              "
+              >El dato es requerido</span
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-sm-4" for="busqueda"
+            >Alcance del Proyecto:</label
+          >
+          <div class="col-sm-7">
+            <textarea
+              class="form-control"
+              type="text"
+              name="alcance"
+              id="alcance"
+              cols="50"
+              rows="5"
+              #alcance="ngModel"
+              [(ngModel)]="datos_resumen.alcance"
+              autocomplete="off"
+              required
+            >
+            </textarea>
+            <span
+              style="color: tomato"
+              *ngIf="!alcance.valid && alcance.touched"
+              >El dato es requerido</span
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-sm-4" for="busqueda"
+            >Compromiso Presidencial:</label
+          >
+          <div class="col-sm-7">
+            <textarea
+              class="form-control"
+              type="text"
+              name="compromiso_presidencial"
+              id="compromiso_presidencial"
+              #compromiso_presidencial="ngModel"
+              cols="50"
+              rows="5"
+              [(ngModel)]="datos_resumen.compromiso_presidencial"
+              autocomplete="off"
+              required
+            >
+            </textarea>
+            <span
+              style="color: tomato"
+              *ngIf="
+                !compromiso_presidencial.valid &&
+                compromiso_presidencial.touched
+              "
+              >El dato es requerido</span
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-sm-4" for="busqueda"
+            >Situación Actual:</label
+          >
+          <div class="col-sm-7">
+            <textarea
+              class="form-control"
+              type="text"
+              name="situacion_actual"
+              id="situacion_actual"
+              #situacion_actual="ngModel"
+              cols="50"
+              rows="5"
+              [(ngModel)]="datos_resumen.situacion_actual"
+              autocomplete="off"
+              required
+            >
+            </textarea>
+            <span
+              style="color: tomato"
+              *ngIf="!situacion_actual.valid && situacion_actual.touched"
+              >El dato es requerido</span
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-sm-4" for="busqueda"
+            >Monitoreado por:</label
+          >
+          <div class="col-sm-7">
+            <select
+              class="form-control"
+              id="estado_actual"
+              name="estado_actual"
+              #estado_actual="ngModel"
+              [disabled]="camposHabilitados._proyectista_administrador"
+              [(ngModel)]="datos_resumen.estado_actual"
+            >
+              <option value="TERRITORIALISTA">TERRITORIALISTA</option>
+              <option value="PROYECTISTA">PROYECTISTA</option>
+            </select>
+            <span
+              style="color: tomato"
+              *ngIf="!estado_actual.valid && estado_actual.touched"
+              >El dato es requerido</span
+            >
+          </div>
+        </div>
+
+        <!-- <div class="form-group">
+        <label class="control-label col-sm-4" for="busqueda">Monto en Bs:</label>
+        <div class="col-sm-7">
+          <input class="form-control" type="text" name="m_montoBs" id="m_montoBs" 
+            [(ngModel)]="m_montoBs" (ngModelChange)="setMontoSus()" onKeyDown="A(event,this.form.m_estadoSolicitud)"
+            autocomplete="off" required>
+        </div>
+      </div> -->
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="enviarRespuestaPadre('CIERRA_MODAL_FORMULARIO_RESUMEN')"
+          >
+            Cerrar
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            *ngIf="btnRegistraResumen == true"
+            name="btnRegistraResumen"
+            id="btnRegistraResumen"
+            (click)="InsertaResumen()"
+            [disabled]="f.invalid"
+          >
+            Registrar
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-primary"
+            *ngIf="btnEditaResumen == true"
+            name="btnEditaResumen"
+            id="btnEditaResumen"
+            (click)="EditaResumen()"
+            [disabled]="f.invalid"
+          >
+            Editar
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

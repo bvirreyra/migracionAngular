@@ -1,0 +1,370 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="contenedor-modulo">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <span class="fa fa-building"></span> Lista del Personal
+      <button class="btn btn-info" title="{{mostrarListado ? 'Mostrar Listado Personal': 'Ocultar Listado Personal'}}" style="padding: 2px 10px; margin: -2px 0 0 2rem;" (click)="mostrarListado = !mostrarListado" >
+        <span class="fa fa-plus-square-o"></span> {{mostrarListado ? 'Ocultar Listado': 'Mostrar Listado'}}
+      </button>
+      <button class="btn btn-info pull-right" title="Agregar nuevo personal" style="padding: 2px 10px; margin-top: -2px;" (click)="abrirFormEmpleado()" [disabled]="mostrarEmpleado && !elIdPersona" >
+        <span class="fa fa-plus-square-o"></span> Agregar...
+      </button>
+    </div>
+    <div class="panel-body">
+      <div style="overflow-x: auto;" *ngIf="mostrarListado">
+        <table class="table table-responsive table-condensed table-hover dt-empleados" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="width: 80px;">Acciones</th>
+              <th >Número de Documento</th>
+              <th >Nombre</th>
+              <th >Primer Apellido</th>
+              <th >Segundo Apellido</th>
+              <th >Fecha de Nacimiento</th>
+              <th >Nacionalidad</th>
+              <th >Profesión</th>
+              <th >Nro. Registro Profesional</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsPersonal;"
+            [ngClass]="{ 'bg-success': row.id_persona === elIdPersona}">
+              <td style="width: 80px;">
+                <div class="botonera">
+                  <button class="btn btn-warning" title="Editar" (click)="abrirFormEmpleado(row)">
+                    <span class="fa fa-edit"></span>
+                  </button>
+                  <button class="btn btn-danger" title="Desvincular" (click)="confirmarEliminacion(row,'D')">
+                    <span class="fa fa-trash"></span>
+                  </button>
+                  <!-- <button class="btn btn-info" title="Experiencia Empleado" (click)="desplegarExperiencia(row)">
+                    <span class="fa fa-briefcase"></span>
+                  </button> -->
+                </div>
+              </td>
+              <td >{{row.numero_documento }}</td>
+              <td >{{ row.nombres}} </td>
+              <td >{{ row.primer_apellido }}</td>
+              <td >{{row.segundo_apellido}}</td>
+              <td >{{ row.fecha_nacimiento | date: "dd/MM/yyyy"}}</td>
+              <td >{{ row.nacionalidad }}</td>
+              <td >{{ row.profesion }}</td>
+              <td >{{ row.registro_profesional}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-primary" *ngIf="mostrarEmpleado && !mostrarListado">
+    <div class="panel-heading">
+      <span class="fa fa-building"></span> Datos Personales
+      <!-- <button class="btn btn-info pull-right" title="Agregar nueva experiencia" style="padding: 2px 10px; margin-top: -2px;" (click)="abrirFormExperienciaEmpleado()" >
+        <span class="fa fa-plus-square-o"></span> Agregar...
+      </button> -->
+    </div>
+    <div class="panel-body">
+      <p style="background-color: #76cdf9;color: #0379b5;border: #0daeff 1px solid;; margin: 15px; border-left: #0daeff 8px solid; padding: 10px;">
+        <i class="fa fa-info-circle" aria-hidden="true"></i> Ingrese el número de documento y la fecha de nacimiento para realizar la búsqueda.<br>
+      </p>
+      <div style="text-align: left;">
+        <form  [formGroup]="formEmpleado" (ngSubmit)="crudEmpleado()" autocomplete="off">
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="tipo_documento">Tipo Documento:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+                <select class="form-control" formControlName="tipo_documento" required autofocus>
+                  <option *ngFor="let row of dtsTiposDocumento" [ngValue]="row.sigla">{{row.nombre}}</option>
+                </select>
+              </div>
+              <span style="color:tomato;" *ngIf="formEmpleado.controls['tipo_documento'].touched && formEmpleado.controls['tipo_documento'].errors?.required">Este campo es requerido</span>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="expedido">Lugar Expedición:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-street-view"></i></span>
+                <select class="form-control" formControlName="expedido" >
+                  <option *ngFor="let row of dtsTIposExpedido" [ngValue]="row.sigla">{{row.nombre}}</option>
+                </select>
+              </div>
+              <span style="color:tomato;" *ngIf="formEmpleado.controls['expedido'].touched && formEmpleado.controls['expedido'].errors?.required">Este campo es requerido</span>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="numero_documento">Número de Documento:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-address-card"></i></span>
+                <input class="form-control" type="text" name="numero_documento" placeholder="Número Documento" formControlName="numero_documento" onkeypress="return permite(event, 'solo_num')" required>
+              </div>
+              <span style="color:tomato;" *ngIf="formEmpleado.controls['numero_documento'].touched && formEmpleado.controls['numero_documento'].errors?.required">Este campo es requerido</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-2 col-md-2">
+              <label for="complemento">Complemento SEGIP:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-link"></i></span>
+                <input class="form-control" type="text" name="cargo" placeholder="complemento" formControlName="complemento" maxlength="5">
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-2 col-md-2">
+              <label for="complemento">Género:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-id-badge"></i></span>
+                <select class="form-control" formControlName="genero" required >
+                  <option *ngFor="let row of dtsGenero" [ngValue]="row">{{row}}</option>
+                </select>
+              </div>
+              <span style="color:tomato;" *ngIf="formEmpleado.controls['genero'].touched && formEmpleado.controls['genero'].errors?.required">Este campo es requerido</span>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="fecha_nacimiento">Fecha Nacimiento:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i></span>
+                <input class="form-control" type="date" name="fecha_nacimiento" formControlName="fecha_nacimiento" required>
+              </div>
+              <span style="color:tomato;" *ngIf="formEmpleado.controls['fecha_nacimiento'].touched && formEmpleado.controls['fecha_nacimiento'].errors?.required">Este campo es requerido</span>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <button type="button" class="btn btn-info btn-block" style="margin-top: 24px;"
+              [disabled]="!formEmpleado.controls['numero_documento'].value || !formEmpleado.controls['fecha_nacimiento'].value || elIdPersona" (click)="buscarPersonaInterop()">
+                <i class="fa fa-search" aria-hidden="true"></i> Buscar
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="primer_apellido">Primer Apellido:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input class="form-control" type="text" id="primer_apellido" formControlName="primer_apellido" readonly>
+              </div>
+              <span style="color:tomato;" *ngIf="formEmpleado.controls['primer_apellido'].touched && formEmpleado.controls['primer_apellido'].errors?.required && elIdPersona==0">Este campo es requerido</span>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="segundo_apellido">Segundo Apellido:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input class="form-control" type="text" id="segundo_apellido" formControlName="segundo_apellido" readonly>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="nombres">Nombre(s):</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input class="form-control" type="text" id="nombres" formControlName="nombres" required readonly>
+              </div>
+              <span style="color:tomato;" *ngIf="formEmpleado.controls['nombres'].touched && formEmpleado.controls['nombres'].errors?.required && elIdPersona==0">Este campo es requerido</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="nacionalidad">Nacionalidad:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-flag"></i></span>
+                <input class="form-control" type="text" id="nacionalidad" formControlName="nacionalidad" required readonly>
+              </div>
+              <span style="color:tomato;" *ngIf="formEmpleado.controls['nacionalidad'].touched && formEmpleado.controls['nacionalidad'].errors?.required && elIdPersona==0">Este campo es requerido</span>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="profesion">Profesión:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-id-badge"></i></span>
+                <input class="form-control" type="text" name="profesion" formControlName="profesion" maxlength="250" required>
+              </div>
+              <span style="color:tomato;" *ngIf="formEmpleado.controls['profesion'].touched && formEmpleado.controls['profesion'].errors?.required">Este campo es requerido</span>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="registro_profesional">Número Registro Profesional:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-registered"></i></span>
+                <input class="form-control" type="text" name="registro_profesional" formControlName="registro_profesional" maxlength="50">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-12 col-md-12">
+              <label for="direccion">Dirección:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                <input class="form-control" type="text" name="direccion" formControlName="direccion" maxlength="100">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="linea"></div>
+            <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+              <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" (click)="mostrarListado = true;mostrarEmpleado = false;mostrarExperiencia = false" >Volver al listado</button>
+              <button type="button" class="btn btn-info" style="margin-right: 1rem;" *ngIf="elIdPersona" (click)="abrirFormExperienciaEmpleado()">Registrar Experiencia</button>
+              <button class="btn btn-success" type="submit"  [disabled]="formEmpleado.invalid || formEmpleado.pristine">
+                <div *ngIf="!elIdPersona"><span class="fa fa-floppy-o"></span> Registrar Empleado</div>
+                <div *ngIf="elIdPersona"><span class="fa fa-check"></span> Actualizar Empleado</div>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-primary" *ngIf="mostrarExperiencia && !mostrarListado && elIdPersona" id="grilla-experiencia" style="margin-top: 2rem;">
+    <div class="panel-heading">
+      <span class="fa fa-building"></span> Experiencia del Empleado - {{nombreEmpleado}}
+      <!-- <button class="btn btn-info pull-right" title="Agregar experiencia del empleado" style="padding: 2px 10px; margin-top: -2px;" (click)="abrirFormExperienciaEmpleado()" >
+        <span class="fa fa-plus-square-o"></span> Agregar...
+      </button> -->
+    </div>
+    <div class="panel-body">
+      <div style="overflow-x: auto;">
+        <table class="table table-responsive table-condensed table-hover dt-experiencia-empleado" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="width: 100px; text-align: center;">Acciones</th>
+              <th >Empresa / Entidad</th>
+              <th >Objeto Obra</th>
+              <th >Cargo</th>
+              <th >Monto Obra Bs.</th>
+              <th >Desde</th>
+              <th >Hasta</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsExperienciaEmpleado;"
+            [ngClass]="{ 'bg-success': row.id_experiencia_empleado === elIdExperienciaEmpleado}">
+              <td style="width: 100px;">
+                <div class="botonera">
+                  <button class="btn btn-warning" title="Editar" (click)="abrirFormExperienciaEmpleado(row)">
+                    <span class="fa fa-edit"></span> {{row.tipo}}
+                  </button>
+                  <button class="btn btn-danger" title="Eliminar" (click)="confirmarEliminacion(row,'D')">
+                    <span class="fa fa-trash"></span> {{row.tipo}}
+                  </button>
+                </div>
+              </td>
+              <td >{{row.nombre_empresa }}</td>
+              <td >{{row.objeto_obra}} </td>
+              <td >{{row.cargo }}</td>
+              <td >{{row.monto_obra | number: "0.2-2" | formatoDecimal}}</td>
+              <td >{{row.fecha_inicio | date: "dd/MM/yyyy"}}</td>
+              <td >{{row.fecha_fin | date: "dd/MM/yyyy"}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal experiencia -->
+<div class="modal fade" tabindex="-1"  name="modalExperiencia" id="modalExperiencia" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!experienciaEditar">Registrar Experiencia</div><div *ngIf="experienciaEditar">Editar Experiencia</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formExperienciaEmpleado" (ngSubmit)="crudExperienciaEmpleado()" autocomplete="off">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="nombre_empresa">Empresa / Entidad:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                  <input class="form-control" type="text" name="nombre_empresa" placeholder="Empresa / Entidad" formControlName="nombre_empresa" maxlength="150" required autofocus>
+                  <span style="color:tomato;" *ngIf="formExperienciaEmpleado.controls['nombre_empresa'].touched && formExperienciaEmpleado.controls['nombre_empresa'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="objeto_obra">Objeto de la Obra:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-street-view"></i></span>
+                  <input class="form-control" type="text" name="objeto_obra" placeholder="Objeto de la Obra" formControlName="objeto_obra" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperienciaEmpleado.controls['objeto_obra'].touched && formExperienciaEmpleado.controls['objeto_obra'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="cargo">Cargo:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-info"></i></span>
+                  <input class="form-control" type="text" name="cargo" placeholder="Cargo" formControlName="cargo" maxlength="100" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperienciaEmpleado.controls['cargo'].touched && formExperienciaEmpleado.controls['cargo'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="monto_obra">Monto de la Obra Bs.:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-asterisk"></i></span>
+                  <input class="form-control" type="text" name="monto_obra" placeholder="0.00" formControlName="monto_obra" onkeypress="return permite(event, 'monto')" (input)="handleInput($event)" (blur)="handleBlur($event)"  required>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperienciaEmpleado.controls['monto_obra'].touched && formExperienciaEmpleado.controls['monto_obra'].errors?.required">Este campo es requerido</span>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="fecha_inicio">Desde:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                  <input class="form-control" type="date" name="fecha_inicio" formControlName="fecha_inicio" max="{{maxFechaIni}}"  required>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperienciaEmpleado.controls['fecha_inicio'].touched && formExperienciaEmpleado.controls['fecha_inicio'].errors?.required">Este campo es requerido</span>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="fecha_fin">Hasta:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                  <input class="form-control" type="date" name="fecha_fin" formControlName="fecha_fin" min="{{minFechaFin}}" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperienciaEmpleado.controls['fecha_fin'].touched && formExperienciaEmpleado.controls['fecha_fin'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formExperienciaEmpleado.invalid || formExperienciaEmpleado.pristine">
+                  <div *ngIf="!experienciaEditar"><span class="fa fa-floppy-o"></span> Registrar Experiencia</div>
+                  <div *ngIf="experienciaEditar"><span class="fa fa-check"></span> Actualizar Experiencia</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

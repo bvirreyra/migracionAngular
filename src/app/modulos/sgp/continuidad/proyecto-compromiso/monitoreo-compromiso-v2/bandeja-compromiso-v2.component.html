@@ -1,0 +1,981 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+
+<!-- BANDEJA PROYECTOS -->
+<div name="pnl_Bandejao" id="pnl_Bandeja">
+  <!--REFRESCA GRIDVIEW -->
+  <div class="clearfix" style="margin-bottom: 1rem">
+    <button
+      type="button"
+      class="btn btn-success pull-right"
+      (click)="ActualizarListado()"
+    >
+      <i class="fa fa-refresh" aria-hidden="true" title="Actualizar">
+        Bandeja Monitoreo</i
+      >
+    </button>
+    <button
+      type="button"
+      class="btn btn-info pull-right"
+      (click)="SeguimientoMonitoreo()"
+      style="margin-right: 5px"
+    >
+      <i class="fa fa-eye" aria-hidden="true" title="Seguimiento">
+        Seguimiento Monitoreo</i
+      >
+    </button>
+  </div>
+  <!--LISTA GRIDVIEW PROYECTOS CONSOLIDADOS-->
+  <div style="text-align: right">
+    <label class="titulo">{{
+      dtsBandeja
+        ? dtsBandeja.length != dtsBandejaPivote.length
+          ? dtsBandeja.length +
+            " REGISTROS FILTRADOS DE UN TOTAL DE " +
+            dtsBandejaPivote.length +
+            " REGISTROS"
+          : dtsBandejaPivote.length + " REGISTROS EN TOTAL"
+        : ""
+    }}</label>
+  </div>
+  <div style="overflow-x: auto">
+    <table
+      class="table table-responsive table-condensed table-hover dt-monitoreo"
+      style="font-size: 9pt"
+    >
+      <thead>
+        <tr>
+          <th (click)="ordenar('id_compromiso')">
+            <i class="fa fa-sort">Codigo.</i>
+          </th>
+          <th (click)="ordenar('gestion')">
+            <i class="fa fa-sort">Gestion</i>
+          </th>
+          <th (click)="ordenar('departamento')">Departamento</th>
+          <th (click)="ordenar('municipio')">
+            <i class="fa fa-sort">Municipio</i>
+          </th>
+          <th (click)="ordenar('tfinanciamiento')">
+            <i class="fa fa-sort">TF</i>
+          </th>
+          <th (click)="ordenar('area')"><i class="fa fa-sort">Area</i></th>
+          <th (click)="ordenar('nombreproyecto')">
+            <i class="fa fa-sort">Nombre Proyecto</i>
+          </th>
+          <th (click)="ordenar('estructura_financiera')">
+            <i class="fa fa-sort">Estructura Fin.</i>
+          </th>
+          <th (click)="ordenar('nombre_tarea')">
+            <i class="fa fa-sort">Estado Monitoreo</i>
+          </th>
+          <th>Hoja de Ruta</th>
+          <th>Contactos</th>
+          <th (click)="ordenar('dias_trans_convenio')">
+            <i class="fa fa-sort">Dias Convenio</i>
+          </th>
+          <th (click)="ordenar('dias_trans_sinconvenio')">
+            <i class="fa fa-sort">Dias SinConvenio</i>
+          </th>
+          <th (click)="ordenar('dias_trans_ordenproceder')">
+            <i class="fa fa-sort">Dias OrdenP</i>
+          </th>
+          <th (click)="ordenar('dias_trans_sinordenproceder')">
+            <i class="fa fa-sort">Dias SinOrdenP</i>
+          </th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td>
+            <input
+              type="text"
+              #filtroCodigo
+              (keyup)="filtro_grid('id_compromiso', filtroCodigo.value)"
+              max="6"
+              style="width: 10px"
+            />
+          </td>
+          <td></td>
+          <td>
+            <select
+              [(ngModel)]="departamentoSel"
+              (ngModelChange)="filtro_grid('departamento', departamentoSel)"
+              style="width: 100px"
+            >
+              <option value=""></option>
+              <option
+                *ngFor="let row of dts_departamentos"
+                [ngValue]="row.departamento"
+              >
+                {{ row.departamento }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <select
+              [(ngModel)]="municipioSel"
+              (ngModelChange)="filtro_grid('municipio', municipioSel)"
+              style="width: 80px"
+            >
+              <option value=""></option>
+              <option
+                *ngFor="let row of dts_municipios"
+                [ngValue]="row.municipio"
+              >
+                {{ row.municipio }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <select
+              [(ngModel)]="tfinanciamientoSel"
+              (ngModelChange)="
+                filtro_grid('tfinanciamiento', tfinanciamientoSel)
+              "
+              style="width: 80px"
+            >
+              <option value=""></option>
+              <option
+                *ngFor="let row of dts_tfinanciamiento"
+                [ngValue]="row.tfinanciamiento"
+              >
+                {{ row.tfinanciamiento }}
+              </option>
+            </select>
+          </td>
+          <td></td>
+          <td>
+            <input
+              type="text"
+              #nombre_proyecto
+              (keyup)="filtro_grid('nombreproyecto', nombre_proyecto.value)"
+              max="6"
+            />
+          </td>
+
+          <td>
+            <select
+              [(ngModel)]="estructura_financieraSel"
+              (ngModelChange)="
+                filtro_grid('estructura_financiera', estructura_financieraSel)
+              "
+              style="width: 80px"
+            >
+              <option value=""></option>
+              <option
+                *ngFor="let row of dts_estructurafinanciera"
+                [ngValue]="row.estructura_financiera"
+              >
+                {{ row.estructura_financiera }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <select
+              [(ngModel)]="nombre_tareaSel"
+              (ngModelChange)="filtro_grid('nombre_tarea', nombre_tareaSel)"
+              style="width: 80px"
+            >
+              <option value=""></option>
+              <option
+                *ngFor="let row of dts_nombre_tarea"
+                [ngValue]="row.nombre_tarea"
+              >
+                {{ row.nombre_tarea }}
+              </option>
+            </select>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+
+      <tbody>
+        <tr
+          *ngFor="
+            let row_registro of dtsBandeja
+              | slice : pagina * 10 : pagina * 10 + 10;
+            let i = index
+          "
+          [ngClass]="{
+            'bg-danger': row_registro.tipo_flujo == 'INICIO',
+            'bg-warning': row_registro.tipo_flujo == 'FLUJO',
+            'bg-success': row_registro.tipo_flujo == 'FIN'
+          }"
+        >
+          <td>{{ row_registro.id_compromiso }}</td>
+          <td>{{ row_registro.gestion }}</td>
+          <td>{{ row_registro.departamento }}</td>
+          <td>{{ row_registro.municipio }}</td>
+          <td>{{ row_registro.tfinanciamiento }}</td>
+          <td>{{ row_registro.area }}</td>
+          <td>{{ row_registro.nombreproyecto }}</td>
+          <td>{{ row_registro.estructura_financiera }}</td>
+          <td>{{ row_registro.nombre_tarea }}</td>
+          <td>
+            <input
+              class="form-control"
+              name="observacion{{ row_registro.id_compromiso }}{{
+                row_registro.estructura_financiera
+              }}"
+              id="observacion{{ row_registro.id_compromiso }}{{
+                row_registro.estructura_financiera
+              }}"
+              autocomplete="off"
+              value="{{ row_registro.observacion_monitoreo }}"
+              (input)="handleInputHr($event)"
+              (change)="
+                preEditaObservacion(
+                  row_registro.id_compromiso,
+                  row_registro.estructura_financiera,
+                  row_registro.nombre_tarea
+                )
+              "
+              [disabled]="s_usu_id != 752 && s_usu_id != 1"
+            />
+            <!-- <textarea
+            class="form-control"
+            name="observacion{{ row_registro.id_compromiso }}{{
+              row_registro.estructura_financiera
+            }}"
+            id="observacion{{ row_registro.id_compromiso }}{{
+              row_registro.estructura_financiera
+            }}"
+            autocomplete="off"
+            value="{{ row_registro.observacion_monitoreo }}"
+            (change)="
+              preEditaObservacion(
+                row_registro.id_compromiso,
+                row_registro.estructura_financiera,
+                row_registro.nombre_tarea
+              )
+            "
+            
+          ></textarea> -->
+          </td>
+
+          <td>
+            <textarea
+              class="form-control"
+              name="contacto{{ row_registro.id_compromiso }}{{
+                row_registro.estructura_financiera
+              }}"
+              id="contacto{{ row_registro.id_compromiso }}{{
+                row_registro.estructura_financiera
+              }}"
+              autocomplete="off"
+              value="{{ row_registro.contacto }}"
+              (change)="
+                preEditaContacto(
+                  row_registro.id_compromiso,
+                  row_registro.estructura_financiera
+                )
+              "
+              [disabled]="m_rolMonitoreo == 104"
+            ></textarea>
+          </td>
+          <td>{{ row_registro.dias_trans_convenio }}</td>
+          <td>{{ row_registro.dias_trans_sinconvenio }}</td>
+          <td>{{ row_registro.dias_trans_ordenproceder }}</td>
+          <td>{{ row_registro.dias_trans_sinordenproceder }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-success btn-block"
+              title="Ver Registros"
+              (click)="paneles('REGISTRO_MONITOREO', row_registro)"
+            >
+              <i class="fa fa-eye" aria-hidden="true">Monitoreo Presidencial</i>
+            </button>
+            <!-- <button
+              *ngIf="m_rolMonitoreo == 104"
+              type="button"
+              class="btn btn-danger btn-block"
+              title="Historial de Observaciones"
+              (click)="paneles('HISTORIAL_OBSERVACIONES', row_registro)"
+            >
+              <i class="fa fa-eye"></i>
+            </button> -->
+            <button
+              *ngIf="
+                (m_rolMonitoreo == 104 || s_usu_id == 706) &&
+                row_registro.observacion_monitoreo != null
+              "
+              type="button"
+              class="btn btn-danger btn-block"
+              title="Monitoreo Interno"
+              (click)="paneles('LINEA_TIEMPO_HR', row_registro)"
+            >
+              <i class="fa fa-eye">Monitoreo Interno</i>
+            </button>
+
+            <button
+              *ngIf="m_rolMonitoreo != 104"
+              type="button"
+              class="btn btn-primary btn-block"
+              title="Registrar Monitoreo"
+              (click)="paneles('FORMULARIO', row_registro)"
+            >
+              <i class="fa fa-magic" aria-hidden="true"></i>
+            </button>
+
+            <button
+              *ngIf="
+                (m_rolMonitoreo == 100 &&
+                  (row_registro.codigo_tarea == 'REG_ESTRUCTURA_FINANCIERA' ||
+                    row_registro.codigo_tarea ==
+                      'CIF_REG_ESTRUCTURA_FINANCIERA')) ||
+                camposHabilitados._monitoreo_mantenimiento == false
+              "
+              type="button"
+              class="btn btn-warning btn-block"
+              title="Ingreso Nuevo"
+              (click)="CambiaTf(row_registro)"
+            >
+              <i class="fa fa-plus">Cambiar TF </i>
+            </button>
+            <button
+              *ngIf="
+                camposHabilitados._monitoreo_mantenimiento == false ||
+                camposHabilitados._monitoreo_cambio_estado == false
+              "
+              type="button"
+              class="btn btn-info btn-block"
+              title="Administracion"
+              (click)="paneles('ADMINISTRACION', row_registro)"
+            >
+              <i class="fa fa-cogs">Mantenimiento</i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- paginacion -->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination pull-right">
+      <li class="page-item" style="margin-right: 2rem">
+        <label class="titulo">{{
+          "MOSTRANDO REGISTROS DEL " +
+            (pagina * 10 + 1) +
+            " AL " +
+            (pagina * 10 + 10 > dtsBandeja.length
+              ? dtsBandeja.length
+              : pagina * 10 + 10) +
+            " DE UN TOTAL DE " +
+            dtsBandeja.length
+        }}</label>
+      </li>
+      <li class="page-item">
+        <button
+          class="btn btn-primary page-link"
+          id="anterior"
+          (click)="paginar(-1)"
+        >
+          Anterior
+        </button>
+      </li>
+      <li class="page-item">
+        <button
+          class="btn btn-primary page-link"
+          id="siguiente"
+          (click)="paginar(1)"
+        >
+          Siguiente
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>
+<!-- FORMULARIO INICIAL -->
+
+<div *ngIf="pnl_FormularioInicial" class="col-lg-offset-2 col-lg-8">
+  <div>
+    <button
+      type="button"
+      class="btn btn-primary pull-left"
+      title="Volver a Bandeja"
+      (click)="paneles('VISTA_BANDEJA')"
+    >
+      <i class="fa fa-reply fa-2x"> </i>
+    </button>
+  </div>
+  <form
+    action=""
+    name="formMonitoreo"
+    #f="ngForm"
+    enctype="multipart/form-data"
+  >
+    <div class="panel panel-primary">
+      <div class="panel-heading clearfix">
+        {{ dts_registro.id_compromiso }}-{{ dts_registro.nombreproyecto }}
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <label class="control-label col-sm-4">Tipo Financiamiento:</label>
+              <div class="col-sm-7">
+                <select
+                  type="text"
+                  id="tipo_financiamiento"
+                  name="tipo_financiamiento"
+                  #tipo_financiamiento="ngModel"
+                  class="form-control"
+                  aria-placeholder="Seleccione Tipo Financiamiento"
+                  [(ngModel)]="ingreso_transicion.tipo_financiamiento"
+                  [disabled]="
+                    !dts_transicion.atributos.w_tipofinanciamiento.habilitado
+                  "
+                  required
+                >
+                  <!-- <option selected="true" disabled="disabled">
+                    Seleccione...
+                  </option> -->
+                  <option value="CIF">CIF</option>
+                  <option value="CIFE">CIFE</option>
+                </select>
+                <span
+                  style="color: tomato"
+                  *ngIf="
+                    !tipo_financiamiento.valid && tipo_financiamiento.touched
+                  "
+                  >El campo es requerido</span
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4">Tipo de Observacion:</label>
+              <div class="col-sm-7">
+                <select
+                  type="text"
+                  id="tipo_observacion"
+                  name="tipo_observacion"
+                  class="form-control"
+                  aria-placeholder="Seleccione Tipo Observacion"
+                  (change)="habilitaCamposFormulario($event)"
+                  required
+                >
+                  <option selected="true" disabled="disabled">
+                    Seleccione...
+                  </option>
+                  <option value="OBS_CURSO">Observación en Curso</option>
+                  <option value="OBS_ETAPA">Observación en Etapa</option>
+                </select>
+              </div>
+            </div>
+            <div *ngIf="pnl_obs_etapa == true">
+              <div class="form-group">
+                <label class="control-label col-sm-4">Hoja de Ruta:</label>
+                <div class="col-sm-7">
+                  <input
+                    class="form-control"
+                    name="hr"
+                    id="hr"
+                    autocomplete="off"
+                    placeholder="HR 001/2023"
+                    onKeyDown="A(event,this.form.tarea)"
+                    [(ngModel)]="ingreso_transicion.hoja_ruta"
+                    [disabled]="!dts_transicion.atributos.w_hojaruta.habilitado"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-4">Detalle:</label>
+                <div class="col-sm-7">
+                  <textarea
+                    class="form-control"
+                    name="tarea"
+                    id="tarea"
+                    autocomplete="off"
+                    onKeyDown="A(event,this.form.fecha_inicio)"
+                    [(ngModel)]="ingreso_transicion.detalle"
+                    [disabled]="!dts_transicion.atributos.w_detalle.habilitado"
+                    #tarea="ngModel"
+                    required
+                  ></textarea>
+                  <span
+                    style="color: tomato"
+                    *ngIf="!tarea.valid && tarea.touched"
+                    >El campo es requerido</span
+                  >
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-4">Fecha Inicio:</label>
+                <div class="col-sm-7">
+                  <input
+                    class="form-control"
+                    type="date"
+                    name="fecha_inicio"
+                    #fecha_inicio="ngModel"
+                    max="9999-12-31"
+                    id="fecha_inicio"
+                    [(ngModel)]="ingreso_transicion.fecha_inicio"
+                    [disabled]="
+                      !dts_transicion.atributos.w_fechainicio.habilitado
+                    "
+                    onKeyDown="A(event,this.form.fecha_fin)"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-4">Fecha Fin:</label>
+                <div class="col-sm-7">
+                  <input
+                    class="form-control"
+                    type="date"
+                    name="fecha_fin"
+                    #fecha_fin="ngModel"
+                    id="fecha_fin"
+                    max="9999-12-31"
+                    autocomplete="off"
+                    [(ngModel)]="ingreso_transicion.fecha_fin"
+                    [disabled]="!dts_transicion.atributos.w_fechafin.habilitado"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <!-- <div class="pull-right"> -->
+      </div>
+    </div>
+
+    <!-- ESTRUCTURA FINANCIAMIENTO -->
+    <div *ngIf="pnl_FormularioEstructura && pnl_obs_etapa">
+      <div class="panel panel-primary">
+        <div class="panel-heading clearfix">
+          AGREGAR UNA ESTRUCTURA DE FINANCIAMIENTO
+        </div>
+        <div class="panel-body">
+          <div class="col-lg-6">
+            <button
+              type="button"
+              class="btn btn-primary pull-left"
+              title="Volver a Bandeja"
+              (click)="preinsertaEstructuraFinanciamiento('SUPERVISION')"
+            >
+              SUPERVISION
+            </button>
+          </div>
+          <div class="col-lg-6">
+            <button
+              type="button"
+              class="btn btn-primary pull-left"
+              title="Volver a Bandeja"
+              (click)="preinsertaEstructuraFinanciamiento('FISCALIZACION')"
+            >
+              FISCALIZACION
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="pnl_FormularioInicial && pnl_obs_etapa">
+      <button
+        *ngIf="ingreso_transicion.fecha_fin >= ingreso_transicion.fecha_inicio"
+        type="button"
+        class="btn btn-success btn-block"
+        name="btnRegistra"
+        id="btnRegistra"
+        (click)="insertaMonitoreo()"
+        [disabled]="f.invalid"
+      >
+        Registrar
+      </button>
+    </div>
+    <!-- ESTRUCTURA FINANCIAMIENTO -->
+    <div *ngIf="pnl_FormularioInicial && pnl_obs_curso">
+      <div class="panel panel-primary">
+        <div class="panel-heading clearfix">AGREGAR OBSERVACION EN CURSO</div>
+        <div class="panel-body">
+          <textarea
+            class="form-control"
+            name="m_obs_curso"
+            id="m_obs_curso"
+            autocomplete="off"
+            onKeyDown="A(event,this.form.btnGuardarObsCurso)"
+            [(ngModel)]="m_obs_curso"
+            #tarea="ngModel"
+            required
+          ></textarea>
+          <button
+            name="btnGuardarObsCurso"
+            id="btnGuardarObsCurso"
+            type="button"
+            class="btn btn-primary pull-left"
+            title="Guardar Obs.en Curso"
+            (click)="editaObservacionV2()"
+          >
+            GUARDAR
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- REGISTRO MONITOREO -->
+<div *ngIf="pnl_registroMonitoreo == true">
+  <div>
+    <button
+      type="button"
+      class="btn btn-primary pull-left"
+      title="Volver a Bandeja"
+      (click)="paneles('VISTA_BANDEJA')"
+    >
+      <i class="fa fa-reply fa-2x"> </i>
+    </button>
+  </div>
+  <div class="panel-body col-lg-offset-2 col-lg-8">
+    <table class="table table-responsive dt-monitoreo-compromiso">
+      <thead>
+        <tr>
+          <th>Nro Compromiso</th>
+          <th>Tipo Financiamiento</th>
+          <th>Etapa</th>
+          <th>Fecha Inicio</th>
+          <th>Fecha Fin</th>
+          <th>Tarea</th>
+          <th>Dias Ejecucion</th>
+          <th>Hoja de Ruta</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr
+          *ngFor="let row_monitoreo of dts_registros_monitoreo; let i = index"
+        >
+          <td>{{ row_monitoreo.fid_compromiso }}</td>
+          <td>{{ row_monitoreo.tipo_financiamiento }}</td>
+          <td>{{ row_monitoreo.detalle_etapa }}</td>
+          <td>{{ row_monitoreo.fecha_inicio | date : "dd/MM/yyyy" }}</td>
+          <td>{{ row_monitoreo.fecha_fin | date : "dd/MM/yyyy" }}</td>
+          <td>{{ row_monitoreo.tarea }}</td>
+          <td>{{ row_monitoreo.dias_ejecucion }}</td>
+          <td>{{ row_monitoreo.hoja_ruta }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel-body col-lg-12">
+    <div style="display: block !important">
+      <app-workflow [idCompromiso]="dts_registro.id_compromiso"></app-workflow>
+      {{ dts_registro.id_compromiso }}-{{ dts_registro.fid_flujo }}
+    </div>
+  </div>
+</div>
+<!-- HISTORIAL OBSERVACIONES -->
+<div *ngIf="pnl_registroObservaciones == true">
+  <div>
+    <button
+      type="button"
+      class="btn btn-primary pull-left"
+      title="Volver a Bandeja"
+      (click)="paneles('VISTA_BANDEJA')"
+    >
+      <i class="fa fa-reply fa-2x"> </i>
+    </button>
+  </div>
+  <div class="panel-body col-lg-offset-2 col-lg-8">
+    <table class="table table-responsive dt-observaciones">
+      <thead>
+        <tr>
+          <th>Nro Compromiso</th>
+          <th>Estructura Financiera</th>
+          <th>Etapa</th>
+          <th>Observacion</th>
+          <th>Usuario Registro</th>
+          <th>Fecha Registro</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr
+          *ngFor="
+            let row_observacion of dts_registros_observaciones;
+            let i = index
+          "
+        >
+          <td>{{ row_observacion.fid_compromiso }}</td>
+          <td>{{ row_observacion.estructura_financiera }}</td>
+          <td>{{ row_observacion.detalle_etapa }}</td>
+          <td>{{ row_observacion.observacion }}</td>
+          <td>{{ row_observacion.usuario }}</td>
+          <td>{{ row_observacion.fecha_registro | date : "dd/MM/yyyy" }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- FORMULARIO ADMINISTRACION -->
+
+<div *ngIf="pnl_FormularioAdminitracion" class="col-lg-offset-2 col-lg-8">
+  <div>
+    <button
+      type="button"
+      class="btn btn-primary pull-left"
+      title="Volver a Bandeja"
+      (click)="paneles('VISTA_BANDEJA')"
+    >
+      <i class="fa fa-reply fa-2x"> </i>
+    </button>
+  </div>
+  <form
+    action=""
+    name="formMonitoreo"
+    #f="ngForm"
+    enctype="multipart/form-data"
+  >
+    <div
+      *ngIf="camposHabilitados._monitoreo_mantenimiento == false"
+      class="panel panel-primary"
+    >
+      <div class="panel-heading clearfix">
+        {{ dts_registro.id_compromiso }}-{{ dts_registro.nombreproyecto }}
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <label class="control-label col-sm-4">Tipo Financiamiento:</label>
+              <div class="col-sm-7">
+                <select
+                  type="text"
+                  id="tipo_financiamiento"
+                  name="tipo_financiamiento"
+                  #tipo_financiamiento="ngModel"
+                  class="form-control"
+                  aria-placeholder="Seleccione Tipo Financiamiento"
+                  [(ngModel)]="ingreso_transicion.tipo_financiamiento"
+                  [disabled]="true"
+                  required
+                >
+                  <!-- <option selected="true" disabled="disabled">
+                    Seleccione...
+                  </option> -->
+                  <option value="CIF">CIF</option>
+                  <option value="CIFE">CIFE</option>
+                </select>
+                <span
+                  style="color: tomato"
+                  *ngIf="
+                    !tipo_financiamiento.valid && tipo_financiamiento.touched
+                  "
+                  >El campo es requerido</span
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4">Hoja de Ruta:</label>
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  name="hr"
+                  id="hr"
+                  autocomplete="off"
+                  placeholder="HR 001/2023"
+                  onKeyDown="A(event,this.form.tarea)"
+                  [(ngModel)]="ingreso_transicion.hoja_ruta"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4">Detalle:</label>
+              <div class="col-sm-7">
+                <textarea
+                  class="form-control"
+                  name="tarea"
+                  id="tarea"
+                  autocomplete="off"
+                  onKeyDown="A(event,this.form.fecha_inicio)"
+                  [(ngModel)]="ingreso_transicion.detalle"
+                  #tarea="ngModel"
+                  required
+                ></textarea>
+                <span
+                  style="color: tomato"
+                  *ngIf="!tarea.valid && tarea.touched"
+                  >El campo es requerido</span
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4">Fecha Inicio:</label>
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="date"
+                  name="fecha_inicio"
+                  #fecha_inicio="ngModel"
+                  max="9999-12-31"
+                  id="fecha_inicio"
+                  [(ngModel)]="ingreso_transicion.fecha_inicio"
+                  onKeyDown="A(event,this.form.fecha_fin)"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4">Fecha Fin:</label>
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="date"
+                  name="fecha_fin"
+                  #fecha_fin="ngModel"
+                  id="fecha_fin"
+                  max="9999-12-31"
+                  autocomplete="off"
+                  [(ngModel)]="ingreso_transicion.fecha_fin"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <!-- <div class="pull-right"> -->
+      </div>
+    </div>
+
+    <!-- ESTRUCTURA FINANCIAMIENTO MANTENIMIENTO -->
+    <div *ngIf="camposHabilitados._monitoreo_mantenimiento == false">
+      <div class="panel panel-primary">
+        <div class="panel-heading clearfix">
+          AGREGAR UNA ESTRUCTURA DE FINANCIAMIENTO
+        </div>
+        <div class="panel-body">
+          <div class="col-lg-6">
+            <button
+              type="button"
+              class="btn btn-primary pull-left"
+              title="Volver a Bandeja"
+              (click)="preinsertaEstructuraFinanciamiento('SUPERVISION')"
+            >
+              SUPERVISION
+            </button>
+          </div>
+          <div class="col-lg-6">
+            <button
+              type="button"
+              class="btn btn-primary pull-left"
+              title="Volver a Bandeja"
+              (click)="preinsertaEstructuraFinanciamiento('FISCALIZACION')"
+            >
+              FISCALIZACION
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="camposHabilitados._monitoreo_mantenimiento == false">
+      <button
+        type="button"
+        class="btn btn-success btn-block"
+        name="btnRegistra"
+        id="btnRegistra"
+        (click)="insertaMonitoreo()"
+        [disabled]="f.invalid"
+      >
+        Registrar
+      </button>
+    </div>
+  </form>
+  <!-- CAMBIAR ESTADO DE MONITOREO -->
+  <div
+    *ngIf="
+      camposHabilitados._monitoreo_cambio_estado == false ||
+      camposHabilitados._monitoreo_mantenimiento == false
+    "
+  >
+    <div class="panel panel-primary">
+      <div class="panel-heading clearfix">
+        CAMBIAR ESTADO DE MONITOREO - {{ dts_registro.id_compromiso }}-{{
+          dts_registro.nombreproyecto
+        }}
+      </div>
+      <div class="panel-body">
+        <select
+          id="m_estadomonitoreo"
+          class="form-control"
+          name="m_estadomonitoreo"
+          [(ngModel)]="m_estadomonitoreo"
+        >
+          <option value="0" disabled="m_estadomonitoreo =='0'">
+            Seleccione...
+          </option>
+          <option
+            *ngFor="let row_registros of dts_estadosmonitoreo"
+            [ngValue]="row_registros.codigo_tarea"
+          >
+            {{ row_registros.nombre_tarea }}
+          </option>
+        </select>
+        <div>
+          <button
+            type="button"
+            class="btn btn-warning btn-block"
+            name="btnCambioEstado"
+            id="btnCambioEstado"
+            (click)="cambiaEstadosMonitoreo()"
+          >
+            Cambiar Estado
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- LINEA DE TIEMPO HOJA DE RUTA -->
+<div *ngIf="pnl_LineaTiemopHr == true">
+  <div>
+    <button
+      type="button"
+      class="btn btn-primary pull-left"
+      title="Volver a Bandeja"
+      (click)="paneles('VISTA_BANDEJA')"
+    >
+      <i class="fa fa-reply fa-2x"> </i>
+    </button>
+    <div style="margin: 2rem 0; padding: 0 2rem">
+      <app-chart-proveidos
+        [numero]="m_nrohojaderuta"
+        [gestion]="m_hrgestion"
+      ></app-chart-proveidos>
+    </div>
+  </div>
+</div>

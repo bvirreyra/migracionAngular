@@ -1,0 +1,232 @@
+<div class="row" name="pnl_nuevoproyecto" id="pnl_nuevoproyecto">
+  <div class="col-lg-7 col-md-7 col-sm-7 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+      <form action="" method="post" enctype="multipart/form-data">
+          <div class="panel panel-primary">
+              <div class="panel-heading clearfix">
+              </div>
+              <div class="panel-body">
+                  <div class="bg-primary text-white">NUEVO PROYECTO</div>
+
+                  <div class="form-group ">
+                      <div>
+                          <label for="Gestion">Nombre del Proyecto:</label>
+                      </div>
+                      <div>
+                          <input class="form-control" id="m_nombreproyecto" maxlength="200" rows="4"
+                              name="m_nombreproyecto"
+                              placeholder="Introdusca el nombre completo del proyecto como esta en el CONVENIO"
+                              [(ngModel)]="m_nombreproyecto" onKeyDown="A(event,this.form.m_departamento)" required>
+                      </div>
+                  </div>
+                  <div class="form-group ">
+                      <div>
+                          <label for="Gestion">Descripción del Proyecto:</label>
+                      </div>
+                      <div>
+                          <input class="form-control" id="m_descripcionproyecto" maxlength="200" rows="4"
+                              name="m_descripcionproyecto" [(ngModel)]="m_descripcionproyecto"
+                              onKeyDown="A(event,this.form.m_departamento)" required>
+                      </div>
+                  </div>
+                  <div class="form-group col-lg-4 col-md-4 col-sm-4">
+                      <div>
+                          <label for="Gestion">Tipo de Proyecto:</label>
+                      </div>
+                      <div>
+                          <select id="m_tipoproyecto" class="form-control" name="m_tipoproyecto"
+                              [(ngModel)]="m_tipoproyecto" onKeyDown="A(event,this.form.m_provincia)">
+                              <option value='0' disabled="m_tipoproyecto =='0'">Seleccione...</option>
+                              <option *ngFor="let row_registros of dts_TipoProyecto" [ngValue]="row_registros.codigo">
+                                  {{row_registros.nombre}}
+                              </option>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="form-group col-lg-4 col-md-4 col-sm-4">
+                      <div>
+                          <label for="Gestion">Tipo de Convenio:</label>
+                      </div>
+                      <div>
+                          <select id="m_tipoconvenio" class="form-control" name="m_tipoconvenio"
+                              [(ngModel)]="m_tipoconvenio" onKeyDown="A(event,this.form.m_provincia)">
+                              <option value='0' disabled="m_tipoconvenio =='0'">Seleccione...</option>
+                              <option *ngFor="let row_registros of dts_TipoConvenio"
+                                  [ngValue]="row_registros.id_detalle">
+                                  {{row_registros.descripciondetalleclasificador}}
+                              </option>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="row"></div>
+                  <div class="form-group col-lg-4 col-md-4 col-sm-4">
+                      <div>
+                          <label for="Gestion">Entidad beneficiaria:</label>
+                      </div>
+                      <div>
+                          <select id="m_entidadbeneficiaria" class="form-control" name="m_entidadbeneficiaria"
+                              [(ngModel)]="m_entidadbeneficiaria">
+                              <option value='0' disabled="m_entidadbeneficiaria =='0'">Seleccione...</option>
+                              <option *ngFor="let row_registros of dts_EntidadBeneficiaria"
+                                  [ngValue]="row_registros.id">{{row_registros.descripcion}}
+                              </option>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="form-group col-lg-8 col-md-8 col-sm-8">
+                      <div>
+                          <label for="Gestion">Detalle beneficiario:</label>
+                      </div>
+                      <div>
+                          <input class="form-control" id="m_detallebeneficiario" maxlength="200" rows="4"
+                              name="m_detallebeneficiario" [(ngModel)]="m_detallebeneficiario"
+                              onKeyDown="A(event,this.form.m_departamento)" required>
+                      </div>
+                  </div>
+                  <div class="row"></div>
+                  <div class="form-group " class="col-lg-4 col-md-4 col-sm-4">
+                      <div>
+                          <label for="Gestion">Departamento:</label>
+                      </div>
+                      <div>
+                          <select id="m_departamento" class="form-control" name="m_departamento"
+                              [(ngModel)]="m_departamento" #device (change)="buscarMunicipio(device.value)"
+                              onKeyDown="A(event,this.form.m_provincia)">
+                              <option value='0' disabled="m_departamento =='0'">Seleccione...</option>
+                              <option *ngFor="let row_dep of dts_ListaDepartamento; let i = index "
+                                  [ngValue]="row_dep.codigo_departamento"
+                                  (click)="buscarMunicipio(row_dep.codigo_departamento)">{{row_dep.nombre}}</option>
+                          </select>
+                      </div>
+                  </div>
+                  <!-- <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+                      <div>
+                          <label for="Gestion">Provincia:</label>
+                      </div>
+                      <div>
+                          <select id="m_provincia" class="form-control" name="m_provincia" [(ngModel)]="m_provincia"
+                              (change)="filtraMunicipio()" onKeyDown="A(event,this.form.m_municipio)">
+                              <option value='0' disabled="m_provincia =='0'">Seleccione...</option>
+                              <option *ngFor="let row_registros of dts_provinciafiltrada"
+                                  [ngValue]="row_registros.codigo_provincia">{{row_registros.nombre}}
+                              </option>
+                          </select>
+                      </div>
+                  </div> -->
+                  <div class="form-group " class="col-lg-4 col-md-4 col-sm-4">
+                      <div>
+                          <label for="Gestion">Municipio:</label>
+                      </div>
+                      <div>
+                          <select id="m_municipio" class="form-control" name="m_municipio" [(ngModel)]="m_municipio"
+                              onKeyDown="A(event,this.form.btnRegistrar)">
+                              <option value='0' disabled="m_municipio =='0'">Seleccione...</option>
+                              <option *ngFor="let row_mun of dts_ListaMunicipio; let i = index "
+                                  [ngValue]="row_mun.fidsgp_municipio">{{row_mun.nombre}}</option>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="panel-heading clearfix">
+                  </div>
+
+                  <div class="bg-primary text-white col-lg-12 col-md-12 col-sm-12">DATOS DEL CONVENIO</div>
+
+
+
+                  <div class="form-group " class="col-lg-4 col-md-4 col-sm-4">
+                      <div>
+                          <label for="Gestion">Numero:</label>
+                      </div>
+                      <div>
+                          <input class="form-control" id="m_nroconvenio" maxlength="200" rows="4" name="m_nroconvenio"
+                              placeholder="NUMERO DE CONVENIO" [(ngModel)]="m_nroconvenio"
+                              onKeyDown="A(event,this.form.m_departamento)" required>
+                      </div>
+                  </div>
+                  <div class="form-group " class="col-lg-4 col-md-4 col-sm-4">
+                      <div>
+                          <label for="Gestion">Fecha Suscripción:</label>
+                      </div>
+                      <div>
+                          <input class="form-control" id="m_fechaconvenio" maxlength="200" rows="4"
+                              name="m_fechaconvenio" placeholder="dd/mm/YYYY" [(ngModel)]="m_fechaconvenio"
+                              onKeyDown="A(event,this.form.m_departamento)" required>
+                      </div>
+                  </div>
+                  <div class="form-group " class="col-lg-4 col-md-4 col-sm-4">
+                      <div>
+                          <label for="Gestion">Plazo de Ejecución:</label>
+                      </div>
+                      <div>
+                          <input class="form-control" type="number" id="m_plazoconvenio" maxlength="200" rows="4"
+                              name="m_plazoconvenio" placeholder="DIAS CALENDARIO" [(ngModel)]="m_plazoconvenio"
+                              onKeyDown="A(event,this.form.m_departamento)" required>
+                      </div>
+                  </div>
+                  <div class="form-group " class="col-lg-4 col-md-4 col-sm-4 ">
+                      <div>
+                          <label for="Gestion">Monto financiado UPRE:</label>
+                      </div>
+                      <div>
+                          <input class="form-control" id="m_montofinanciadoupre" maxlength="200" rows="4"
+                              name="m_montofinanciadoupre" [(ngModel)]="m_montofinanciadoupre"
+                              onKeyDown="A(event,this.form.m_departamento)" required>
+                      </div>
+                  </div>
+                  <div class="row"></div>
+                  <div class="form-group row " class="col-lg-3 col-md-3 col-sm-3">
+                      <div>
+                          <label for="Gestion">Monto Contraparte Beneficiario:</label>
+                      </div>
+                      <div>
+                          <input class="form-control" id="m_montocontrapartebeneficiario" maxlength="200" rows="4"
+                              name="m_montocontrapartebeneficiario" [(ngModel)]="m_montocontrapartebeneficiario"
+                              onKeyDown="A(event,this.form.m_departamento)" required>
+                      </div>
+                  </div>
+                  <div class="form-group row " class="col-lg-3 col-md-3 col-sm-3">
+                      <div>
+                          <label for="Gestion">Monto Contraparte Gobernación:</label>
+                      </div>
+                      <div>
+                          <input class="form-control" id="m_montocontrapartegobernacion" maxlength="200" rows="4"
+                              name="m_montocontrapartegobernacion" [(ngModel)]="m_montocontrapartegobernacion"
+                              onKeyDown="A(event,this.form.m_departamento)" required>
+                      </div>
+                  </div>
+                  <div class="form-group row " class="col-lg-3 col-md-3 col-sm-3">
+                      <div>
+                          <label for="Gestion">Monto Contraparte Municipio:</label>
+                      </div>
+                      <div>
+                          <input class="form-control" id="m_montocontrapartemunicipio" maxlength="200" rows="4"
+                              name="m_montocontrapartemunicipio" [(ngModel)]="m_montocontrapartemunicipio"
+                              onKeyDown="A(event,this.form.m_departamento)" required>
+                      </div>
+                  </div>
+                  <div class="form-group " class="col-lg-3 col-md-3 col-sm-3">
+                      <div>
+                          <label for="Gestion">Monto total de convenio:</label>
+                      </div>
+                      <div>
+                          <input class="form-control" id="m_montototalconvenio" maxlength="200" rows="4"
+                              name="m_montototalconvenio" [(ngModel)]="m_montototalconvenio"
+                              onKeyDown="A(event,this.form.m_departamento)" required>
+                      </div>
+                  </div>
+                  <div class="row"></div>
+                  <div class="panel-footer">
+                      <button type="button" class="btn btn-success btn-block" value="REGISTRAR" name="btnRegistrar"
+                          id="btnRegistrar" title="Guardar Seguimiento"
+                          (click)="inserta_seguimiento_sgp()">Registrar</button>
+                      <button type="button" class="btn btn-success btn-block" value="ACTUALIZAR" name="btnActualizar"
+                          id="btnActualizar" (click)="actualiza_seguimiento()"
+                          title="Guardar Seguimiento">Actualizar</button>
+                  </div>
+
+
+              </div>
+          </div>
+
+      </form>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="modal fade" name="modalUbicacion" id="modalUbicacion" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <h5 class="modal-title" id="exampleModalLabel">Registrar ubicación para "{{proyecto.nombre_proyecto_compromiso}}"</h5>
+      </div>
+      <div class="modal-body" style="overflow:hidden;">
+        <div style="text-align: left;">
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-6 col-md-6">
+              <label for="oficina">Oficina:</label>
+              <div class="input-group">
+                <span class="input-group-addon" (click)="nuevoElemento('oficina')" style="cursor: pointer;"><i class="glyphicon glyphicon-home"></i></span>
+                <select class="form-control" id="oficina" [(ngModel)]="ubicacion.oficina" (ngModelChange)="cambiando($event)" aria-placeholder="seleccione...">
+                  <option *ngFor="let row of dts_oficinas" [ngValue]="row.oficina">
+                    {{row.oficina}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-6 col-md-6">
+              <label for="estante">Estante:</label>
+              <div class="input-group">
+                <span class="input-group-addon" (click)="nuevoElemento('estante')" style="cursor: pointer;"><i class="glyphicon glyphicon-align-justify"></i></span>
+                <select class="form-control" id="estante" [(ngModel)]="ubicacion.estante" (ngModelChange)="cambiando($event)" aria-placeholder="seleccione...">
+                  <option *ngFor="let row of dts_estantes" [ngValue]="row.estante">
+                    {{row.estante}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-6 col-md-6">
+              <label for="tipo">Contenedor:</label>
+              <div class="input-group">
+                <span class="input-group-addon" (click)="nuevoElemento('tipo')" style="cursor: pointer;"><i class="glyphicon glyphicon-inbox"></i></span>
+                <select class="form-control" id="tipo" [(ngModel)]="ubicacion.tipo" (ngModelChange)="cambiando($event)" aria-placeholder="seleccione...">
+                  <option *ngFor="let row of dts_tipos" [ngValue]="row.tipo">
+                    {{row.tipo}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-6 col-md-6">
+              <label for="codigo">Código:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span>
+                <input class="form-control" type="text" [(ngModel)]="ubicacion.codigo" name="codigo" placeholder="Código"  maxlength="50">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-12 col-md-12">
+              <label for="observacion">Observación:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                <textarea class="form-control" [(ngModel)]="ubicacion.observacion" type="text" name="observacion" placeholder="Observación"  rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>  
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelar()" >Cancelar</button>
+        <button class="btn btn-success" type="button" (click)="registrarUbicacion()">
+          <div *ngIf="!editando"><span class="glyphicon glyphicon-floppy-disk"></span> Registrar Ubicación</div>
+          <div *ngIf="editando"><span class="glyphicon glyphicon-ok"></span> Actualizar Ubicación</div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

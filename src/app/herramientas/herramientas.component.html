@@ -1,0 +1,528 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+
+<div style="margin: 2rem;">
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <span class="fa fa-envelope"></span> Gestión Configuraciones Correos
+      <button class="btn btn-success pull-right" style="padding: 2px 10px; margin-top: -2px;" (click)="abrirFormCorreo()" >
+        <span class="fa fa-plus-circle"></span> Nueva Configuración
+      </button>
+    </div>
+    <div class="panel-body" style="text-align: left;">
+      <div class="table table-responsive">
+        <table class="table table-responsive table-condensed table-hover table-striped dt-correos" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="width: 140px;">Opciones</th>
+              <th>ID</th>
+              <th>Tipo</th>
+              <th>Host/Puerto</th>
+              <th>Usuario / PWD</th>
+              <th>Cuenta Origen</th>
+              <th>Asunto</th>
+              <th style="width: 200px;">Destinatarios</th>
+              <th>Contenido</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsConfigCorreos; let i = index">
+              <td class="botonera">
+                <button class="btn btn-warning" title="Editar" (click)="abrirFormCorreo(row)">
+                  <span class="fa fa-pencil"></span>
+                </button>
+                <button class="btn btn-danger" title="Eliminar" (click)="registrarCorreo(row.id_config_correo)">
+                  <span class="fa fa-trash"></span>
+                </button>
+                <button class="btn btn-info" title="Verificar Estado" (click)="verificarCorreos(row)">
+                  <span class="fa fa-signal"></span>
+                </button>
+              </td>
+              <td>{{ row.id_config_correo}} </td>
+              <td>{{ row.tipo}}</td>
+              <td style="display: block;"><div style="color: #337ab7;"> {{ row.servidor}}</div> <div>{{ row.puerto}}</div></td>
+              <td style="display: block;"><div style="color: #337ab7;"> {{ row.usuario}}</div> <div>{{ row.clave}}</div></td>
+              <td>{{ row.cuenta_origen}}</td>
+              <td>{{ row.asunto}}</td>
+              <td style="width: 200px;">{{ row.para}}</td>
+              <td>{{ row.mensaje}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <span class="fa fa-whatsapp"></span> Gestión Configuraciones Mensajes
+      <button class="btn btn-success pull-right" style="padding: 2px 10px; margin-top: -2px;" (click)="abrirFormMensaje()" >
+        <span class="fa fa-plus-circle"></span> Nueva Configuración
+      </button>
+    </div>
+    <div class="panel-body" style="text-align: left;">
+      <div class="table table-responsive">
+        <table class="table table-responsive table-condensed table-hover table-striped dt-mensajes" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="width: 160px;">Opciones</th>
+              <th style="width: 40px;">ID</th>
+              <th style="width: 140px;">Tipo</th>
+              <th style="width: 100px;">ID Cuenta/Token</th>
+              <th style="width: 140px;">Origen / Para</th>
+              <th style="width: 400px;">Mensaje</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsConfigMensaje; let i = index">
+              <td class="botonera">
+                <button class="btn btn-warning" title="Editar" (click)="abrirFormMensaje(row)">
+                  <span class="fa fa-pencil"></span>
+                </button>
+                <button class="btn btn-danger" title="Eliminar" (click)="registrarMensaje(row.id_config_mensaje)">
+                  <span class="fa fa-trash"></span>
+                </button>
+                <button class="btn btn-info" title="Verificar Estado" (click)="verificarServicioMensaje(row.para)">
+                  <span class="fa fa-signal"></span>
+                </button>
+                <button class="btn btn-danger" title="Detener Servicio" (click)="detenerServicio(row.para)">
+                  <span class="fa fa-ban"></span>
+                </button>
+              </td>
+              <td>{{ row.id_config_mensaje}} </td>
+              <td style="width: 140px;">{{ row.tipo}}</td>
+              <td style="display: block; width: 100px;"><div style="color: #337ab7;"> {{ row.id_cuenta}}</div> <div>{{ row.token_cuenta}}</div></td>
+              <td style="display: block; width: 140px;"><div style="color: #337ab7;"> {{ row.origen}}</div> <div>{{ row.para}}</div></td>
+              <td>{{ row.mensaje}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <span class="fa fa-whatsapp"></span> Gestión Configuraciones Interoperabilidad
+      <button class="btn btn-success pull-right" style="padding: 2px 10px; margin-top: -2px;" (click)="abrirFormInterop()" >
+        <span class="fa fa-plus-circle"></span> Nueva Configuración
+      </button>
+    </div>
+    <div class="panel-body" style="text-align: left;">
+      <div class="table table-responsive">
+        <table class="table table-responsive table-condensed table-hover table-striped dt-interops" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="width: 140px;">Opciones</th>
+              <th style="width: 40px;">ID</th>
+              <th>Institución</th>
+              <th>Nombre</th>
+              <th>Principal</th>
+              <th>Ruta</th>
+              <th>Token</th>
+              <th>Método</th>
+              <th>Puerto</th>
+              <th>Body</th>
+              <th>Observación</th>
+              <th style="width: 400px;">Respuesta</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsConfigInterop; let i = index">
+              <td class="botonera">
+                <button class="btn btn-warning" title="Editar" (click)="abrirFormInterop(row)">
+                  <span class="fa fa-pencil"></span>
+                </button>
+                <button class="btn btn-danger" title="Eliminar" (click)="registrarInterop(row.id_config_mensaje)">
+                  <span class="fa fa-trash"></span>
+                </button>
+                <button class="btn btn-info" title="Verificar Estado" (click)="verificarInteropBack(row)">
+                  <span class="fa fa-signal"></span>
+                </button>
+              </td>
+              <td>{{ row.id_config_interop}} </td>
+              <td>{{ row.institucion}}</td>
+              <td>{{ row.nombre}}</td>
+              <td>{{ row.principal}}</td>
+              <td>{{ row.ruta}}</td>
+              <td>{{ row.llave_token}}</td>
+              <td>{{ row.metodo}}</td>
+              <td>{{ row.puerto}}</td>
+              <td>{{ row.cuerpo}}</td>
+              <td>{{ row.observacion}}</td>
+              <td>{{ row.respuesta}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal correo -->
+<div class="modal fade" tabindex="-1"  name="modalCorreo" id="modalCorreo" role="dialog" aria-labelledby="exampleModalCorreo" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!correoEditar">Crear Configuración</div><div *ngIf="correoEditar">Actualizar Configuracion</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formCorreo" (ngSubmit)="registrarCorreo()">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="tipo">Nombre Configuración:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-wrench"></i></span>
+                  <input class="form-control" type="text" name="tipo" placeholder="Nombre Configuración" formControlName="tipo" maxlength="100" required autofocus>
+                  <span style="color:tomato;" *ngIf="formCorreo.controls['tipo'].touched && formCorreo.controls['tipo'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="servidor">Host:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-server"></i></span>
+                  <input class="form-control" type="text" name="servidor" placeholder="smtp.gmail.com" formControlName="servidor" maxlength="100" required >
+                  <span style="color:tomato;" *ngIf="formCorreo.controls['servidor'].touched && formCorreo.controls['servidor'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="descripcion">Puerto:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-unlock-alt"></i></span>
+                  <input class="form-control" type="number" name="puerto" formControlName="puerto" min="100" max="9999" value="465" required >
+                  <span style="color:tomato;" *ngIf="formCorreo.controls['puerto'].touched && formCorreo.controls['puerto'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="usuario">Credenciales/Usuario:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                  <input class="form-control" type="text" name="usuario" placeholder="upre2022@gmail.com" formControlName="usuario" maxlength="100" required >
+                  <span style="color:tomato;" *ngIf="formCorreo.controls['usuario'].touched && formCorreo.controls['usuario'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="clave">Credenciales/Password:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-ticket"></i></span>
+                  <input class="form-control" type="text" name="clave" placeholder="password" formControlName="clave" maxlength="100" required >
+                  <span style="color:tomato;" *ngIf="formCorreo.controls['clave'].touched && formCorreo.controls['clave'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="cuentaOrigen">Usuario Origen:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                  <input class="form-control" type="text" name="cuentaOrigen" placeholder="upre2022@gmail.com" formControlName="cuentaOrigen" maxlength="100" required >
+                  <span style="color:tomato;" *ngIf="formCorreo.controls['cuentaOrigen'].touched && formCorreo.controls['cuentaOrigen'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="asunto">Asunto:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-arrow-right"></i></span>
+                  <input class="form-control" type="text" name="asunto" placeholder="asunto del correo" formControlName="asunto" maxlength="500" >
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="para">Destinatarios:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                  <input class="form-control" type="text" name="para" placeholder="prueba1@upre.gob.bo,prueba2@upre.gob.bo" formControlName="para" maxlength="200">
+                  <span style="color:tomato;" *ngIf="formCorreo.controls['para'].touched && formCorreo.controls['para'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="mensaje">Mensaje:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-code"></i></span>
+                  <textarea class="form-control" id="mensaje" name="mensaje" placeholder="<h1>El Titulo</h1><p>Contenido del mensaje</p>" formControlName="mensaje" cols="30" rows="5" required></textarea>
+                  <span style="color:tomato;" *ngIf="formCorreo.controls['mensaje'].touched && formCorreo.controls['mensaje'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div> -->
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formCorreo.invalid || formCorreo.pristine">
+                  <div *ngIf="!correoEditar"><span class="fa fa-floppy-o"></span> Registrar Configuración</div>
+                  <div *ngIf="correoEditar"><span class="fa fa-check"></span> Actualizar Configuración</div>
+                </button>
+              </div>
+            </div>
+          </form>
+          <div class="row" style="margin-top: 1.4rem;">
+            <div class="form-group col-sm-12 col-lg-12 col-md-12" style="border: 1px solid #2c7fdf;" >
+              <ckeditor [editor]="Editor" [(ngModel)]="model.editorData" data="{{model.editorData}}" (change)="onChangePlantillaCorreo()" (ready)="onReady($event)"></ckeditor>
+            </div>
+          </div>
+          <!-- <div class="row">
+            <div class="form-group col-sm-12 col-lg-12 col-md-12">
+              <label for="resultado">Resultado:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-code"></i></span>
+                <textarea class="form-control" [(ngModel)]="model.editorData" name="resultado" id="resultado" cols="30" rows="5"></textarea>
+              </div>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal mensaje -->
+<div class="modal fade" tabindex="-1"  name="modalMensaje" id="modalMensaje" role="dialog" aria-labelledby="exampleModalMensaje" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!mensajeEditar">Crear Configuración</div><div *ngIf="mensajeEditar">Actualizar Configuracion</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formMensaje" (ngSubmit)="registrarMensaje()">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="tipo">Nombre Configuración:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-wrench"></i></span>
+                  <input class="form-control" type="text" name="tipo" placeholder="Nombre Configuración" formControlName="tipo" maxlength="100" required autofocus>
+                  <span style="color:tomato;" *ngIf="formMensaje.controls['tipo'].touched && formMensaje.controls['tipo'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="idCuenta">ID Cuenata:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-server"></i></span>
+                  <input class="form-control" type="text" name="idCuenta" placeholder="ID Cuenta" formControlName="idCuenta" maxlength="100" required >
+                  <span style="color:tomato;" *ngIf="formMensaje.controls['idCuenta'].touched && formMensaje.controls['idCuenta'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="tokenCuenta">Token Cuenta:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-unlock-alt"></i></span>
+                  <input class="form-control" type="text" name="tokenCuenta" placeholder="Token Cuenta" formControlName="tokenCuenta" maxlength="100" required >
+                  <span style="color:tomato;" *ngIf="formMensaje.controls['tokenCuenta'].touched && formMensaje.controls['tokenCuenta'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="origen">Origen:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                  <input class="form-control" type="text" name="origen" placeholder="número origen" formControlName="origen" maxlength="100" required >
+                  <span style="color:tomato;" *ngIf="formMensaje.controls['origen'].touched && formMensaje.controls['origen'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="para">Destinatarios:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                  <input class="form-control" type="text" name="para" placeholder="69712345,72554789" formControlName="para" maxlength="200">
+                  <span style="color:tomato;" *ngIf="formMensaje.controls['para'].touched && formMensaje.controls['para'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="mensaje">Mensaje:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                  <textarea class="form-control" name="mensaje" placeholder="Texto del mensaje" formControlName="mensaje" rows="4" cols="30" maxlength="1000"></textarea>
+                  <span style="color:tomato;" *ngIf="formMensaje.controls['mensaje'].touched && formMensaje.controls['mensaje'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formMensaje.invalid || formMensaje.pristine">
+                  <div *ngIf="!mensajeEditar"><span class="fa fa-floppy-o"></span> Registrar Configuración</div>
+                  <div *ngIf="mensajeEditar"><span class="fa fa-check"></span> Actualizar Configuración</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal interop -->
+<div class="modal fade" tabindex="-1"  name="modalInterop" id="modalInterop" role="dialog" aria-labelledby="exampleModalCorreo" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!interopEditar">Crear Configuración</div><div *ngIf="interopEditar">Actualizar Configuracion</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formInterop" (ngSubmit)="registrarInterop()">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6">
+                <label for="institucion">Institución:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-wrench"></i></span>
+                  <input class="form-control" type="text" name="institucion" placeholder="Nombre Institucion" formControlName="institucion" maxlength="200" required autofocus>
+                  <span style="color:tomato;" *ngIf="formInterop.controls['institucion'].touched && formInterop.controls['institucion'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6">
+                <label for="nombre">Nombre Servicio:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-wrench"></i></span>
+                  <input class="form-control" type="text" name="nombre" placeholder="Nombre Servicio (Alias)" formControlName="nombre" maxlength="200" required autofocus>
+                  <span style="color:tomato;" *ngIf="formInterop.controls['nombre'].touched && formInterop.controls['nombre'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6">
+                <label for="principal">Host (dominio):</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-server"></i></span>
+                  <input class="form-control" type="text" name="principal" placeholder="https://ws.agetic.gob.bo/" formControlName="principal" maxlength="100" required >
+                  <span style="color:tomato;" *ngIf="formInterop.controls['principal'].touched && formInterop.controls['principal'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6">
+                <label for="ruta">Ruta Específica:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-unlock-location-arrow"></i></span>
+                  <input class="form-control" type="text" name="ruta" formControlName="ruta" min="100" maxlength="100" required >
+                  <span style="color:tomato;" *ngIf="formInterop.controls['ruta'].touched && formInterop.controls['ruta'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6">
+                <label for="llave_token">Token (llave):</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                  <textarea class="form-control" placeholder="Bearer xR344512..." name="llave_token" formControlName="llave_token" maxlength="500" id="" cols="30" rows="4" required></textarea>
+                  <span style="color:tomato;" *ngIf="formInterop.controls['llave_token'].touched && formInterop.controls['llave_token'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6">
+                <label for="observacion">Observaciones:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-comment"></i></span>
+                  <textarea class="form-control" placeholder="Las observaciones" name="observacion" formControlName="observacion" maxlength="500" id="" cols="30" rows="4"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-3">
+                <label for="metodo">Método:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-shield"></i></span>
+                  <input class="form-control" type="text" name="metodo" formControlName="metodo" min="3" maxlength="20" required >
+                  <span style="color:tomato;" *ngIf="formInterop.controls['metodo'].touched && formInterop.controls['metodo'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-3">
+                <label for="puerto">Puerto:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-unlock"></i></span>
+                  <input class="form-control" type="puerto" name="puerto" formControlName="puerto" min="2" maxlength="5" required >
+                  <span style="color:tomato;" *ngIf="formInterop.controls['puerto'].touched && formInterop.controls['puerto'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6">
+                <label for="cuerpo">Body:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-code"></i></span>
+                  <textarea class="form-control" placeholder="{}" name="cuerpo" formControlName="cuerpo" maxlength="2000" cols="30" rows="4"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12">
+                <label for="respuesta">Ultima Respuesta:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                  <textarea class="form-control" name="respuesta" formControlName="respuesta" maxlength="3000" id="" cols="30" rows="4"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formInterop.invalid || formInterop.pristine">
+                  <div *ngIf="!interopEditar"><span class="fa fa-floppy-o"></span> Registrar Configuración</div>
+                  <div *ngIf="interopEditar"><span class="fa fa-check"></span> Actualizar Configuración</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

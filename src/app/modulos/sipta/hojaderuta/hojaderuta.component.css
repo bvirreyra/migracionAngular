@@ -1,0 +1,43 @@
+.dt-resultadoreferencia tfoot input {
+    width: 100% !important;
+}
+
+.dt-resultadoreferencia tfoot {
+    display: table-header-group !important;
+}
+
+
+.loading {
+    background-color: rgba(0, 0, 0, .4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: 1s all;
+    opacity: 8;
+}
+.loading.show {
+    opacity: 1;
+}
+.loading .spin {
+    border: 13px solid #ffffff;
+    border-top: 13px solid #5797c2;
+    border-bottom: 13px solid #1d4864;
+    border-radius: 60%;
+    width: 4em;
+    height: 4em;
+    animation: spin 1s linear infinite;
+}
+.pull-right button{
+margin-right: 1rem;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+} 

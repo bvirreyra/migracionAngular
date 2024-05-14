@@ -1,0 +1,6 @@
+.dt-UsuarioExterno tfoot input{
+    width: 100% !important;
+}
+.dt-UsuarioExterno tfoot {
+    display: table-header-group !important;
+}

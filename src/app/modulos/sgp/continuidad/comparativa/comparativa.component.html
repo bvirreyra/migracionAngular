@@ -1,0 +1,100 @@
+<div *ngIf="!pnl_cabecera">
+
+  <div style="text-align:right;">
+    <label class="titulo">{{data? data.length != dts_inicial.length 
+      ? data.length + ' registros filtrados de un total de ' + dts_inicial.length + ' registros'
+      :dts_inicial.length + ' registros en total':''}}</label>
+  </div>
+  <table
+      id="example"
+      class="table table-responsive table-condensed table-hover dt-proyectos"
+      style="font-size: 10pt; width: 100%"
+    >
+      <thead>
+        <tr>
+          <!-- <th data-priority="1">Nro.</th> -->
+          <th data-priority="1">Nombre Proyecto</th>
+          <th data-priority="2">Departamento</th>
+          <th>Municipio</th>
+          <th>Área</th>
+          <th>Monto (Bs.)</th>
+        </tr>
+      </thead>
+      <tfoot style="text-align: left;">
+        <tr>
+          <!-- <td></td> -->
+          <td>
+            <input type="text" #filtroProyecto (keyup)="filtrar('nombre_proyecto_sgp',filtroProyecto.value)" max="20">
+          </td>
+          <td>
+            <select  [(ngModel)]="dep" (ngModelChange)="filtrar('departamento',dep)" style="width: 100px;">
+              <option *ngFor="let row of dts_departamentos" [ngValue]="row.departamento">
+                {{ row.departamento }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <select  [(ngModel)]="mun" (ngModelChange)="filtrar('municipio',mun)" style="width: 100px;">
+              <option *ngFor="let row of dts_municipios" [ngValue]="row.municipio">
+                {{ row.municipio }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <select  [(ngModel)]="area" (ngModelChange)="filtrar('area',area)" style="width: 100px;">
+              <option *ngFor="let row of dts_areas" [ngValue]="row.area">
+                {{ row.area }}
+              </option>
+            </select>
+          </td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody style="text-align: left;">
+        <tr
+          *ngFor="let row_registros of data | slice:pagina*itemsPagina: pagina*itemsPagina+itemsPagina; let i = index"
+          [ngClass]="{ 'bg-info': row_registros.entrega_protocolar == 'SI' }"
+        >
+          <!-- <td>{{ i + 1 }}</td> -->
+          <td style="text-align: left;">
+            <button type="button" class="btn btn-success btn-sm">
+              <i
+                class="fa fa-eye fa-lg"
+                aria-hidden="true"
+                title="Datos Generales del Proyecto"
+                (click)="detalleProyecto(row_registros)"
+              ></i>
+            </button>
+            {{ row_registros.nombre_proyecto_sgp }}
+          </td>
+          <td>{{ row_registros.departamento }}</td>
+          <td>{{ row_registros.municipio }}</td>
+          <td>{{ row_registros.area }}</td>
+          <td style="width: 200px;">
+            <div class="progress" style="background-color: rgb(97, 97, 97);color: white;text-align: left;">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                style="font-weight: bold;background-color: rgb(21, 158, 163);" 
+                aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" [style.width.%]="row_registros.monto_upre*100/maxMonto">
+                {{ row_registros.monto_upre | number: "0.2-2" | formatoDecimal }}
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <nav >
+      <ul class="pagination pull-right">
+        <li class="page-item" style="margin-right: 2rem;"><label class="titulo">{{'mostrando registros del ' + (pagina*itemsPagina+1)+ ' al '
+          + ((pagina*itemsPagina+itemsPagina)> data.length ? data.length :(pagina*itemsPagina+itemsPagina))   + ' de un total de '+ data.length}}</label></li>
+        <li class="page-item"><button class="btn btn-info page-link" id="anterior" (click)="paginar(-1)">Anterior</button></li>
+        <li class="page-item"><button class="btn btn-info page-link" id="siguiente" (click)="paginar(1)">Siguiente</button></li>
+      </ul>
+    </nav>
+</div>
+
+  <div *ngIf="pnl_cabecera">
+    <app-detalle-continuidad
+      [inputDts]="registroFila"
+      (mensajeHijo)="recibeMensaje($event)"
+    ></app-detalle-continuidad>
+  </div>

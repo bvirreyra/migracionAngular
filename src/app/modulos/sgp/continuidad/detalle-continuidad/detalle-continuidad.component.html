@@ -1,0 +1,212 @@
+<div class="row">
+  <div class="panel-heading clearfix">
+    <div class="text-left">
+      <button type="button" class="btn btn-primary pull-left" title="Volver anterior" (click)="emitirMensaje()">
+        <i class="fa fa-reply fa-2x"> </i>
+      </button>
+    </div>
+  </div>
+</div>
+<div id="pnl_seguimiento" name="pnl_seguimiento" class="card card-body">
+  <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+    <div class="content-header with-border">
+      <h3 class="content-title text-green">
+        <strong>PROYECTO {{ inputDts.nombre_proyecto_sgp }}</strong>
+      </h3>
+    </div>
+    <div class="content-body">
+      <div style="font-size: 18pt">
+        <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+        <div class="col-lg-offset-1 col-lg-10">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">DETALLE DE PROYECTO</div>
+            <div class="panel-body">
+              <div>
+                <div class="form-horizontal">
+                  <div class="form-group" *ngIf="inputDts.observacion">
+                    <div>
+                      <label class="control-label col-sm-4 text-left" for="informe"
+                        *ngIf="inputDts.observacion">Observación:
+                      </label>
+                      <div class="col-sm-8" *ngIf="inputDts.observacion">
+                        <textarea class="form form-control" style="font-size: 18pt" rows="5" readonly
+                          style="resize: none" [(ngModel)]="inputDts.observacion"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="inputDts.entregado_por">
+                    <div>
+                      <label class="control-label col-sm-4 text-left" for="informe"
+                        *ngIf="inputDts.entregado_por">Entregado por:
+                      </label>
+                      <div class="col-sm-8">
+                        <input *ngIf="inputDts.entregado_por" class="form form-control" style="font-size: 18pt" readonly
+                          style="resize: none" [(ngModel)]="inputDts.entregado_por" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div>
+                      <label class="control-label col-sm-1 text-left" for="informe">Gestión:
+                      </label>
+                      <div class="col-sm-3">
+                        <input class="form form-control" style="font-size: 18pt" maxlength="4" readonly
+                          [(ngModel)]="inputDts.gestion" />
+                      </div>
+                    </div>
+                    <div>
+                      <label class="control-label col-sm-1 text-left" for="informe">Sector:
+                      </label>
+                      <div class="col-sm-3">
+                        <input class="form form-control" style="font-size: 18pt" maxlength="2000" readonly
+                          [(ngModel)]="inputDts.sector" />
+                      </div>
+                    </div>
+                    <div>
+                      <label class="control-label col-sm-1 text-left" for="informe">Área:
+                      </label>
+                      <div class="col-sm-3">
+                        <input class="form form-control" style="font-size: 18pt" maxlength="2000" readonly
+                          [(ngModel)]="inputDts.area" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div>
+                      <label class="control-label col-sm-1 text-left" for="informe">Departamento
+                      </label>
+                      <div class="col-sm-3">
+                        <input class="form form-control" style="font-size: 18pt" maxlength="2000" readonly
+                          [(ngModel)]="inputDts.departamento" />
+                      </div>
+                    </div>
+                    <div>
+                      <label class="control-label col-sm-1 text-left" for="informe">Municipio:
+                      </label>
+                      <div class="col-sm-3">
+                        <input class="form form-control" style="font-size: 18pt" maxlength="5000"
+                          [(ngModel)]="inputDts.municipio" readonly />
+                      </div>
+                    </div>
+                    <div>
+                      <label class="control-label col-sm-1 text-left" for="informe">Fecha Inicio:
+                      </label>
+                      <div class="col-sm-3">
+                        <input type="date" class="form form-control" style="font-size: 18pt" maxlength="5000"
+                          [(ngModel)]="inputDts.fecha_inicio" readonly />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div>
+                      <label class="control-label col-sm-1 text-left" for="telefonos">Fecha Fin:
+                      </label>
+                      <div class="col-sm-3">
+                        <input type="date" class="form form-control" style="font-size: 18pt" maxlength="2000" readonly
+                          [(ngModel)]="inputDts.fecha_fin" readonly />
+                      </div>
+                    </div>
+                    <div>
+                      <label class="control-label col-sm-1 text-left" for="telefonos">Avance Físico (%):
+                      </label>
+                      <div class="col-sm-3">
+                        <input class="form form-control" style="font-size: 18pt" maxlength="2000"
+                          [(ngModel)]="inputDts.avance_fisico" readonly />
+                      </div>
+                    </div>
+                    <div>
+                      <label class="control-label col-sm-1 text-left" for="telefonos">Monto UPRE:
+                      </label>
+                      <div class="col-sm-3">
+                        <input class="form form-control" style="font-size: 18pt" maxlength="2000"
+                          [ngModel]="m_monto_upre | number : '1.2-2' | formatoDecimal" readonly />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div>
+                      <label class="control-label col-sm-1 text-left" for="telefonos">Total acumulado:
+                      </label>
+                      <div class="col-sm-3">
+                        <input class="form form-control" style="font-size: 18pt" maxlength="2000"
+                          [ngModel]="m_total_acumulado | number : '1.2-2' | formatoDecimal" readonly />                   
+                      </div>
+                    </div>
+                    <div>
+                      <label class="control-label col-sm-1 text-left" for="telefonos">Monto Saldo
+                      </label>
+                      <div class="col-sm-3">
+                        <input class="form form-control" style="font-size: 18pt" maxlength="2000"
+                          [ngModel]="m_saldo_real | number : '1.2-2' | formatoDecimal" readonly />
+                      </div>
+                    </div>
+                    <div>
+                      <label class="control-label col-sm-1 text-left" for="telefonos">Avance Financiero (%)
+                      </label>
+                      <div class="col-sm-3">
+                        <input class="form form-control" style="font-size: 18pt" maxlength="2000"
+                          [(ngModel)]="inputDts.avance_financiero" readonly />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div>
+                      <label class="control-label col-sm-1 text-left" for="telefonos">Estado Fin. Act.
+                      </label>
+                      <div class="col-sm-7">
+                        <input class="form form-control" style="font-size: 18pt" maxlength="2000"
+                          [(ngModel)]="inputDts.estado_financiero_actual" readonly />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="center-block" *ngIf="pnl_georeferenciacion==true">
+                    <div class="col col-xs-12 col-sm-6 col-md-6 col-lg-6 col-lg-offset-2 ">
+                      <div class="form-group">
+                        <div class="
+                        panel-heading
+                        text-center
+                        col-sm-12
+                        bg-secondary
+                        text-white
+                      ">
+                          UBICACIÓN GEOGRÁFICA
+                        </div>                        
+                      </div>
+                      <div >
+                        <div class="map" id="map" name="map"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row"></div>
+                  <div class="form-group" *ngIf="dts_listaimagenes.length > 0">
+                    <div *ngIf="dts_listaimagenes.length > 0" class="
+                        panel-heading
+                        text-center
+                        col-sm-12
+                        bg-secondary
+                        text-white
+                      ">
+                      GALERIA DE IMÁGENES
+                    </div>
+                    <div *ngFor="let registro of dts_listaimagenes" class="col-sm-3">
+                      <img class="img-responsive" [src]="registro.archivo | imagen: inputDts.fid_sgp" alt="Foto" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="panel-heading clearfix">
+    <div class="text-left">
+      <button type="button" class="btn btn-primary pull-left" title="Volver anterior" (click)="emitirMensaje()">
+        <i class="fa fa-reply fa-2x"> </i>
+      </button>
+    </div>
+  </div>
+</div>

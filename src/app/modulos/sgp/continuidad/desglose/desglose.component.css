@@ -1,0 +1,33 @@
+.dt-regionales tfoot input {
+  width: 100% !important;
+}
+.dt-regionales tfoot {
+  display: table-header-group !important;
+}
+
+.dt-sectores tfoot input {
+  width: 100% !important;
+}
+.dt-sectores tfoot {
+  display: table-header-group !important;
+}
+
+.containerCris{
+  width: 80%;
+  text-align: center;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (max-width: 600px) {
+  .containerCris {
+    width: 95%;
+    text-align: center;
+    padding-right: 2px;
+    padding-left: 2px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+}

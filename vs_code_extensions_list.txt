@@ -1,0 +1,5 @@
+aravindfz.angular-2-snippets
+donjayamanne.githistory
+esbenp.prettier-vscode
+MS-CEINTL.vscode-language-pack-es
+wix.vscode-import-cost

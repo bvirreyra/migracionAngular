@@ -1,0 +1,115 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="row">
+  <div class="content-body" *ngIf="dts_EquipoTecnico">
+    <div class="row">
+      <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+      <div>
+        <div class="panel panel-primary">
+          <div class="panel-heading text-center">
+            EQUIPO TECNICO SEGUIMIENTO
+          </div>
+          <div class="panel-body">
+            <table class="table table-condensed table-hover table-responsive">
+              <thead>
+                <tr>
+                  <th>Nro.</th>
+                  <th>Cargo</th>
+                  <th>Nombres</th>
+                  <th>Apellido Paterno</th>
+                  <th>Apellido Materno</th>
+                  <th>Tel</th>
+                  <th>Correo</th>
+                  <th>Estado</th>
+                  <!-- <th>Resetear...</th>
+                  <th>Reponer Pass...</th> -->
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <!-- <td></td>
+                  <td></td> -->
+                </tr>
+              </tfoot>
+              <tbody>
+                <tr
+                  *ngFor="let row_reg of dts_EquipoTecnico; let i = index"
+                >
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ row_reg._cargo }}</td>
+                  <td>{{ row_reg._nombres }}</td>
+                  <td>{{ row_reg._primerapellido }}</td>
+                  <td>{{ row_reg._segundoapellido }}</td>
+                  <td>{{ row_reg._telefono }}</td>
+                  <td>{{ row_reg._correo }}</td>
+                  <td>{{ row_reg._estado }}</td>
+                  
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-body" *ngIf="dts_listacontactos">
+    <div class="row">
+      <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+      <div>
+        <div class="panel panel-primary">
+          <div class="panel-heading text-center">EQUIPO TECNICO SGP</div>
+          <div class="panel-body">
+            <table class="table table-condensed table-hover dt-listacontactos">
+              <thead>
+                <tr>
+                  <th>Nro.</th>
+                  <th>Tipo Contacto</th>
+                  <th>Detalle</th>
+                  <th>Correo</th>
+                  <th>telefonos</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tfoot>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let row_registros of dts_listacontactos;
+                    let i = index
+                  "
+                  [ngClass]="{ 'bg-danger': row_registros.id_estado == 0 }"
+                >
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    {{ row_registros.tipo_contacto | uppercase }}
+                  </td>
+                  <td>{{ row_registros.descripcion | uppercase }}</td>
+                  <td>{{ row_registros.email | lowercase }}</td>
+                  <td style="text-align: justify">
+                    {{ row_registros.telefonos }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

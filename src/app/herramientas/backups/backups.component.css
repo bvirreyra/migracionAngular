@@ -1,0 +1,41 @@
+.dt-backups tfoot input{
+    width: 100% !important;
+  }
+  .dt-backups tfoot {
+    display: table-header-group !important;
+  }
+   .dt-backups tfoot input{
+    width: 100% !important;
+  }
+  .dt-backups tfoot {
+    display: table-header-group !important;
+  }
+   .dt-backups tfoot input{
+    width: 100% !important;
+  }
+  .dt-backups tfoot {
+    display: table-header-group !important;
+  }
+    input[type="text"],textarea {
+    text-transform: none !important;
+  }
+    .botonera{
+   min-width:180px !important;
+    /* display: flex; */
+    /* justify-content: space-between; */
+    /* margin: 0 1rem; */
+  }
+  .botonera button{
+    margin: 0 0.5rem;
+  }
+  .glyphicon {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: "Glyphicons Halflings";
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,189 @@
+<div id="pnl_listaderecho" name="pnl_listaderecho" class="card card-body">
+  <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+    <div class="content-header with-border">
+      <h3 class="content-title text-green">
+        <strong
+          >DERECHO PROPIETARIO LEGAL - PROYECTO:
+          <b>{{ nombre_proyecto }}</b></strong
+        >
+      </h3>
+    </div>
+    <div class="content-body">
+      <div class="row">
+        <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+        <div class="col-lg-offset-2 col-lg-8">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">DERECHO PROPIETARIO</div>
+            <div class="panel-body">
+              <div *ngIf="pnl_formulario == true">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="porcentaje"
+                        >Estado de Proyecto:</label
+                      >
+                      <div class="col-sm-6">
+                        <select
+                          class="form form-control"
+                          [(ngModel)]="derecho_propietario.estadoderecho"
+                          name="estado_proyecto"
+                          id="estado_proyecto"
+                          [disabled]="camposHabilitados._juridica"
+                        >
+                          <option
+                            *ngFor="
+                              let row_reg of dts_estadoDerechoPropietario;
+                              let i = index
+                            "
+                            [ngValue]="row_reg.descripciondetalleclasificador"
+                          >
+                            {{ row_reg.descripciondetalleclasificador }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="informe"
+                        >Descripción:
+                      </label>
+                      <div class="col-sm-6">
+                        <textarea
+                          class="form form-control"
+                          maxlength="5000"
+                          rows="10"
+                          name="descripcion_dp"
+                          id="descripcion_dp"
+                          [(ngModel)]="derecho_propietario.descripcion"
+                          style="resize: none"
+                          [disabled]="camposHabilitados._juridica"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="informe"
+                        >Número de Folio:
+                      </label>
+                      <div class="col-sm-6">
+                        <input
+                          class="form form-control"
+                          maxlength="100"
+                          autocomplete="off"
+                          name="nro_folio"
+                          id="nro_folio"
+                          [(ngModel)]="derecho_propietario.nrofolio"
+                          [disabled]="camposHabilitados._juridica == true"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="informe"
+                        >Declaración Jurada:
+                      </label>
+                      <div class="col-sm-6">
+                        <input
+                          type="date"
+                          class="form form-control"
+                          maxlength="10"
+                          autocomplete="off"
+                          name="declaracion_jurada"
+                          id="declaracion_jurada"
+                          [(ngModel)]="derecho_propietario.fechadeclaracion"
+                          [disabled]="camposHabilitados._juridica == true"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="telefonos"
+                        >Archivo Derecho Propietario:
+                      </label>
+                      <div class="col-sm-6">
+                        <label for="">Formatos Permitidos (pdf)</label>
+                        <input
+                          type="file"
+                          class="form-control"
+                          id="inputArchivo"
+                          name="inputArchivo"
+                          (change)="handleFileInput($event.target.files)"
+                          required
+                          [disabled]="camposHabilitados._juridica == true"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-lg-offset-4 col-sm-6 text-center">
+                        <button
+                          *ngIf="btn_Registra == true"
+                          type="button"
+                          class="btn btn-success btn-block"
+                          title="Guardar Registro"
+                          (click)="subirArchivoInsertarDerecho()"
+                          [disabled]="
+                            derecho_propietario.estadoderecho == '' ||
+                            derecho_propietario.descripcion == '' ||
+                            camposHabilitados._juridica
+                          "
+                        >
+                          <i class="fa fa-save" aria-hidden="true"></i> Guardar
+                          Derecho Propietario
+                        </button>
+                        <button
+                          *ngIf="btn_Actualiza == true"
+                          type="button"
+                          class="btn btn-warning btn-block"
+                          title="Guardar Registro"
+                          (click)="actualizarArchivo()"
+                          [disabled]="
+                            derecho_propietario.estadoderecho == '' ||
+                            derecho_propietario.descripcion == '' ||
+                            camposHabilitados._juridica
+                          "
+                        >
+                          <i class="fa fa-save" aria-hidden="true"></i>
+                          Actualizar Derecho Propietario
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="pnl_descarga">
+                <div class="text-center">
+                  <app-upload-file
+                    inputTipoDocumento="derecho_propietario"
+                    inputCodigoProy="{{ id_sgp }}"
+                    inputVista="false"
+                    inputTipoImagen="documento"
+                    inputSrc=""
+                    inputNombre="{{ derecho_propietario.nombrearchivo }}"
+                    inputAccion="VISUALIZAR"
+                  >
+                  </app-upload-file>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

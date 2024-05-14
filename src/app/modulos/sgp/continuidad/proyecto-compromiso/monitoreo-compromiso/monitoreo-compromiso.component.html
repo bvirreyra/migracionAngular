@@ -1,0 +1,354 @@
+<!-- PANEL BANDEJA -->
+<div *ngIf="pnlBandeja == true">
+  <!-- BARRA SUPERIOR -->
+
+  <div class="panel-heading clearfix" style="text-align: center">
+    <button
+      *ngIf="
+        camposHabilitados._administrador_plataforma == false ||
+        camposHabilitados._proyectista_administrador == false 
+        
+      "      
+      type="button"
+      class="btn btn-warning pull-right"
+      title="Ingreso Nuevo"
+      (click)="CambiaTf()"
+    >
+      <i class="fa fa-plus">Cambiar TF </i>
+    </button>
+    <button
+      *ngIf="
+        camposHabilitados._administrador_plataforma == false ||
+        camposHabilitados._adm_monitoreo_solicitud == false ||
+        camposHabilitados._usr_legal_monitoreo_solicitud == false ||
+        camposHabilitados._usr_financiero_monitoreo_solicitud == false
+      "
+      name="btnNuevo"
+      id="btnNuevo"
+      type="button"
+      class="btn btn-success pull-right"
+      title="Ingreso Nuevo"
+      (click)="paneles('NUEVO_MONITOREO')"
+    >
+      <i class="fa fa-plus">Nuevos </i>
+    </button>
+    <label for="" style="margin-top: 10px; font-size: large"
+      >{{ dts_registro.id_compromiso }} -
+      {{ dts_registro.nombreproyecto }}</label
+    >
+    <button
+      type="button"
+      class="btn btn-primary pull-left"
+      title="Volver anterior"
+      (click)="enviarRespuestaPadre('VOLVER_CABECERA')"
+    >
+      <i class="fa fa-reply fa-2x"> </i>
+    </button>
+  </div>
+  <!-- TABLA DE HITOS -->
+
+  <div class="panel-body col-lg-offset-2 col-lg-8">
+    <table class="table table-responsive dt-monitoreo-compromiso">
+      <thead>
+        <tr>
+          <th data-priority="1">.::.</th>
+          <th>Nro Compromiso</th>
+          <th>Etapa</th>
+          <th>Sub Etapa</th>
+          <th *ngIf="camposHabilitados._administrador_plataforma == false ||
+          camposHabilitados._proyectista_administrador == false ||
+          camposHabilitados._proyectista_usuario == false ||
+          camposHabilitados._solicitud_administrador == false 
+
+
+          ">T.F</th>
+          <th>Detalle</th>
+          <th>Fecha Inicio</th>
+          <th>Fecha Fin</th>
+          <th>Estado Monitoreo</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td *ngIf="camposHabilitados._administrador_plataforma == false ||
+          camposHabilitados._proyectista_administrador == false ||
+          camposHabilitados._proyectista_usuario == false ||
+          camposHabilitados._solicitud_administrador == false "></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr
+          *ngFor="let row_monitoreo of dts_monitoreo; let i = index"
+          [ngClass]="{
+            'bg-warning': row_monitoreo.estado_monitoreo == 'EN EJECUCION',
+            'bg-success': row_monitoreo.estado_monitoreo == 'CUMPLIDO'
+          }"
+        >
+          <td>
+            <button
+              *ngIf="
+                camposHabilitados._administrador_plataforma == false ||
+                (row_monitoreo.unidad == s_usu_area &&
+                  (camposHabilitados._adm_monitoreo_solicitud == false ||
+                    camposHabilitados._usr_legal_monitoreo_solicitud == false ||
+                    camposHabilitados._usr_financiero_monitoreo_solicitud ==
+                      false))
+              "
+              type="button"
+              class="btn btn-warning btn-block"
+              (click)="paneles('EDITA_MONITOREO', row_monitoreo)"
+              title="Actualizar Registro"
+            >
+              <i class="fa fa-edit"></i>
+            </button>
+            <button
+              *ngIf="
+                camposHabilitados._administrador_plataforma == false ||
+                (camposHabilitados._adm_monitoreo_solicitud == false &&
+                  i == 0 &&
+                  row_monitoreo.unidad == s_usu_area)
+              "
+              type="button"
+              class="btn btn-danger btn-block"
+              data-toggle="modal"
+              data-target="#modalEliminaDetalle"
+              (click)="paneles('ELIMINA_MONITOREO', row_monitoreo)"
+              title="Eliminar Registro"
+            >
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+          </td>
+          <td>{{ row_monitoreo.fid_compromiso }}</td>
+          <td>{{ row_monitoreo.etapa }}</td>
+          <td>{{ row_monitoreo.sub_etapa }}</td>
+          <td *ngIf="camposHabilitados._administrador_plataforma == false ||
+          camposHabilitados._proyectista_administrador == false ||
+          camposHabilitados._proyectista_usuario == false ||
+          camposHabilitados._solicitud_administrador == false ">{{ row_monitoreo.tipo_financiamiento }}</td>
+          <td>{{ row_monitoreo.tarea }}</td>
+          <td>{{ row_monitoreo.fecha_inicio | date: "dd/MM/yyyy" }}</td>
+          <td>{{ row_monitoreo.fecha_fin | date: "dd/MM/yyyy" }}</td>
+          <td>{{ row_monitoreo.estado_monitoreo }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="row col-lg-12 col-md-12 col-sg-12" *ngIf="grafica == true">
+    <app-monitoreo-etapas [data]="dts_registro"></app-monitoreo-etapas>
+  </div>
+</div>
+<!-- FIN PANEL BANDEJA -->
+<!-- FORMULARIO MONITOREO -->
+<div *ngIf="pnlFormulario == true" class="col-lg-offset-2 col-lg-8">
+  <div>
+    <button
+      type="button"
+      class="btn btn-primary pull-left"
+      title="Volver a Bandeja"
+      (click)="paneles('VISTA_MONITOREO')"
+    >
+      <i class="fa fa-reply fa-2x"> </i>
+    </button>
+  </div>
+  <form action="" enctype="multipart/form-data">
+    <div class="panel panel-primary">
+      <div class="panel-heading clearfix">
+        {{ dts_registro.nombreproyecto }}
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="form-horizontal">
+            <div
+              *ngIf="
+                camposHabilitados._adm_monitoreo_solicitud == true ||
+                camposHabilitados._administrador_plataforma == false ||
+                camposHabilitados._proyectista_administrador == false ||
+                camposHabilitados._usr_financiero_monitoreo_solicitud ==
+                  false ||
+                camposHabilitados._usr_legal_monitoreo_solicitud == false ||
+                camposHabilitados._usr_monitoreo_solicitud == false
+              "
+              class="form-group"
+            >
+              <label class="control-label col-sm-4">Tipo Financiamiento:</label>
+              <div class="col-sm-7">
+                <select
+                  id="tipo_financiamiento"
+                  name="tipo_financiamiento"
+                  class="form-control"
+                  [(ngModel)]="datos_monitoreo.tipo_financiamiento"
+                  (ngModelChange)="buscaEtapas()"
+                  [disabled]="sTipoFinanciamiento"
+                >
+                  <option
+                    *ngFor="let row_tf of dts_tf"
+                    [ngValue]="row_tf.tipo_financiamiento"
+                  >
+                    {{ row_tf.tipo_financiamiento }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            
+              <div class="form-group"  *ngIf="flagTf == false">
+                <label class="control-label col-sm-4">Etapa:</label>
+                <div class="col-sm-7">
+                  <select
+                    id="etapa"
+                    name="etapa"
+                    class="form-control"
+                    [(ngModel)]="datos_monitoreo.etapa"
+                    (ngModelChange)="buscarSubEtapa()"
+                  >
+                    <option value="0">Seleccione...</option>
+                    <option
+                      *ngFor="let row_etapa of dts_etapas; let i = index"
+                      [ngValue]="row_etapa.etapa"
+                    >
+                      {{ row_etapa.etapa }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group"  *ngIf="flagTf == false">
+                <label class="control-label col-sm-4">Sub Etapa:</label>
+                <div class="col-sm-7">
+                  <select
+                    id="sub_etapa"
+                    name="sub_etapa"
+                    class="form-control"
+                    [(ngModel)]="datos_monitoreo.sub_etapa"
+                  >
+                    <option>Seleccione...</option>
+                    <option
+                      *ngFor="let row_subetapa of dts_subetapas | orderBy: 'orden':false; let i = index"
+                      [ngValue]="row_subetapa.etapa"
+                    >
+                      {{ row_subetapa.etapa }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group"  *ngIf="flagTf == false">
+                <label class="control-label col-sm-4">Detalle:</label>
+                <div class="col-sm-7">
+                  <textarea
+                    class="form-control"
+                    name="tarea"
+                    id="tarea"
+                    [(ngModel)]="datos_monitoreo.tarea"
+                    autocomplete="off"
+                    onKeyDown="A(event,this.form.fecha_inicio)"
+                  ></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-4">Fecha Inicio:</label>
+                <div class="col-sm-7">
+                  <input
+                    class="form-control"
+                    type="date"
+                    name="fecha_inicio"
+                    max="9999-12-31"
+                    id="fecha_inicio"
+                    [(ngModel)]="datos_monitoreo.fecha_inicio"
+                    onKeyDown="A(event,this.form.fecha_fin)"
+                  />
+                </div>
+              </div>
+              <div class="form-group"  *ngIf="flagTf == false">
+                <label class="control-label col-sm-4">Fecha Fin:</label>
+                <div class="col-sm-7">
+                  <input
+                    class="form-control"
+                    type="date"
+                    name="fecha_fin"
+                    id="fecha_fin"
+                    max="9999-12-31"
+                    [(ngModel)]="datos_monitoreo.fecha_fin"
+                    autocomplete="off"
+                    onKeyDown="A(event,this.form.estado_monitoreo)"
+                  />
+                </div>
+              </div>
+              <div class="form-group"  *ngIf="flagTf == false">
+                <label class="control-label col-sm-4">Estado Monitoreo:</label>
+                <div class="col-sm-7">
+                  <select
+                    id="estado_monitoreo"
+                    name="estado_monitoreo"
+                    class="form-control"
+                    [(ngModel)]="datos_monitoreo.estado_monitoreo"
+                  >
+                    <option>EN EJECUCION</option>
+                    <option>CUMPLIDO</option>
+                  </select>
+                </div>
+              </div>
+            
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <!-- <div class="pull-right"> -->
+
+        <button
+          type="button"
+          *ngIf="
+            btnRegistra == true &&
+            datos_monitoreo.tipo_financiamiento != '' &&
+            datos_monitoreo.etapa != '' &&
+            datos_monitoreo.sub_etapa != '' &&
+            datos_monitoreo.tarea != '' &&
+            datos_monitoreo.fecha_inicio != '' &&
+            datos_monitoreo.estado_monitoreo != ''
+          "
+          class="btn btn-success btn-block"
+          name="btnRegistra"
+          id="btnRegistra"
+          (click)="InsertaMonitoreo()"
+        >
+          Registrar
+        </button>
+        <button
+          type="button"
+          *ngIf="flagTf == true"
+          class="btn btn-success btn-block"
+          name="btnRegistra"
+          id="btnRegistra"
+          (click)="InsertaMonitoreo()"
+        >
+          Registrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning btn-block"
+          *ngIf="
+            btnEdita == true &&
+            datos_monitoreo.tipo_financiamiento != '' &&
+            datos_monitoreo.etapa != '' &&
+            datos_monitoreo.sub_etapa != '' &&
+            datos_monitoreo.tarea != '' &&
+            datos_monitoreo.fecha_inicio != '' &&
+            datos_monitoreo.estado_monitoreo != ''
+          "
+          name="btnEdita"
+          id="btnEdita"
+          (click)="EditaMonitoreo()"
+        >
+          Editar
+        </button>
+        <!-- </div> -->
+      </div>
+    </div>
+  </form>
+</div>

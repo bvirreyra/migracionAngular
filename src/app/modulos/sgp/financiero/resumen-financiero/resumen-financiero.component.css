@@ -1,0 +1,137 @@
+.dt-educacion tfoot input{
+  width: 100% !important;
+}
+.dt-educacion tfoot {
+  display: table-header-group !important;
+}
+
+.containerCris{
+    width: 90vw;
+    text-align: center;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  
+  @media (max-width: 600px) {
+    .containerCris {
+      width: 95vw;
+      text-align: center;
+      padding-right: 15px;
+      padding-left: 2px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+  @media (max-width:360px){
+    .grid-tablas{
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 1rem;
+        overflow: auto;
+    }
+  }
+
+  .titulo{
+      color: #3c8dbc;
+      font-size: 2rem;
+      font-weight: 600;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-gap: 1rem;
+    /* justify-items:normal;
+    align-items: center; */
+  }
+
+  .grid-tablas{
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(500px,1fr));
+      gap: 1rem;
+      /* overflow: auto; */
+  }
+
+  .grid-charts{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+    gap: 1rem;
+}
+
+.card-box {
+    font-family: sans-serif;
+    position: relative;
+    color: #fff;
+    padding: 10px;
+    margin: 20px 0px;
+    border-radius: 8px;
+    min-width: 230px;
+    min-height: 130px;
+    max-height: 130px;
+  }
+  .card-box:hover {
+    text-decoration: none;
+    color: #f1f1f1;
+  }
+  .card-box:hover .icon i {
+    font-size: 100px;
+    transition: 1s;
+    -webkit-transition: 1s;
+  }
+  .card-box .inner {
+    padding: 5px 10px 0 10px;
+  }
+  .card-box h3 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    white-space: nowrap;
+    padding: 0;
+    text-align: left;
+  }
+  .card-box p {
+    font-size: 2rem;
+    font-style: italic;
+    font-weight: 300;
+    text-align: left;
+  }
+  .card-box .icon {
+    position: absolute;
+    top: auto;
+    bottom: 5px;
+    right: 10px;
+    z-index: 0;
+    font-size: 72px;
+    color: rgba(0, 0, 0, 0.35);
+  }
+  .card-box .card-box-footer {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    text-align: center;
+    padding: 3px 0;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-decoration: none;
+    border-radius: 0 0 8px 8px;
+  }
+  .card-box:hover .card-box-footer {
+    background: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+  .bg-blue {
+    background: linear-gradient(to left, #007bff, #03366d);
+  }
+  .bg-green {
+    background: linear-gradient(to left, #00a65a, #0e4e32);
+  }
+  .bg-orange {
+    background: linear-gradient(to left, #f39c12, #5c3d0b);
+  }
+  .bg-red {
+    background: linear-gradient(to left, #d9534f, #470c0a);
+  }
+  

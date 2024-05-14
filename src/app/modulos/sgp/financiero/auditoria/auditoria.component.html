@@ -1,0 +1,115 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="containerAudi" *ngIf="render" >
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <span class="glyphicon glyphicon-folder-close"></span> {{editarAuditoria?'ACTUALIZAR':'REGISTRAR'}} AUDITORIA PROYECTO: {{nombreProyecto}}
+    </div>
+    <div *ngIf="pnl_formularioauditoria==true" class="panel-body" style="text-align: left;">
+      <div style="text-align: left;">
+        <form (ngSubmit)="registrarAuditoria()" #auditoriaForm="ngForm" >
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-4">
+              <label for="diferencia">Diferencia Monto:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-retweet"></i></span>
+                <select class="form-control" [(ngModel)]="auditoria.diferencia" name="diferencia" [disabled]="camposHabilitados._auditoria" >
+                  <option value=""></option>
+                  <option *ngFor="let row of dts_booleano" [ngValue]="row.descripciondetalleclasificador">
+                    {{row.descripciondetalleclasificador}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4">
+              <label for="vigencia">Vigencia Convenio:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                <select class="form-control" [(ngModel)]="auditoria.vigencia" name="vigencia" [disabled]="camposHabilitados._auditoria" >
+                  <option value=""></option>
+                  <option *ngFor="let row of dts_vigencia" [ngValue]="row.descripciondetalleclasificador">
+                    {{row.descripciondetalleclasificador}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4">
+              <label for="encargado">Encargado Auditoría:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
+                <select class="form-control" [(ngModel)]="auditoria.encargado" name="encargado" [disabled]="camposHabilitados._auditoria" aria-placeholder="seleccione..." required>
+                  <option *ngFor="let row of dts_encargado" [ngValue]="row.descripciondetalleclasificador">
+                    {{row.descripciondetalleclasificador}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-4">
+              <label for="tipo">Tipo Auditoría:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign"></i></span>
+                <select class="form-control" [(ngModel)]="auditoria.tipo" name="tipo" [disabled]="camposHabilitados._auditoria" required>
+                  <option *ngFor="let row of dts_tipo" [ngValue]="row.descripciondetalleclasificador">
+                    {{row.descripciondetalleclasificador}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4">
+              <label for="plazo">Plazo Auditoría:</label>
+              <div class="input-group">
+                <span class="input-group-addon">DIA(S).</span>
+                <input class="form-control" type="number" name="plazo" placeholder="1" [(ngModel)]="auditoria.plazo" #plazo="ngModel"
+                 min="0" onkeypress="return permite(event, 'solo_num')" [disabled]="camposHabilitados._auditoria" required>
+                <span style="color:tomato;" *ngIf="plazo.touched && plazo.errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4">
+              <label for="presento">Presentó Auditoría a la UPRE:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-ok-circle"></i></span>
+                <select class="form-control" [(ngModel)]="auditoria.presento" name="presento" [disabled]="camposHabilitados._auditoria" required>
+                  <option *ngFor="let row of dts_booleano" [ngValue]="row.descripciondetalleclasificador">
+                    {{row.descripciondetalleclasificador}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-4">
+              <label for="adenda">Nº Adenda:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-repeat"></i></span>
+                <input class="form-control" type="text" name="adenda" maxlength="200" placeholder="1" [(ngModel)]="auditoria.adenda"
+                #adenda="ngModel" [disabled]="camposHabilitados._auditoria" >
+                <span style="color:tomato;" *ngIf="adenda.touched && adenda.errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-8">
+              <label for="observacion">Observación:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+                <textarea class="form-control" type="text" name="observacion" maxlength="1800" placeholder="Observación" [(ngModel)]="auditoria.observacion"
+                #observacion="ngModel" [disabled]="camposHabilitados._auditoria"></textarea>
+                <span style="color:tomato;" *ngIf="observacion.touched && observacion.errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="linea"></div>
+            <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+              <button class="btn btn-success" type="submit"  [disabled]="auditoriaForm.invalid || auditoriaForm.pristine" >
+                <div *ngIf="!editarAuditoria"><span class="glyphicon glyphicon-floppy-disk"></span> Registrar Auditoria</div>
+                <div *ngIf="editarAuditoria"><span class="glyphicon glyphicon-ok"></span> Actualizar Auditoria</div>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>  
+    </div>
+  </div>
+</div>

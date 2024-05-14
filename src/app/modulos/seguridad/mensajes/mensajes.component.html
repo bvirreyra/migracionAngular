@@ -1,0 +1,93 @@
+
+    <!-- Modal Success -->
+    <div class="modal fade" id="modal_success" name="modal_success" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Mensaje del Sistema</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-success">
+              <strong>Éxito! </strong>{{prop_msg}}
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cerrarmodal('modal_success')">Cerrar</button>
+            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Info -->
+    <div class="modal fade" id="modal_info" name="modal_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Mensaje del Sistema</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-info">
+              <strong>Información! </strong>{{prop_msg}}
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cerrarmodal('modal_info')">Cerrar Info</button>    
+            <!--          -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Warning -->
+    <div class="modal fade" id="modal_warning" name="modal_warning"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Mensaje del Sistema</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-warning">
+              <strong>Advertencia! </strong>{{prop_msg}}
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cerrarmodal('modal_warning')">Cerrar</button>           
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modal_danger" name="modal_danger" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Mensaje del Sistema</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-danger">
+              <strong>Error! </strong>{{prop_msg}}
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cerrarmodal('modal_danger')">Cerrar</button>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--DIV -->
+    <div class="alert alert-{{prop_tipomsg}}" >
+      <strong>{{prop_msg}}</strong>
+    </div>
+  

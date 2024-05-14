@@ -1,0 +1,6 @@
+.dt-unidad tfoot input{
+    width: 100% !important;
+}
+.dt-unidad tfoot {
+    display: table-header-group !important;
+}

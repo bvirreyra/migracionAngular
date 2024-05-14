@@ -1,0 +1,20 @@
+<div class="row"></div>
+<div id="tarjeta" class="tarjeta blanca" (click)="detallar()">
+  <h2>{{ titulo }}</h2>
+  <h1>{{ cantidad }}</h1>
+  <span class="label"
+    >{{ montoFinanciado | number: "0.2-2" | formatoDecimal }} Bs.</span
+  >
+  <h3><strong>Total Monto Financiado</strong></h3>
+  <div *ngIf="saldo">
+    <span class="label"
+      >{{ montoDesembolsado | number: "0.2-2" | formatoDecimal }} Bs.</span
+    >
+    <h3><strong>Total Monto Desembolsado</strong></h3>
+    <span class="label"
+      >{{ montoSaldo | number: "0.2-2" | formatoDecimal }} Bs.</span
+    >
+    <h3><strong>Total Monto Saldo</strong></h3>
+  </div>
+  <hr style="border-top: 1px solid #eee" />
+</div>

@@ -1,0 +1,688 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="content content-success" name="pnl_cabecera" id="pnl_cabecera">
+  <div class="content-header with-border">
+    <h3 class="content-title text-green">
+      <strong>CORRESPONDENCIA EXTERNA</strong>
+    </h3>
+  </div>
+  <div class="content-body">
+    <div class="rowlocal">
+      <div
+        class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10"
+      >
+        <div class="panel panel-success">
+          <div class="panel-heading text-center">CORRESPONDENCIA EXTERNA</div>
+          <div class="panel-body"></div>
+          <div class="form-horizontal">
+            <div class="form-group">
+              <label class="control-label col-sm-3">FECHA:</label>
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="m_fecha"
+                  id="m_fecha"
+                  [(ngModel)]="m_fecha_actual"
+                  autocomplete="off"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="busqueda">CITE:</label>
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="m_cite"
+                  id="m_cite"
+                  [(ngModel)]="m_cite"
+                  ngModel
+                  required
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3">RECEPCIONADO:</label>
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="m_recepcionado"
+                  id="m_recepcionado"
+                  [(ngModel)]="s_nomuser"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3">REMITENTE:</label>
+              <div
+                class="col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 col-xs-9 col-sm-9 col-md-9 col-lg-9"
+              >
+                <div class="panel panel-default">
+                  <label>DATOS PERSONALES EXTERNA A UPRE:</label>
+                  <div class="form-group">
+                    <label class="control-label col-sm-2">INSTITUCION:</label>
+                    <div class="col-sm-8">
+                      <!-- <input class="form-control" type="text" name="m_institucion" id="m_institucion" list="ListaInstitucion" [(ngModel)]="m_institucion" autocomplete="off" (blur)=filtraCargo()> -->
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="m_institucion"
+                        id="m_institucion"
+                        list="ListaInstitucion"
+                        [(ngModel)]="m_institucion"
+                        autocomplete="off"
+                        (blur)="filtraCargo()"
+                      />
+                      <datalist id="ListaInstitucion" class="datalist">
+                        <div
+                          *ngFor="
+                            let row_registros of dts_institucionSD;
+                            let i = index
+                          "
+                        >
+                          <option
+                            class="form-control"
+                            value="{{ row_registros.institucion }}"
+                            label="{{ row_registros.institucion }}"
+                          ></option>
+                        </div>
+                      </datalist>
+                      <!-- <datalist id="ListaInstitucion" class="datalist" name="m_institucion">
+                                                <option *ngFor="let row_registros of dts_institucion; let i = index;"
+                                                    value="row_registros.IdInstitucion">{{row_registros.Nombre}}</option>
+                                            </datalist> -->
+                    </div>
+                    <button
+                      type="button"
+                      class="btn btn-primary pull-left"
+                      title="Persona Natural"
+                      name="natural"
+                      id="natural"
+                      (click)="personaNatural()"
+                    >
+                      <i class="fa fa-user" aria-hidden="true"></i>
+                    </button>
+                    <!-- <button type="button" class="btn btn-primary  pull-left" title="Agregar Institución" name="volver" id="volver" (click)="preAgregarInstitucion()">
+                      <i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                                        <button *ngIf="m_institucion != ''" type="button" class="btn btn-success  pull-left" title="Registrar Automaticamente" name="reg_automatico" id="reg_automatico" (click)="ModalRegAutomatico('PreRegistro')">
+                      <i class=" fa fa-user-circle-o" aria-hidden="true"></i></button> -->
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-2">CARGO:</label>
+                    <div class="col-sm-8">
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="m_cargo"
+                        id="m_cargo"
+                        list="ListaCargo"
+                        [(ngModel)]="m_cargo"
+                        autocomplete="off"
+                        (blur)="listaUsuarioExterno(m_institucion, m_cargo)"
+                      />
+                      <datalist id="ListaCargo" class="datalist">
+                        <div
+                          *ngFor="let row_registros of dts_cargo; let i = index"
+                        >
+                          <option
+                            class="form-control"
+                            value="{{ row_registros.cargo }}"
+                            label="{{ row_registros.cargo }}"
+                          ></option>
+                        </div>
+                      </datalist>
+                      <!-- <select id="m_cargo" class="form-control" name="m_cargo" [(ngModel)]="m_cargo" (change)="listaUsuarioExterno(m_institucion,m_cargo)">
+                                                <option *ngFor="let row_registros_cargo of dts_cargo; let i = index;"
+                                                    [ngValue]="row_registros_cargo.cargo">{{row_registros_cargo.cargo}}</option>
+                                            </select> -->
+                    </div>
+                    <!-- <button type="button" class="btn btn-primary  pull-left" title="Agregar Cargo" name="volver" id="volver" (click)="preAgregarCargo()">
+                      <i class="fa fa-plus-circle" aria-hidden="true"></i></button> -->
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-2">NOMBRE:</label>
+                    <div class="col-sm-8">
+                      <!-- <input class="form-control" type="text" name="m_nombre" id="m_nombre"
+                              [(ngModel)]="m_nombre"> -->
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="m_usuario_externo"
+                        id="m_usuario_externo"
+                        list="ListaUsuarioExterno"
+                        [(ngModel)]="m_usuario_externo"
+                        autocomplete="off"
+                        (blur)="determinar_idue()"
+                      />
+                      <datalist id="ListaUsuarioExterno" class="datalist">
+                        <div
+                          *ngFor="
+                            let row_registros of dtsListaUsuarioExterno;
+                            let i = index
+                          "
+                        >
+                          <option
+                            class="form-control"
+                            value="{{ row_registros.nombre }}"
+                            label="{{ row_registros.nombre }}"
+                          ></option>
+                        </div>
+                      </datalist>
+                      <!-- <select id="m_idusuarioexterno" class="form-control" name="m_idusuarioexterno" [(ngModel)]="m_idusuarioexterno">
+                        <option *ngFor="let row_registros of dtsListaUsuarioExterno; let i = index;"
+                          [ngValue]="row_registros.id_usuario_externo">{{row_registros.nombre}}</option>
+                      </select> -->
+                    </div>
+                    <!-- <button type="button" class="btn btn-primary  pull-left" title="Ingresar Usuario" name="volver" id="volver" (click)="preAgregarUsuarioExterno()">
+                      <i class="fa fa-plus-circle" aria-hidden="true"></i></button> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3">PARA:</label>
+              <div class="col-sm-7">
+                <!--<input type="hidden" [(ng-model)]="m_idconfiguracion" value="{{m_idconfiguracion}}"/-->
+                <input
+                  class="form-control"
+                  type="text"
+                  name="m_para"
+                  id="m_para"
+                  [(ngModel)]="m_nombrecompleto"
+                  autocomplete="off"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3">TIPO DOCUMENTO:</label>
+              <div class="col-sm-7">
+                <select
+                  id="m_nombre"
+                  class="form-control"
+                  name="m_tipodocumentohc"
+                  [(ngModel)]="m_tipodocumentohc"
+                >
+                  <option
+                    *ngFor="
+                      let row_registros of dts_ListaTipoDocumentoHr;
+                      let i = index
+                    "
+                    [ngValue]="row_registros.descripciondetalleclasificador"
+                  >
+                    {{ row_registros.descripciondetalleclasificador }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div
+              *ngIf="
+                m_tipodocumentohc.startsWith(
+                  'PLANILLA DE AVANCE O CERTIFICADO DE AVANCE'
+                )
+              "
+              class="form-group"
+            >
+              <label class="control-label col-sm-3">PROYECTO VINCULADO:</label>
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="m_nombreProyecto"
+                  id="m_nombreProyecto"
+                  list="listaProyectos"
+                  [(ngModel)]="m_nombreProyecto"
+                  autocomplete="off"
+                  (blur)="validarProyecto()"
+                />
+                <label *ngIf="m_idProyecto">Proyecto:{{ m_idProyecto }} </label>
+                <datalist id="listaProyectos" class="datalist">
+                  <div
+                    *ngFor="
+                      let row_registros of dts_proyectosflujo;
+                      let i = index
+                    "
+                  >
+                    <option
+                      class="form-control"
+                      value="{{ row_registros._nombreproyecto }}"
+                      label="{{ row_registros._nombreproyecto }}"
+                    ></option>
+                  </div>
+                </datalist>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3">LIMITAR DIAS:</label>
+              <div class="col-sm-7">
+                <select
+                  id="m_limitardias"
+                  class="form-control"
+                  name="m_limitardias"
+                  [(ngModel)]="m_limitardias"
+                >
+                  <option value="0">SIN LIMITE</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="15">15</option>
+                  <option value="16">16</option>
+                  <option value="17">17</option>
+                  <option value="18">18</option>
+                  <option value="19">19</option>
+                  <option value="20">20</option>
+                  <option value="21">21</option>
+                  <option value="22">22</option>
+                  <option value="23">23</option>
+                  <option value="24">24</option>
+                  <option value="25">25</option>
+                  <option value="26">26</option>
+                  <option value="27">27</option>
+                  <option value="28">28</option>
+                  <option value="29">29</option>
+                  <option value="30">30</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3">REFERENCIA:</label>
+              <div class="col-sm-7">
+                <textarea
+                  class="form-control"
+                  id="m_referencia"
+                  maxlength="799"
+                  rows="4"
+                  name="m_referencia"
+                  [(ngModel)]="m_referencia"
+                ></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3">OBSERVACIONES:</label>
+              <div class="col-sm-7">
+                <textarea
+                  class="form-control"
+                  id="m_observaciones"
+                  maxlength="500"
+                  rows="4"
+                  name="m_observaciones"
+                  [(ngModel)]="m_observaciones"
+                ></textarea>
+              </div>
+            </div>
+            <div *ngIf="m_referencia != undefined && m_referencia != ''">
+              <button
+                type="button"
+                class="btn btn-success btn-block"
+                value="INSERTAR"
+                name="btnGuardarCorrespondencia"
+                id="btnGuardarCorrespondencia"
+                title="Guardar Correspondencia"
+                (click)="Verifica()"
+              >
+                Guardar Correspondencia
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- INICIO MODAL modalguardar -->
+<div
+  class="modal fade"
+  id="pnl_Guardarregistros"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="Insertar_Correspondencia"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Insertar_Correspondencia">
+          <b>Correspondencia Externa</b>
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">Esta seguro de Guardar Registros</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="insertarCorrespondencia()"
+        >
+          Guardar Registros
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL modalguardar -->
+<div class="content content-success" name="pnl_anexos" id="pnl_anexos">
+  <div
+    class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10"
+  >
+    <!--div>
+        <button type="button" class="btn btn-primary  pull-left"
+        title="Volver Inicio" name="volver" id="volver" (click)="paneles('VER_INICIO')">
+          <i class="fa fa-reply fa-2x"></i></button>
+      </div-->
+    <div class="panel panel-success">
+      <div class="panel-heading text-center">
+        HOJA DE RUTA EXTERNA:{{ m_numero }}
+      </div>
+      <div class="panel-body"></div>
+      <div class="form-horizontal">
+        <div class="form-group">
+          <label class="control-label col-sm-3" for="busqueda">ANEXO:</label>
+          <div class="col-sm-7">
+            <select
+              id="anexo"
+              class="form-control"
+              name="anexo"
+              [(ngModel)]="m_anexo"
+            >
+              <option
+                *ngFor="let row_documento of dts_Documentos; let i = index"
+                [ngValue]="row_documento.descripciondetalleclasificador"
+              >
+                {{ row_documento.descripciondetalleclasificador }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-3">DESCRIPCION:</label>
+          <div class="col-sm-7">
+            <textarea
+              class="form-control"
+              id="m_descripcion"
+              maxlength="180"
+              rows="4"
+              name="m_descripcion"
+              [(ngModel)]="m_descripcion"
+            ></textarea>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="table table-condensed table-hover dt-anexo">
+            <thead>
+              <tr>
+                <th>Nro.</th>
+                <th>Documento</th>
+                <th>Descripcion</th>
+                <th>Seleccione...</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row_anexos of dts_Anexo; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ row_anexos.documento }}</td>
+                <td>{{ row_anexos.descripcion }}</td>
+                <td>
+                  <div>
+                    <button
+                      type="button"
+                      class="btn btn-warning btn-md"
+                      (click)="editaranexoPre(row_anexos)"
+                    >
+                      <i
+                        class="fa fa-edit"
+                        aria-hidden="true"
+                        title="Modificar Anexo"
+                      ></i>
+                    </button>
+                    <button
+                      *ngIf="row_anexos.usuario_registro == s_usu_id"
+                      type="button"
+                      class="btn btn-danger btn-circle-sm"
+                      (click)="eliminar_anexo(row_anexos)"
+                    >
+                      <i
+                        class="glyphicon glyphicon-remove"
+                        aria-hidden="true"
+                        title="Eliminar Anexo"
+                      ></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-success btn-block"
+            value="INSERTAR"
+            name="btnInsertarAnexo"
+            id="btnInsertarAnexo"
+            (click)="InsertarAnexo()"
+            title="Guardar Anexos"
+          >
+            Guardar Anexos
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-success btn-block"
+            value="MODIFICA"
+            name="btnModificarAnexo"
+            id="btnModificarAnexo"
+            (click)="editarAnexo()"
+            title="Modificar Anexos"
+          >
+            Modificar Anexos
+          </button>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-primary btn-block"
+            value="CERRAR"
+            name="btnCerrarAnexo"
+            id="btnCerrarAnexo"
+            (click)="terminar_correspondencia()"
+            title="Cerrar"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL PARA AGREGAR INSTITUCION -->
+
+<div
+  class="modal fade"
+  id="modal_Institucion"
+  role="dialog"
+  aria-labelledby="modal_Institucion"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal_Institucion">
+          <b>Insertar Institucion</b>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="sw_institucion == true">
+          <app-institucion></app-institucion>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="cerrar_ModalInstitucion()"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PARA AGREGAR CARGO -->
+
+<div
+  class="modal fade"
+  id="modal_Cargo"
+  role="dialog"
+  aria-labelledby="modal_Cargo"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal_Cargo"><b>Insertar Cargo</b></h5>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="sw_cargo == true">
+          <app-institucioncargo
+            [inputIdInstitucion]="dts_cargofiltrada"
+          ></app-institucioncargo>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="cerrar_ModalCargo()"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL PARA AGREGAR USUARIO EXTERNO -->
+
+<div
+  class="modal fade"
+  id="modal_UsuarioExterno"
+  role="dialog"
+  aria-labelledby="modal_UsuarioExterno"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal_UsuarioExterno">
+          <b>Insertar Usuario Externo</b>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="sw_usuarioexterno == true">
+          <app-frmdatos
+            [inputIdInstitucion]="dts_cargofiltrada"
+            [inputIdCargo]="m_idcargo"
+          >
+          </app-frmdatos>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="cerrar_ModalUsuarioExterno()"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PARA AGREGAR CARGO Y USUARIO AUTOMATICAMENTE -->
+<div
+  class="modal fade"
+  id="modal_RegAutomatico"
+  role="dialog"
+  aria-labelledby="modal_RegAutomatico"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-mg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal_RegAutomatico">
+          <b>REGISTRO AUTOMÁTICO</b>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <table class="table table-condensed table-hover">
+          <tr>
+            <th class="text-center">INSTITUCIÓN:</th>
+            <td class="text-center">{{ m_institucion }}</td>
+          </tr>
+          <tr>
+            <th class="text-center">CARGO:</th>
+            <td class="text-center">SD</td>
+          </tr>
+          <tr>
+            <th class="text-center">USUARIO:</th>
+            <td class="text-center">SD</td>
+          </tr>
+        </table>
+        <div class="modal-footer">
+          <span>Está seguro de continuar con el registro?</span><br />
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="registrar_automaticamente()"
+          >
+            Guardar
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="ModalRegAutomatico('cerrar')"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

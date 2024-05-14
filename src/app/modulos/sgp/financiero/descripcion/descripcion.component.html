@@ -1,0 +1,328 @@
+<div
+  style="
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+  "
+>
+  <!-- DATOS DEL PROYECTO -->
+  <!-- <div class="panel panel-primary" style="width: 49%;" *ngIf="cargado">
+        <div (click)="switchMostrar();" class="panel-heading text-center puntero" title="Mostrar Informacón">
+            <span class="glyphicon glyphicon-briefcase"></span> Datos del Proyecto: {{dts_descripcion.nombreproyecto}}
+        </div>
+        <div class="panel-body" style="text-align: left;" *ngIf="mostrar">
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Departamento </label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                    <input class="form-control" type="text" readonly value="{{dts_descripcion.v_departamento}}">
+                </div>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Provincia </label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                    <input class="form-control" type="text" readonly value="{{dts_descripcion.v_provincia}}">
+                </div>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Municipio </label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                    <input class="form-control" type="text" readonly value="{{dts_descripcion.v_municipio}}">
+                </div>
+            </div>
+            <div class="row"></div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Codigo Proy </label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                    <input class="form-control" type="text" readonly value="{{dts_descripcion.v_cod_sgp}}">
+                </div>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Número Convenio </label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-indent" aria-hidden="true"></i></span>
+                    <input class="form-control" type="text" readonly value="{{dts_descripcion.v_nroconvenio}}">
+                </div>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Fecha Suscripcion </label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-indent" aria-hidden="true"></i></span>
+                    <input class="form-control" type="text" readonly
+                        value="{{dts_descripcion.v_fecha_suscripcion_convenio | date: 'dd/MM/yyyy' }}">
+                </div>
+            </div>
+            <div class="row"></div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Monto Convenio </label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">Bs.</span>
+                    <input class="form-control" type="text" readonly
+                        value="{{dts_descripcion.v_monto_convenio | number: '0.2-2' | formatoDecimal}}">
+                </div>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Monto a Financiar Upre </label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">Bs.</span>
+                    <input class="form-control" type="text" readonly
+                        value="{{dts_descripcion.v_monto_upre | number: '0.2-2' | formatoDecimal}}">
+                </div>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6" *ngIf="dts_descripcion.v_monto_contraparte!=0">
+                <div>
+                    <label>Monto Contraparte </label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">Bs.</span>
+                    <input class="form-control" type="text" readonly
+                        value="{{dts_descripcion.v_monto_contraparte | number: '0.2-2' | formatoDecimal}}">
+                </div>
+            </div>
+            <div class="row"></div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Monto Contrato </label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">Bs.</span>
+                    <input class="form-control" type="text" readonly
+                        value="{{dts_descripcion.v_monto_contrato_original | number: '0.2-2' | formatoDecimal}}">
+                </div>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6"
+                *ngIf="dts_descripcion.v_monto_modificacion!=dts_descripcion.v_monto_contrato_original">
+                <div>
+                    <label>Monto Modificatorio</label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">Bs.</span>
+                    <input class="form-control" type="text" readonly
+                        value="{{dts_descripcion.v_monto_modificacion | number: '0.2-2' | formatoDecimal}}">
+                </div>
+            </div>
+            <div class="row"></div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Fecha Inicio: </label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
+                    <input class="form-control" type="text" readonly
+                        value="{{dts_descripcion.v_fecha_inicio | date: 'dd/MM/yyyy'}}">
+                </div>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Plazo Ejecución</label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-hourglass" aria-hidden="true"></i></span>
+                    <input class="form-control" type="text" readonly value="{{dts_descripcion.v_plazo_convenio}}">
+                </div>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Ampliación de Plazo</label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-hourglass-half" aria-hidden="true"></i></span>
+                    <input class="form-control" type="text" readonly value="{{dts_descripcion.v_ampliacion_plazo}}">
+                </div>
+            </div>
+            <div class="row"></div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Fecha prevista p/Recepción Provisional</label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar-o" aria-hidden="true"></i></span>
+                    <input class="form-control" type="text" readonly
+                        value="{{dts_descripcion.v_entrega_provisional | date: 'dd/MM/yyyy'}}">
+                </div>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6">
+                <div>
+                    <label>Fecha prevista p/Recepción Definitiva</label>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
+                    <input class="form-control" type="text" readonly
+                        value="{{dts_descripcion.v_entrega_definitiva | date: 'dd/MM/yyyy'}}">
+                </div>
+            </div>
+        </div>
+    </div> -->
+  <!-- DASTOS RESUMEN -->
+  <div class="panel panel-primary" style="width: 49%" *ngIf="cargado">
+    <div
+      (click)="switchMostrar()"
+      class="panel-heading text-center puntero"
+      title="Mostrar Informacón"
+    >
+      <span class="glyphicon glyphicon-briefcase"></span> RESUMEN NRO 1
+    </div>
+    <div class="panel-body" style="text-align: left" *ngIf="mostrar">
+      <div class="form-group col-lg-4 col-md-4 col-sm-6">
+        <div>
+          <label>Saldo por Desembolsar</label>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Bs.</span>
+          <input
+            class="form-control"
+            type="text"
+            readonly
+            value="{{
+              dts_descripcion.v_monto_saldo | number : '0.2-2' | formatoDecimal
+            }}"
+          />
+        </div>
+      </div>
+      <div class="form-group col-lg-4 col-md-4 col-sm-6">
+        <div>
+          <label>Porcentaje</label>
+        </div>
+        <div class="input-group">
+          <input
+            class="form-control"
+            type="text"
+            readonly
+            value="{{ m_porcentaje_saldo }}"
+          />
+          <span class="input-group-addon">%</span>
+        </div>
+      </div>
+      <div class="row"></div>
+      <div class="form-group col-lg-4 col-md-4 col-sm-6">
+        <div>
+          <label>Total Desembolsado</label>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Bs.</span>
+          <input
+            class="form-control"
+            type="text"
+            readonly
+            value="{{
+              dts_descripcion.v_monto_liquidopagado
+                | number : '0.2-2'
+                | formatoDecimal
+            }}"
+          />
+        </div>
+      </div>
+      <div class="form-group col-lg-4 col-md-4 col-sm-6">
+        <div>
+          <label>Porcentaje</label>
+        </div>
+        <div class="input-group">
+          <input
+            class="form-control"
+            type="text"
+            readonly
+            value="{{ m_porcentaje_desembolsado }}"
+          />
+          <span class="input-group-addon">%</span>
+        </div>
+      </div>
+      <div class="row"></div>
+      <div class="form-group col-lg-12 col-md-12 col-sm-12">
+        <div>
+          <label>TOTAL</label>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Bs.</span>
+          <input
+            class="form-control"
+            type="text"
+            readonly
+            value="{{
+              m_montocontratomodificacion | number : '0.2-2' | formatoDecimal
+            }}"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-primary" style="width: 49%" *ngIf="cargado">
+    <div
+      (click)="switchMostrar()"
+      class="panel-heading text-center puntero"
+      title="Mostrar Informacón"
+    >
+      <span class="glyphicon glyphicon-briefcase"></span> RESUMEN NRO 2
+    </div>
+    <div class="panel-body" style="text-align: left" *ngIf="mostrar">
+      <div class="form-group col-lg-4 col-md-4 col-sm-6">
+        <div>
+          <label>Total Desembolsado</label>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Bs.</span>
+          <input
+            class="form-control"
+            type="text"
+            readonly
+            value="{{
+              dts_descripcion.v_monto_liquidopagado
+                | number : '0.2-2'
+                | formatoDecimal
+            }}"
+          />
+        </div>
+      </div>
+      <div class="form-group col-lg-4 col-md-4 col-sm-6">
+        <div>
+          <label>Descuento por Multas</label>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Bs.</span>
+          <input
+            class="form-control"
+            type="text"
+            readonly
+            value="{{
+              dts_descripcion.v_totalmultas | number : '0.2-2' | formatoDecimal
+            }}"
+          />
+        </div>
+      </div>
+      <div class="row"></div>
+      <div class="form-group col-lg-12 col-md-12 col-sm-12">
+        <div><label>Total General Ejecutado</label></div>
+        <div class="input-group">
+          <span class="input-group-addon">Bs.</span>
+          <input
+            class="form-control"
+            type="text"
+            readonly
+            value="{{
+              dts_descripcion.v_monto_cierre | number : '0.2-2' | formatoDecimal
+            }}"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

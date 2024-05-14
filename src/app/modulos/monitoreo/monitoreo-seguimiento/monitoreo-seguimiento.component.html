@@ -1,0 +1,255 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="bg-primary text-white">
+  <H3>DATOS AUSENTES EN EL MODULO DE SEGUIMIENTO</H3>
+</div>
+<!-- SELECCION PERIODO PRESIDENCIAL -->
+<div class="containerCris">
+  <div class="row">
+    <div class="form-group col-sm-3 col-lg-3 col-md-3">
+      <label class="control-label text-left">Periodo Presidencial:</label>
+      <select
+        id="periodo_presidencial"
+        name="periodo_presidencial"
+        class="form-control"
+        [(ngModel)]="m_periodopresidencial"
+        (ngModelChange)="filtraPeriodoPresidencial()"
+      >
+        <option>Seleccione...</option>
+        <option value="TODOS">TODOS</option>
+        <option
+          *ngFor="
+            let row_periodopresidencial of dts_periodospresidencialesagrupados;
+            let i = index
+          "
+          [ngValue]="row_periodopresidencial.nombre_completo"
+        >
+          {{ row_periodopresidencial.nombre_completo }}
+          {{ row_periodopresidencial.fecha_inicio | date : "yyyy/MM/dd" }} -
+          {{ row_periodopresidencial.fecha_fin | date : "yyyy/MM/dd" }}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sindescripcion"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sindescripcion"
+  [valor]="'DESCRIPCION DEL PROYECTO'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinentidadbeneficiaria"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinentidadbeneficiaria"
+  [valor]="'ENTIDAD BENEFICIARIA'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sindetallebeneficiario"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sindetallebeneficiario"
+  [valor]="'DETALLE BENEFICIARIO'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sintipoconvenio"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sintipoconvenio"
+  [valor]="'TIPO CONVENIO'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinplazoejecucion"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinplazoejecucion"
+  [valor]="'PLAZO EJECUCION'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sintipofinanciamiento"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sintipofinanciamiento"
+  [valor]="'TIPO FINANCIAMIENTO'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinarea"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinarea"
+  [valor]="'AREA'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinclasificacion"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinclasificacion"
+  [valor]="'CLASIFICACION'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinsubarea"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinsubarea"
+  [valor]="'SUB AREA'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sindetallelocalizacion"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sindetallelocalizacion"
+  [valor]="'DESCRIPCION DE LA LOCALIZACION'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinpoblacionbeneficiada"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinpoblacionbeneficiada"
+  [valor]="'POBLACION BENEFICIADA'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinsuperficie"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinsuperficie"
+  [valor]="'SUPERFICIE'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinlatitudlongitud"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinlatitudlongitud"
+  [valor]="'UBICACION GEOGRAFICA (LATITUD/LONGITUD)'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinconvenio"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinconvenio"
+  [valor]="'CONVENIO'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinfechainicio"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinfechainicio"
+  [valor]="'FECHA INICIO (ORDEN DE PROCEDER)'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sincontrato"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sincontrato"
+  [valor]="'CONTRATO'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinsupervision"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinsupervision"
+  [valor]="'SUPERVISION'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinimagenesgaleria"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinimagenesgaleria"
+  [valor]="'SIN IMAGENES EN LA GALERIA'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sincontactos"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sincontactos"
+  [valor]="'CONTACTOS (EMPRESA/EQUIPO TECNICO)'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinprogramacion"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinprogramacion"
+  [valor]="'PROGRAMACION PRESUPUESTARIA PARA EL SIGUIENTE MES'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sinregistroambiental"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sinregistroambiental"
+  [valor]="'REGISTRO AMBIENTAL'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo
+  *ngIf="dts_sincierreadministrativo"
+  class="col col-xs-12 col-sm-3 col-lg-3"
+  [inputDts]="dts_sincierreadministrativo"
+  [valor]="'CIERRE ADMINISTRATIVO'"
+  [color]="'azul'"
+  [saldo]="false"
+  [panel]="'SEGUIMIENTO'"
+  (messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>

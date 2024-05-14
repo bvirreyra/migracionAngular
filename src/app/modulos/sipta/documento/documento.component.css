@@ -1,0 +1,110 @@
+.dt-documentos1 tfoot input{
+  width: 100% !important;
+}
+.dt-documentos1 tfoot {
+  display: table-header-group !important;
+}
+.dt-documentos2 tfoot input{
+  width: 100% !important;
+}
+.dt-documentos2 tfoot {
+  display: table-header-group !important;
+}
+.dt-oficinas tfoot input{
+  width: 100% !important;
+}
+.dt-oficinas tfoot {
+  display: table-header-group !important;
+}
+.dt-tipos tfoot input{
+  width: 100% !important;
+}
+.dt-tipos tfoot {
+  display: table-header-group !important;
+}
+.dt-docuser tfoot input{
+  width: 100% !important;
+}
+.dt-docuser tfoot {
+  display: table-header-group !important;
+}
+.dt-docuser2 tfoot input{
+  width: 100% !important;
+}
+.dt-docuser2 tfoot {
+  display: table-header-group !important;
+}
+
+.linea {
+  /* border-top: 2px solid #2f6a8b; */
+  background-color: #2f6a8b;
+  height: 4px;
+  padding: 0;
+  margin: 2px 0 10px 0;
+}
+
+.division{
+  display: grid;
+  /* grid-template-columns: repeat(auto-fill,minmax(500px,0.5fr)); */
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-gap: 1rem;
+}
+
+.division-modal{
+  display: grid;
+  /* grid-template-columns: repeat(auto-fill,minmax(500px,0.5fr)); */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 1rem;
+}
+
+.btn-destinatario{
+  background-color: transparent;
+  color: #1554ee;
+  display: block;
+  font-style: italic;
+}
+
+.propiedad{
+  /* width: 40%; */
+ text-align: right;
+}
+.detalle{
+  /* width: 60%; */
+  padding-left: 1rem;
+  color: #1554ee;
+  font-style: italic;
+  font-size: 1.5rem;
+  text-align: left;
+}
+
+.datos{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(35%, 42%));
+}
+
+.cites{
+  height: 60vh;
+  overflow-y: auto;
+}
+
+tr:hover{
+  background-color: #d6eefc !important;
+}
+
+.resaltado{
+  background-color: #9edbff;
+  border-color: #084d75;
+}
+
+.btn-dangerous{
+  background-color: rgb(160, 7, 38);
+  color: white;
+}
+.btn-dangerous:hover{
+  background-color: rgb(105, 14, 32);
+}
+
+.botonera{
+  display: flex !important;
+  justify-content: space-between;
+}

@@ -1,0 +1,133 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<!-- BOTONERA -->
+<div class="pull-right">
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="paneles('DASHBOARD_PAGOPLANILLAS')"
+  >
+    DashBoard Pago Planillas
+  </button>
+</div>
+<div class="pull-right">
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="paneles('VER_LISTAPROYECTOS')"
+  >
+    Monitoreo Programación
+  </button>
+</div>
+<div class="row"></div>
+<!-- VISTA UNO -->
+<div name="pnl_listaproyecto" id="pnl_listaproyecto" *ngIf="pnl_listaproyecto">
+  <!--REFRESCA GRIDVIEW -->
+  <div class="clearfix" style="margin-bottom: 1rem">
+    <button
+      type="button"
+      class="btn btn-success btn-md pull-right"
+      (click)="paneles('VER_LISTAPROYECTOS')"
+    >
+      <i class="fa fa-refresh" aria-hidden="true" title="Actualizar"></i>
+    </button>
+  </div>
+  <input
+    class="pull-left"
+    type="month"
+    name="periodo_programacion"
+    max="9999-12-31"
+    id="periodo_programacion"
+    [(ngModel)]="m_periodoProgramacion"
+    (ngModelChange)="paneles('VER_LISTAPROYECTOS')"
+  />
+  <br />
+  <div class="row"></div>
+  <!--LISTA GRIDVIEW PROYECTOS CONSOLIDADOS-->
+  <table
+    class="table table-responsive table-condensed table-hover dt-seguimiento"
+    style="font-size: 9pt"
+  >
+    <thead>
+      <tr>
+        <!-- <th>Nro.</th> -->
+        <th>Cod Sgp</th>
+        <th>Gestion</th>
+        <th>Departamento</th>
+        <th>Municipio</th>
+        <th>Nombre Proyecto</th>
+        <th>Responsable</th>
+        <th>Periodo de la programación</th>
+        <th>Componente</th>
+        <th>Nro de Planilla</th>
+        <th>Estado Programación</th>
+        <th>Monto Bs.</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <!-- <td></td> -->
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+
+    <tbody>
+      <tr
+        *ngFor="let row_registros of dts_proyectos; let i = index"
+        [ngClass]="{
+          'bg-success': row_registros.id_estado_programacion == '3',
+          'bg-warning': row_registros.id_estado_programacion == '2'
+        }"
+      >
+        <!-- <td>{{ i + 1 }}</td> -->
+        <td>{{ row_registros.cod_sgp }}</td>
+        <td>{{ row_registros.gestion }}</td>
+        <td>{{ row_registros.departamento }}</td>
+        <td>{{ row_registros.municipio }}</td>
+        <td>{{ row_registros.nombreproyecto }}</td>
+        <td>{{ row_registros.tecnico_responsable }}</td>
+        <td>{{ row_registros.periodo_programacion | date : "MM/yyyy" }}</td>
+        <td>{{ row_registros.estructura_financiamiento }}</td>
+        <td>{{ row_registros.nro_planilla }}</td>
+        <td>{{ row_registros.estado_programacion }}</td>
+        <td>
+          {{
+            row_registros.monto_programado | number : "0.2-2" | formatoDecimal
+          }}
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-info btn-block"
+            title="Asignar"
+            (click)="paneles('ASIGNACION', row_registros)"
+          >
+            <i class="fa fa-id-badge" aria-hidden="true"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div>
+  <app-sheet [id]="5"></app-sheet>
+</div>
+
+<!-- PANEL DASHBOARD PAGO PLANILLAS -->
+<div *ngIf="pnl_dasPlanillas" style="padding-top: 30px">
+  <app-das-planillas></app-das-planillas>
+</div>
+<!-- FIN PANEL AUDITORIA -->

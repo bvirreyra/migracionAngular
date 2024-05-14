@@ -1,0 +1,137 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="contenedor-modulo">
+  <div class="panel panel-primary" id="grilla-experiencia">
+    <div class="panel-heading">
+      <span class="fa fa-building"></span> Equipos de Trabajo
+      <button class="btn btn-info pull-right" title="Agreagr nuevo equipo de trabajo..." style="padding: 2px 10px; margin-top: -2px;" (click)="abrirFormEquipo()" >
+        <span class="fa fa-plus-square-o"></span> Agregar...
+      </button>
+    </div>
+    <div class="panel-body">
+      <div style="overflow-x: auto;">
+        <table class="table table-responsive table-condensed table-hover dt-equipos" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="width: 80px; text-align: center;">Acciones</th>
+              <th >Descripción</th>
+              <th >Unidad</th>
+              <th >Cantidad</th>
+              <th >Potencia</th>
+              <th >Capacidad</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsEquipos;"
+            [ngClass]="{ 'bg-success': row.id_equipo_trabajo === elIdEquipo}">
+              <td style="width: 80px;">
+                <div class="botonera">
+                  <button class="btn btn-warning" title="Editar" (click)="abrirFormEquipo(row)">
+                    <span class="fa fa-edit"></span>
+                  </button>
+                  <button class="btn btn-danger" title="Eliminar" (click)="confirmarEliminacion(row,'D')">
+                    <span class="fa fa-trash"></span>
+                  </button>
+                </div>
+              </td>
+              <td >{{row.descripcion }}</td>
+              <td >{{row.unidad}} </td>
+              <td >{{row.cantidad}}</td>
+              <td >{{row.potencia}}</td>
+              <td >{{row.capacidad}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--modal equipo -->
+<div class="modal fade" tabindex="-1"  name="modalEquipo" id="modalEquipo" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!equipoEditar">Registrar Equipo de Trabajo</div><div *ngIf="equipoEditar">Editar Equipo de Trabajo</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formEquipo" (ngSubmit)="crudEquipo()" autocomplete="off">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="descripcion">Descripcion:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-cogs"></i></span>
+                  <input class="form-control" type="text" name="descripcion" placeholder="descripcion del equipo" formControlName="descripcion" maxlength="100" required autofocus>
+                </div>
+                <span style="color:tomato;" *ngIf="formEquipo.controls['descripcion'].touched && formEquipo.controls['descripcion'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="unidad">Unidad de Medida:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-tag"></i></span>
+                  <input class="form-control" type="text" name="unidad" placeholder="unidad de medida" formControlName="unidad" maxlength="30" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formEquipo.controls['unidad'].touched && formEquipo.controls['unidad'].errors?.required">Este campo es requerido</span>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="cantidad">Cantidad:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-braille"></i></span>
+                  <input class="form-control" type="number" name="cantidad" placeholder="1" formControlName="cantidad" onkeypress="return permite(event, 'solo_num')" min="1" max="9999" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formEquipo.controls['cantidad'].touched && formEquipo.controls['cantidad'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="potencia">Potencia:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-tasks"></i></span>
+                  <input class="form-control" type="text" name="potencia" placeholder="1000 HP" formControlName="potencia" maxlength="150">
+                </div>
+                <span style="color:tomato;" *ngIf="formEquipo.controls['potencia'].touched && formEquipo.controls['potencia'].errors?.required">Este campo es requerido</span>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="capacidad">Capacidad:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-tasks"></i></span>
+                  <input class="form-control" type="text" name="capacidad" placeholder="500 TM" formControlName="capacidad" maxlength="150">
+                </div>
+                <span style="color:tomato;" *ngIf="formEquipo.controls['capacidad'].touched && formEquipo.controls['capacidad'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formEquipo.invalid || formEquipo.pristine">
+                  <div *ngIf="!equipoEditar"><span class="fa fa-floppy-o"></span> Registrar Equipo Trabajo</div>
+                  <div *ngIf="equipoEditar"><span class="fa fa-check"></span> Actualizar Equipo Trabajo</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

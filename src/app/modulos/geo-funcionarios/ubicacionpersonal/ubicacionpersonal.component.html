@@ -1,0 +1,235 @@
+<div class="container-fluid">
+    <div class="col-xs-12 col-md-4">
+        <div class="row">
+            <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+                <!-- <div class="content-header with-border">
+                    <h3 class="content-title text-green">
+                        <strong>COMPROMISOS - LISTA DE COMPROMISOS</strong>
+                    </h3>
+                </div> -->
+                <div class="content-body">
+                    <div class="rowlocal ">
+                        <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+                        <div class="col-xs-12 col-md-12">
+                             <!-- <div class="panel panel-success">
+                                <div class="panel-heading text-center">Ubicación Geográfica De Domicilio</div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-horizontal ">
+                                            <div class="form-group"><button type="button" class="btn btn-primary" id="btnTecnica" name="btnTecnica" (click)="ubicacionActual()">
+                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                Ubicacio Actual</button></div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>Unidad:</label>
+                                                <div class="col-sm-7">
+                                                    <select id="m_unidad" class="form-control" name="m_unidad" [(ngModel)]="m_unidad">
+                                                      <option value="TECNICA">TECNICA</option>
+                                                      <option value="ADMINISTRATIVA FINANCIERA">FINANCIERA</option>
+                                                      <option value="JURIDICA">JURIDICA</option>
+                                                  </select>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>Nombre(s):</label>
+                                                <div class="col-sm-7">
+                                                    <input id="m_nombre" class="inputform" placeholder="Ingrese su nombre" name="m_nombre" [(ngModel)]="m_nombre" required />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>Apellido Paterno:</label>
+                                                <div class="col-sm-7">
+                                                    <input id="m_paterno" class="inputform" placeholder="Ingrese su apellido paterno" name="m_paterno" [(ngModel)]="m_paterno" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>Apellido Materno:</label>
+                                                <div class="col-sm-7">
+                                                    <input id="m_materno" class="inputform" placeholder="Ingrese su apellido materno" name="m_materno" [(ngModel)]="m_materno" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>CI:</label>
+                                                <div class="col-sm-7">
+                                                    <input type="number" id="m_ci" class="inputform" placeholder="Ingrese su Cedula de Identidad" name="m_ci" [(ngModel)]="m_ci" required />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>Expedido:</label>
+                                                <div class="col-sm-7">
+                                                    <select id="m_expedido" class="form-control" name="m_expedido" [(ngModel)]="m_expedido" required>
+                                                        <option value="CH">CH</option>
+                                                        <option value="LP">LP</option>
+                                                        <option value="CBBA">CBBA</option>
+                                                        <option value="OR">OR</option>
+                                                        <option value="PT">PT</option>
+                                                        <option value="TJ">TJ</option>
+                                                        <option value="SC">SC</option>
+                                                        <option value="BN">BN</option>
+                                                        <option value="PD">PD</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda">Complemento SEGIP:</label>
+                                                <div class="col-sm-7">
+                                                    <input id="m_complementosegip" class="inputform" placeholder="Complemento Segip solo si tiene" name="m_complementosegip" [(ngModel)]="m_complementosegip" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>Celular:</label>
+                                                <div class="col-sm-7">
+                                                    <input id="m_celular" class="inputform" placeholder="Ingrese su Celular" name="m_celular" [(ngModel)]="m_celular" required />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>Dirección Completa:</label>
+                                                <div class="col-sm-7">
+                                                    <textarea id="m_direccion" cols="30" rows="3" placeholder="Ingrese su direccion completa Av. calle y nro " name="m_direccion" [(ngModel)]="m_direccion" required></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>Latitud:</label>
+                                                <div class="col-sm-7">
+                                                    <input id="m_latitud" placeholder="Latitud" name="m_latitud" [(ngModel)]="m_latitud" required readonly/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>Longitud:</label>
+                                                <div class="col-sm-7">
+                                                    <input id="m_longitud" placeholder="Longitud" name="m_longitud" [(ngModel)]="m_longitud" required readonly/>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <button *ngIf="m_latitud != '' && m_nombre != '' && m_ci != '' && m_direccion != ''  && m_expedido != ''  && m_expedido != ''  && m_celular != ''  && m_unidad != '' && m_latitud != '' && m_longitud != '' && m_nombre != undefined && m_ci != undefined && m_direccion != undefined  && m_expedido != undefined  && m_expedido != undefined  && m_celular != undefined  && m_unidad != undefined && m_latitud != undefined && m_longitud != undefined"
+                                                            type="button" class="btn btn-primary btn-block" id="btnGuardarUbicacion" name="btnGuardarUbicacion" (click)="preinsertaGeoFuncionario()">
+                                                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                        Guardar</button>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-default btn-block" id="LimpiarBusqueda" name="LimpiarBusqueda" (click)="paneles('LIMPIA_FORMULARIO')">
+                                                          <i class="fa fa-eraser" aria-hidden="true"></i>
+                                                          Limpiar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="panel panel-success">
+                                <div class="panel-heading text-center">Ubicación Geográfica De Domicilio</div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda">Unidad:</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" id="m_unidad" name="m_unidad" [(ngModel)]="m_unidad" disabled />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda">Nombre(s):</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" id="m_nombre" name="m_nombre" [(ngModel)]="m_nombre" disabled />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda">Apellido Paterno:</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" id="m_paterno" name="m_paterno" [(ngModel)]="m_paterno" disabled />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda">Apellido Materno:</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" id="m_materno" name="m_materno" [(ngModel)]="m_materno" disabled />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda">CI:</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" type="number" id="m_ci" name="m_ci" [(ngModel)]="m_ci" disabled />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda">Expedido:</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" id="m_expedido" name="m_expedido" [(ngModel)]="m_expedido" disabled />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda">Complemento SEGIP:</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" id="m_complementosegip" name="m_complementosegip" [(ngModel)]="m_complementosegip" disabled />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda">Fecha de Nacimiento:</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" id="m_fechanacimiento" name="m_fechanacimiento" [(ngModel)]="m_fechanacimiento" disabled />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>Celular:</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" id="m_celular" placeholder="Ingrese su Celular" name="m_celular" [(ngModel)]="m_celular" required />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>Dirección Completa:</label>
+                                                <div class="col-sm-7">
+                                                    <textarea class="form-control" id="m_direccion" cols="30" rows="3" placeholder="Ingrese su direccion completa Av. calle y nro " name="m_direccion" [(ngModel)]="m_direccion" required></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>Latitud:</label>
+                                                <div class="col-sm-7">
+                                                    <input id="m_latitud" placeholder="Latitud" name="m_latitud" [(ngModel)]="m_latitud" required readonly/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-4" for="busqueda"><span style="color:red;">(*)</span>Longitud:</label>
+                                                <div class="col-sm-7">
+                                                    <input id="m_longitud" placeholder="Longitud" name="m_longitud" [(ngModel)]="m_longitud" required readonly/>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-primary btn-block" id="btnGuardarUbicacion" name="btnGuardarUbicacion" (click)="actualizarUbicacionGeo()">
+                                                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                                        Guardar</button>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-secondary btn-block" id="btnGuardarUbicacion" name="btnGuardarUbicacion" (click)="cancelar()">
+                                                        <i class="fa fa-undo" aria-hidden="true"></i>
+                                                        Cancelar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="content-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-8">
+        <div class="map" id="map" name="map"></div>
+    </div>
+</div>

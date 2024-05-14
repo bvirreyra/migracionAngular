@@ -1,0 +1,143 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="containerCris" *ngIf="pnl_ambiental==true">
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <span class="glyphicon glyphicon-list"></span> {{editando?'ACTUALIZAR':'REGISTRA'}} FICHA AMBIENTAL
+    </div>
+    <div class="panel-body" style="text-align: left;">
+      <div style="text-align: left;">
+        <form  [formGroup]="formAmbiental" (ngSubmit)="subirAdjunto()">
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-12 col-md-12">
+              <label for="proyecto">Proyecto:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-folder-close"></i></span>
+                <input class="form-control" type="text" name="proyecto" formControlName="proyecto" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-6 col-md-6">
+              <label for="codigo">Código:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                <input class="form-control" type="codigo" name="codigo" placeholder="Código" formControlName="codigo" 
+                        
+                required>
+                <span style="color:tomato;" *ngIf="formAmbiental.controls['codigo'].touched && formAmbiental.controls['codigo'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-6 col-md-6">
+              <label for="tipo">Tipo Licencia:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign"></i></span>
+                <select class="form-control" formControlName="tipo" aria-placeholder="seleccione..." 
+                
+                required>
+                  <option *ngFor="let row of dts_tipo" [ngValue]="row.descripciondetalleclasificador">
+                    {{row.descripciondetalleclasificador}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-6 col-md-6">
+              <label for="docs">Otros Documentos:</label>
+              <div  *ngFor="let elemento of dts_otros; let i = index;" style="text-align: left;">
+                <label class="checkbox-inline cheklab" id="lab{{elemento.id_detalle}}" >
+                  <input type="checkbox" class="check text-left" id="c{{ elemento.id_detalle }}" (change)="armarOtros($event)"
+                  [disabled]="camposHabilitados._ambientalista"
+                  />
+                  {{elemento.descripciondetalleclasificador}}
+                </label>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-6 col-md-6">
+              <label for="observacion">Observaciones:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-paperclip"></i></span>
+                <select class="form-control" formControlName="observacion" aria-placeholder="selccione..." 
+                [disabled]="camposHabilitados._ambientalista"
+                required>
+                  <option *ngFor="let row of dts_observacion" [ngValue]="row.descripciondetalleclasificador">
+                    {{row.descripciondetalleclasificador}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-6 col-md-6">
+              <label for="ubicacion">Ubicación:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
+                <select class="form-control" formControlName="ubicacion" aria-placeholder="selccione..." 
+                [disabled]="camposHabilitados._ambientalista"
+                required>
+                  <option *ngFor="let row of dts_ubicacion" [ngValue]="row.descripciondetalleclasificador">
+                    {{row.descripciondetalleclasificador}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-6 col-md-6">
+              <label for="transferencia">Nº Transferencia:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
+                <input class="form-control" type="text" name="transferencia" placeholder="Nº Transferencia" formControlName="transferencia" maxlength="50" 
+                [disabled]="camposHabilitados._ambientalista"
+                required>
+                <span style="color:tomato;" *ngIf="formAmbiental.controls['transferencia'].touched && formAmbiental.controls['transferencia'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-6 col-md-6">
+              <label for="archivo">Archivo:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-file"></i></span>
+                <input class="form-control" type="text" name="archivo" placeholder="Archivo" formControlName="archivo" readonly                
+                required>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-6 col-md-6">
+              <label for="inputArchivo">Agregar/Reemplazar Archivo:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-open"></i></span>
+                <input class="form-control" type="file"accept="application/pdf" id="inputArchivo" name="inputArchivo" 
+                [disabled]="camposHabilitados._ambientalista"
+                (change)="handleFileInput($event.target.files)">
+              </div>
+            </div>
+          </div>
+          <div class="linea"></div>
+          <div class="text-center" *ngIf="mostrarArchivo">
+              <app-upload-file
+                inputTipoDocumento="ficha_ambiental"
+                inputCodigoProy="{{ idProyecto }}"
+                inputVista="false"
+                inputTipoImagen="documento"
+                inputSrc=""
+                inputNombre="{{ dts_ambiental[0].archivo}}"
+                inputAccion="VISUALIZAR"
+                [disabled]="camposHabilitados._ambientalista"
+              >
+              </app-upload-file>
+          </div>
+          <div class="row">
+            <div class="linea"></div>
+            <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+              <button class="btn btn-success" type="submit"  [disabled]="formAmbiental.invalid || (!habilitarEnvio && formAmbiental.pristine) || camposHabilitados._ambientalista" >
+                <div *ngIf="!editando"><span class="glyphicon glyphicon-floppy-disk"></span> Registrar Ficha Ambiental</div>
+                <div *ngIf="editando"><span class="glyphicon glyphicon-ok"></span> Actualizar Ficha Ambiental</div>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>  
+    </div>
+  </div>
+</div>

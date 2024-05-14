@@ -1,0 +1,206 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="row" *ngIf="render">
+  <div class="form-group col-sm-12 col-lg-12 col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading text-center">
+        <span class="glyphicon glyphicon-list"></span> Historial Solicitudes Gestión {{gestion}}
+      </div>
+      <div class="panel-body" style="text-align: left;">
+        <button class="btn btn-success" data-toggle="modal" style="margin-bottom: 1rem;" data-target="#modalSolicitud" (click)="reiniciar()">
+          <span class="glyphicon glyphicon-plus"></span> Nueva Solicitud
+        </button>
+        <button *ngIf="dts_roles.includes(2)" class="btn btn-info" style="margin: 0 0 1rem 1rem;" (click)="cargarSolicitudes('ACTIVOS')">
+          <span class="glyphicon glyphicon-refresh"></span> Mostrar Solicitudes {{gestion}} 
+        </button>
+          <label style="white-space: nowrap; margin: 0 1rem;padding-top: 0.8rem;">Cambiar Gestión</label>
+          <select class="form-control" style="width: 80px; display:inline;" [(ngModel)]="gestion" (ngModelChange)="cambiarGestion()" >
+            <option *ngFor="let row of dts_gestiones" [ngValue]="row" >
+              {{row}}
+            </option>
+          </select>
+        <table class="table table-responsive table-condensed table-hover dt-solicitud" style="font-size: 9pt">
+          <thead>
+            <tr>
+              <th>Nº</th>
+              <th>Observación</th>
+              <th>Fecha Solicitud</th>
+              <th>Fecha Entrega</th>
+              <th>Usuario Solicitud</th>
+              <th>Estado</th>
+              <th style="width: 280px;">Opciones</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dts_solicitudes; let i = index" [ngClass]="{ 'bg-danger': row.estado == 'CANCELADO', 'bg-success': row.estado == 'INICIADO','bg-info': row.estado == 'CONFIRMADO' }">
+              <td width="40px">{{ row.numero_solicitud }}</td>
+              <td width="400px">{{ row.observacion}}</td>
+              <td>{{ row.fecha_registro | date: "dd/MM/yyyy HH:mm:ss"}}</td>
+              <td>{{ row.fecha_entrega | date: "dd/MM/yyyy HH:mm:ss"}}</td>
+              <td>{{ row.usuario}}</td>
+              <td>{{ row.estado }}</td>
+              <td>
+                <button class="btn btn-info" title="Artículos" (click)="solicitudDetalle(row)">
+                  <span class="glyphicon glyphicon-plus-sign"></span>
+                </button>
+                <button class="btn btn-danger" title="Cancelar" (click)="cambiarEstado(row,'CANCELADO')" [disabled]="row.estado!='INICIADO' || row.usuario_registro !=idUsuario">
+                  <span class="glyphicon glyphicon-trash"></span>
+                </button>
+                <button class="btn btn-warning" title="Finalizar" (click)="cambiarEstado(row,'ENTREGADO')" [disabled]="row.estado!=='CONFIRMADO'" *ngIf="dts_roles.includes(2)" >
+                  <span class="glyphicon glyphicon-ok"></span>
+                </button>
+                <button class="btn btn-primary" title="Reporte" (click)="reporteSolicitud(row.id_solicitud)" [disabled]="row.estado!='ENTREGADO'">
+                  <span class="glyphicon glyphicon-print"></span>
+                </button>
+                <button class="btn btn-success" title="Confirmar" (click)="cambiarEstado(row,'CONFIRMADO')" [disabled]="!(row.estado=='INICIADO')" *ngIf="row.usuario_registro === idUsuario" >
+                  <span class="glyphicon glyphicon-ok"></span>
+                </button>
+                <button class="btn btn-success" title="Retornar" (click)="cambiarEstado(row,'INICIADO')" [disabled]="row.estado=='ENTREGADO'" *ngIf="dts_roles.includes(2)" >
+                  <span class="glyphicon glyphicon-log-out"></span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal solicitud -->
+<div class="modal fade" name="modalSolicitud" id="modalSolicitud" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!solicitudEditar">Registrar Solicitud</div><div *ngIf="solicitudEditar">Actualizar Solicitud</div> </h5>
+      </div>
+      <div class="modal-body" style="overflow:hidden;">
+        <div id="todo" style="text-align: left;">
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="numeroSolicitud">Nº Solicitud:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                <input class="form-control" type="text" name="numeroSolicitud" placeholder="1" [(ngModel)]="solicitud.numeroSolicitud" min="1" max="500" readonly>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="fechaSolicitud">Fecha Solicitud:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                <input class="form-control" type="date" name="fechaSolicitud" placeholder="Fecha Solicitud" [(ngModel)]="solicitud.fechaSolicitud" readonly>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="fechaEntrega">Fecha Entrega:</label>
+              <div class="input-group">
+                <label style="font-weight: 700;color: #0c72ad;"><div *ngIf="solicitud.estado == 'ENTREGADO'">{{solicitud.fechaEntrega | date: "dd/MM/yyyy"}}</div><div *ngIf="solicitud.estado != 'ENTREGADO'">Sin fecha de entrega</div></label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-12 col-md-12">
+              <label for="observacion">Observación / Justificación:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+                <input class="form-control" type="text" name="observacion" placeholder="Observación / Justificación" [(ngModel)]="solicitud.observacion"
+                      maxlength="250" (ngModelChange)="habilitar()" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-10 col-lg-6">
+              <label for="insumo">Seleccione Artículo:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+                <ng-select2 [width]="400" [data]="comboInsumos" [(ngModel)]="insumo" (ngModelChange)="solicitarInsumo($event)"></ng-select2>
+              </div>
+            </div>
+            <div class="form-group col-sm-2 col-lg-2">
+              <label for="insumo">Existencias:</label>
+              <div class="input-group">
+                <span id="stock" class="input-group-addon" style="font-weight: 800;">{{stockActual}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-12 col-md-12">
+              <table class="table table-responsive table-condensed table-hover" style="font-size: 9pt">
+                <thead>
+                  <tr>
+                    <th>Nº</th>
+                    <th>Artículo</th>
+                    <th>Unidad</th>
+                    <th style="text-align: right;">Cantidad Solicitada</th>
+                    <th style="text-align: right;">Cantidad Entregada</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr *ngFor="let row of dts_detalle; let i = index"
+                  [ngClass]="{ 'bg-danger': editados.includes(-row.id_solicitud_detalle) && row.id_solicitud_detalle!=0}">
+                    <td width="20px">{{ i + 1 }}</td>
+                    <td>{{ row.codigo}} - {{row.descripcion}} </td>
+                    <td>{{ row.unidad}}</td>
+                    <td style="text-align: right;">
+                      <span *ngIf="(row.cantidad>row.stock) && (solicitud.estado == 'INICIADO')" class="fa fa-exclamation-triangle" style="margin-right: 1rem;color: darkorange; font-size: 18px;"
+                        title="No debe ser mayor a {{row.stock}}"></span>
+                      <input type="number" class="cuser" id="cant{{row.fid_insumo}}" (change)="marcar(row,row.fid_insumo,'S')" style="width: 60px;"
+                              min="1" max="{{row.stock}}" onkeypress="return permite(event, 'solo_num')" value="{{ row.cantidad}}">
+                    </td>
+                    <td style="text-align: right;">
+                      <span *ngIf="(row.cantidad_entregada>row.stock) && (solicitud.estado == 'CONFIRMADO')" class="fa fa-exclamation-triangle" style="margin-right: 1rem;color: darkorange; font-size: 18px;"
+                        title="No debe ser mayor a {{row.stock}}"></span>
+                      <input type="number" class="cadmin" id="ent{{row.fid_insumo}}" [disabled]="!dts_roles.includes(2)" (change)="marcar(row,row.fid_insumo,'E')"
+                            style="width: 60px;" min="0" max="{{row.stock}}" onkeypress="return permite(event, 'solo_num')" value="{{ row.cantidad_entregada}}">
+                    </td>
+                    <td>
+                      <button class="btn btn-danger" title="Eliminar" (click)="marcar(row,-row.fid_insumo,'D')" [disabled]="dts_roles.includes(2) && idUsuario!=solicitud.idUsuarioRegistro">
+                        <span class="glyphicon glyphicon-trash"></span>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="linea"></div>
+            <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+              <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal" (click)="reiniciar()">Cancelar</button>
+              <button class="btn btn-success" id="registrar" type="button" (click)="registrarSolicitud()"  [disabled]="!habilitarRegistro">
+                <div *ngIf="!solicitudEditar"><span class="glyphicon glyphicon-floppy-disk"></span> Registrar Solicitud</div>
+                <div *ngIf="solicitudEditar"><span class="glyphicon glyphicon-ok"></span> Actualizar Solicitud</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

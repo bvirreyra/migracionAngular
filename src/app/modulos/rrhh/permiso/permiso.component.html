@@ -1,0 +1,498 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="panel panel-primary">
+  <div class="panel-heading text-center">
+    <span class="glyphicon glyphicon-user"></span> PERMISOS DE USUARIOS
+  </div>
+  <div class="panel-body">
+    <div class="row text-center">
+      <div class="form-group col-md-12">
+        <label for="busqueda">Servidor(a):</label>
+        <div class="form-group">
+          <div>
+            <ng-select2
+              width="300px"
+              [data]="comboSeleccion"
+              [(ngModel)]="idUsuario"
+              (ngModelChange)="muestraPermisos()"
+            ></ng-select2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div *ngIf="pnlUsuarios" name="pnlUsuarios" id="pnlUsuarios">
+    <div class="content-body">
+      <!-- <div class="rowlocal"> -->
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading text-center">Usuarios</div>
+          <div class="panel-body table">
+            <!-- INICIO TABLA-->
+            <div class="row">
+              <table
+                class="table table-primary table-striped table-condensed table-hover dt-usuarios"
+              >
+                <tfoot>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+                <thead>
+                  <tr>
+                    <th>Id Usuario</th>
+                    <th>Nombres</th>
+                    <th>Apellido Paterno</th>
+                    <th>Apellido Materno</th>
+                    <th>Número Documento</th>
+                    <th>Expedido</th>
+                    <th>Id Biometrico</th>
+                    <th>Seleccionar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let row_registros of dts_ListaUsuarios;
+                      let i = index
+                    "
+                  >
+                    <td>{{ row_registros.id }}</td>
+                    <td>{{ row_registros.nombre }}</td>
+                    <td>{{ row_registros.paterno }}</td>
+                    <td>{{ row_registros.materno }}</td>
+                    <td>{{ row_registros.ci }}</td>
+                    <td>{{ row_registros.exp }}</td>
+                    <td>{{ row_registros.t_userid }}</td>
+                    <td>
+                      <button
+                        class="btn btn-info btn-circle-sm"
+                        type="button"
+                        (click)="permisosUsuario(row_registros.t_userid)"
+                      >
+                        <span class="glyphicon glyphicon-hand-right"></span>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- FIN TABLA-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- </div> -->
+
+  <div name="pnlPermisos" id="pnlPermisos" *ngIf="pnlPermisos">
+    <div class="row"></div>
+    <div class="content-body">
+      <div class="col-sm-12 col-lg-4" style="margin-top: 2.4rem">
+        <button
+          *ngIf="flagBtnRegistrar == 1"
+          class="btn btn-danger"
+          type="button"
+          data-toggle="modal"
+          data-target="#modalPermisos"
+          (click)="abrirModal()"
+          title="Registrar Nuevo Permiso"
+        >
+          <i class="fa fa-plus"></i> REGISTRAR PERMISO
+        </button>
+      </div>
+      <!-- <div> -->
+      <div class="form-group col-sm-12 col-lg-2">
+        <label for="f1">Fecha Desde:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          <input
+            type="date"
+            name="f1"
+            id="f1"
+            [(ngModel)]="reporteF1"
+            class="form-control"
+          />
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-2">
+        <label for="f2">Fecha Hasta:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          <input
+            type="date"
+            name="f2"
+            id="f3"
+            [(ngModel)]="reporteF2"
+            class="form-control"
+          />
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-2">
+        <label for="f2">Tipo Permiso:</label>
+        <select
+          id="idTipoPermiso"
+          class="form-control"
+          name="idTipoPermiso"
+          [(ngModel)]="tipoPermisoDesc"
+        >
+          <option
+            *ngFor="let row_permiso of dts_TipoPermiso"
+            [ngValue]="row_permiso.Descripcion"
+          >
+            {{ row_permiso.Descripcion }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group col-sm-12 col-lg-2" style="margin-top: 2.4rem">
+        <button
+          class="btn btn-success"
+          (click)="reportePermisos('01')"
+          title="Reporte Permisos"
+        >
+          <i class="fa fa-print"></i> REPORTE PERMISOS
+        </button>
+      </div>
+      <!-- </div> -->
+      <!-- <div class="rowlocal"> -->
+      <div class="col-sm-12 col-lg-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading text-center">Permisos Registrados</div>
+          <div class="panel-body table">
+            <!-- INICIO TABLA-->
+            <table
+              class="table table-primary table-striped table-condensed table-hover dt-permisos"
+            >
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Tipo Permiso</th>
+                  <th>Motivo</th>
+                  <th>Fecha Desde</th>
+                  <th>Hora Desde</th>
+                  <th>Fecha Hasta</th>
+                  <th>Hora Hasta</th>
+                  <th>Duración Días</th>
+                  <th>Observacion</th>
+                  <th>Fecha Registro</th>
+                  <th>Opciones</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tfoot>
+              <tbody>
+                <tr *ngFor="let row_registros of dts_permisos; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ row_registros.TipoPermiso }}</td>
+                  <td>{{ row_registros.Motivo }}</td>
+                  <td>{{ row_registros.FechaDesde }}</td>
+                  <td>{{ row_registros.HoraDesde }}</td>
+                  <td>{{ row_registros.FechaHasta }}</td>
+                  <td>{{ row_registros.HoraHasta }}</td>
+                  <td>{{ row_registros.DuracionDias }}</td>
+                  <td>{{ row_registros.Observacion }}</td>
+                  <td>{{ row_registros.FechaRegistro }}</td>
+                  <td>
+                    <button
+                      *ngIf="
+                        row_registros.Estado == 1 &&
+                        row_registros.Diferencia <= 1
+                      "
+                      class="btn btn-warning btn-circle-sm"
+                      type="button"
+                      data-toggle="modal"
+                      data-target="#modalPermisos"
+                      (click)="datosModal(row_registros, 'U')"
+                      title="Actualizar"
+                    >
+                      <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button
+                      *ngIf="
+                        row_registros.Estado == 1 &&
+                        row_registros.Diferencia <= 1
+                      "
+                      class="btn btn-danger btn-circle-sm"
+                      type="button"
+                      data-toggle="modal"
+                      data-target="#modalConfirmaBajaPermiso"
+                      (click)="datosModal(row_registros, 'D')"
+                      title="Eliminar"
+                    >
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- FIN TABLA-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INICIO MODAL BIOMETRICO -->
+<div
+  class="modal fade"
+  name="modalPermisos"
+  id="modalPermisos"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">
+          REGISTRO DE PERMISO
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4" for="busqueda"
+                  >Tipo Permiso:</label
+                >
+                <div class="col-sm-7">
+                  <select
+                    id="idTipoPermiso"
+                    class="form-control"
+                    name="idTipoPermiso"
+                    [(ngModel)]="permiso.idTipoPermiso"
+                  >
+                    <option
+                      *ngFor="let row_permiso of dts_TipoPermiso"
+                      [ngValue]="row_permiso.IdTipoPermiso"
+                    >
+                      {{ row_permiso.Descripcion }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Fecha/Hora desde:</label
+              >
+              <div class="col-sm-4">
+                <input
+                  class="form-control"
+                  min="{{ fechaValida | date : 'yyyy-MM-dd' }}"
+                  type="date"
+                  name="fechaDesde"
+                  id="fechaDesde"
+                  autocomplete="off"
+                  [(ngModel)]="permiso.fechaDesde"
+                />
+              </div>
+              <div class="col-sm-3">
+                <input
+                  class="form-control"
+                  type="time"
+                  name="horaDesde"
+                  id="horaDesde"
+                  autocomplete="off"
+                  [(ngModel)]="permiso.horaDesde"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Fecha/Hora hasta:</label
+              >
+              <div class="col-sm-4">
+                <input
+                  class="form-control"
+                  min="{{ permiso.fechaDesde | date : 'yyyy-MM-dd' }}"
+                  type="date"
+                  name="fechaHasta"
+                  id="fechaHasta"
+                  autocomplete="off"
+                  [(ngModel)]="permiso.fechaHasta"
+                />
+              </div>
+              <div class="col-sm-3">
+                <input
+                  class="form-control"
+                  type="time"
+                  name="horaHasta"
+                  id="horaHasta"
+                  autocomplete="off"
+                  [(ngModel)]="permiso.horaHasta"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Motivo:</label
+              >
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="motivo"
+                  id="motivo"
+                  autocomplete="off"
+                  [(ngModel)]="permiso.motivo"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Observacion:</label
+              >
+              <div class="col-sm-7">
+                <textarea
+                  class="form-control"
+                  type="text"
+                  name="observacion"
+                  id="observacion"
+                  autocomplete="off"
+                  rows="6"
+                  style="resize: none"
+                  [(ngModel)]="permiso.observacion"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          name="btnRegistrar"
+          id="btnRegistrar"
+          (click)="insertarValidaHoras()"
+        >
+          Registrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning"
+          name="btnModificar"
+          id="btnModificar"
+          (click)="modificarPermiso()"
+        >
+          Modificar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL BIOMETRICO -->
+<!-- </div> -->
+<!-- INICIO MODAL CONFIRMACION -->
+<div
+  class="modal fade"
+  id="modalConfirmacion"
+  name="modalConfirmacion"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="Eliminar_proveido"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><b>ALERTA</b></h5>
+      </div>
+      <div class="modal-body">
+        La persona excede el total de 2 horas permitido por mes, desea continuar
+        el registro?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          id="btnInsConfirmar"
+          name="btnInsConfirmar"
+          class="btn btn-primary"
+          (click)="guardarPermiso()"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL CONFIRMACION-->
+<!-- </div> -->
+<!-- INICIO MODAL CONFIRMACION DE ELIMINACION PERMISO -->
+<div
+  class="modal fade"
+  id="modalConfirmaBajaPermiso"
+  name="modalConfirmaBajaPermiso"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><b>ALERTA</b></h5>
+      </div>
+      <div class="modal-body">
+        Esta seguro en eliminar el permiso registrado con el siguiente motivo
+        ==>
+        <strong>"{{ permiso.motivo }}"</strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          id="btnBajaPermiso"
+          name="btnBajaPermiso"
+          class="btn btn-primary"
+          (click)="bajaPermiso()"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL CONFIRMACION-->

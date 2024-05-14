@@ -1,0 +1,147 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="panel panel-primary">
+  <div class="panel-heading text-center">
+    {{ estructura_financiamiento }}
+  </div>
+  <div class="panel-body">
+    <form>
+      <div
+        *ngIf="ioperacion == 'I'"
+        class="form-group"
+        class="col-lg-12 col-md-12 col-sm-12"
+      >
+        <div>
+          <label>Tipo Estructura Fin:</label>
+        </div>
+        <div class="input-group">
+          <select
+            id="estructura_financiamiento"
+            class="form-control"
+            name="estructura_financiamiento"
+            [(ngModel)]="estructura_financiamiento"
+          >
+            <option
+              *ngFor="let row_estructura of dtsTipoEstructuraFinanciamiento"
+              [ngValue]="row_estructura.descripciondetalleclasificador"
+            >
+              {{ row_estructura.descripciondetalleclasificador }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" class="col-lg-12 col-md-12 col-sm-12">
+        <div>
+          <label>Monto Total:</label>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Bs.</span>
+          <input
+            class="form-control"
+            id="ef_montototal"
+            maxlength="30"
+            name="ef_montototal"
+            autocomplete="off"
+            (input)="handleInput($event)"
+            (blur)="handleBlur($event)"
+            onKeyDown="A(event,this.form.ef_montobeneficiario)"
+            [(ngModel)]="monto_total"
+            [disabled]="dtsPermisos._usuario_nuevo_proyecto"
+          />
+        </div>
+      </div>
+      <!-- /*MONTO CONTRAPARTE BENEFICIARIO*/ -->
+      <div class="form-group row" class="col-lg-12 col-md-12 col-sm-12">
+        <div>
+          <label>Monto Contraparte Beneficiario:</label>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Bs.</span>
+          <input
+            class="form-control"
+            id="ef_montobeneficiario"
+            name="ef_montobeneficiario"
+            autocomplete="off"
+            onKeyDown="A(event,this.form.ef_montogobernacion)"
+            (input)="handleInput($event)"
+            (blur)="handleBlur($event)"
+            [(ngModel)]="monto_beneficiario"
+            [disabled]="dtsPermisos._usuario_nuevo_proyecto"
+          />
+        </div>
+      </div>
+      <div class="form-group row" class="col-lg-12 col-md-12 col-sm-12">
+        <div>
+          <label>Monto Contraparte Gobernación:</label>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Bs.</span>
+          <input
+            class="form-control"
+            id="ef_montogobernacion"
+            name="ef_montogobernacion"
+            autocomplete="off"
+            onKeyDown="A(event,this.form.ef_montomunicipal)"
+            (input)="handleInput($event)"
+            (blur)="handleBlur($event)"
+            [(ngModel)]="monto_gobernacion"
+            [disabled]="dtsPermisos._usuario_nuevo_proyecto"
+          />
+        </div>
+      </div>
+
+      <div class="form-group row" class="col-lg-12 col-md-12 col-sm-12">
+        <div>
+          <label>Monto Contraparte Municipio:</label>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Bs.</span>
+          <input
+            class="form-control"
+            id="ef_montomunicipal"
+            name="ef_montomunicipal"
+            autocomplete="off"
+            (input)="handleInput($event)"
+            (blur)="handleBlur($event)"
+            [(ngModel)]="monto_municipal"
+            [disabled]="dtsPermisos._usuario_nuevo_proyecto"
+          />
+        </div>
+      </div>
+
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <button
+          type="button"
+          *ngIf="btnInsertar == true"
+          class="btn btn-warning btn-block"
+          (click)="crudEstructuraFinanciamiento()"
+          [disabled]="dtsPermisos._usuario_nuevo_proyecto"
+        >
+          Insertar
+        </button>
+        <button
+          type="button"
+          *ngIf="btnActualizar == true"
+          class="btn btn-warning btn-block"
+          (click)="crudEstructuraFinanciamiento()"
+          [disabled]="dtsPermisos._usuario_nuevo_proyecto"
+        >
+          Actualizar
+        </button>
+        <button
+          type="button"
+          *ngIf="
+            btnActualizar == true &&
+            estructura_financiamiento != 'INFRAESTRUCTURA'
+          "
+          class="btn btn-danger btn-block"
+          (click)="eliminarEstructuraFinanciamiento()"
+          [disabled]="dtsPermisos._usuario_nuevo_proyecto"
+        >
+          Eliminar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

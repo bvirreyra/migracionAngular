@@ -1,0 +1,11 @@
+.dt-asistencia tfoot input, .dt-omisiones tfoot input{
+    width: 100% !important;
+}
+.dt-asistencia tfoot, .dt-omisiones tfoot{
+    display: table-header-group !important;
+}
+
+.botonera{
+    display: flex !important;
+    justify-content: space-between;
+}

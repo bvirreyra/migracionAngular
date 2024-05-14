@@ -1,0 +1,12 @@
+.dt-Compromisos tfoot input{
+    width: 100% !important;
+}
+.dt-Compromisos tfoot {
+    display: table-header-group !important;
+}
+.dt-supervision tfoot input{
+    width: 100% !important;
+}
+.dt-supervision tfoot {
+    display: table-header-group !important;
+}

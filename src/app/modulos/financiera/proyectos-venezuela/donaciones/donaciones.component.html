@@ -1,0 +1,481 @@
+<div id="pnl_formulario">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="page-header">
+                <h2>Donaciones</h2>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary  pull-left" title="Volver Panel" name="btnVolverGv" id="btnVolverGv" (click)="paneles('VER_GRIDVIEW')"><i class="fa fa-reply fa-2x">
+            </i></button>
+    </div>
+    <div class="row">
+        <div class="col-lg-7 col-md-7 col-sm-7 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+            <form action="" method="post" enctype="multipart/form-data">
+                <div class="panel panel-primary">
+                    <div class="panel-heading clearfix">
+                    </div>
+                    <div class="panel-body">
+                        <div class="bg-primary text-white">Donaciones</div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Gestion:</label>
+                            </div>
+                            <div>
+                                <input class="form-control" id="m_gestion_proy" maxlength="200" rows="2" name="m_gestion_proy" [(ngModel)]="m_gestion_proy" onKeyDown="A(event,this.form.m_nombreproyecto)" required />
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Nombre del Proyecto:</label>
+                            </div>
+                            <div>
+                                <textarea class="form-control" id="m_nombreproyecto" maxlength="200" rows="2" name="m_nombreproyecto" [(ngModel)]="m_nombreproyecto" onKeyDown="A(event,this.form.m_departamento)" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Departamento:</label>
+                            </div>
+                            <div>
+                                <select id="m_departamento" class="form-control" name="m_departamento" [(ngModel)]="m_departamento" (change)="filtraMunicipio()" onKeyDown="A(event,this.form.m_provincia)">
+                                    <option value='0' disabled="m_departamento =='0'">Seleccione...</option>
+                                    <option *ngFor="let row_registros of dts_departamento"
+                                        [ngValue]="row_registros.codigo_departamento">
+                                        {{row_registros.nombre}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Provincia:</label>
+                            </div>
+                            <div>
+                                <select id="m_provincia" class="form-control" name="m_provincia" [(ngModel)]="m_provincia" (change)="filtraMunicipio()" onKeyDown="A(event,this.form.m_municipio)">
+                  <option value='0' disabled="m_provincia =='0'">Seleccione...</option>
+                  <option *ngFor="let row_registros of dts_provinciafiltrada"
+                    [ngValue]="row_registros.codigo_provincia">{{row_registros.nombre}}
+                  </option>
+                </select>
+                            </div>
+                        </div> -->
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Municipio:</label>
+                            </div>
+                            <div>
+                                <select id="m_municipio" class="form-control" name="m_municipio" [(ngModel)]="m_municipio" onKeyDown="A(event,this.form.m_empresa)">
+                                    <option value='0' disabled="m_municipio =='0'">Seleccione...</option>
+                                    <option *ngFor="let row_registros of dts_municipiofiltrado"
+                                        [ngValue]="row_registros.codigo_municipio">{{row_registros.nombre}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Empresa Constructora:</label>
+                            </div>
+                            <div>
+                                <textarea class="form-control" id="m_empresa" maxlength="200" rows="2" name="m_empresa" [(ngModel)]="m_empresa" onKeyDown="A(event,this.form.m_representante)" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Representante Legal:</label>
+                            </div>
+                            <div>
+                                <input class="form-control" id="m_representante" name="m_representante" [(ngModel)]="m_representante" onKeyDown="A(event,this.form.m_cirepresentante)" required />
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Ci Representante Legal:</label>
+                            </div>
+                            <div>
+                                <input class="form-control" id="m_cirepresentante" name="m_cirepresentante" [(ngModel)]="m_cirepresentante" onKeyDown="A(event,this.form.m_modalidadfinanciamiento)" required />
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Modalidad Financiamiento:</label>
+                            </div>
+                            <div>
+                                <select id="m_modalidadfinanciamiento" class="form-control" name="m_modalidadfinanciamiento" [(ngModel)]="m_modalidadfinanciamiento" onKeyDown="A(event,this.form.m_firmacontrato)">
+                                    <option *ngFor="let row_registros of dts_modalidadfinanciamiento"
+                                        [ngValue]="row_registros.descripciondetalleclasificador">
+                                        {{row_registros.descripciondetalleclasificador}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Firma Contrato:</label>
+                            </div>
+                            <div>
+                                <select id="m_firmacontrato" class="form-control" name="m_firmacontrato" [(ngModel)]="m_firmacontrato" onKeyDown="A(event,this.form.m_montofinanciarsus)">
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                    <option value="NINGUNO">NINGUNO</option>
+                                    <option value="DONACION">DONACION</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Monto a Financiar Sus:</label>
+                            </div>
+                            <div>
+                                <input class="form-control" id="m_montofinanciarsus" name="m_montofinanciarsus" (blur)="calculo()" [(ngModel)]="m_montofinanciarsus" onKeyDown="A(event,this.form.m_tipocambio)" required />
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Tipo de Cambio:</label>
+                            </div>
+                            <div>
+                                <input class="form-control" id="m_tipocambio" name="m_tipocambio" (blur)="calculo()" [(ngModel)]="m_tipocambio" onKeyDown="A(event,this.form.m_montofinanciarbs)" required />
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Monto a Financiar Bs:</label>
+                            </div>
+                            <div>
+                                <input class="form-control" id="m_montofinanciarbs" name="m_montofinanciarbs" [(ngModel)]="m_montofinanciarbs" required />
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <button type="button" class="btn btn-success btn-block" value="REGISTRAR" name="btnRegistrar" id="btnRegistrar" title="Guardar Seguimiento" (click)="insertaDonacion()">Registrar</button>
+                            <button type="button" class="btn btn-success btn-block" value="ACTUALIZAR" name="btnActualizar" id="btnActualizar" (click)="actualizaDonacion()" title="Guardar Seguimiento">Actualizar</button>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<div id="pnl_formulario_bandeja">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="page-header">
+                <h2>Anticipo & Desembolso</h2>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary  pull-left" title="Volver Panel" name="btnVolverGv" id="btnVolverGv" (click)="paneles('VER_GRIDVIEW_BANDEJA')"><i class="fa fa-reply fa-2x">
+            </i></button>
+    </div>
+    <div class="row">
+        <div class="col-lg-7 col-md-7 col-sm-7 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+            <form action="" method="post" enctype="multipart/form-data">
+                <div class="panel panel-primary">
+                    <div class="panel-heading clearfix">
+                    </div>
+                    <div class="panel-body">
+                        <div class="bg-primary text-white">Anticipo & Desembolso</div>
+
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Nombre del Proyecto:</label>
+                            </div>
+                            <div>
+                                <textarea class="form-control" id="nombreproyecto2" maxlength="200" rows="2" name="nombreproyecto2" [(ngModel)]="m_nombreproyecto" onKeyDown="A(event,this.form.m_tipopago)" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Tipo Pago:</label>
+                            </div>
+                            <div>
+                                <select id="m_tipopago" class="form-control" name="m_tipopago" [(ngModel)]="m_tipopago" onKeyDown="A(event,this.form.m_nropago)">
+                                    <option value="ANTICIPO">ANTICIPO</option>
+                                    <option value="DESEMBOLSO">DESEMBOLSO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Nro:</label>
+                            </div>
+                            <div>
+                                <input type="number" class="form-control" id="m_nropago" name="m_nropago" [(ngModel)]="m_nropago" onKeyDown="A(event,this.form.m_montodesembolso)" required>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Monto:</label>
+                            </div>
+                            <div>
+                                <input class="form-control" id="m_montodesembolso" name="m_montodesembolso" [(ngModel)]="m_montodesembolso" onKeyDown="A(event,this.form.m_porcentaje)" required>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Porcentaje %:</label>
+                            </div>
+                            <div>
+                                <input class="form-control" (blur)="calculo_porcentaje()" id="m_porcentaje" name="m_porcentaje" [(ngModel)]="m_porcentaje" onKeyDown="A(event,this.form.m_respaldo)" required>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Respaldo:</label>
+                            </div>
+                            <div>
+                                <input class="form-control" id="m_respaldo" name="m_respaldo" [(ngModel)]="m_respaldo" onKeyDown="A(event,this.form.m_modalidadpago)" required>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Modalidad de Pago:</label>
+                            </div>
+                            <div>
+                                <input class="form-control" id="m_modalidadpago" name="m_modalidadpago" [(ngModel)]="m_modalidadpago" onKeyDown="A(event,this.form.m_nrocuenta)" required>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Nro de Cuenta:</label>
+                            </div>
+                            <div>
+                                <input class="form-control" id="m_nrocuenta" name="m_nrocuenta" [(ngModel)]="m_nrocuenta" onKeyDown="A(event,this.form.m_obs)" required>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div>
+                                <label for="Gestion">Observación:</label>
+                            </div>
+                            <div>
+                                <textarea class="form-control" id="m_obs" maxlength="200" rows="2" name="m_obs" [(ngModel)]="m_obs"></textarea>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <button type="button" class="btn btn-success btn-block" value="ACTUALIZAR" name="btnActualizarDetalle" id="btnActualizarDetalle" (click)="actualiza_donacion_detalle()" title="Actualizar Detalle">Actualizar</button>
+                        </div>
+                        <div class="panel-footer">
+                            <button type="button" class="btn btn-success btn-block" value="REGISTRAR" name="btnRegistrarDetalle" id="btnRegistrarDetalle" title="Guardar Seguimiento Físico" (click)="inserta_donacion_detalle()">Registrar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="pnl_gridview" name="pnl_gridview">
+    <div class="page-header" style="text-align:center">
+        <h2>Donaciones</h2>
+    </div>
+    <div class="panel panel-primary">
+
+
+        <div class="panel-heading clearfix" *ngIf="vbtn_NuevoProyecto==true">
+            <a title="Descargar Reporte" class="btn btn-danger   btn-md pull-right" target="_blank" href="{{url_reporte}}/modulos/financiera/rptDonacionesVen.php"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>
+            <button type="button" class="btn btn-success pull-right" title="Nueva Ficha" (click)="paneles('NUEVA_FICHA')"><i class="fa fa-plus">Nueva Ficha
+                </i></button>
+        </div>
+
+
+        <div class="panel-body">
+            <!-- <table class="table table-condensed table-hover dt-seguimiento"> -->
+            <table class="table table-condensed table-hover dt-donaciones">
+                <thead>
+                    <tr>
+                        <th>Nro.</th>
+                        <th>Gestion</th>
+                        <th>Departamento</th>
+                        <th>Provincia</th>
+                        <th>Municipio</th>
+                        <th>Nombre de Proyecto</th>
+                        <th>Empresa Constructora</th>
+                        <th>Representante Legal</th>
+                        <th>Ci Representante</th>
+                        <th>Modalidad Fin.</th>
+                        <th>Firma Contrato</th>
+                        <th>Monto a Financiar en Bs</th>
+                        <th>Total Desembolso en Bs</th>
+                        <th>Diferencia</th>
+                        <!-- <th>Fecha Reg.</th> -->
+                        <th>Usuario Reg.</th>
+                        <!-- <th>Fecha Mod.</th> -->
+                        <th>Usuario Mod.</th>
+                        <th>Seleccione...</th>
+                        <th>Eliminar...</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr *ngFor="let row_registros of dts_donaciones; let i = index;">
+                        <td>{{i+1}}</td>
+                        <td>{{row_registros._gestion}}</td>
+                        <td>{{row_registros._departamento}}</td>
+                        <td>{{row_registros._provincia}}</td>
+                        <td>{{row_registros._municipio}}</td>
+                        <td>{{row_registros._nomb_proyecto}}</td>
+                        <td>{{row_registros._empresa_constructora}}</td>
+                        <td>{{row_registros._representante_legal}}</td>
+                        <td>{{row_registros._ci_representantelegal}}</td>
+                        <td>{{row_registros._modalidad_financiamiento}}</td>
+                        <td>{{row_registros._firma_contrato}}</td>
+                        <td>{{row_registros._montoa_financiar_bs}}</td>
+                        <td>{{row_registros._total_desembolsos}}</td>
+                        <td>{{row_registros._diferencia}}</td>
+                        <!-- <td>{{row_registros._fecha_registro | date: 'dd/MM/yyyy'}}</td> -->
+                        <td>{{row_registros._usuario_registro}}</td>
+                        <!-- <td>{{row_registros._fecha_modifica | date: 'dd/MM/yyyy'}}</td> -->
+                        <td>{{row_registros._usuario_modifica}}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-warning btn-md" (click)="preactualizaDonacion(row_registros)" *ngIf="vbtn_EditaProyecto==true">
+                                    <i class="fa fa-edit" aria-hidden="true" title="Actualizar Registro"></i>
+                                </button>
+                                <!-- <a title="Descargar Reporte" *ngIf="row_registros._usuario_tec!='' && row_registros._usuario_fin!='' "
+                                          class="btn btn-success   btn-md" target="_blank" ti
+                                          href="{{url_reporte}}/rptInformeFinanciero.php?id={{row_registros._id_seg}}"><i
+                                              class="fa fa-file-pdf-o" aria-hidden="true" ></i></a>
+                                      -->
+
+                                <button type="button" class="btn btn-info btn-md" (click)="ver_bandeja(row_registros)" title="Ver Bandeja">
+                                    <i class="fa fa-id-card" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td>
+                            <button *ngIf="vbtnEliminaProyecto==true" type="button" class="btn btn-danger btn-md" (click)="elimina_donacion(row_registros._id_donacion)" title="Eliminar Registro">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="pnl_gridview_bandeja" name="pnl_gridview_bandeja">
+    <div class="page-header" style="text-align:center">
+        <h2>Anticipo & Desemboso</h2><br />
+        <h2>{{m_nombreproyecto}}</h2>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary  pull-left" title="Volver Panel" name="btnVolverGv" id="btnVolverGv" (click)="paneles('VER_GRIDVIEW')"><i class="fa fa-reply fa-2x">
+            </i></button>
+    </div>
+
+
+    <div class="panel panel-primary">
+
+        <div class="panel-heading clearfix">
+
+            <button type="button" class="btn btn-success pull-right" *ngIf="vbtn_NuevoDetalle==true" title="Nueva Ficha" (click)="paneles('NUEVO_DETALLE')"><i class="fa fa-plus">Nuevo
+                </i></button>
+
+        </div>
+        <div class="panel-body">
+            <table class="table table-condensed table-hover dt-donaciondetalle">
+                <thead>
+                    <tr>
+                        <th>Nro.</th>
+                        <th>Tipo de Pago</th>
+                        <th>Tipo Nro de Pago</th>
+                        <th>Monto</th>
+                        <th>Respaldo</th>
+                        <th>Modalidad de Pago</th>
+                        <th>Nro de Cuenta</th>
+                        <th>Observacion</th>
+                        <th>Fecha Reg.</th>
+                        <th>Usuario Reg.</th>
+                        <th>Fecha Mod.</th>
+                        <th>Usuario Mod.</th>
+                        <th>Seleccione...</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row_registros of dts_donacion_detalle; let i = index;">
+
+                        <td>{{i+1}}</td>
+                        <td>{{row_registros._tipo_pago}}</td>
+                        <td>{{row_registros._nro_pago}}</td>
+                        <td>{{row_registros._monto}}</td>
+                        <td>{{row_registros._respaldo}}</td>
+                        <td>{{row_registros._modalidad_pago}}</td>
+                        <td>{{row_registros._nro_cuenta}}</td>
+                        <td>{{row_registros._obs}}</td>
+                        <td>{{row_registros._usuario_registro}}</td>
+                        <td>{{row_registros._fecha_registro}}</td>
+                        <td>{{row_registros._usuario_modifica}}</td>
+                        <td>{{row_registros._fecha_modifica}}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-warning btn-md" *ngIf="vbtn_EditaDetalle==true" (click)="preactualiza_donacion_detalle(row_registros)">
+                                    <i class="fa fa-edit" aria-hidden="true" title="Actualizar Registro"></i>
+                                </button>
+
+
+                                <button type="button" class="btn btn-danger btn-md" *ngIf="vbtnEliminaDetalle==true" (click)="elimina_desembolso_detalle(row_registros._id_desembolso)" title="Eliminar Registro">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-body">
+            <div class="bg-primary text-white">Resumen</div>
+            <div class="form-group ">
+                <div>
+                    <label for="Gestion">Total Monto a Financiar en Bs: ==></label>
+                    <span class="dato">{{m_montofinanciarbs_porcentaje}}</span>
+                </div>
+            </div>
+            <div class="form-group ">
+                <div>
+                    <label for="Gestion">Total Desembolsos: ==></label>
+                    <span class="dato">{{m_totaldesembolso}}</span>
+                </div>
+            </div>
+            <div class="form-group ">
+                <div>
+                    <label for="Gestion">Diferencia en Bs: ==></label>
+                    <span *ngIf="m_diferencia < 0" class="dato-negativo">{{m_diferencia}}</span>
+                    <span *ngIf="m_diferencia >= 0" class="dato-positivo">{{m_diferencia}}</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

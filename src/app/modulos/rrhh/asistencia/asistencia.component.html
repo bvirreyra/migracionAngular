@@ -1,0 +1,255 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<!-- VISTA UNO -->
+<div name="pnl_listaasistencia" id="pnl_listaasistencia">
+  <!--REFRESCA GRIDVIEW -->
+  <div class="panel-heading clearfix">
+    <div class="col-md-3">
+      <div class="panel panel-primary">
+        <div class="panel-heading text-center">
+          <i class="fas fa-comment-dollar"></i><b>SANCIONES</b>
+        </div>
+        <div class="panel-body">
+          <table
+            class="table table-responsive table-condensed table-hover"
+            style="font-size: 8pt"
+          >
+            <thead class="text-center">
+              <tr>
+                <th>Min. desde</th>
+                <th>Min. hasta</th>
+                <th>Sancion</th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let row_sancion of dts_sanciones">
+              <td>{{ row_sancion.MinutosInicial }}</td>
+              <td>{{ row_sancion.MinutosFinal }}</td>
+              <td>{{ row_sancion.DescripcionSancion }}</td>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="busqueda">Servidor(a):</label>
+      <div class="form-group">
+        <div>
+          <!-- <select
+            id="e_usuario"
+            class="form form-control js-example-basic-single"
+            name="e_usuario"
+            [(ngModel)]="e_usuario"
+            (ngModelChange)="cambioUsuario($event.target.value)"
+            class="select2"
+          >
+
+            <option value="0" selected>TODOS</option>
+            <option
+              *ngFor="let row_servidor of dts_funcionario; let i = index"
+              [ngValue]="dts_funcionario.t_userid"
+            >
+              {{ row_servidor.nombre }}
+            </option>
+          </select> -->
+          <ng-select2
+            width="300px"
+            [data]="comboSeleccion"
+            [(ngModel)]="e_usuario"
+            (ngModelChange)="datosReporte()"
+            [disabled]="habilita"
+          ></ng-select2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <label for="fecInicio">Fecha Inicio</label>
+      <input
+        type="date"
+        class="form form-control"
+        [(ngModel)]="fecha_inicio"
+        (ngModelChange)="onChangeFecInicio()"
+        maxlength="10"
+      />
+    </div>
+    <div class="col-md-2">
+      <label for="fecFin">Fecha Fin</label>
+      <input
+        type="date"
+        class="form form-control"
+        [(ngModel)]="fecha_fin"
+        maxlength="10"
+        (ngModelChange)="onChangeFecFin()"
+      />
+    </div>
+    <div class="col-md-2">
+      <a
+        *ngIf="e_usuario > 0 && !habilita"
+        title="Descargar Reporte"
+        class="btn btn-warning btn-md"
+        target="_blank"
+        href="{{
+          url_reporte
+        }}/modulos/recursosHumanos/rptTarjetaAsitencia.php?biometrico={{
+          reporte.biometrico
+        }}&fecIni={{ reporte.fechaDesde }}&fecFin={{
+          reporte.fechaHasta
+        }}&nombre={{ reporte.nombre }}"
+        ><i class="fa fa-file-pdf-o" aria-hidden="true"></i
+      ></a>
+      <a
+        *ngIf="
+          m_dia_actual > 25 && m_dia_actual < 30 && habilita && e_usuario > 0
+        "
+        title="Descargar Reporte"
+        class="btn btn-warning btn-md"
+        target="_blank"
+        href="{{
+          url_reporte
+        }}/modulos/recursosHumanos/rptTarjetaAsitencia.php?biometrico={{
+          reporte.biometrico
+        }}&fecIni={{ reporte.fechaDesde }}&fecFin={{
+          reporte.fechaHasta
+        }}&nombre={{ reporte.nombre }}"
+        ><i class="fa fa-file-pdf-o" aria-hidden="true"></i
+      ></a>
+      <a
+        *ngIf="e_usuario > 0 && !habilita"
+        title="Asistencia sin depurar"
+        class="btn btn-danger btn-md"
+        target="_blank"
+        href="{{
+          url_reporte
+        }}/modulos/recursosHumanos/rptAsistenciaSinDepurar.php?biometrico={{
+          reporte.biometrico
+        }}&fecIni={{ reporte.fechaDesde }}&fecFin={{
+          reporte.fechaHasta
+        }}&nombre={{ reporte.nombre }}"
+        ><i class="fa fa-file-pdf-o" aria-hidden="true"></i
+      ></a>
+      <a
+        *ngIf="e_usuario > 0"
+        title="Reporte Preliminar"
+        class="btn btn-info btn-md"
+        target="_blank"
+        href="{{
+          url_reporte
+        }}/modulos/recursosHumanos/rptTarjetaBorrador.php?biometrico={{
+          reporte.biometrico
+        }}&fecIni={{ reporte.fechaDesde }}&fecFin={{
+          reporte.fechaHasta
+        }}&nombre={{ reporte.nombre }}"
+        ><i class="fa fa-file-pdf-o" aria-hidden="true"></i
+      ></a>
+      <a
+        *ngIf="e_usuario > 0 && !habilita"
+        title="Reporte Permisos"
+        class="btn btn-primary btn-md"
+        target="_blank"
+        href="{{
+          url_reporte
+        }}/modulos/recursosHumanos/rptPermisos.php?fecIni={{
+          reporte.fechaDesde
+        }}&fecFin={{ reporte.fechaHasta }}"
+        ><i class="fa fa-file-pdf-o" aria-hidden="true"></i
+      ></a>
+      <button
+        type="button"
+        class="btn btn-success btn-md pull-right"
+        (click)="listaAsistencia()"
+      >
+        <i class="fa fa-refresh" aria-hidden="true" title="Lista Asistencia">
+          Actualizar</i
+        >
+      </button>
+    </div>
+  </div>
+
+  <!--LISTA GRIDVIEW SISTENCIAS-->
+  <table
+    class="table table-responsive table-condensed table-hover dt-asistencia"
+    style="font-size: 8pt"
+  >
+    <thead>
+      <tr class="text-center">
+        <th>Nro.</th>
+        <th>Tipo Horario</th>
+        <th>Nombre</th>
+        <th>Fecha</th>
+        <th>Ingreso Of.1</th>
+        <th>Salida Of.1</th>
+        <th>Ingreso Of.2</th>
+        <th>Salida Of.2</th>
+        <th>Hora Ingreso 1</th>
+        <th>Hora Salida 1</th>
+        <th>Hora Ingreso 2</th>
+        <th>Hora Salida 2</th>
+        <th>Minutos Atraso</th>
+        <th>Minutos Salida Adelantada</th>
+        <!-- <th>Refrigerio</th> -->
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <!-- <td></td> -->
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr *ngFor="let row_registros of dts_asistencia; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ row_registros.TipoHorario }}</td>
+        <td>{{ row_registros.Nombre }}</td>
+        <td>
+          {{ row_registros.FechaMarcado | date : "dd/MM/yyyy" : "+00:00" }}
+        </td>
+        <td>
+          {{ row_registros.HoraIngresoDia1 | date : "HH:mm" : "+00:00" }}
+        </td>
+        <td>
+          {{ row_registros.HoraSalidaDia1 | date : "HH:mm" : "+00:00" }}
+        </td>
+        <td>
+          {{ row_registros.HoraIngresoDia2 | date : "HH:mm" : "+00:00" }}
+        </td>
+        <td>
+          {{ row_registros.HoraSalidaDia2 | date : "HH:mm" : "+00:00" }}
+        </td>
+        <td>
+          {{ row_registros.HoraIngreso1 | date : "HH:mm" : "+00:00" }}
+        </td>
+        <td>{{ row_registros.HoraSalida1 | date : "HH:mm" : "+00:00" }}</td>
+        <td>
+          {{ row_registros.HoraIngreso2 | date : "HH:mm" : "+00:00" }}
+        </td>
+        <td>{{ row_registros.HoraSalida2 | date : "HH:mm" : "+00:00" }}</td>
+        <td class="text-center" style="font-size: 12pt">
+          <span
+            ngClass="row_registros.MinutosAtrasoIngreso > 0 ? label label-danger : label label-default"
+            >{{ row_registros.MinutosAtrasoIngreso }}</span
+          >
+        </td>
+        <td class="text-center" style="font-size: 12pt">
+          <span
+            ngClass="row_registros.MinutosSalidaAdelanto > 0 ? label label-warning : label label-default"
+            >{{ row_registros.MinutosSalidaAdelanto }}</span
+          >
+        </td>
+        <!-- <td>{{ row_registros.Refrigerio == 1 ? "SI" : "NO" }}</td> -->
+      </tr>
+    </tbody>
+  </table>
+</div>

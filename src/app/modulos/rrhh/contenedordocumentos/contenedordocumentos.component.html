@@ -1,0 +1,112 @@
+<div *ngIf="pnl_bandeja==true">
+  <div class="panel-heading clearfix">
+    <button type="button" *ngIf="btnNuevo==true" class="btn btn-success" (click)="paneles('VER_FORMULARIO')">Nuevo Documento</button>
+  </div>
+
+  <div class="col-lg-offset-2 col-lg-8">
+    <table class="table table-responsive table-condensed table-hover dt-listadocumentos" style="font-size: 8pt">
+      <thead>
+        <tr class="text-center">
+          <th>Nro.</th>
+          <th>Gestion</th>
+          <th>Fecha</th>
+          <th>Tipo Documento</th>
+          <th>Nro de Cite</th>
+          <th>Descripcion</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr *ngFor="let row_registros of dts_listacontenedor; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ row_registros.fecha_documento | date: 'yyyy' }}</td>
+          <td>{{ row_registros.fecha_documento | date: 'dd/MM/yyyy'}}</td>
+          <td>{{ row_registros.tipo_documento}}</td>
+          <td>{{ row_registros.cite}}</td>
+          <td>{{ row_registros.descripcion }}</td>
+          <td> <button type="button" class="btn btn-info btn-md" title="Descargar" (click)="obtenerArchivo(row_registros.ruta)">
+              <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+            </button>
+            <button type="button" *ngIf="btnEliminar==true" title="Eliminar el Archivo" class="btn btn-danger btn-circle-sm" (click)="eliminaDocumento(row_registros.id_contenedor,row_registros.ruta)">
+              <span class="glyphicon glyphicon-remove"></span>
+          </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div *ngIf="pnl_formulario==true">
+  <div class="panel-heading clearfix">
+    <button type="button" class="btn btn-success btn-md pull-left" (click)="paneles('VER_BANDEJA')">
+      <i class="fa fa-reply fa-2x" aria-hidden="true" title="Volver a Bandeja"></i>
+    </button>
+
+  </div>
+  <div class="bg-primary text-white">FORMULARIO DE REGISTRO</div>
+  <div class="form-group " class="col-lg-4 col-md-4 col-sm-4">
+    <div class="input-group">
+      <label for="Gestion">Tipo Documento:</label>
+    </div>
+    <div>
+      <select class="form-control" [(ngModel)]="m_tipodocumento">
+        <option *ngFor="let row_reg of dts_listatipodocumento;" [ngValue]="row_reg.descripciondetalleclasificador">
+          {{row_reg.descripciondetalleclasificador}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group " class="col-lg-4 col-md-4 col-sm-4">
+    <div class="input-group">
+      <div>
+        <label for="Gestion">CITE:</label>
+      </div>
+      <div>
+        <input class="form-control" type="text" placeholder="Nro de Cite" [(ngModel)]="m_nrocite">
+
+      </div>
+    </div>
+  </div>
+  <div class="form-group " class="col-lg-4 col-md-4 col-sm-4">
+    <div>
+      <label for="Gestion">Fecha Documento:</label>
+    </div>
+    <div>
+      <input class="form-control" type="date" placeholder="Fecha Documento" [(ngModel)]="m_fechadocumento">
+    </div>
+  </div>
+  <div class="row"></div>
+  <div class="form-group " class="col-lg-4 col-md-4 col-sm-4">
+    <div>
+      <label for="Gestion">Descripcion Documento:</label>
+    </div>
+    <div class="input-group">
+      <textarea class="form-control" type="text" placeholder="Descripción Documento"
+        [(ngModel)]="m_descripciondocumento" cols="60" rows="10"></textarea>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <app-upload-file 
+      inputTipoDocumento="contenedor_documentos" 
+      inputCodigoProy='contenedor_documentos'
+      inputVista="false" 
+      inputTipoImagen="documento" 
+      inputSrc="" 
+      inputNombre="Nuevo Archivo"      
+      inputAccion="SUBIR_ARCHIVO"
+      (enviaPadre)="postDogumento($event)" 
+      >
+    </app-upload-file>
+  </div>
+</div>

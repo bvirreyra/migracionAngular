@@ -1,0 +1,20 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="form-group" >
+  <label class="control-label col-sm-4" for="busqueda">Tipo de Priorizacion:</label>
+  <div class="col-sm-7">
+    <div class="grid-lista">
+      <div *ngFor="let row_registro of dts_ListaPriorizacion; let i = index;" style="text-align: left;">
+        <label class="checkbox-inline" id="lab{{row_registro.id_detalle}}">
+          <input type="checkbox" class="check text-left" id="chk_{{i}}" value="{{ row_registro.descripciondetalleclasificador }}" />
+          {{row_registro.descripciondetalleclasificador}}
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">  
+  <button type="button" class="btn btn-primary"
+    (click)="pre_registro_priorizacion()">Guardar</button>
+</div>

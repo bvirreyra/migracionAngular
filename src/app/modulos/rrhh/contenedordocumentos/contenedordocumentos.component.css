@@ -1,0 +1,6 @@
+.dt-listadocumentos tfoot input{
+    width: 100% !important;
+}
+.dt-listadocumentos tfoot {
+    display: table-header-group !important;
+}

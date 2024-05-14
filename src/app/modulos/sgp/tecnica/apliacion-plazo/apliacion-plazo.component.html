@@ -1,0 +1,257 @@
+<div *ngIf="pnl_listaampliacion==true" id="pnl_listaampliacion" name="pnl_listaampliacion" class="card card-body">
+  <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+    <div class="content-header with-border">
+      <h3 class="content-title text-green">
+        <strong>AMPLIACION DE PLAZO - TECNICA: <b>{{ nombre_proyecto }}</b></strong>
+      </h3>
+      <div class="pull-right">
+        <button class="btn btn-primary" type="button" (click)="paneles('NUEVA_AMPLIACION')" *ngIf="habilitaAdicion"
+          [disabled]="camposHabilitados._tecnica">
+          <i class="fa fa-plus-square" aria-hidden="true" title="Nueva Ampliacion"></i>
+        </button>
+      </div>
+    </div>
+    <div class="content-body">
+      <div class="row">
+        <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+        <div class="col-lg-offset-2 col-lg-8">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+              LISTADO DE AMPLIACIONES
+            </div>
+            <div class="panel-body">
+              <!--LISTA GRIDVIEW AMPLIACION DE PLAZO-->
+              <table class="table table-condensed table-hover dt-listaampliacion">
+                <thead>
+                  <tr>
+                    <th>Nro.</th>
+                    <th>Fecha Registro</th>
+                    <th>Registro Usuario</th>
+                    <th>Detalle</th>
+                    <th>Ampliacion de Plazo</th>
+                    <th>Monto Total</th>
+                    <th>Monto Upre</th>
+                    <th>Monto Contraparte Beneficiario</th>
+                    <th>Monto Contraparte Gobernacion</th>
+                    <th>Monto Contraparte Municipio</th>
+                    <th>Fecha Aprobacion</th>
+                    <th>Opciones</th>
+                    <th>Adjunto</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr *ngFor="
+                      let row_registros of dts_listaampliacion;
+                      let i = index
+                    ">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      {{ row_registros.fecha_registro | date: "dd/MM/yyyy" }}
+                    </td>
+                    <td>{{ row_registros.nombre_completo | uppercase }}</td>
+                    <td>{{ row_registros.descripcion | uppercase }}</td>
+                    <td>{{ row_registros.plazo }}</td>
+                    <td>{{ row_registros.monto }}</td>
+                    <td>{{ row_registros.monto_upre }}</td>
+                    <td>{{ row_registros.monto_contraparte_beneficiario }}</td>
+                    <td>{{ row_registros.monto_contraparte_gobernacion }}</td>
+                    <td>{{ row_registros.monto_contraparte_municipal }}</td>
+                    <td>
+                      {{ row_registros.fecha_aprobacion | date: "dd/MM/yyyy" }}
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-warning btn-md"
+                        (click)="paneles('EDITA_AMPLIACION',row_registros)" [disabled]="camposHabilitados._tecnica">
+                        <i class="fa fa-edit" aria-hidden="true" title="Modificar ampliación"></i></button><br />
+                      <button *ngIf="row_registros.diferenciadias <= 1 || camposHabilitados._administrador==false "
+                        type="button" class="btn btn-danger btn-md" (click)="abrirEliminacion(row_registros)"
+                        [disabled]="camposHabilitados._tecnica">
+                        <i class="fa fa-trash" aria-hidden="true" title="Eliminar ampliación"></i></button><br />
+                    </td>
+                    <td>
+                      <div *ngIf='!(row_registros.archivo_adjunto==="")'>
+                        <div class="text-center">
+                          <app-upload-file inputTipoDocumento="ampliacion_plazo" inputCodigoProy="{{ id_sgp }}"
+                            inputVista="false" inputTipoImagen="documento" inputSrc=""
+                            inputNombre="{{ row_registros.archivo_adjunto }}" inputAccion="VISUALIZAR">
+                          </app-upload-file>
+                        </div>
+                      </div>
+
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content-footer"></div>
+  </div>
+</div>
+
+<!-- INICIO MODAL SUPERVISION -->
+<div class="modal fade" name="modalAmpliacion" id="modalAmpliacion" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Ampliación</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="form-horizontal">
+              <div class="form-group">
+                <div class="row">
+                  <label class="control-label col-sm-4 text-left" for="plazo">Plazo a ampliar (Días):</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" id="plazo" name="plazo" [(ngModel)]="ampliacion.plazoin"
+                      onKeyDown="A(event,this.form.monto)" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label class="control-label col-sm-4 text-left" for="monto">Monto Total (Bs):
+                  </label>
+                  <div class="col-sm-6">
+                    <input class="form form-control" id="monto" name="monto" [(ngModel)]="ampliacion.montoin"
+                      onKeyDown="A(event,this.form.monto_contraparte_beneficiario)" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label class="control-label col-sm-4 text-left" for="monto">Monto Contraparte Beneficiario(Bs):
+                  </label>
+                  <div class="col-sm-6">
+                    <input class="form form-control" id="monto_contraparte_beneficiario"
+                      name="monto_contraparte_beneficiario" [(ngModel)]="ampliacion.monto_contraparte_beneficiario"
+                      onKeyDown="A(event,this.form.monto_contraparte_gobernacion)" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label class="control-label col-sm-4 text-left" for="monto">Monto Contraparte Gobernacion (Bs):
+                  </label>
+                  <div class="col-sm-6">
+                    <input class="form form-control" id="monto_contraparte_gobernacion"
+                      name="monto_contraparte_gobernacion" [(ngModel)]="ampliacion.monto_contraparte_gobernacion"
+                      onKeyDown="A(event,this.form.monto_contraparte_municipio)" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label class="control-label col-sm-4 text-left" for="monto">Monto Contraparte Municipio(Bs):
+                  </label>
+                  <div class="col-sm-6">
+                    <input class="form form-control" id="monto_contraparte_municipio" name="monto_contraparte_municipio"
+                      [(ngModel)]="ampliacion.monto_contraparte_municipio"
+                      onKeyDown="A(event,this.form.fechaaprobacion)" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label class="control-label col-sm-4 text-left" for="fecha aprobacion">Fecha Aprobación:
+                  </label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form form-control" id="fechaaprobacion" name="fechaaprobacion"
+                      max="{{ fecha_tope }}" [(ngModel)]="ampliacion.fechaaprobacionin" placeholder="dd/mm/yyyy"
+                      onKeyDown="A(event,this.form.detalle)" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label class="control-label col-sm-4 text-left" for="detalle">Detalle:
+                  </label>
+                  <div class="col-sm-6">
+                    <textarea style="resize: none" id="detalle" name="detalle" class="form form-control" rows="6"
+                      maxlength="2000" [(ngModel)]="ampliacion.descripcionin"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <label class="control-label col-sm-4 text-left" for="telefonos">Archivo Adjunto:
+                  </label>
+                  <div class="col-sm-6">
+                    <label for="">Formatos Permitidos (pdf)</label>
+                    <input type="file" class="form-control" id="inputArchivo" name="inputArchivo"
+                      (change)="handleFileInput($event.target.files)"
+                      onKeyDown="A(event,this.form.monto_contraparte_gobernacion)" required />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button type="button" *ngIf="
+          ampliacion.fechaaprobacionin != '' && ampliacion.descripcionin != '' && btnActualizar==true"
+          class="btn btn-warning" name="btnModificar" id="btnModificar" (click)="actualizarArchivo()">
+          Modificar
+        </button>
+        <button type="button" *ngIf="
+          ampliacion.fechaaprobacionin != '' && ampliacion.descripcionin != ''  && btnRegistrar==true "
+          class="btn btn-primary" name="btnRegistrar" id="btnRegistrar" (click)="subirImagenInserta()">
+          Registrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL SUPERVISION-->
+
+<!-- INICIO MODAL ELIMINACION -->
+<div class="modal fade" id="modalEliminacion" name="modalEliminacion" tabindex="-1" role="dialog"
+  aria-labelledby="Eliminar_proveido" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><b>ALERTA</b></h5>
+      </div>
+      <div class="modal-body">
+        Está seguro que desea Eliminar el registro seleccionado?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button type="button" class="btn btn-primary" (click)="eliminaAmpliacion()">
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL ELMINACION-->

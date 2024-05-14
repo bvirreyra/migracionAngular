@@ -1,0 +1,7 @@
+.dt-estructura tfoot input {
+    width: 100% !important;
+}
+
+.dt-estructura tfoot {
+    display: table-header-group !important;
+}

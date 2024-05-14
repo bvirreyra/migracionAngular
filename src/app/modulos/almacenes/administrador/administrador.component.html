@@ -1,0 +1,1078 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div style="display: flex; justify-content: space-between;">
+  <div style="margin-bottom: 2rem; text-align: lfet;">
+    <button class="btn btn-primary" id="rep" type="button" (click)="paneles('reportes')"><i class="glyphicon glyphicon-print"></i>  REPORTES</button>
+  </div>
+  <div style="margin-bottom: 2rem; text-align: right;">
+    <button class="btn btn-primary" id="par" type="button" (click)="paneles('partidas')"><i class="glyphicon glyphicon-list-alt"></i>  PARTIDAS</button>
+    <button class="btn btn-primary" id="ins" type="button" (click)="paneles('insumos')"><i class="glyphicon glyphicon-file"></i>  INSUMOS</button>
+    <button class="btn btn-primary" id="ing" type="button" (click)="paneles('ingresos')"><i class="glyphicon glyphicon-download-alt"></i>  INGRESOS</button>
+    <button class="btn btn-primary" id="pro" type="button" (click)="paneles('proveedores')"><i class="glyphicon glyphicon-user"></i>  PROVEEDORES</button>
+  </div>
+</div>
+
+<div *ngIf="pnlReportes">
+  <div class="grid-lista">
+    <div class="form-comtrol">
+      <button class="btn btn-success btn-block" style="padding: 3px 12px;" data-toggle="modal" data-target="#modalFV">1. Inventario Físico Valorado <i class="glyphicon glyphicon-print"></i></button>
+    </div>
+    <div class="form-comtrol">
+      <button class="btn btn-success btn-block" style="padding: 3px 12px;" (click)="procesarReporte('04')" [disabled]="!resultFV">2. Inventario Resumen <i class="glyphicon glyphicon-print"></i></button>
+    </div>
+  </div>
+</div>
+
+    <div style="display: flex;justify-content: right;">
+      <label style="white-space: nowrap; margin-right: 1rem;padding-top: 0.8rem;">Cambiar Gestión</label>
+      <select class="form-control" style="width: 80px;" [(ngModel)]="gestion" (ngModelChange)="cambiarGestion()" >
+        <option *ngFor="let row of dts_gestiones" [ngValue]="row" >
+          {{row}}
+        </option>
+      </select>
+    </div>
+
+<div class="centrado" *ngIf="pnlPartida">
+  <div class="panel panel-primary" style="text-align: center;">
+    <div class="panel-heading text-center">
+      <span class="glyphicon glyphicon-list"></span> Listado Partidas
+    </div>
+    <div class="panel-body" style="text-align: left;">
+      <!-- <button class="btn btn-success" data-toggle="modal" style="margin-bottom: 1rem;" data-target="#modalPartida"> -->
+      <button class="btn btn-success" style="margin-bottom: 1rem;" (click)="nuevoRegistro('partida')">
+        <span class="glyphicon glyphicon-plus"></span> Nueva Partida
+      </button>
+      <div class="table table-responsive">
+        <table class="table table-responsive table-condensed table-hover dt-partida" style="font-size: 9pt">
+          <thead>
+            <tr>
+              <th>Opciones</th>
+              <th style="width: 20px;">Nº</th>
+              <th style="width: 50px;">Codigo</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dts_partidas; let i = index">
+              <td>
+                <button class="btn btn-warning" title="Editar" (click)="crudPartida(row,'editar')">
+                  <span class="glyphicon glyphicon-edit"></span>
+                </button>
+                <button class="btn btn-danger" title="Eliminar" (click)="crudPartida(row,'eliminar')">
+                  <span class="glyphicon glyphicon-trash"></span>
+                </button>
+              </td>
+              <td width="20px" style="text-align: right;">{{ i + 1 }}</td>
+              <td width="50px">{{ row.codigo}}</td>
+              <td>{{ row.descripcion }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="pnlInsumo">
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <span class="glyphicon glyphicon-list"></span> Listado Insumos
+    </div>
+    <div class="panel-body" style="text-align: left;">
+      <!-- <button class="btn btn-success" data-toggle="modal" style="margin-bottom: 1rem;" data-target="#modalInsumo"> -->
+      <button class="btn btn-success" style="margin-bottom: 1rem;" (click)="nuevoRegistro('insumo')" >
+        <span class="glyphicon glyphicon-plus"></span> Nuevo Insumo
+      </button>
+      <div class="table table-responsive">
+        <table class="table table-responsive table-condensed table-hover dt-insumo" style="font-size: 9pt">
+          <thead>
+            <tr>
+              <th style="width: 120px;">Opciones</th>
+              <th style="width: 20px;">Nº</th>
+              <th style="width: 300px;">Partida</th>
+              <th style="width: 100px;">Código</th>
+              <th style="width: 100px;">Código Anterior</th>
+              <th style="width: 400px;">Descripción</th>
+              <th>Unidad</th>
+              <th>Stock</th>
+              <th>Mínimo</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dts_insumos; let i = index" [ngClass]="{ 'bg-danger': row.cantidad < row.minimo}">
+              <td>
+                <button class="btn btn-warning" title="Editar" (click)="crudInsumo(row,'editar')">
+                  <span class="glyphicon glyphicon-edit"></span>
+                </button>
+                <button class="btn btn-danger" title="Eliminar" (click)="crudInsumo(row,'eliminar')">
+                  <span class="glyphicon glyphicon-trash"></span>
+                </button>
+                <button class="btn btn-info" title="Kardex" (click)="paneles('kardexInsumo',row)">
+                  <span class="fa fa-exchange"></span>
+                </button>
+              </td>
+              <td>{{ i + 1 }}</td>
+              <td>{{row.codpartida}} - {{ row.descpartida }}</td>
+              <td>{{ row.codigo}}</td>
+              <td>{{ row.codigo_pasado }}</td>
+              <td>{{ row.descripcion }}</td>
+              <td>{{ row.unidad}}</td>
+              <td>{{ row.cantidad}}</td>
+              <td>{{ row.minimo}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="pnlIngreso">
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <span class="glyphicon glyphicon-list"></span> Listado Ingresos
+    </div>
+    <div class="panel-body" style="text-align: left;">
+      <!-- <button class="btn btn-success" data-toggle="modal" style="margin-bottom: 1rem;" data-target="#modalIngreso"> -->
+      <button class="btn btn-success" style="margin-bottom: 1rem;" (click)="nuevoRegistro('ingreso')">
+        <span class="glyphicon glyphicon-plus"></span> Nuevo Ingreso
+      </button>
+      <div class="table table-responsive">
+        <table class="table table-responsive table-condensed table-hover dt-ingreso" style="font-size: 9pt">
+          <thead>
+            <tr>
+              <th>Opciones</th>
+              <th>Nº Ingreso</th>
+              <th>Fecha Ingreso</th>
+              <th>Total Ingreso</th>
+              <th>Nº Entrega</th>
+              <th>Fecha Entrega</th>
+              <th>Proveedor</th>
+              <th>Nº Factura</th>
+              <th>Fecha Factura</th>
+              <th>Código Autorización</th>
+              <th>C-31</th>
+              <!-- <th>Fecha C-31</th> -->
+              <!-- <th>Incremento</th> -->
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <!-- <td></td> -->
+              <!-- <td></td> -->
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dts_ingresos; let i = index">
+              <td width="200px">
+                <button class="btn btn-info" title="Artículos" (click)="paneles('ingresosDetalle',row)">
+                  <span class="glyphicon glyphicon-plus-sign"></span>
+                </button>
+                <button class="btn btn-warning" title="Editar" (click)="crudIngreso(row,'editar')" [disabled]="row.pasado">
+                  <span class="glyphicon glyphicon-edit"></span>
+                </button>
+                <button class="btn btn-danger" title="Eliminar" (click)="crudIngreso(row,'eliminar')" [disabled]="row.pasado">
+                  <span class="glyphicon glyphicon-trash"></span>
+                </button>
+                <button class="btn btn-success" title="Reporte" (click)="procesarReporte('05',row)">
+                  <span class="glyphicon glyphicon-print"></span>
+                </button>
+                <button *ngIf="dts_rolesb.includes(73)" class="btn btn-warning" title="Habilitar" (click)="habilitarIngreso(row)" [disabled]="!row.pasado">
+                  <span class="glyphicon glyphicon-ok"></span>
+                </button>
+              </td>
+              <td width="40px">{{ row.numero_ingreso | number: "1.0-2"}}</td>
+              <td>{{ row.fecha_ingreso | date: "dd/MM/yyyy"}}</td>
+              <td style="text-align: right;">{{ row.total | number: "0.2-2" | formatoDecimal}}</td>
+              <td>{{ row.numero_entrega}}</td>
+              <td>{{ row.fecha_entrega | date: "dd/MM/yyyy"}}</td>
+              <td>{{ row.nit}} {{row.nombre}}</td>
+              <td>{{ row.numero_factura}}</td>
+              <td>{{ row.fecha_factura | date: "dd/MM/yyyy"}}</td>
+              <td>{{ row.autorizacion_factura}}</td>
+              <td>{{ row.c31}} {{ row.c31_fecha | date: "dd/MM/yyyy"}}</td>
+              <!-- <td>{{ row.c31_fecha | date: "dd/MM/yyyy"}}</td> -->
+              <!-- <td>{{ row.incremento_alfabetico}}</td> -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="pnlIngresoDetalle">
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <span class="glyphicon glyphicon-list"></span> Artículos del Ingreso Nº {{elIngresoDesc}}
+    </div>
+    <div class="panel-body" style="text-align: left;">
+      <!-- <button class="btn btn-success" data-toggle="modal" style="margin-bottom: 1rem;" data-target="#modalIngresoDetalle"> -->
+      <button class="btn btn-success" style="margin-bottom: 1rem;" (click)="nuevoRegistro('detalle')" [disabled]="detalleBloqueado">
+        <span class="glyphicon glyphicon-plus"></span> Nuevo Artículo
+      </button>
+      <div class="table table-responsive">
+        <table class="table table-responsive table-condensed table-hover dt-detalle" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th>Opciones</th>
+              <th>Nº</th>
+              <th>Insumo</th>
+              <th>Unidad</th>
+              <th style="text-align: right;">Cantidad</th>
+              <th style="text-align: right;">Costo Unitario</th>
+              <th style="text-align: right;">Costo Total</th>
+              <th style="text-align: right;">Existencias</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dts_ingresosDetalle; let i = index">
+              <td>
+                <button class="btn btn-warning" title="Editar" (click)="crudIngresoDetalle(row,'editar')" [disabled]="detalleBloqueado">
+                  <span class="glyphicon glyphicon-edit"></span>
+                </button>
+                <button class="btn btn-danger" title="Eliminar" (click)="crudIngresoDetalle(row,'eliminar')" [disabled]="detalleBloqueado">
+                  <span class="glyphicon glyphicon-trash"></span>
+                </button>
+              </td>
+              <td width="40px">{{ i + 1 }}</td>
+              <td width="400px">{{ row.codigo}} - {{row.descripcion}} </td>
+              <td>{{ row.unidad}}</td>
+              <td style="text-align: right;">{{ row.cantidad | number:0}}</td>
+              <td style="text-align: right;">{{ row.costo_unidad | number: "0.2-2" | formatoDecimal}}</td>
+              <td style="text-align: right;">{{ row.costo_total | number: "0.2-2" | formatoDecimal}}</td>
+              <td style="text-align: right;">{{ row.existencias}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="pnlProveedor">
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <span class="glyphicon glyphicon-list"></span> Lista de Proveedores
+    </div>
+    <div class="panel-body" style="text-align: left;">
+      <!-- <button class="btn btn-success" data-toggle="modal" style="margin-bottom: 1rem;" data-target="#modalProveedor"> -->
+      <button class="btn btn-success" style="margin-bottom: 1rem;" (click)="nuevoRegistro('proveedor')" >
+        <span class="glyphicon glyphicon-plus"></span> Nuevo Proveedor
+      </button>
+      <div class="table table-responsive">
+        <table class="table table-responsive table-condensed table-hover dt-proveedor" style="font-size: 9pt">
+          <thead>
+            <tr>
+              <th>Opciones</th>
+              <th>Nº</th>
+              <th>Nombre</th>
+              <th>NIT</th>
+              <th>Telefono</th>
+              <th>Contacto</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dts_proveedores; let i = index">
+              <td>
+                <button class="btn btn-warning" title="Editar" (click)="crudProveedor(row,'editar')">
+                  <span class="glyphicon glyphicon-edit"></span>
+                </button>
+                <button class="btn btn-danger" title="Eliminar" (click)="crudProveedor(row,'eliminar')">
+                  <span class="glyphicon glyphicon-trash"></span>
+                </button>
+              </td>
+              <td width="50px">{{ i + 1 }}</td>
+              <td width="300px">{{ row.nombre}}</td>
+              <td>{{ row.nit}} </td>
+              <td>{{ row.telefono}}</td>
+              <td width="300px">{{ row.contacto}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="pnlKardexInsumo">
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <span class="glyphicon glyphicon-list"></span> Histórico de Movimientos - Artículo: {{nombreInsumo}}
+    </div>
+    <div class="panel-body" style="text-align: left;">
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-6">
+          <label class="kardex-titulo">{{datosInsumo.descripcion}}</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-4">
+          <table>
+            <tbody>
+              <tr>
+                <td class="kardex-subtitulo">Código Anterior: </td>
+                <td class="kardex-contenido">{{datosInsumo.codigoAnterior}}</td>
+              </tr>
+              <tr>
+                <td class="kardex-subtitulo">Unidad de Medida: </td>
+                <td class="kardex-contenido">{{datosInsumo.unidad}}</td>
+              </tr>
+              <tr>
+                <td class="kardex-subtitulo">Stock: </td>
+                <td class="kardex-contenido">{{datosInsumo.stock}}</td>
+              </tr>
+              <tr>
+                <td class="kardex-subtitulo">Stock Mínimo: </td>
+                <td class="kardex-contenido">{{datosInsumo.minimo}}</td>
+              </tr>
+              <tr>
+                <td class="kardex-subtitulo">Grupo Contable: </td>
+                <td class="kardex-contenido">{{datosInsumo.partida}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- <label>Código Anterior: </label><label>{{datosInsumo.codigoAnterior}}</label> -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-sm-12 col-lg-6 kardex-inputs">
+          <label class="kardex-fechas">Histórico desde {{datosInsumo.fechaIni}} hasta {{datosInsumo.fechaFin}} </label>
+          <button class="btn btn-success" style="margin-bottom: 1rem;" (click)="procesarReporte('01')" >
+            <span class="glyphicon glyphicon-print"></span> Reporte
+          </button>
+        </div>
+        <div class="form-group col-sm-12 col-lg-6 kardex-inputs">
+          <label>Desde: </label><input class="form-control" style="width: 160px;" type="date" name="fechaDesde" id="fechaDesde" [(ngModel)]="fechaDesde">
+          <label>hasta: </label><input class="form-control" style="width: 160px;" type="date" name="fechaHasta" id="fechaHasta" [(ngModel)]="fechaHasta">
+          <button class="btn btn-primary" (click)="cargarKardexInsumo()" >
+            <span class="glyphicon glyphicon-refresh"></span> Actualizar
+          </button>
+        </div>
+      </div>
+      <div class="table table-responsive">
+        <table class="table table-responsive table-condensed table-hover dt-kardex" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="width: 50px;">Nº</th>
+              <th >Fecha</th>
+              <th style="width: 100px;">Pedido / Entrega</th>
+              <th style="width: 600px;">Detalle</th>
+              <th style="text-align: right; width: 70px;">Cantidad</th>
+              <th style="text-align: right; width: 70px;">Saldo</th>
+              <th style="text-align: right; width: 100px;">Costo Unitario</th>
+              <th style="text-align: right; width: 100px;">Costo Total</th>
+              <th style="width: 100px;">Tipo</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dts_kardexInsumo; let i = index">
+              <td width="40px">{{ i + 1 }}</td>
+              <td width="200px">{{ row.fecha | date: "dd/MM/yyyy HH:mm:ss"}} </td>
+              <td width="100px">{{ row.numero | number: "1.0-2"}}</td>
+              <td width="500px">{{row.nombre}} {{row.cargo}} - {{ row.detalle }}</td>
+              <td style="text-align: right;">{{ row.cantidad | number:0}}</td>
+              <td style="text-align: right;">{{ row.existencias | number:0}}</td>
+              <td style="text-align: right;">{{ row.costo_unidad | number: "0.2-2" | formatoDecimal}}</td>
+              <td style="text-align: right;">{{ row.costo_total | number: "0.2-2" | formatoDecimal}}</td>
+              <td width="120px">
+                <div *ngIf="row.tipo == 'ENTRADA'">
+                  <button class="btn btn-info btn-block" title="Detalle" (click)="detalleKardex(row)">
+                    <span class="glyphicon glyphicon-info-sign"></span> {{row.tipo}}
+                  </button>
+                </div>
+                <div *ngIf="row.tipo == 'SALIDA'">
+                  <button class="btn btn-warning btn-block" title="Detalle" (click)="detalleKardex(row)">
+                    <span class="glyphicon glyphicon-info-sign"></span> {{row.tipo}}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal partida -->
+<div class="modal fade" tabindex="-1"  name="modalPartida" id="modalPartida" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!partidaEditar">Registrar Partida</div><div *ngIf="partidaEditar">Actualizar Partida</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formPartida" (ngSubmit)="registrarPartida()">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="codigo">Codigo Partida:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                  <input class="form-control" type="number" name="codigo" placeholder="Codigo" formControlName="codigo" min="1" max="50000000" onkeypress="return permite(event, 'solo_num')" required>
+                  <span style="color:tomato;" *ngIf="formPartida.controls['codigo'].touched && formPartida.controls['codigo'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="fechaPago">Descripción:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+                  <input class="form-control" type="text" name="descripcion" placeholder="Descripción" formControlName="descripcion" maxlength="200" required>
+                  <span style="color:tomato;" *ngIf="formPartida.controls['descripcion'].touched && formPartida.controls['descripcion'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formPartida.invalid || formPartida.pristine">
+                  <div *ngIf="!partidaEditar"><span class="glyphicon glyphicon-floppy-disk"></span> Registrar Partida</div>
+                  <div *ngIf="partidaEditar"><span class="glyphicon glyphicon-ok"></span> Actualizar Partida</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal insumo -->
+<div class="modal fade" tabindex="-1"  name="modalInsumo" id="modalInsumo" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!insumoEditar">Registrar Insumo</div><div *ngIf="insumoEditar">Actualizar Insumo</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formInsumo" (ngSubmit)="registrarInsumo()">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="cantidad">Partida:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                  <select class="form-control" formControlName="idPartida" (ngModelChange)="cambioPartida()" required >
+                    <option
+                      *ngFor="let row of dts_partidas"
+                      [ngValue]="row.id_partida"
+                      [disabled]="insumoHistorico"
+                    >
+                      {{row.codigo}} - {{row.descripcion}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="codigo">Código Insumo:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                  <input class="form-control" type="number" name="codigo" placeholder="Código" formControlName="codigo" min="1" max="50000000" onkeypress="return permite(event, 'solo_num')" readonly required>
+                  <!-- <span style="color:tomato;" *ngIf="formInsumo.controls['codigo'].touched && formInsumo.controls['codigo'].errors?.required">Este campo es requerido</span> -->
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="descripcion">Descripción:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+                  <input class="form-control" type="text" name="descripcion" placeholder="Descripción" formControlName="descripcion" maxlength="200" required [readonly]="insumoHistorico">
+                  <span style="color:tomato;" *ngIf="formInsumo.controls['descripcion'].touched && formInsumo.controls['descripcion'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="codigo">Unidad:</label>
+                <div class="input-group">
+                  <span class="input-group-addon" title="Nuevo Tipo de Unidad" (click)="nuevoElemento('unidad')" style="cursor: pointer;"><i class="glyphicon glyphicon-info-sign"></i></span>
+                  <!-- <input class="form-control" type="text" name="unidad" placeholder="Unidad" formControlName="unidad" maxlength="30" required>
+                  <span style="color:tomato;" *ngIf="formInsumo.controls['unidad'].touched && formInsumo.controls['unidad'].errors?.required">Este campo es requerido</span> -->
+                  <select class="form-control" formControlName="unidad" required>
+                    <option *ngFor="let row of dts_unidad" [ngValue]="row.unidad" [disabled]="insumoHistorico">
+                      {{row.unidad}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="cantidad">Código Anterior:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                  <input class="form-control" type="text" name="codigoPasado" placeholder="Código Anterior" formControlName="codigoPasado" maxlength="200" [readonly]="insumoHistorico">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="cantidad">Cantidad (Stock):</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-stats"></i></span>
+                  <input class="form-control" type="number" name="cantidad" placeholder="Cantidad" formControlName="cantidad" min="0" max="10000" onkeypress="return permite(event, 'solo_num')" readonly required>
+                  <span style="color:tomato;" *ngIf="formInsumo.controls['cantidad'].touched && formInsumo.controls['cantidad'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="codigo">Cantidad Mínimo:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-stats"></i></span>
+                  <input class="form-control" type="number" name="minimo" placeholder="Cantidad Mínimo" formControlName="minimo" min="1" max="10000" onkeypress="return permite(event, 'solo_num')" required>
+                  <span style="color:tomato;" *ngIf="formInsumo.controls['minimo'].touched && formInsumo.controls['minimo'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <!-- <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="codigo">Incremento:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-export"></i></span>
+                  <input class="form-control" type="number" name="incremento" placeholder="Incremento" formControlName="incremento" min="1" max="10000">
+                </div>
+              </div> -->
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formInsumo.invalid || formInsumo.pristine">
+                  <div *ngIf="!insumoEditar"><span class="glyphicon glyphicon-floppy-disk"></span> Registrar Partida</div>
+                  <div *ngIf="insumoEditar"><span class="glyphicon glyphicon-ok"></span> Actualizar Partida</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal ingreso -->
+<div class="modal fade" tabindex="-1"  name="modalIngreso" id="modalIngreso" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!ingresoEditar">Registrar Ingreso</div><div *ngIf="ingresoEditar">Actualizar Ingreso</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formIngreso" (ngSubmit)="registrarIngreso()">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="numeroIngreso">Nº Ingreso:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-asterisk"></i></span>
+                  <input class="form-control" type="number" name="numeroIngreso" placeholder="Nº Ingreso" formControlName="numeroIngreso" min="1" max="9999" onkeypress="return permite(event, 'solo_num')" required>
+                  <span style="color:tomato;" *ngIf="formIngreso.controls['numeroIngreso'].touched && formIngreso.controls['numeroIngreso'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="fechaIngreso">Fecha Ingreso:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                  <input class="form-control" type="date" name="fechaIngreso" placeholder="Fecha Ingreso" formControlName="fechaIngreso" max="{{maxFecha}}" min="{{minFecha}}" required>
+                  <span style="color:tomato;" *ngIf="formIngreso.controls['fechaIngreso'].touched && formIngreso.controls['fechaIngreso'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="total">Total Ingreso:</label>
+                <div class="input-group">
+                  <span class="input-group-addon">Bs.</span>
+                  <input class="form-control" type="number" name="total" placeholder="0.00" formControlName="total" min="1" max="500000" onkeypress="return permite(event, 'monto')" required>
+                  <span style="color:tomato;" *ngIf="formIngreso.controls['total'].touched && formIngreso.controls['total'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="numeroEntrega">Nº Entrega:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-asterisk"></i></span>
+                  <input class="form-control" type="text" name="numeroEntrega" placeholder="Descripción" formControlName="numeroEntrega" maxlength="50" required>
+                  <span style="color:tomato;" *ngIf="formIngreso.controls['numeroEntrega'].touched && formIngreso.controls['numeroEntrega'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="fechaEntrega">Fecha Entrega:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                  <input class="form-control" type="date" name="fechaEntrega" placeholder="Fecha Entrega" formControlName="fechaEntrega" max="{{maxFecha}}" min="{{minFecha}}" required>
+                  <span style="color:tomato;" *ngIf="formIngreso.controls['fechaEntrega'].touched && formIngreso.controls['fechaEntrega'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <!-- <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="idProveedor">Proveedor:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                  <select class="form-control" formControlName="idProveedor"  name="idProveedor" id="idProveedor"  (keypress)=BusquedaProveedor(idProveedor)>
+                    <option *ngFor="let row of dts_proveedores" [ngValue]="row.id_proveedor">
+                      {{row.nit}} - {{row.nombre}}
+                    </option>
+                  </select>
+                </div>
+              </div> -->
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="numeroFactura">Nº Factura:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-asterisk"></i></span>
+                  <input class="form-control" type="number" name="numeroFactura" placeholder="Nº Factura" formControlName="numeroFactura" maxlength="15" onkeypress="return permite(event, 'solo_num')" required>
+                  <span style="color:tomato;" *ngIf="formIngreso.controls['numeroFactura'].touched && formIngreso.controls['numeroFactura'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="fechaFactura">Fecha Factura:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                  <input class="form-control" type="date" name="fechaFactura" placeholder="Fecha Factura" formControlName="fechaFactura" max="{{maxFecha}}" min="{{minFecha}}" required>
+                  <span style="color:tomato;" *ngIf="formIngreso.controls['fechaFactura'].touched && formIngreso.controls['fechaFactura'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="autorizacion">Código Autorización:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span>
+                  <input class="form-control" type="text" name="autorizacion" placeholder="Código Autorización" formControlName="autorizacion" maxlength="100" required>
+                  <span style="color:tomato;" *ngIf="formIngreso.controls['autorizacion'].touched && formIngreso.controls['autorizacion'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="c31">C-31:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-file"></i></span>
+                  <input class="form-control" type="text" name="c31" placeholder="c31" formControlName="c31" maxlength="50"  required>
+                  <span style="color:tomato;" *ngIf="formIngreso.controls['c31'].touched && formIngreso.controls['c31'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="fechaC31">Fecha C-31:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                  <input class="form-control" type="date" name="fechaC31" placeholder="Fecha C-31" formControlName="fechaC31" max="{{maxFecha}}" min="{{minFecha}}" required>
+                  <span style="color:tomato;" *ngIf="formIngreso.controls['fechaC31'].touched && formIngreso.controls['fechaC31'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <!-- <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="incremento">Incremento:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-arrow-up"></i></span>
+                  <input class="form-control" type="text" name="incremento" placeholder="Incremento" formControlName="incremento" maxlength="20">
+                </div>
+              </div> -->
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="idProveedor">Proveedor:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                  <input class="form-control" formControlName="idProveedor" type="text" name="idProveedor" id="idProveedor" list="ListaPara" [(ngModel)]="idProveedorLista" (keypress)=BusquedaProveedor(idProveedorLista) autocomplete="off" (blur)=ValidaProveedor()>
+                    <datalist id="ListaPara" class="datalist">
+                      <div *ngFor="let row of proveedoresFiltrados">
+                        <option class="form-control"
+                                value={{row.nombre}}
+                                label={{row.nombre}}>
+                      </div>
+                    </datalist>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formIngreso.invalid || formIngreso.pristine">
+                  <div *ngIf="!ingresoEditar"><span class="glyphicon glyphicon-floppy-disk"></span> Registrar Partida</div>
+                  <div *ngIf="ingresoEditar"><span class="glyphicon glyphicon-ok"></span> Actualizar Partida</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal ingresoDetalle -->
+<div class="modal fade" tabindex="-1"  name="modalIngresoDetalle" id="modalIngresoDetalle" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">
+          <div *ngIf="!ingresoDetalleEditar">Registrar Detalle Ingreso</div>
+          <div *ngIf="ingresoDetalleEditar">Actualizar Detalle Ingreso {{autor}}</div>
+        </h5>
+      </div>
+      <div id="todoIngresoDetalle" class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formIngresoDetalle" (ngSubmit)="registrarIngresoDetalle()">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="filtro">Filtrar Insumos:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-filter"></i></span>
+                  <input class="form-control" type="text" name="filtro" placeholder="Filtar..." maxlength="20" formControlName="filtro" [(ngModel)]="filtro"  (ngModelChange)="filtrar()" >
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-8 col-md-8">
+                <label for="cantidad">Insumo:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                  <!-- <ng-select2 [width]="400" [data]="dts_insumos" formControlName="idInsumo" [(ngModel)]="insumo" (ngModelChange)="cambioInsumo()"></ng-select2> -->
+                  <select class="form-control" formControlName="idInsumo" aria-placeholder="selccione..." (ngModelChange)="cambioInsumo()" required>
+                    <option
+                      *ngFor="let row of filtradoInsumos"
+                      [ngValue]="row.id_insumo"
+                    >
+                      {{row.codigo}} - {{row.descripcion}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-4">
+                <label for="unidad">Unidad:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                  <input class="form-control" type="text" name="unidad" placeholder="Unidad" formControlName="unidad" maxlength="20" readonly>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4">
+                <label for="codigoPasado">Código Anterior:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+                  <input class="form-control" type="text" name="codigoPasado" placeholder="Código Anterior" formControlName="codigoPasado" maxlength="20" readonly>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4">
+                <label for="existencias">Existencias:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-cog"></i></span>
+                  <input class="form-control" type="number" name="existencias" placeholder="0" formControlName="existencias" min="1" max="10000"
+                        value="{{formIngresoDetalle.value.cantidad + formIngresoDetalle.value.existencias}}" onkeypress="return permite(event, 'solo_num')"readonly>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="cantidad">Cantidad:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+                  <input class="form-control" type="number" name="cantidad" placeholder="0" formControlName="cantidad" onkeypress="return permite(event, 'solo_num')" min="1" required>
+                  <span style="color:tomato;" *ngIf="formIngresoDetalle.controls['cantidad'].touched && formIngresoDetalle.controls['cantidad'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="costoUnidad">Costo Unitario:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign"></i></span>
+                  <input class="form-control" type="number" name="costoUnidad" placeholder="0" formControlName="costoUnidad" min="1" onkeypress="return permite(event, 'monto')" min="1" step=".10" required>
+                  <span style="color:tomato;" *ngIf="formIngresoDetalle.controls['costoUnidad'].touched && formIngresoDetalle.controls['costoUnidad'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="costoTotal">Costo Total:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                  <input class="form-control" type="text" name="costoTotal" placeholder="0" formControlName="costoTotal" value="{{formIngresoDetalle.value.cantidad * formIngresoDetalle.value.costoUnidad}}" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formIngresoDetalle.invalid || formIngresoDetalle.pristine">
+                  <div *ngIf="!ingresoDetalleEditar"><span class="glyphicon glyphicon-floppy-disk"></span> Registrar Detalle Ingreso</div>
+                  <div *ngIf="ingresoDetalleEditar"><span class="glyphicon glyphicon-ok"></span> Actualizar Detalle Ingreso</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal proveedor -->
+<div class="modal fade" tabindex="-1"  name="modalProveedor" id="modalProveedor" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!proveedorEditar">Registrar Proveedor</div><div *ngIf="proveedorEditar">Actualizar Proveedor</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formProveedor" (ngSubmit)="registrarProveedor()">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-7 col-md-7">
+                <label for="nombre">Nombre:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                  <input class="form-control" type="text" name="nombre" placeholder="Nombre" formControlName="nombre" maxlength="250" required>
+                  <span style="color:tomato;" *ngIf="formProveedor.controls['nombre'].touched && formProveedor.controls['nombre'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-5 col-md-5">
+                <label for="nit">NIT:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+                  <input class="form-control" type="number" name="nit" placeholder="Descripción" formControlName="nit" min="10000" onkeypress="return permite(event, 'solo_num')" required>
+                  <span style="color:tomato;" *ngIf="formProveedor.controls['nit'].touched && formProveedor.controls['nit'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-7 col-md-7">
+                <label for="contacto">Contacto:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                  <input class="form-control" type="text" name="contacto" placeholder="Contacto" formControlName="contacto" maxlength="250" required>
+                  <span style="color:tomato;" *ngIf="formProveedor.controls['contacto'].touched && formProveedor.controls['contacto'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-5 col-md-5">
+                <label for="telefono">Teléfono:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+                  <input class="form-control" type="text" name="telefono" placeholder="Teléfono" formControlName="telefono" maxlength="50" required>
+                  <span style="color:tomato;" *ngIf="formProveedor.controls['telefono'].touched && formProveedor.controls['telefono'].errors?.required">Este campo es requerido</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formProveedor.invalid || formProveedor.pristine">
+                  <div *ngIf="!proveedorEditar"><span class="glyphicon glyphicon-floppy-disk"></span> Registrar Proveedor</div>
+                  <div *ngIf="proveedorEditar"><span class="glyphicon glyphicon-ok"></span> Actualizar Proveedor</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal solicitud solo lectura para kardex-->
+<div class="modal fade" name="modalSolicitudConsulta" id="modalSolicitudConsulta" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">Solicitud Nº {{consulta.numeroSolicitud}} {{autor}}</h5>
+      </div>
+      <div class="modal-body" style="overflow:hidden;">
+        <div id="todoSolicitud" style="text-align: left;">
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="numeroSolicitud">Nº Solicitud:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                <input class="form-control" type="text" name="numeroSolicitud" [(ngModel)]="consulta.numeroSolicitud" disabled>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="fechaSolicitud">Fecha Solicitud:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                <input class="form-control" type="date" name="fechaSolicitud" [(ngModel)]="consulta.fechaSolicitud" disabled>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="fechaEntrega">Fecha Entrega:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                <input class="form-control" type="date" name="fechaEntrega" [(ngModel)]="consulta.fechaEntrega" disabled>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-12 col-md-12">
+              <label for="observacion">Observación / Justificación:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+                <input class="form-control" type="text" name="observacion" [(ngModel)]="consulta.observacion" disabled>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-12 col-md-12">
+              <table class="table table-responsive table-condensed table-hover" style="font-size: 9pt">
+                <thead>
+                  <tr>
+                    <th>Nº</th>
+                    <th>Artículo</th>
+                    <th>Unidad</th>
+                    <th style="text-align: right;">Cantidad Solicitada</th>
+                    <th style="text-align: right;">Cantidad Entregada</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of dts_detalleConsulta; let i = index" [ngClass]="{'bg-info': consulta.idDetalle == row.id_solicitud_detalle}">
+                    <td width="20px">{{ i + 1 }}</td>
+                    <td>{{ row.codigo}} - {{row.descripcion}} </td>
+                    <td>{{ row.unidad}}</td>
+                    <td style="text-align: right;">
+                      <input type="number" class="cuser" id="cant{{row.fid_insumo}}" style="width: 60px;" value="{{ row.cantidad}}" disabled>
+                    </td>
+                    <td style="text-align: right;">
+                      <input type="number" class="cadmin" id="ent{{row.fid_insumo}}" style="width: 60px;" value="{{ row.cantidad_entregada}}" disabled>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal prompt FV -->
+<div class="modal fade" tabindex="-1"  name="modalFV" id="modalFV" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-group col-sm-12 col-lg-12">
+            <label for="fechaIniFV">Fecha Desde:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+              <input class="form-control" type="date" name="fechaIniFV" id="fechaIniFV" [(ngModel)]="fechaIniFV" autofocus required>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-sm-12 col-lg-12">
+            <label for="fechaFinFV">Fecha Hasta:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+              <input class="form-control" type="date" name="fechaFinFV" id="fechaFinFV" [(ngModel)]="fechaFinFV" required>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="procesarReporte('03')">Generar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- CHARTS -->
+<div *ngIf="charts" style="width: 100%;" >
+  <app-barras [titulo]="'Ingresos Gestión'" [titulos]="titulos" [series]="series" [periodos]="listaPeriodos" [alto]="350" ></app-barras>
+  <!-- <app-radial [titulo]="'Porcentaje Desembolsado AP'" [actual]="totalDesembolsos" [total]="montoContractual" [id]="ap" ></app-radial> -->
+  <div class="row">
+    <div class="form-group col-sm-12 col-lg-6">
+      <app-pie [titulo]="'Artículos más Comprados'" [series]="seriesInsumos" [labels]="labelsInsumos" ></app-pie>
+    </div>
+    <div class="form-group col-sm-12 col-lg-6">
+      <app-pie [titulo]="'Compras por Partidas'" [series]="seriesPartida" [labels]="labelsPartida" ></app-pie>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-sm-12 col-lg-6">
+      <app-pie [titulo]="'Artículos más Solicitados'" [series]="seriesSolicitado" [labels]="labelsSolicitado" ></app-pie>
+    </div>
+  </div>
+</div>

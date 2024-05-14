@@ -1,0 +1,131 @@
+.medidor {
+    position:relative ;
+    display: block;
+    height: 25.4%;
+    width:25.4% ;
+    border-radius: 50%;
+    z-index: 1;
+    background: linear-gradient(to right, #d42c2c, #dfd331, #27aa27,#4b4de2);
+    min-width: 385px !important;
+    margin-bottom: -12rem;
+  }
+
+.medidor::after {
+  position: absolute;
+  content: "";
+  height: 53%;
+  background-color: #d7dbe6;
+  top: 48%;
+  left: -1%;
+  width: 101%;
+  opacity: 1;
+  margin-bottom: -12rem;
+}
+.medidor::before {
+  position: absolute;
+  content: "";
+  top: 9%;
+  left: 9.2%;
+  background-color: #d7dbe6;
+  height: calc(100% - 15%);
+  width: calc(100% - 18%);
+  border-radius: 50%;
+  margin-bottom: -12rem;
+}
+  .aguja {
+    width: 1.5%;
+    height: 37.5%;
+    background-color: #333335;
+    position: absolute;
+    left: 48%;
+    bottom: 53%;
+    transform-origin: bottom center;
+    transition: transform 3s ease;
+  }
+  
+  .indicador {
+    width: 1px;
+    height: 9%;
+    background-color: #d7dbe6;
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10%;
+  }
+  
+  .punto {
+    width: 2000%;
+    height: 38%;
+    background-color: #333335;
+    border-radius: 50%;
+    position: absolute;
+    top: 93%;
+    left: -1280%;
+  }
+ 
+  .wrapper {
+    text-align:center;
+    top: 4px;
+    width:111%;
+    height:400px;
+    position:relative;
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
+  .number {
+    width:7%;
+    left:40%;
+    height:68%;
+    color: #333335;
+    display:inline-block;
+    position:absolute;
+    z-index:100;
+}
+.number.n0 {
+    transform: rotate(-90deg);
+    bottom:22.1%;
+    z-index: 100;
+    left: 31.4%;   
+}
+.number.n25 {
+    transform: rotate(-45deg);
+    bottom:27.5%;
+    left: 34%;
+}
+.number.n75 {
+    transform: rotate(45deg);
+    bottom:28.5%;
+    left: 48%;
+}
+.number.n180 {
+    transform: rotate(90deg);
+    bottom:26.9%;
+    left: 51.5%;
+}
+.medidor label{
+  position:absolute;
+  top: 21%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  color: #363434;
+  font-weight: bolder;
+  font-size: 4rem;
+}
+#titulo{
+  color: #333335;
+  text-decoration: underline;
+  letter-spacing: 0.1rem;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+}
+.main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 1rem;
+  margin-bottom: -4rem;
+}

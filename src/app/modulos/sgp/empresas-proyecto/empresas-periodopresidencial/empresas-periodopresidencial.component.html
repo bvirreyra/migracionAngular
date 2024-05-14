@@ -1,0 +1,8 @@
+<div id="tarjeta" class="tarjeta azul" (click)="detallar()">
+  <h2>{{ periodo_titulo }}</h2>
+  <h1>{{ total[0].cantidad }}</h1>
+  <span class="label"
+    >{{ total[0].monto_contrato | number : "0.2-2" | formatoDecimal }}Bs.</span
+  >
+  <hr style="border-top: 1px solid #eee" />
+</div>

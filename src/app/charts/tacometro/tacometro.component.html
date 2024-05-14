@@ -1,0 +1,22 @@
+<div class="main">
+  <label id="titulo">{{titulo}}</label>
+  <div class="medidor">
+    <div
+    class="aguja"
+    [style.transform]="'rotate(' + calcularAngulo() + 'deg)'">
+  </div>
+  <label for="">{{valor}} %</label>
+  <div class="indicador">
+    <div class="punto"></div>
+    </div>
+    <div class="wrapper">
+      <div class="">
+          <div class="number n0">0%</div>
+          <div class="number n25">25%</div>
+          <div class="number n90">50%</div>
+          <div class="number n75">75%</div>
+          <div class="number n180">100%</div>
+      </div> 
+    </div>
+  </div>
+</div>

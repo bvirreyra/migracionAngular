@@ -1,0 +1,110 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div >
+  <div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+      <button type="button" class="btn btn-success btn-md pull-right" (click)="paneles('VER_PROYECTOS')">
+        <i class="fa fa-refresh" aria-hidden="true" title="Ver Proyectos"></i>
+      </button>
+      <!-- <button type="button" class="btn btn-success pull-right" title="Ingreso Nuevo"
+        (click)="paneles('NUEVO_REGISTRO')"><i class="fa fa-plus">Nuevo
+        </i></button> -->
+    </div>   
+    <div class="row"></div>
+
+    <div class="panel-body">
+      <!-- <table class="table table-responsive dt-compromisos"> -->
+      <table class="table table-responsive dt-proyectos" id="data-table">
+        <thead>
+          <tr>
+            <th>.::.</th>   
+            <th>Gestión</th>                                          
+            <th data-priority="1">Nombre de Proyecto</th>
+            <th>Estado del Proyecto</th>
+            <th>Tecnico Responsable</th>            
+            <th>Observacion</th>            
+
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+        <tbody>
+          <tr *ngFor="let row_registros of dts_listaProyectosEmpresa | groupBy:'id_proyecto'; let i = index;">
+            <td>
+              <div class="btn-group btn-group-sm">
+                <!-- <button type="button" class="btn btn-warning btn-md"
+                  (click)="paneles('EDITA_REGISTRO',row_registros)">
+                  <i class="fa fa-edit" aria-hidden="true" title="Actualizar Registro"></i>
+                </button><br><br> -->
+                <button type="button" class="btn btn-info btn-md" (click)="paneles('VER_DETALLE',row_registros)"
+                  title="Ver Planillas">
+                  <i class="fa fa-id-card" aria-hidden="true"></i>
+                </button><br><br>
+                <!-- <button type="button" class="btn btn-danger btn-md" data-toggle="modal"
+                  data-target="#modalEliminaCabecera" (click)="paneles('ELIMINA_CABECERA',row_registros)"
+                  title="Eliminar Registro">
+                  <i class="fa fa-times" aria-hidden="true"></i>
+                </button><br><br> -->
+              </div>
+            </td>
+            <td>{{row_registros.value[0]['gestion']}}</td>
+            <td>{{row_registros.value[0]['nombre']}}</td>
+            <td>{{row_registros.value[0]['estadoproyecto']}}</td>
+            <td>{{row_registros.value[0]['tecnico_asignado']}}</td>
+            <td>
+              <table class="table table-responsive dt-observaciones" id="data-table">
+                <thead>
+                  <tr>
+                    <th>.::.</th>   
+                    <th>Unidad</th>                                          
+                    <th >Situación Actual del Proyecto</th>
+                    <th>Pendientes del Proyecto</th>
+                    <th>Observacion dirigida a</th>            
+                    <th>Fecha Observacion</th>            
+                    <th>Fecha Fin Observacion</th>            
+                    <th>Estado</th>            
+        
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr *ngFor="let row_obs of row_registros.value; let i = index;">
+                  <td>{{i+1}}</td>
+                  <td>{{row_obs.unidad}}</td>
+                  <td>{{row_obs.situacion_actual}}</td>
+                  <td>{{row_obs.pendientes}}</td>
+                  <td>{{row_obs.dirigido}}</td>
+                  <td>{{row_obs.fecha_inicio | date:'dd/MM/yyyy'}}</td>
+                  <td>{{row_obs.fecha_fin | date:'dd/MM/yyyy'}}</td>
+                  <td>{{row_obs.estado_observacion}}</td>
+                  </tr>                  
+                </tbody>   
+              </table>     
+            </td>            
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

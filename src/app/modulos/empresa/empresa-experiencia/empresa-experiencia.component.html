@@ -1,0 +1,264 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="contenedor-modulo">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <span class="fa fa-building"></span> Experiencia de la empresa
+      <button class="btn btn-info pull-right" title="Agregar experiencia de la empresa..." style="padding: 2px 10px; margin: -2px 0 0 1rem;" (click)="abrirFormExperienciaEmpresa()" >
+        <span class="fa fa-plus-square-o"></span> Agregar...
+      </button>
+      <button class="btn btn-success pull-right" title="Importar desde Hoja de Cálculo..." style="padding: 2px 10px; margin-top: -2px;" (click)="buscarExcel()" >
+        <span class="fa fa-upload"></span> Importar
+      </button>
+      <button class="btn btn-warning pull-right" title="Descargar Plantilla Hoja de Cálculo" style="padding: 2px 10px; margin: -2px 1rem 0 1rem;" (click)="descargarExperiencia()" >
+        <span class="fa fa-download"></span> Descargar
+      </button>
+    </div>
+    <div class="panel-body">
+      <div style="overflow-x: auto;">
+        <table class="table table-responsive table-condensed table-hover dt-experiencia-empresa" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="width: 80px; text-align: center;">Acciones</th>
+              <th >Nombre del Contratante</th>
+              <th >Contacto / Dirección</th>
+              <th >Objeto del Contrato</th>
+              <th >Ubicación</th>
+              <th >Monto Contrato (Bs)</th>
+              <th >Monto Contrato ($us)</th>
+              <th >Inicio</th>
+              <th >Finalización</th>
+              <th >% Participación</th>
+              <th >Profesional Responsable</th>
+              <th >Nombre de los socios</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsExperienciaEmpresa;">
+              <td >
+                <button class="btn btn-warning btn-block" title="Editar" (click)="abrirFormExperienciaEmpresa(row)">
+                  <span class="fa fa-edit"></span> {{row.tipo}}
+                </button>
+                <button class="btn btn-danger btn-block" title="Eliminar" (click)="confirmarEliminacion(row,'D')">
+                  <span class="fa fa-trash"></span> {{row.tipo}}
+                </button>
+              </td>
+              <td >{{row.nombre_contratante }}</td>
+              <td >{{ row.direccion_contacto}} </td>
+              <td >{{ row.objeto_contratacion }}</td>
+              <td >{{row.ubicacion}} {{row.cargo}} - {{ row.detalle }}</td>
+              <td >{{ row.monto_contrato_bs | number: "0.2-2" | formatoDecimal}}</td>
+              <td >{{ row.monto_contrato_sus | number: "0.2-2" | formatoDecimal}}</td>
+              <td >{{ row.fecha_inicio | date: "dd/MM/yyyy"}}</td>
+              <td >{{ row.fecha_fin | date: "dd/MM/yyyy"}}</td>
+              <td >{{ row.participacion | number:0}}</td>
+              <td >{{ row.responsable}}</td>
+              <td >{{ row.socio }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal experiencia -->
+<div class="modal fade" tabindex="-1"  name="modalExperiencia" id="modalExperiencia" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!experienciaEditar">Registrar Experiencia</div><div *ngIf="experienciaEditar">Editar Experiencia</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formExperiencia" (ngSubmit)="crudExperienciaEmpresa()" autocomplete="off">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="nombre_contratante">Nombre del Contratante:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-building"></i></span>
+                  <input class="form-control" type="text" name="nombre_contratante" placeholder="nombre contratante" formControlName="nombre_contratante" maxlength="150" required autofocus>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperiencia.controls['nombre_contratante'].touched && formExperiencia.controls['nombre_contratante'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="direccion_contacto">Persona y Dirección del Contacto:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-address-card-o"></i></span>
+                  <input class="form-control" type="text" name="direccion_contacto" placeholder="direccion contacto" formControlName="direccion_contacto" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperiencia.controls['direccion_contacto'].touched && formExperiencia.controls['direccion_contacto'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="objeto_contratacion">Objeto de Contrato:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-inbox"></i></span>
+                  <input class="form-control" type="text" name="objeto_contratacion" placeholder="objeto contratacion" formControlName="objeto_contratacion"  required>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperiencia.controls['objeto_contratacion'].touched && formExperiencia.controls['objeto_contratacion'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="ubicacion">Ubicación:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                  <input class="form-control" type="text" name="ubicacion" placeholder="ubicación" formControlName="ubicacion" maxlength="200" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperiencia.controls['ubicacion'].touched && formExperiencia.controls['ubicacion'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="monto_contrato_bs">Monto Final Contrato Bs:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-money"></i></span>
+                  <input class="form-control" type="text" name="monto_contrato_bs" placeholder="0.00" formControlName="monto_contrato_bs" (input)="handleInput($event)" (blur)="handleBlur($event)" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperiencia.controls['monto_contrato_bs'].touched && formExperiencia.controls['monto_contrato_bs'].errors?.required">Este campo es requerido</span>
+                <span style="color:tomato;" *ngIf="formExperiencia.controls['monto_contrato_bs'].touched && formExperiencia.controls['monto_contrato_bs'].errors?.min">El monto debe ser mayor o igual a 1</span>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="monto_contrato_sus">Monto Final Contrato $us:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-money"></i></span>
+                  <input class="form-control" type="text" name="monto_contrato_sus" placeholder="0.00" formControlName="monto_contrato_sus" (input)="handleInput($event)" (blur)="handleBlur($event)">
+                </div>
+                <span style="color:tomato;" *ngIf="formExperiencia.controls['monto_contrato_sus'].touched && formExperiencia.controls['monto_contrato_sus'].errors?.min">El monto debe ser mayor o igual a 1</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="fecha_inicio">Fecha Incicio:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i></span>
+                  <input class="form-control" type="date" name="fecha_inicio" formControlName="fecha_inicio" max="{{maxFechaIni}}" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperiencia.controls['fecha_inicio'].touched && formExperiencia.controls['fecha_inicio'].errors?.required">Este campo es requerido</span>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="fecha_fin">Fecha Finalización:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i></span>
+                  <input class="form-control" type="date" name="fecha_fin"  formControlName="fecha_fin" min="{{minFechaFin}}" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperiencia.controls['fecha_fin'].touched && formExperiencia.controls['fecha_fin'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="participacion">Participacion (%):</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-percent"></i></span>
+                  <input class="form-control" type="text" name="participacion" placeholder="100" formControlName="participacion" (input)="handleInput($event)" (blur)="handleBlur($event)" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperiencia.controls['participacion'].touched && formExperiencia.controls['participacion'].errors?.required">Este campo es requerido</span>
+                <span style="color:tomato;" *ngIf="formExperiencia.controls['participacion'].touched && formExperiencia.controls['participacion'].errors?.min">El valor debe estar entre 1 y 100</span>
+                <span style="color:tomato;" *ngIf="formExperiencia.controls['participacion'].touched && formExperiencia.controls['participacion'].errors?.max">El valor debe estar entre 1 y 100</span>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="responsable">Profesional Responsable:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-male"></i></span>
+                  <input class="form-control" type="text" name="responsable" placeholder="profesional responsable" formControlName="responsable" maxlength="150" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formExperiencia.controls['responsable'].touched && formExperiencia.controls['responsable'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="c31">Nombre de los socios:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                  <input class="form-control" type="text" name="socio" placeholder="primer Socio, Segundo Socio" formControlName="socio" maxlength="250">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <p style="background-color: #76cdf9;color: #0379b5;border: #0daeff 1px solid;; margin: 15px; border-left: #0daeff 8px solid; padding: 10px;">
+                * Monto a la fecha de Recepción Final de la Obra.<br>
+                ** Cuando la empresa cuente con experiencia asociada, consignar el monto correspondiente a su participación.<br>
+                *** Si el contrato lo ejecutó asociado, indicar el nombre del o los socios.<br>
+                **** Indicar el nombre del Profesional Responsable, que desempeñó el cargo de Superintendente/ Residente o Director de Obras o su equivalente. Se puede nombrar a más de un profesional, si así correspondiese.<br>
+                ***** El monto en bolivianos no necesariamente debe coincidir con el monto en Dólares Americanos.<br>
+              </p>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formExperiencia.invalid || formExperiencia.pristine">
+                  <div *ngIf="!experienciaEditar"><span class="fa fa-floppy-o"></span> Registrar Experiencia</div>
+                  <div *ngIf="experienciaEditar"><span class="fa fa-check"></span> Actualizar Experiencia</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal cargar excel -->
+<div class="modal fade" tabindex="-1"  name="modalExcel" id="modalExcel" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">Importar desde Hoja de Cálculo - Experiencia Empresa</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-group col-sm-12 col-lg-9 col-md-9">
+            <label for="inputArchivo">Experiencia de la Empresa:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-open"></i></span>
+              <input class="form-control" type="file" accept=".ods" id="inputArchivo" name="inputArchivo" 
+              (change)="handleFileInput($event.target.files)" autofocus>
+            </div>
+          </div>
+          <div class="form-group col-sm-12 col-lg-3 col-md-3">
+            <button class="btn btn-info btn-block" (click)="cargarExcel()" style="margin-top: 2.5rem;" title="Subir Archivo">
+              <span class="glyphicon glyphicon-open"></span> Cargar
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <p style="background-color: #c0eaff; color: #0090d9; margin: 15px; border-left: #0daeff 4px solid; padding: 10px;">
+            ✔ El archivo debe estar en formato<strong> Libre Office Calc</strong>, extensión <strong>.ods</strong>.<br>
+            ✔ Todos las 21 columnas deben ser llenadas para cada fila, excepto monto <strong>"MONTO CONTRATO $US"</strong> o <strong>"SOCIOS"</strong>.<br>
+            ✔ Las columnas MONTOS deben estar en formato de número y solo con <strong>2 decimales</strong>.<br>
+            ✔ Las columnas de <strong>"FECHA INICIO"</strong> y <strong>"FECHA FINALIZACIÓN"</strong> deben estar en formato de fecha, <strong>EJEMPLO: 24/07/2018</strong>.<br>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

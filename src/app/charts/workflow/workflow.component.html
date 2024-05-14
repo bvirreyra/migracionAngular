@@ -1,0 +1,86 @@
+<div id="baseCharts">
+  <div class="r" *ngIf="dtsSeries.length > 0">
+    <app-range-bar
+      [series]="dtsSeriesIdeal"
+      [titulos]="titulosIdeal"
+      [topes]="topes"
+      [xmin]="xmin"
+      [titleXTop]="true"
+      [feriados]="dtsFeriados"
+      (messageEvent)="recibeMensaje($event, 'rangeBarIdeal')"
+    ></app-range-bar>
+    <div class="aviso">
+      <P>💯<strong>CRONOGRAMA IDEAL: </strong> {{ detalle }}</P>
+      <p>
+        🚨<strong>TOTAL TIEMPO DESFASE: </strong
+        ><b id="alerta"> {{ totalRetraso.toFixed(0) }} días</b>
+      </p>
+      <p>
+        ⚙️<strong>ETAPA EN PROCESO ACTUAL: </strong> {{ etapActual }} desde el
+        {{
+          dtsMonitoreos[dtsMonitoreos.length - 1].fecha_inicio
+            | date : "dd/MM/yyyy"
+        }}
+      </p>
+    </div>
+  </div>
+  <div class="row" *ngIf="dtsSeriesLinea.length > 0">
+    <app-line
+      [titulos]="titulosLinea"
+      [series]="dtsSeriesLinea"
+      [periodos]="dtsPeriodosLinea"
+      [nombresPeriodos]="dtsPeriodosNombre"
+      [alto]="350"
+      [colores]="colores"
+      (messageEvent)="recibeMensaje($event, 'linea')"
+    ></app-line>
+  </div>
+  <div class="r">
+    <div
+      class="grid-charts"
+      id="groupPie"
+      *ngIf="dtsSeriesPie.length > 0 && dtsSeriesPie2.length > 0"
+    >
+      <app-pie
+        [titulo]="tituloPie"
+        [series]="dtsSeriesPie"
+        [labels]="labelsPie"
+      >
+      </app-pie>
+      <app-pie
+        [titulo]="tituloPie2"
+        [series]="dtsSeriesPie2"
+        [labels]="labelsPie2"
+      >
+      </app-pie>
+    </div>
+  </div>
+  <div class="r" *ngIf="dtsGrupos.length > 0">
+    <label style="white-space: nowrap; margin-right: 1rem; padding-top: 0.8rem"
+      >Seleccione tipo de Filtro</label
+    >
+    <select
+      class="form-control"
+      style="width: 200px"
+      [(ngModel)]="tipoFiltro"
+      (ngModelChange)="filtrarSubSeries()"
+    >
+      <option value="SF">SIN FILTAR</option>
+      <option value="ED">ETAPAS CON DESFACE</option>
+      <option value="ET">ETAPAS EN TIEMPO</option>
+    </select>
+    <div class="grid-charts">
+      <app-bar-categorias
+        *ngFor="let g of dtsGrupos"
+        [titulos]="g.titulos"
+        [series]="g.series"
+        [periodos]="g.periodos"
+        [nombresPeriodos]="g.periodosNombres"
+        [alto]="350"
+        [colores]="coloresSub"
+        [horizontal]="false"
+        (messageEvent)="recibeMensaje($event, 'sub' + g.numero)"
+      ></app-bar-categorias>
+    </div>
+  </div>
+</div>

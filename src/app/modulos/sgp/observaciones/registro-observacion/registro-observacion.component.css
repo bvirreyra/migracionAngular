@@ -1,0 +1,7 @@
+.dt-observaciones tfoot input {
+    width: 100% !important;
+}
+
+.dt-observaciones tfoot {
+    display: table-header-group !important;
+}

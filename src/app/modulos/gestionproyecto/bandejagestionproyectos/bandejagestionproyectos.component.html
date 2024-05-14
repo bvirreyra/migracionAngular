@@ -1,0 +1,250 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+
+<!-- VISTA UNO -->
+<div name="pnl_listaproyecto" id="pnl_listaproyecto">
+  <!--REFRESCA GRIDVIEW -->
+  <div class="clearfix" style="margin-bottom: 1rem">
+    <button
+      type="button"
+      class="btn btn-success btn-md pull-right"
+      (click)="ActualizarListado()"
+    >
+      <i class="fa fa-refresh" aria-hidden="true" title="Actualizar"></i>
+    </button>
+  </div>
+  <!--LISTA GRIDVIEW PROYECTOS CONSOLIDADOS-->
+  <table
+    class="table table-responsive table-condensed table-hover dt-seguimiento"
+    style="font-size: 9pt"
+  >
+    <thead>
+      <tr>
+        <th>Nro.</th>
+        <th>Cod Sgp</th>
+        <th>Gestion</th>
+        <th>Departamento</th>
+        <th>Provincia</th>
+        <th>Municipio</th>
+        <th>Tipo Financiamiento</th>
+        <th>Nro Convenio</th>
+        <th>Fecha Convenio</th>
+        <th>Nombre Proyecto</th>
+        <th>Responsable</th>
+        <th>Estado Proyecto</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+
+    <tbody>
+      <tr
+        *ngFor="let row_registros of dts_proyectosgestion; let i = index"
+        [ngClass]="{
+          'bg-success': row_registros.estado == 'TERMINADO',
+          'bg-danger': row_registros.estado == 'SIN ASIGNAR',
+          'bg-warning': row_registros.estado == 'PROCESADO'
+        }"
+      >
+        <td>{{ i + 1 }}</td>
+        <td>{{ row_registros.id_sgp }}</td>
+        <td>{{ row_registros.fecha_suscripcion_convenio | date : "yyyy" }}</td>
+        <td>{{ row_registros.departamento }}</td>
+        <td>{{ row_registros.provincia }}</td>
+        <td>{{ row_registros.municipio }}</td>
+        <td>{{ row_registros.tipo_financiamiento }}</td>
+        <td>{{ row_registros.nro_convenio }}</td>
+        <td>
+          {{ row_registros.fecha_suscripcion_convenio | date : "dd/MM/yyyy" }}
+        </td>
+        <td>{{ row_registros.nombreproyecto }}</td>
+        <td>{{ row_registros.tecnico_asignado }}</td>
+        <td>{{ row_registros.estado }}</td>
+        <td>
+          <button
+            *ngIf="
+              row_registros.estado != 'TERMINADO' &&
+              (dts_permisos['_administrador_gestionproyectos'] == false ||
+                dts_permisos['_usuario_gestionproyectos'] == false)
+            "
+            type="button"
+            class="btn btn-primary btn-block"
+            title="Bandeja Items"
+            (click)="paneles('BANDEJA_ITEMS', row_registros)"
+          >
+            <i class="fa fa-eye" aria-hidden="true"></i>
+          </button>
+
+          <button
+            *ngIf="
+              (row_registros.estado == 'SIN ASIGNAR' ||
+                row_registros.estado == 'ASIGNADO') &&
+              dts_permisos['_administrador_gestionproyectos'] == false
+            "
+            type="button"
+            class="btn btn-info btn-block"
+            title="Asignar"
+            (click)="paneles('ASIGNACION', row_registros)"
+          >
+            <i class="fa fa-id-badge" aria-hidden="true"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!--MODAL ASIGNACION DE RESPONSABLE DE GESTION DE PROYECTO -->
+<div
+  class="modal fade"
+  name="modalAsignacion"
+  id="modalAsignacion"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+  data-backdrop="static"
+  data-keyboard="false"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad; color: white">
+        <button
+          type="button"
+          class="close text-white"
+          (click)="cerrarAsignacion()"
+        >
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">
+          Asignar Técnico a proyecto {{ m_nombreproyecto }}
+        </h5>
+      </div>
+      <div class="modal-body" style="overflow: hidden">
+        <div class="row">
+          <div class="form-group col-sm-12 col-lg-12 col-md-12">
+            <label class="control-label text-left" for="busqueda"
+              >Servidor(a):</label
+            >&nbsp;&nbsp;
+            <ng-select2
+              [width]="400"
+              [data]="comboSeleccion"
+              [(ngModel)]="m_idtecnico"
+              (ngModelChange)="changeTecnico()"
+            >
+            </ng-select2>
+          </div>
+        </div>
+        <div class="row" *ngIf="historial" style="text-align: center">
+          <label style="font-size: smaller; color: #3c8dbc">ASIGNACIONES</label>
+          <table
+            class="table table-responsive table-condensed table-hover dt-historial"
+            style="font-size: 8pt"
+          >
+            <thead>
+              <tr>
+                <th>Nro.</th>
+                <th>Fecha Registro</th>
+                <th>Servidor(a)</th>
+                <th>Estado</th>
+                <th>Fecha Modificación</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let row of dts_historialasignacion; let i = index"
+                [ngClass]="{
+                  'bg-success': row.estado_asignacion == 'ACTIVO',
+                  'bg-warning': row.estado_asignacion == 'INACTIVO'
+                }"
+              >
+                <td>{{ i + 1 }}</td>
+                <td>{{ row.fecha_registro | date : "dd/MM/yyyy" }}</td>
+                <td>{{ row.nombre_completo }}</td>
+                <td>{{ row.estado_asignacion }}</td>
+                <td>{{ row.fecha_modificacion | date : "dd/MM/yyyy" }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="cerrarAsignacion()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="registrarAsignacion()"
+        >
+          Asignar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL LISTA DE ITEMS -->
+<div *ngIf="pnl_modalItems == true">
+  <button
+    type="button"
+    class="btn btn-primary pull-left"
+    title="Volver Bandeja"
+    name="btnVolverGv"
+    id="btnVolverGv"
+    (click)="paneles('CIERRA_BANDEJA_ITEMS')"
+  >
+    <i class="fa fa-reply fa-2x"> </i>
+  </button>
+  <div
+    class="modal fullscreen-modal fade"
+    name="modalItems"
+    id="modalItems"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+    data-backdrop="static"
+    data-keyboard="false"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">
+            :::IMPORTAR ITEMS:::
+          </h5>
+          <button
+            type="button"
+            class="close"
+            (click)="paneles('CIERRA_BANDEJA_ITEMS')"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <app-bandejaitems
+            [dts_registro]="DatosProyecto"
+            (respuestaPadre)="paneles($event)"
+          ></app-bandejaitems>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

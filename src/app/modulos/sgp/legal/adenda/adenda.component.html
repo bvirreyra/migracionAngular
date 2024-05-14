@@ -1,0 +1,223 @@
+<div *ngIf="pnl_principal==true">
+  <div id="pnl_listaderecho" name="pnl_listaderecho" class="card card-body">
+    <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+      <div class="content-header with-border">
+        <h3 class="content-title text-green">
+          <strong>ADENDA(S) - PROYECTO:
+            <b>{{ nombre_proyecto }}</b></strong>
+        </h3>
+        <div class="pull-right">
+          <button class="btn btn-primary" type="button" [disabled]="camposHabilitados._juridica">
+            <i class="fa fa-plus-square" aria-hidden="true" (click)="paneles('NUEVO_REGISTRO')" title="Nueva Adenda"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="content-body">
+    <div class="row">
+      <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+      <div class="col-lg-offset-2 col-lg-8">
+        <div class="panel panel-primary">
+          <div class="panel-heading text-center">ADENDA(S)</div>
+          <div class="panel-body">
+            <!--LISTA GRIDVIEW LISTA ADENDAS-->
+            <table class="table table-condensed table-hover dt-lista">
+              <thead>
+                <tr>
+                  <th>Nro.</th>
+                  <th>Numero Adenda </th>
+                  <th>Fecha Suscripcion</th>
+                  <th>Monto Total</th>
+                  <th>Monto Upre</th>
+                  <th>Monto Contraparte Beneficiario</th>
+                  <th>Monto Contraparte Gobernacion</th>
+                  <th>Monto Contraparte Municipio</th>
+                  <th>Detalle</th>
+                  <th>Adjunto</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tfoot>
+              <tbody>
+                <tr *ngFor="let row_registros of dts_lista; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    {{ row_registros.numero_adenda | uppercase}}
+                  </td>
+                  <td>
+                    {{ row_registros.fecha_suscripcion | date: "dd/MM/yyyy" }}
+                  </td>
+                  <td>{{ row_registros.monto_contrato  }}</td>
+                  <td>{{ row_registros.monto_upre  }}</td>
+                  <td>{{ row_registros.monto_contraparte_beneficiario  }}</td>
+                  <td>{{ row_registros.monto_contraparte_gobernacion  }}</td>
+                  <td>{{ row_registros.monto_contraparte_municipal  }}</td>
+                  <td>{{ row_registros.descripcion  }}</td>
+
+                  <td>
+                    <button *ngIf='i==0' type="button" class="btn btn-warning btn-md" (click)="paneles('ACTUALIZAR_REGISTRO',row_registros)"
+                      [disabled]="camposHabilitados._juridica">
+                      <i class="fa fa-edit" aria-hidden="true" title="Modificar Adenda"></i></button>
+
+                    <app-upload-file inputTipoDocumento="adenda" inputCodigoProy="{{ id_sgp }}" inputVista="false"
+                      inputTipoImagen="aa" inputSrc="" inputNombre="{{ row_registros.nombre_archivo }}"
+                      inputAccion="VISUALIZAR">
+                    </app-upload-file>
+
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div *ngIf="pnl_formulario == true">
+  <form>
+  <div class="modal fade" id="modalFormulario" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">
+            Formulario de Registro
+          </h5>
+          <button type="button" class="close" aria-label="Cerrar" (click)="paneles('CERRAR_FORMULARIO')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="informe">Número de Adenda:
+                </label>
+                <div class="col-sm-6">
+                  <input class="form form-control" maxlength="100" autocomplete="off" name="nro_adenda" id="nro_adenda"
+                    [(ngModel)]="datos_adenda.nro_adenda" [disabled]="camposHabilitados._juridica" 
+                    onKeyDown="A(event,this.form.fechadesuscripcion)" />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="informe">Fecha Suscripción:
+                </label>
+                <div class="col-sm-6">
+                  <input type="text" class="form form-control" autocomplete="off" name="fechadesuscripcion" id="fechadesuscripcion"                   
+                    [(ngModel)]="datos_adenda.fechadesuscripcion" [disabled]="camposHabilitados._juridica" 
+                    onKeyDown="A(event,this.form.descripcion)" 
+                    placeholder="dd/mm/yyyy"
+                   
+                    />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="informe">Descripcion:
+                </label>
+                <div class="col-sm-6">
+                  <textarea class="form form-control" name="descripcion" id="descripcion" maxlength="1000"
+                    autocomplete="off" [(ngModel)]="datos_adenda.descripcion"
+                    [disabled]="camposHabilitados._juridica"
+                    onKeyDown="A(event,this.form.monto_adenda)"
+                    ></textarea>
+
+
+                </div>
+              </div>
+            </div>
+            <!-- /*MONTO ADENDA*/ -->
+            <div class="form-group" class="col-lg-6 col-md-6 col-sm-6">
+              <div>
+                <label>Monto Total:</label>
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon">Bs.</span>
+                <input class="form-control" id="monto_adenda" maxlength="30" name="monto_adenda" autocomplete="off"
+                onKeyDown="A(event,this.form.monto_contraparte_beneficiario)"
+                  [(ngModel)]="datos_adenda.monto_adenda" 
+                  [disabled]="camposHabilitados._juridica" />
+              </div>
+            </div>
+            <!-- /*MONTO CONTRAPARTE BENEFICIARIO*/ -->
+            <div class="form-group row" class="col-lg-6 col-md-6 col-sm-6">
+              <div>
+                <label>Monto Contraparte Beneficiario:</label>
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon">Bs.</span>
+                <input class="form-control" id="monto_contraparte_beneficiario" 
+                  name="monto_contraparte_beneficiario" autocomplete="off"
+                  onKeyDown="A(event,this.form.monto_contraparte_gobernacion)"
+                  [(ngModel)]="datos_adenda.monto_contraparte_beneficiario"
+                   [disabled]="camposHabilitados._juridica" />
+              </div>
+            </div>
+            <div class="form-group row" class="col-lg-6 col-md-6 col-sm-6">
+              <div>
+                <label>Monto Contraparte Gobernación:</label>
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon">Bs.</span>
+                <input class="form-control" id="monto_contraparte_gobernacion" name="monto_contraparte_gobernacion"
+                  autocomplete="off" 
+                  onKeyDown="A(event,this.form.monto_contraparte_municipal)"
+                  [(ngModel)]="datos_adenda.monto_contraparte_gobernacion"
+                   [disabled]="camposHabilitados._juridica" />
+              </div>
+            </div>
+           
+            <div class="form-group row" class="col-lg-6 col-md-6 col-sm-6">
+              <div>
+                <label>Monto Contraparte Municipio:</label>
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon">Bs.</span>
+                <input class="form-control" id="monto_contraparte_municipal" 
+                  name="monto_contraparte_municipal" autocomplete="off"
+                  
+                  [(ngModel)]="datos_adenda.monto_contraparte_municipio" 
+                  [disabled]="camposHabilitados._juridica" />
+              </div>
+            </div>
+            <div class="form-group" *ngIf="datos_adenda.nro_adenda != '' &&
+            datos_adenda.fechadesuscripcion != '' && datos_adenda.descripcion != '' ">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="telefonos">Archivo Convenio:
+                </label>
+                <div class="col-sm-6">
+                  <app-upload-file inputTipoDocumento="adenda" inputCodigoProy="{{ id_sgp }}" inputVista="false"
+                    inputTipoImagen="aa" inputSrc="" inputNombre="Nuevo Archivo" inputAccion="{{inputAccion}}"
+                    (enviaPadre)="refrescaListaAdenda($event)">
+                  </app-upload-file>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+</form>
+</div>

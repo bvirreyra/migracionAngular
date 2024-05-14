@@ -1,0 +1,12 @@
+.dt-consultas tfoot input{
+  width: 100% !important;
+}
+.dt-consultas tfoot {
+  display: table-header-group !important;
+}
+
+.botonera{
+  width: 120px;
+  display: flex;
+  justify-content: space-between;
+}

@@ -1,0 +1,123 @@
+<!--------------////////////////////////----------PANEL DE FORMULARIO NUEVO USUARIO-----------////////////////////////////////////////////////-->
+<div class="content content-success" name="pnl_formulariodatos" id="pnl_formulariodatos">
+    <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10">
+        <div class="panel panel-success">
+            <div class="panel-heading text-center">NUEVO USUARIO EXTERNO</div>
+            <div class="panel-body">
+            </div>
+            <div class="form-horizontal ">
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3">NOMBRE DE LA INSTITUCION:</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" type="text" name="m_nombreinstitucion" id="m_nombreinstitucion" [(ngModel)]="m_nombreinstitucion" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3">NOMBRE DEL CARGO:</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" type="text" name="m_nombrecargo" id="m_nombrecargo" [(ngModel)]="m_nombrecargo" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3">NOMBRE DEL USUARIO:</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" type="text" name="m_nombreusuario" id="m_nombreusuario" [(ngModel)]="m_nombreusuario">
+                    </div>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-success btn-block" value="INSERTAR" name="btnInsertarUsuario" id="btnInsertarUsuario" (click)="InsertarUsuario()" title="Guardar Usuario">Guardar Usuario
+                      </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-condensed table-hover dt-UsuarioExterno">
+                    <thead>
+                        <tr>
+                            <th>Nro.</th>
+                            <th>Institucion</th>
+                            <th>Cargo</th>
+                            <th>Nombre</th>
+                            <th>Estado</th>
+                            <th>Seleccione.....</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr *ngFor="let row_registros of dts_UsuarioExterno; let i = index;">
+                            <td>{{i+1}}</td>
+                            <td>{{row_registros.Institucion}}</td>
+                            <td>{{row_registros.Cargo}}</td>
+                            <td>{{row_registros.Nombre}}</td>
+                            <td>{{row_registros.id_estado}}</td>
+                            <td>
+                                <div>
+                                    <button type="button" class="btn btn-warning btn-md" (click)="editarusuarioPre(row_registros)">
+                                  <i class="fa fa-edit" aria-hidden="true" title="Editar Usuario"></i>
+                                  </button>
+                                    <button type="button" class="btn btn-danger btn-circle-sm" (click)="eliminar_usuario(row_registros)">
+                                    <i class="glyphicon glyphicon-remove" aria-hidden="true" title="Eliminar Usuario"></i>
+                                  </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------////////////////////////----------PANEL DE MODIFICAR USUARIO EXTERNO-----------////////////////////////////////////////////////-->
+<div class="content content-success" name="pnl_modificarusuario" id="pnl_modificarusuario">
+    <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10">
+        <div>
+            <button type="button" class="btn btn-primary  pull-left" title="Volver Inicio" name="volver" id="volver" (click)="paneles('VER_INICIO')">
+        <i class="fa fa-reply fa-2x"></i></button>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading text-center">MODIFICAR USUARIO</div>
+            <div class="panel-body">
+            </div>
+            <div class="form-horizontal ">
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3">INSTITUCION:</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" type="text" name="m_nombreinstitucion" id="m_nombreinstitucion" [(ngModel)]="m_nombreinstitucion">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3">CARGO:</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" type="text" name="m_nombrecargo" id="m_nombrecargo" [(ngModel)]="m_nombrecargo">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3">NOMBRE DE USUARIO:</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" type="text" name="m_nombreusuario" id="m_nombreusuario" [(ngModel)]="m_nombreusuario">
+                    </div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-success btn-block" value="MODIFICA" name="btnActualizar" id="btnActualizar" (click)="editarUsuario()" title="Modificar Registro">Modificar Registro
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,524 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<!-- VISTA UNO -->
+<div name="pnl_listaasistencia" id="pnl_listaasistencia">
+  <!--REFRESCA GRIDVIEW -->
+  <div class="panel-heading clearfix">
+    <div class="col-md-3">
+      <label for="busqueda">Servidor(a):</label>
+      <div class="form-group">
+        <div>
+          <!-- <select
+            id="e_usuario"
+            class="form form-control js-example-basic-single"
+            name="e_usuario"
+            [(ngModel)]="e_usuario"
+            (ngModelChange)="cambioUsuario($event.target.value)"
+          >
+            <option value="0" selected>TODOS</option>
+            <option
+              *ngFor="let row_servidor of dts_funcionario; let i = index"
+              [ngValue]="dts_funcionario.t_userid"
+            >
+              {{ row_servidor.nombre }}
+            </option>
+          </select> -->
+          <ng-select2
+            width="300px"
+            [data]="comboSeleccion"
+            [(ngModel)]="e_usuario"
+            (ngModelChange)="datosReporte()"
+          ></ng-select2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="fecInicio">Fecha Inicio</label>
+      <input
+        type="date"
+        class="form form-control"
+        [(ngModel)]="fecha_inicio"
+        (ngModelChange)="onChangeFecInicio()"
+        maxlength="10"
+      />
+    </div>
+    <div class="col-md-3">
+      <label for="fecFin">Fecha Fin</label>
+      <input
+        type="date"
+        class="form form-control"
+        [(ngModel)]="fecha_fin"
+        (ngModelChange)="onChangeFecFin()"
+        maxlength="10"
+      />
+    </div>
+    <a
+      *ngIf="e_usuario > 0"
+      title="Descargar Reporte"
+      class="btn btn-warning btn-md"
+      target="_blank"
+      style="margin: 2.4rem 1rem 0 0"
+      href="{{
+        url_reporte
+      }}/modulos/recursosHumanos/rptTarjetaAsitencia.php?biometrico={{
+        reporte.biometrico
+      }}&fecIni={{ reporte.fechaDesde }}&fecFin={{
+        reporte.fechaHasta
+      }}&nombre={{ reporte.nombre }}"
+      ><i class="fa fa-file-pdf-o" aria-hidden="true"></i
+    ></a>
+    <a
+      *ngIf="e_usuario > 0"
+      title="Asistencia sin depurar"
+      class="btn btn-danger btn-md"
+      target="_blank"
+      style="margin-top: 2.4rem"
+      href="{{
+        url_reporte
+      }}/modulos/recursosHumanos/rptAsistenciaSinDepurar.php?biometrico={{
+        reporte.biometrico
+      }}&fecIni={{ reporte.fechaDesde }}&fecFin={{
+        reporte.fechaHasta
+      }}&nombre={{ reporte.nombre }}"
+      ><i class="fa fa-file-pdf-o" aria-hidden="true"></i
+    ></a>
+    <button
+      type="button"
+      class="btn btn-success btn-md pull-right"
+      (click)="listaAsistencia()"
+      style="margin-top: 2.4rem"
+    >
+      <i class="fa fa-refresh" title="Lista Asistencia"> Actualizar</i>
+    </button>
+    <button
+      type="button"
+      style="margin: 2.4rem 1rem 0 0"
+      class="btn btn-warning btn-md pull-right"
+      (click)="mostrarOmisiones()"
+    >
+      <i class="fa fa-exclamation-circle" title="Agregar marcado por omisión">
+        Omisiones</i
+      >
+    </button>
+  </div>
+
+  <!--LISTA GRIDVIEW SISTENCIAS-->
+  <div class="table table-responsive">
+    <table
+      class="table table-responsive table-condensed table-hover dt-asistencia"
+      style="font-size: 8pt"
+    >
+      <thead>
+        <tr class="text-center">
+          <th>Nro.</th>
+          <th>Ingreso 1</th>
+          <th>Salida 1</th>
+          <th>Ingreso 2</th>
+          <th>Salida 2</th>
+          <th>Nombre</th>
+          <th>Fec. Marcado</th>
+          <th>Hora 1</th>
+          <th>Hora 2</th>
+          <th>Hora 3</th>
+          <th>Hora 4</th>
+          <th>Hora 5</th>
+          <th>Hora 6</th>
+          <th>Hora 7</th>
+          <th>Hora 8</th>
+          <th>Permiso/Comision</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr *ngFor="let row_registros of dts_asistencia; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ row_registros.Ingreso1 }}</td>
+          <td>{{ row_registros.Salida1 }}</td>
+          <td>{{ row_registros.Ingreso2 }}</td>
+          <td>{{ row_registros.Salida2 }}</td>
+          <td>{{ row_registros.Nombre }}</td>
+          <td>{{ row_registros.FechaMarcadoC }}</td>
+          <td
+            *ngIf="row_registros.Marcado1 != ''"
+            (click)="datosMarcadoModal(row_registros, row_registros.Marcado1)"
+          >
+            {{ row_registros.Marcado1 }}
+          </td>
+          <td *ngIf="row_registros.Marcado1 == ''">
+            {{ row_registros.Marcado1 }}
+          </td>
+          <td
+            *ngIf="row_registros.Marcado2 != ''"
+            (click)="datosMarcadoModal(row_registros, row_registros.Marcado2)"
+          >
+            {{ row_registros.Marcado2 }}
+          </td>
+          <td *ngIf="row_registros.Marcado2 == ''">
+            {{ row_registros.Marcado2 }}
+          </td>
+          <td
+            *ngIf="row_registros.Marcado3 != ''"
+            (click)="datosMarcadoModal(row_registros, row_registros.Marcado3)"
+          >
+            {{ row_registros.Marcado3 }}
+          </td>
+          <td *ngIf="row_registros.Marcado3 == ''">
+            {{ row_registros.Marcado3 }}
+          </td>
+          <td
+            *ngIf="row_registros.Marcado4 != ''"
+            (click)="datosMarcadoModal(row_registros, row_registros.Marcado4)"
+          >
+            {{ row_registros.Marcado4 }}
+          </td>
+          <td *ngIf="row_registros.Marcado4 == ''">
+            {{ row_registros.Marcado4 }}
+          </td>
+          <td
+            *ngIf="row_registros.Marcado5 != ''"
+            (click)="datosMarcadoModal(row_registros, row_registros.Marcado5)"
+          >
+            {{ row_registros.Marcado5 }}
+          </td>
+          <td *ngIf="row_registros.Marcado5 == ''">
+            {{ row_registros.Marcado5 }}
+          </td>
+          <td
+            *ngIf="row_registros.Marcado6 != ''"
+            (click)="datosMarcadoModal(row_registros, row_registros.Marcado6)"
+          >
+            {{ row_registros.Marcado6 }}
+          </td>
+          <td *ngIf="row_registros.Marcado6 == ''">
+            {{ row_registros.Marcado6 }}
+          </td>
+          <td
+            *ngIf="row_registros.Marcado7 != ''"
+            (click)="datosMarcadoModal(row_registros, row_registros.Marcado7)"
+          >
+            {{ row_registros.Marcado7 }}
+          </td>
+          <td *ngIf="row_registros.Marcado7 == ''">
+            {{ row_registros.Marcado7 }}
+          </td>
+          <td
+            *ngIf="row_registros.Marcado8 != ''"
+            (click)="datosMarcadoModal(row_registros, row_registros.Marcado8)"
+          >
+            {{ row_registros.Marcado8 }}
+          </td>
+          <td *ngIf="row_registros.Marcado8 == ''">
+            {{ row_registros.Marcado8 }}
+          </td>
+          <td>{{ row_registros.Permiso }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- INICIO MODAL MARCADO -->
+<div
+  class="modal fade"
+  name="modalMarcado"
+  id="modalMarcado"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">
+          Modificación de Marcado
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="busqueda"
+                >Fecha Hora Marcado</label
+              >
+              <div class="col-sm-6">
+                <input
+                  class="form-control"
+                  type="Text"
+                  name="fechaHoraMarcado"
+                  id="fechaHoraMarcado"
+                  [(ngModel)]="asistencia.fechaHoraMarcado"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4" for="busqueda"
+                  >Tipo:</label
+                >
+                <div class="col-sm-6">
+                  <select
+                    type="text"
+                    id="entradaSalida"
+                    class="form-control"
+                    name="entradaSalida"
+                    [(ngModel)]="asistencia.entradaSalida"
+                  >
+                    <option [ngValue]="0">NINGUNO</option>
+                    <option [ngValue]="1">ENTRADA TURNO MAÑANA</option>
+                    <option [ngValue]="2">SALIDA TURNO MAÑANA</option>
+                    <option [ngValue]="3">ENTRADA TURNO TARDE</option>
+                    <option [ngValue]="4">SALIDA TURNO TARDE</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          name="btnModificar"
+          id="btnModificar"
+          (click)="actualizaMarcacion()"
+        >
+          Modificar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL MARCADO-->
+
+<!--modal omisiones -->
+<div
+  class="modal fade"
+  tabindex="-1"
+  name="modalOmision"
+  id="modalOmision"
+  role="dialog"
+  aria-labelledby="modalOmision"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad; color: white">
+        <button
+          type="button"
+          class="close text-white"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="modalOmision">Gestionar Omisiones</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12 col-lg-5">
+            <label for="usuarioOmision">Servidor(a):</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-user"></i></span>
+              <select
+                type="text"
+                id="usuarioOmision"
+                class="form-control"
+                name="usuarioOmision"
+                [(ngModel)]="e_usuario"
+                autofocus
+              >
+                <option
+                  *ngFor="let row of dts_funcionario"
+                  [ngValue]="row.t_userid"
+                >
+                  {{ row.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <!-- <div class="col-sm-6 col-lg-2">
+            <label for="omisiontIPO">Tipo de marcado:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-address-card"></i></span>
+              <select type="text" id="omisiontIPO" class="form-control" name="omisiontIPO" [(ngModel)]="tipoMarcadoOmision">
+                <option [ngValue]="1">ENTRADA</option>
+                <option [ngValue]="2">SALIDA</option>
+              </select>
+            </div>
+          </div> -->
+          <div class="col-sm-4 col-lg-3">
+            <label for="omisiontIPO">Fecha marcado:</label>
+            <div class="input-group">
+              <span class="input-group-addon"
+                ><i class="fa fa-calendar"></i
+              ></span>
+              <input
+                class="form-control"
+                type="date"
+                max="{{ maxFecha }}"
+                [(ngModel)]="fechaOmision"
+              />
+            </div>
+          </div>
+          <div class="col-sm-4 col-lg-2">
+            <label for="omisiontIPO">Hora:</label>
+            <div class="input-group">
+              <span class="input-group-addon"
+                ><i class="fa fa-clock-o"></i
+              ></span>
+              <input
+                class="form-control"
+                type="time"
+                [(ngModel)]="horaOmision"
+              />
+            </div>
+          </div>
+          <div class="col-sm-2 col-lg-2">
+            <button
+              type="button"
+              class="btn btn-success btn-block"
+              title="Insertar marcado por omisión"
+              style="margin-top: 2.4rem"
+              (click)="crudOmision('I')"
+            >
+              Registrar
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-lg-12">
+            <label for="omisiontIPO">Justificativo:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-file"></i></span>
+              <input
+                class="form-control"
+                type="text"
+                [(ngModel)]="laObservacion"
+                maxlength="250"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding: 0 15px; margin-top: 2rem">
+          <table
+            class="table table-responsive table-condensed table-hover table-striped dt-omisiones"
+            style="font-size: 9pt"
+          >
+            <thead>
+              <tr>
+                <th style="width: 150px">Servidor(a)</th>
+                <th>Fecha Marcado</th>
+                <th>Hora Marcado</th>
+                <th style="width: 200px">Jutificativo</th>
+                <th style="width: 100px">Opciones</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row of dtsOmisiones; let i = index">
+                <td style="width: 150px">{{ row.Nombre }}</td>
+                <td>{{ row.FechaHoraMarcado | date : "dd/MM/yyyy" }}</td>
+                <td>
+                  <input
+                    type="time"
+                    class="input-ghost"
+                    [(ngModel)]="row.Hora"
+                    [disabled]="elIdOmision != row.IdAsistencia"
+                  />
+                </td>
+                <td style="width: 200px">
+                  <input
+                    type="text"
+                    class="input-ghost"
+                    title="{{ row.Observacion }}"
+                    style="width: 100%"
+                    [(ngModel)]="row.Observacion"
+                    [disabled]="elIdOmision != row.IdAsistencia"
+                  />
+                </td>
+                <td style="width: 100px" class="botonera">
+                  <div *ngIf="elIdOmision == row.IdAsistencia">
+                    <button
+                      class="btn btn-success"
+                      title="Guardar"
+                      (click)="crudOmision('UO', row)"
+                    >
+                      <i class="fa fa-save"></i>
+                    </button>
+                  </div>
+                  <div *ngIf="!elIdOmision">
+                    <button
+                      class="btn btn-warning"
+                      title="Editar"
+                      (click)="elIdOmision = row.IdAsistencia"
+                    >
+                      <i class="fa fa-pencil"></i>
+                    </button>
+                  </div>
+                  <button
+                    [disabled]="true"
+                    class="btn btn-danger"
+                    title="Eliminar"
+                    (click)="crudOmision('DO', row)"
+                  >
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- <div class="row">
+          <div class="linea"></div>
+          <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+            <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+            <button class="btn btn-success" type="submit" > registrar Omsisión </button>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL MODAL OMISIONES -->

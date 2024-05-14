@@ -1,0 +1,1469 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="row" *ngIf="pnl_bandejaproyectos">
+  <div class="panel-heading clearfix">
+    <div class="text-left">
+      <button
+        type="button"
+        class="btn btn-primary pull-left"
+        title="Volver anterior"
+        (click)="paneles('cabecera')"
+      >
+        <i class="fa fa-reply fa-2x"> </i>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="pnl_bandejacabecera">
+  <div class="panel-heading clearfix">
+    <div class="text-left">
+      <button
+        type="button"
+        class="btn btn-primary pull-left"
+        title="Volver anterior"
+        (click)="sendMessage()"
+      >
+        <i class="fa fa-reply fa-2x"> </i>
+      </button>
+    </div>
+  </div>
+</div>
+<!--LISTA GRIDVIEW ARCHIVO CENTRAL-->
+<div *ngIf="pnl_bandejacabecera">
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <span class="glyphicon glyphicon-book"></span> {{ tipoArchivo }} -
+      {{ region }}
+    </div>
+    <div class="panel-body">
+      <button class="btn btn-success" style="margin: 0 5px 5px 0;" (click)="listarProyectos()">
+        <span class="glyphicon glyphicon-plus"></span> Registrar Documentos
+      </button>
+      <select style="margin: 0 2rem;font-size: large;"  [(ngModel)]="regionReporte" title="Seleccione el filtrado del Reporte">
+        <option value="SELECCIONE...">SELECCIONE...</option>
+        <option value="NACIONAL">NACIONAL</option>
+        <option value="OCCIDENTE">OCCIDENTE</option>
+        <option value="CENTRO">CENTRO</option>
+        <option value="ORIENTE">ORIENTE</option>
+      </select>
+      <button class="btn btn-info" style="margin: 0 5px 5px 0;" (click)="generarReporte(tipoArchivo == 'ARCHIVO TECNICO' ? '03': tipoArchivo == 'ARCHIVO JURIDICO'? '05':'07')" [disabled]="regionReporte == 'SELECCIONE...'">
+        <span class="glyphicon glyphicon-print"></span> Proyectos {{tipoArchivo}} 
+      </button>
+      <table *ngIf="tipoArchivo == 'ARCHIVO TECNICO'" id="gridTecnico"
+        class="table table-responsive table-condensed table-hover dt-cabecera"
+        style="font-size: 8pt"
+      >
+        <thead>
+          <tr class="text-center">
+            <th>Nro.</th>
+            <th>SGP</th>
+            <th>Proyecto</th>
+            <th>Region</th>
+            <th>Departamento</th>
+            <th>Provincia</th>
+            <th>Municipio</th>
+            <th>Gestion</th>
+            <th>Ubicación</th>
+            <th>Contenido</th>
+            <th>Seleccionar</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+        <tbody>
+          <tr *ngFor="let row of dts_cabecera; let i = index">
+            <td width="40px">{{ i + 1 }}</td>
+            <td>{{ row.fid_sgp }}</td>
+            <td width="200px">
+              {{ row.nombre_proyecto_compromiso }}
+            </td>
+            <td>{{ row.region }}</td>
+            <td>{{ row.dptodesc }}</td>
+            <td>{{ row.provdesc }}</td>
+            <td>{{ row.mundesc }}</td>
+            <td>{{ row.gestion }} <br> {{ row.tipo_financiamiento }}</td>
+            <td>{{ row.ubicacion }}</td>
+            <td>{{ row.contenido }}</td>
+            <td class="botonera">
+              <button class="btn btn-warning" title="Adjuntar Documentos" (click)="datosFormulario(row)">
+                <span class="fa fa-file"></span>
+              </button>
+              <a
+                type="button"
+                class="btn btn-success"
+                title="Agrupar Docs."
+                (click)="
+                  abrirAgrupacion(
+                    row.id_cabecera,
+                    row.tipoarchivo +
+                      '-' +
+                      row.tiporegion +
+                      '-' +
+                      row.abreviacion +
+                      '-' +
+                      row.mundesc,
+                    row.gestion
+                  )
+                "
+              >
+                <span class="glyphicon glyphicon-folder-open"></span>
+              </a>
+              <button class="btn btn-primary" title="Ubicación" (click)="habilitarUbicar(row)">
+                <span class="glyphicon glyphicon-map-marker"></span>
+              </button>
+              <button class="btn btn-info" title="Contenido" (click)="consultaContenido(row)">
+                <span class="glyphicon glyphicon-list-alt"></span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table *ngIf="tipoArchivo == 'ARCHIVO JURIDICO'" id="gridJuridico"
+        class="table table-responsive table-condensed table-hover dt-cabecera"
+        style="font-size: 8pt"
+      >
+        <thead>
+          <tr class="text-center">
+            <th>Nro.</th>
+            <th>SGP</th>
+            <th>Proyecto</th>
+            <th>Region</th>
+            <th>Departamento</th>
+            <th>Provincia</th>
+            <th>Municipio</th>
+            <th>Gestion</th>
+            <th>Ubicación</th>
+            <th style="width: 400px;">Documentos</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+        <tbody>
+          <tr *ngFor="let row of dts_cabecera; let i = index">
+            <td width="40px">{{ row.fila }}</td>
+            <td>{{ row.codigo }}</td>
+            <td width="200px">
+              {{ row.proyecto }}
+            </td>
+            <td>{{ row.region }}</td>
+            <td>{{ row.departamento }}</td>
+            <td>{{ row.provincia }}</td>
+            <td>{{ row.municipio }}</td>
+            <td>{{ row.gestion }} <br> {{ row.tipo_financiamiento }}</td>
+            <td>{{ row.ubicacion }}</td>
+            <td style="width: 400px;">
+              <div *ngFor="let r of row.juridica; let i = index">
+                {{i+1}}. {{r.tipo_documento}} - {{r.observacion}}
+              </div>
+            </td>
+            <td class="botonera">
+              <button class="btn btn-primary" title="Ubicación" (click)="habilitarUbicar(row)">
+                <i class="fa fa-map-marker"></i>
+              </button>
+              <button class="btn btn-info" title="Cargar Documentos" (click)="mostrarDocumentos(row)">
+                <span class="fa fa-folder"></span>
+              </button>
+              <button class="btn btn-success" title="Reporte" (click)="generarReporte('04',row.id_cabecera)">
+                <span class="fa fa-print"></span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table *ngIf="tipoArchivo == 'ARCHIVO FINANCIERO'" id="gridFinanciera"
+        class="table table-responsive table-condensed table-hover dt-cabecera"
+        style="font-size: 8pt"
+      >
+        <thead>
+          <tr class="text-center">
+            <th>Nro.</th>
+            <th>SGP</th>
+            <th>Proyecto</th>
+            <th>Region</th>
+            <th>Departamento</th>
+            <th>Provincia</th>
+            <th>Municipio</th>
+            <th>Gestion</th>
+            <th>Ubicación</th>
+            <th style="width: 400px;">Documentos</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+        <tbody>
+          <tr *ngFor="let row of dts_cabecera; let i = index">
+            <td width="40px">{{ row.fila }}</td>
+            <td>{{ row.codigo }}</td>
+            <td width="200px">
+              {{ row.proyecto }}
+            </td>
+            <td>{{ row.region }}</td>
+            <td>{{ row.departamento }}</td>
+            <td>{{ row.provincia }}</td>
+            <td>{{ row.municipio }}</td>
+            <td>{{ row.gestion }} <br> {{ row.tipo_financiamiento }}</td>
+            <td>{{ row.ubicacion }}</td>
+            <td style="width: 400px;">
+              <div *ngFor="let r of row.financiera; let i = index">
+                {{i+1}}. {{r.tipo_documento}} - {{r.cite}} - {{r.hr}} - {{r.tomo}}
+              </div>
+            </td>
+            <td class="botonera">
+              <button class="btn btn-primary" title="Ubicación" (click)="habilitarUbicar(row)">
+                <i class="fa fa-map-marker"></i>
+              </button>
+              <button class="btn btn-info" title="Cargar Documentos" (click)="mostrarDocumentosFinanciera(row)">
+                <span class="fa fa-folder"></span>
+              </button>
+              <button class="btn btn-success" title="Reporte" (click)="generarReporte('08',row.id_cabecera)">
+                <span class="fa fa-print"></span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-primary" *ngIf="pnl_bandejaproyectos">
+  <div class="panel-heading text-center">
+    <span class="glyphicon glyphicon-list-alt"></span> PROYECTOS {{ region }}
+  </div>
+  <div class="panel-body">
+    <div class="table table-responsive">
+      <table
+        class="table table-responsive table-condensed table-hover dt-proyectos"
+        style="font-size: 8pt"
+      >
+        <thead>
+          <tr class="text-center">
+            <th>Nro.</th>
+            <th>Id SGP</th>
+            <th>Proyecto</th>
+            <!-- <th>Descripcion</th> -->
+            <th>Departamento</th>
+            <th>Municipio</th>
+            <th>Gestión</th>
+            <th>Opción</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+        <tbody>
+          <tr *ngFor="let row of dts_cabecera; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ row.id }}</td>
+            <td width="500px">{{ row.nombre_proyecto }}</td>
+            <td>{{ row.dptodesc }}</td>
+            <td>{{ row.mundesc }}</td>
+            <td>{{ row.gestion }}</td>
+            <td>
+              <button class="btn btn-primary" title="Registrar Documentos" (click)="abrirformulario(row)">
+                <span class="glyphicon glyphicon-hand-right"></span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="pnl_formulario">
+  <div class="panel-heading clearfix">
+    <div class="text-left col-md-6" *ngIf="pnl_formulario2">
+      <button
+        type="button"
+        class="btn btn-primary pull-left"
+        title="Volver anterior"
+        (click)="paneles('cabecera')"
+      >
+        <i class="fa fa-reply fa-2x"> </i>
+      </button>
+    </div>
+    <div class="text-left col-md-6" *ngIf="pnl_formulario3">
+      <button
+        type="button"
+        class="btn btn-primary pull-left"
+        title="Volver anterior"
+        (click)="paneles('proyectos')"
+      >
+        <i class="fa fa-reply fa-2x"> </i>
+      </button>
+    </div>
+    <div class="text-right col-md-6">
+      <button
+        type="button"
+        class="btn btn-success pull-right"
+        title="Ir a agrupador"
+        (click)="abrirAgrupacion(detalleArchivo.fidCabecera, cajaCodigo, gestion)"
+      >
+        <i class="fa fa-share fa-2x"> </i>
+      </button>
+    </div>
+  </div>
+
+  <div class="text-center" *ngIf="pnl_formulario" style="font-size: 9pt">
+    <!-- <div class="panel-heading clearfix"> -->
+    <div class="col-lg-offset-1 col-lg-10">
+      <div class="panel panel-primary">
+        <div class="panel-heading text-center">
+          <b
+            ><span
+              class="glyphicon glyphicon-list-alt"
+              style="font-size: 12pt"
+            ></span>
+            PROYECTO: {{ region }} - {{ nombreProyecto }}</b
+          >
+        </div>
+        <div class="panel-body">
+          <div class="form-group" *ngIf="!modoConsulta">
+            <div class="row">
+              <label class="control-label col-sm-3 text-right" for="busqueda"
+                >TIPO CONTENEDOR:</label
+              >
+              <div class="col-sm-8" style="padding: 0;">
+                <select
+                  class="form-control"
+                  [(ngModel)]="contenedor"
+                  (ngModelChange)="datosContenedor()"
+                  [disabled]="habilitaContenedor"
+                >
+                  <option
+                    *ngFor="let row_contenedor of dts_contenedor"
+                    [ngValue]="row_contenedor"
+                  >
+                    {{ row_contenedor.descripciondetalleclasificador }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <label class="control-label col-sm-3 text-right" for="busqueda"
+                >PROYECTO:</label
+              >
+              <div class="col-sm-8 text-left well well-sm">
+                <div>
+                  <label class="checkbox-inline" [ngClass]="{'consulta':proyectoDatos.fisico && modoConsulta}">
+                    <input
+                      type="checkbox"
+                      class="text-left"
+                      [(ngModel)]="proyectoDatos.fisico"
+                      (ngModelChange)="
+                        actualizaDatosDetalle(
+                          'PROYECTO',
+                          'PROYECTO EN FISICO',
+                          proyectoDatos.fisico
+                        )
+                      "
+                      [disabled]="habilitaFormulario"
+                    />
+                    Físico
+                  </label>
+                  <label class="checkbox-inline" [ngClass]="{'consulta':proyectoDatos.digital && modoConsulta}">
+                    <input
+                      type="checkbox"
+                      class="text-left"
+                      [(ngModel)]="proyectoDatos.digital"
+                      (ngModelChange)="
+                        actualizaDatosDetalle(
+                          'PROYECTO',
+                          'PROYECTO DIGITAL',
+                          proyectoDatos.digital
+                        )
+                      "
+                      [disabled]="habilitaFormulario"
+                    />
+                    Digital
+                  </label>
+                  <label class="checkbox-inline" [ngClass]="{'consulta':proyectoDatos.viabilidad && modoConsulta}">
+                    <input
+                      type="checkbox"
+                      class="text-left"
+                      [(ngModel)]="proyectoDatos.viabilidad"
+                      (ngModelChange)="
+                        actualizaDatosDetalle(
+                          'PROYECTO',
+                          'VIABILIDAD',
+                          proyectoDatos.viabilidad
+                        )
+                      "
+                      [disabled]="habilitaFormulario"
+                    />
+                    Viabilidad
+                  </label>
+                  <label class="checkbox-inline" [ngClass]="{'consulta':proyectoDatos.contratacion && modoConsulta}">
+                    <input
+                      type="checkbox"
+                      class="text-left"
+                      [(ngModel)]="proyectoDatos.contratacion"
+                      (ngModelChange)="
+                        actualizaDatosDetalle(
+                          'PROYECTO',
+                          'PROCESO DE CONTRATACION',
+                          proyectoDatos.contratacion
+                        )
+                      "
+                      [disabled]="habilitaFormulario"
+                    />
+                    Proc. Contratación (CIF)
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >ESTUDIO SOCIO ECONÓMICO:</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div>
+                    <label class="radio-inline" [ngClass]="{'consulta':estudio ==1 && modoConsulta}">
+                      <input
+                        type="radio"
+                        name="optradio"
+                        [(ngModel)]="estudio"
+                        [value]="1"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'ESTUDIO SOCIO ECONOMICO',
+                            'SI',
+                            estudio
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />SI
+                    </label>
+                    <label class="radio-inline"  [ngClass]="{'consulta':estudio ==2 && modoConsulta}">
+                      <input
+                        type="radio"
+                        name="optradio"
+                        [(ngModel)]="estudio"
+                        [value]="2"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'ESTUDIO SOCIO ECONOMICO',
+                            'NO',
+                            estudio
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />NO
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >LICENCIA AMBIENTAL:</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div>
+                    <label class="checkbox-inline"  [ngClass]="{'consulta':licenciaAmbiental.original && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="licenciaAmbiental.original"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'LICENCIA AMBIENTAL',
+                            'ORIGINAL',
+                            licenciaAmbiental.original
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Original
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':licenciaAmbiental.legalizada && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="licenciaAmbiental.legalizada"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'LICENCIA AMBIENTAL',
+                            'COPIA LEGALIZADA',
+                            licenciaAmbiental.legalizada
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Copia Legalizada
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':licenciaAmbiental.simple && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="licenciaAmbiental.simple"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'LICENCIA AMBIENTAL',
+                            'COPIA SIMPLE',
+                            licenciaAmbiental.simple
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Copia Simple
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >EJECUCION:</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div class="grid-lista">
+                    <label
+                      *ngFor="
+                        let elemento of arrayPlanillas;
+                        let i = index;
+                        trackBy: indexTracker
+                      "
+                      class="checkbox-inline"
+                      style="margin: 0;"
+                      [ngClass]="{'consulta':arrayPlanillas[i] && modoConsulta}"
+                    >
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        id="pla{{ i }}"
+                        name="pla{{ i }}"
+                        [(ngModel)]="arrayPlanillas[i]"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'EJECUCION',
+                            'PLANILLA',
+                            arrayPlanillas[i],
+                            i + 1
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Planilla {{ i + 1 }}
+                    </label>
+                  </div>
+                  <div style="padding: 5px 0;">
+                    <label class="checkbox-inline" [ngClass]="{'consulta':ejecucionCierre.cierre && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="ejecucionCierre.cierre"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'EJECUCION',
+                            'PLANILLA DE CIERRE',
+                            ejecucionCierre.cierre
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Planilla de Cierre
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':ejecucionCierre.garantia && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="ejecucionCierre.garantia"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'EJECUCION',
+                            'LIBERACION DE GARANTIA',
+                            ejecucionCierre.garantia
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Liberación de Garantía
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':ejecucionCierre.conciliacion && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="ejecucionCierre.conciliacion"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'EJECUCION',
+                            'PLANILLA DE CONCILIACION',
+                            ejecucionCierre.conciliacion
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Planilla de Conciliación
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':ejecucionCierre.resolucion && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="ejecucionCierre.resolucion"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'EJECUCION',
+                            'RESOLUCION DE CONTRATO',
+                            ejecucionCierre.resolucion
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Doc. Resolución de Contrato
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >SUPERVISION:</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div class="grid-lista">
+                    <label
+                      *ngFor="
+                        let elemento of arrayPlanillasSup;
+                        let i = index;
+                        trackBy: indexTracker
+                      "
+                      class="checkbox-inline"
+                      style="margin: 0;"
+                      [ngClass]="{'consulta':arrayPlanillasSup[i] && modoConsulta}"
+                    >
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        id="pla{{ i }}"
+                        name="pla{{ i }}"
+                        [(ngModel)]="arrayPlanillasSup[i]"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'SUPERVISION',
+                            'PLANILLA',
+                            arrayPlanillasSup[i],
+                            i + 1
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Planilla {{ i + 1 }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >FISCALIZACION:</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div class="grid-lista">
+                    <label
+                      *ngFor="
+                        let elemento of arrayPlanillasFis;
+                        let i = index;
+                        trackBy: indexTracker
+                      "
+                      class="checkbox-inline"
+                      style="margin: 0;"
+                      [ngClass]="{'consulta':arrayPlanillasFis[i] && modoConsulta}"
+                    >
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        id="pla{{ i }}"
+                        name="pla{{ i }}"
+                        [(ngModel)]="arrayPlanillasFis[i]"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'FISCALIZACION',
+                            'PLANILLA',
+                            arrayPlanillasFis[i],
+                            i + 1
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Planilla {{ i + 1 }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >MODIFICACIONES:</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div>
+                    <label
+                      *ngFor="
+                        let elemento of arrayContrato;
+                        let i = index;
+                        trackBy: indexTracker
+                      "
+                      class="checkbox-inline"
+                      [ngClass]="{'consulta':arrayContrato[i] && modoConsulta}"
+                    >
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        id="con{{ i }}"
+                        name="con{{ i }}"
+                        [(ngModel)]="arrayContrato[i]"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'MODIFICACION',
+                            'CONTRATO MODIFICATORIO',
+                            arrayContrato[i],
+                            i + 1
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Contraro Modif {{ i + 1 }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >ORDEN DE CAMBIO:</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div>
+                    <label
+                      *ngFor="
+                        let elemento of arrayOrdenCambio;
+                        let i = index;
+                        trackBy: indexTracker
+                      "
+                      class="checkbox-inline"
+                      [ngClass]="{'consulta':arrayOrdenCambio[i] && modoConsulta}"
+                    >
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        id="cam{{ i }}"
+                        name="cam{{ i }}"
+                        [(ngModel)]="arrayOrdenCambio[i]"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'MODIFICACION',
+                            'ORDEN DE CAMBIO',
+                            arrayOrdenCambio[i],
+                            i + 1
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Orden {{ i + 1 }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >ORDEN DE TRABAJO:</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div>
+                    <label
+                      *ngFor="
+                        let elemento of arrayOrdenTrabajo;
+                        let i = index;
+                        trackBy: indexTracker
+                      "
+                      class="checkbox-inline"
+                      [ngClass]="{'consulta':arrayOrdenTrabajo[i] && modoConsulta}"
+                    >
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        id="tra{{ i }}"
+                        name="tra{{ i }}"
+                        [(ngModel)]="arrayOrdenTrabajo[i]"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'MODIFICACION',
+                            'ORDEN DE TRABAJO',
+                            arrayOrdenTrabajo[i],
+                            i + 1
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Orden {{ i + 1 }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >INFORMES:</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':informeProyecto && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="informeProyecto"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'CIERRE CIFE',
+                            'INFORME DE PROYECTO',
+                            informeProyecto
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Informes de Proyecto
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':informeProyectoSup && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="informeProyectoSup"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'CIERRE CIFE',
+                            'INFORME DE SUPERVISION',
+                            informeProyectoSup
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Informe de Supervición
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':informeProyectoFis && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="informeProyectoFis"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'CIERRE CIFE',
+                            'INFORME DE FISCALIZACION',
+                            informeProyectoFis
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Informe de Fiscalización
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >CIERRE (CIFE):</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':cierreCife.tecnico && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="cierreCife.tecnico"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'CIERRE CIFE',
+                            'CIERRE TECNICO',
+                            cierreCife.tecnico
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Cierre Técnico
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':cierreCife.financiero && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="cierreCife.financiero"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'CIERRE CIFE',
+                            'CIERRE FINANCIERO',
+                            cierreCife.financiero
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Cierre Financiero
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':cierreCife.legal && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="cierreCife.legal"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'CIERRE CIFE',
+                            'CIERRE LEGAL',
+                            cierreCife.legal
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Cierre Legal
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':cierreCife.institucional && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="cierreCife.institucional"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'CIERRE CIFE',
+                            'CIERRE INSTITUCIONAL',
+                            cierreCife.institucional
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Cierre Institucional
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >CIERRE (CIF):</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':cierreCif.tecnico && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="cierreCif.tecnico"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'CIERRE CIF',
+                            'INFORME CIERRE TECNICO',
+                            cierreCif.tecnico
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Inf. Cierre Técnico
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':cierreCif.financiero && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="cierreCif.financiero"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'CIERRE CIF',
+                            'INFORME CIERRE FINANCIERO',
+                            cierreCif.financiero
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Inf. Cierre Financiero
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':cierreCif.legal && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="cierreCif.legal"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'CIERRE CIF',
+                            'INFORME CIERRE LEGAL',
+                            cierreCif.legal
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Inf. Cierre Legal
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':cierreCif.institucional && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="cierreCif.institucional"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'CIERRE CIF',
+                            'INFORME CIERRE INSTITUCIONAL',
+                            cierreCif.legal
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Cierre Institucional
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':cierreCif.ficha && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="cierreCif.ficha"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'CIERRE CIF',
+                            'FICHA DE CIERRE TECNICO',
+                            cierreCif.ficha
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Ficha de Cierre Técnico
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >ACTAS DE CIERRE:</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':actasCierre.provisional && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="actasCierre.provisional"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'ACTAS DE CIERRE',
+                            'ACTA PROVISIONAL',
+                            actasCierre.provisional
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Provisional
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':actasCierre.definitiva && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="actasCierre.definitiva"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'ACTAS DE CIERRE',
+                            'ACTA DEFINITIVA',
+                            actasCierre.definitiva
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Definitiva
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >Auditoria:</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':auditoria.auditoria && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="auditoria.auditoria"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'AUDITORIA',
+                            'INFORME AUDITORIA',
+                            auditoria.auditoria
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Inf. Auditoría
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':auditoria.compromiso && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="auditoria.compromiso"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'AUDITORIA',
+                            'NOTA COMPROMISO',
+                            auditoria.compromiso
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Nota Compromiso
+                    </label>
+                    <label class="checkbox-inline" [ngClass]="{'consulta':auditoria.seguimiento && modoConsulta}">
+                      <input
+                        type="checkbox"
+                        class="text-left"
+                        [(ngModel)]="auditoria.seguimiento"
+                        (ngModelChange)="
+                          actualizaDatosDetalle(
+                            'AUDITORIA',
+                            'NOTA SEGUIMIENTO',
+                            auditoria.seguimiento
+                          )
+                        "
+                        [disabled]="habilitaFormulario"
+                      />
+                      Nota Seguimiento
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-3 text-right" for="busqueda"
+                  >Observación:</label
+                >
+                <div class="col-sm-8 text-left well well-sm">
+                  <div>
+                    <textarea
+                      class="form form-control"
+                      name="textObservacion"
+                      id=""
+                      maxlength="500"
+                      [(ngModel)]="observacion"
+                      [disabled]="habilitaFormulario"
+                      [ngClass]="{'consulta':observacion && modoConsulta}"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" *ngIf="!modoConsulta">
+              <div class="row">
+                <button
+                  class="btn btn-success"
+                  (click)="registrarTotalDetalle()"
+                  [disabled]="habilitaFormulario"
+                >
+                  <span class="glyphicon glyphicon-save"></span>Registrar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+    </div>
+  </div>
+</div>
+
+<div *ngIf="ubicar">
+  <app-ubicacion-archivo [proyecto]="elProyecto" [tipoArchivo]="tipoArchivo" (messageEvent)="recibeMensaje($event)" ></app-ubicacion-archivo>
+</div>
+
+<!--modal juridico -->
+<div class="modal fade" name="modalDocumentos" id="modalDocumentos" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" (click)="this.listaArchivoCabecera()">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">Documentos Jurídicos</h5>
+      </div>
+      <div class="modal-body">
+        <div id="todo" style="text-align: left;">
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-12">
+              <label for="proyecto">PROYECTO:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
+                <input class="form-control" type="text" name="proyecto" [(ngModel)]="nombreProyecto" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-3">
+              <label for="tipoDocumento">TIPO DOCUMENTO:</label>
+              <div class="input-group">
+                <span class="input-group-addon" (click)="nuevoElemento('documento')"><i class="fa fa-file"></i></span>
+                <select class="form-control" id="tipoDocumento" [(ngModel)]="jtipo_documento" aria-placeholder="seleccione..." required autofocus>
+                  <option *ngFor="let row of dtsTiposDocumentos" [ngValue]="row">
+                    {{row}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-3 ">
+              <label for="fechaDocumento">Fecha Documento:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i></span>
+                <input class="form-control" type="date" name="fechaDocumento"  [(ngModel)]="fecha_documento" required>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-4 ">
+              <label for="observacion">OBSERVACIÓN:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-comment"></i></span>
+                <input class="form-control" type="text" name="observacion" placeholder="Observaciones..." [(ngModel)]="jobservacion" required>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-2 ">
+              <button class="btn btn-success" style="margin-top: 2.4rem;" (click)="crudDetalleJuridica(elIdJuridica? 'U':'I')" [disabled]="!jtipo_documento || !fecha_documento"><i class="fa fa-save"></i> Guardar</button>
+            </div>
+          </div>
+          <div class="row">
+            
+          </div>
+          <table class="table table-responsive table-condensed table-hover" style="font-size: 9pt">
+            <thead>
+              <tr>
+                <th>Nº</th>
+                <th>DOCUMENTO</th>
+                <th>FECHA</th>
+                <th>OBSERVACIÓN</th>
+                <th>OPCIONES</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row of dtsJuridicas; let i = index "
+              [ngClass]="{ 'bg-warning': !row.observacion}">
+                <td width="20px">{{ i + 1 }}</td>
+                <td>{{ row.tipo_documento}} </td>
+                <td>{{ row.fecha_documento | date: "dd/MM/yyyy"}} </td>
+                <td>{{ row.observacion}}</td>
+                <td class="botonera">
+                  <button class="btn btn-warning" title="Editar" (click)="cargarDocumento(row)">
+                    <span class="fa fa-edit"></span>
+                  </button>
+                  <button class="btn btn-danger" title="Eliminar" (click)="crudDetalleJuridica('D',row)" >
+                    <span class="fa fa-trash"></span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row">
+            <div class="linea"></div>
+            <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+              <button type="button" class="btn btn-primary" style="margin-right: 1rem;" data-dismiss="modal" (click)="this.listaArchivoCabecera()">Cerrar</button>
+              <!-- <button class="btn btn-success" id="registrar" type="button" (click)="crudDetalleJuridica()"  [disabled]="!jtipo_documento || !jobservacion">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Guardar
+              </button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal financiera -->
+<div class="modal fade" name="modalFinanciera" id="modalFinanciera" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" (click)="this.listaArchivoCabecera()">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">Documentos Financiera</h5>
+      </div>
+      <div class="modal-body">
+        <div id="todo" style="text-align: left;">
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-12">
+              <label for="proyecto">PROYECTO:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
+                <input class="form-control" type="text" name="proyecto" [(ngModel)]="nombreProyecto" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-3">
+              <label for="tipoDocumento">TIPO DOCUMENTO:</label>
+              <div class="input-group">
+                <span class="input-group-addon" (click)="nuevoElemento('documento')"><i class="fa fa-file"></i></span>
+                <select class="form-control" id="tipoDocumento" [(ngModel)]="ftipo_documento" aria-placeholder="seleccione..." required autofocus>
+                  <option *ngFor="let row of dtsTiposDocumentos" [ngValue]="row">
+                    {{row}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-3 ">
+              <label for="fechaDocumento">CITE:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-file"></i></span>
+                <input class="form-control" type="text" name="fcite"  [(ngModel)]="fcite" required>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-3 ">
+              <label for="fechaDocumento">Hoja de Ruta:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-file-o"></i></span>
+                <input class="form-control" type="text" name="fhr"  [(ngModel)]="fhr" required>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-3 ">
+              <label for="fechaDocumento">Tomo:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-folder"></i></span>
+                <input class="form-control" type="text" name="ftomo"  [(ngModel)]="ftomo" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-10 ">
+              <label for="observacion">OBSERVACIÓN:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-comment"></i></span>
+                <input class="form-control" type="text" name="observacion" placeholder="Observaciones..." [(ngModel)]="fobservacion" required>
+              </div>
+            </div>
+            <div class="form-group col-sm-12 col-lg-2 ">
+              <button class="btn btn-success btn-block" style="margin-top: 2.4rem;" (click)="crudDetalleFinanciera(elIdFinanciera? 'U':'I')" [disabled]="!ftipo_documento || !fcite || !fhr || !ftomo"><i class="fa fa-save"></i> Guardar</button>
+            </div>
+          </div>
+          <div class="row">
+            
+          </div>
+          <table class="table table-responsive table-condensed table-hover" style="font-size: 9pt">
+            <thead>
+              <tr>
+                <th>Nº</th>
+                <th>DOCUMENTO</th>
+                <th>CITE</th>
+                <th>TOMO</th>
+                <th>HR</th>
+                <th>OBSERVACIONES</th>
+                <th>OPCIONES</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row of dtsFinanciera; let i = index "
+              [ngClass]="{ 'bg-warning': !row.observacion}">
+                <td width="20px">{{ i + 1 }}</td>
+                <td>{{ row.tipo_documento}} </td>
+                <td>{{ row.cite}} </td>
+                <td>{{ row.tomo}}</td>
+                <td>{{ row.hr}}</td>
+                <td>{{ row.observacion}}</td>
+                <td class="botonera">
+                  <button class="btn btn-warning" title="Editar" (click)="cargarDocumentoFinanicera(row)">
+                    <span class="fa fa-edit"></span>
+                  </button>
+                  <button class="btn btn-danger" title="Eliminar" (click)="crudDetalleFinanciera('D',row)" >
+                    <span class="fa fa-trash"></span>
+                  </button>
+                  <button class="btn btn-success" title="Lomo Documento" (click)="generarReporte('06',row.fid_cabecera,row.id_financiera)">
+                    <span class="fa fa-print"></span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row">
+            <div class="linea"></div>
+            <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+              <button type="button" class="btn btn-primary" style="margin-right: 1rem;" data-dismiss="modal" (click)="this.listaArchivoCabecera()">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

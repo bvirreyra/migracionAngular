@@ -1,0 +1,948 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+
+<div class="centrado">
+  <div class="panel panel-primary" style="text-align: center">
+    <div class="panel-heading text-center">
+      <span class="glyphicon glyphicon-list"></span> Filtros Dinámicos
+    </div>
+    <div class="panel-body" style="text-align: left">
+      <div *ngIf="pnlFiltros">
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <label>Departamento:</label>
+            <select
+              id="depto"
+              class="form-control"
+              name="depto"
+              [(ngModel)]="dep"
+              (change)="filtrar2('departamento', dep, 1, 0)"
+            >
+              <option
+                *ngFor="let row of dts_departamentos"
+                [ngValue]="row.departamento"
+              >
+                {{ row.departamento }}
+              </option>
+            </select>
+            <div class="linea"></div>
+          </div>
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <label>Municipio:</label>
+            <select
+              id="muni"
+              class="form-control"
+              name="muni"
+              [(ngModel)]="mun"
+              (change)="filtrar2('municipio', mun, 1, 0)"
+              [disabled]="!dep"
+            >
+              <option
+                *ngFor="let row of dts_municipios"
+                [ngValue]="row.municipio"
+              >
+                {{ row.municipio }}
+              </option>
+            </select>
+            <div class="linea"></div>
+          </div>
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <label>Documento Presentado:</label>
+            <select
+              id="opcion"
+              class="form-control"
+              name="opcion"
+              [(ngModel)]="opcionSel"
+              (change)="filtrar2('documento_ingreso', opcionSel, 1, 0)"
+            >
+              <option value=""></option>
+              <option
+                *ngFor="let row of dts_opciones"
+                [ngValue]="row.documento_ingreso"
+              >
+                {{ row.documento_ingreso }}
+              </option>
+              <!-- <option value='NOTA'>NOTA</option>
+              <option value='PERFIL'>PERFIL</option>
+              <option value='ESTUDIO DE DISEÑO TECNICO DE PREINVERSION'>ESTUDIO DE DISEÑO TECNICO DE PREINVERSION</option> -->
+            </select>
+            <div class="linea"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <label for="numeroSolicitud">NBI:</label
+            ><label class="media-avg"
+              >=> Media:
+              {{ mediaNBI | number : "0.2-2" | formatoDecimal }}</label
+            >
+            <div class="slider">
+              <input
+                type="range"
+                min="{{ nbiMinIni }}"
+                max="{{ nbiMaxIni }}"
+                [(ngModel)]="nbiMin"
+                (change)="filtrar2('nbi', nbiMin, 2, nbiMax, 'min')"
+              />
+              <label>min: {{ nbiMin }}</label>
+            </div>
+            <div class="slider">
+              <input
+                type="range"
+                min="{{ nbiMinIni }}"
+                max="{{ nbiMaxIni }}"
+                [(ngModel)]="nbiMax"
+                (change)="filtrar2('nbi', nbiMin, 2, nbiMax, 'max')"
+              />
+              <label>max: {{ nbiMax }}</label>
+            </div>
+            <label for="html">Prioridad:</label>
+            <input
+              type="radio"
+              id="nbiAsc"
+              name="orderNBI"
+              style="margin-left: 1.2rem"
+              value="Ascendente"
+              (change)="ordenar('nbi', 'asc')"
+            />
+            <label for="nbiAsc">Menor tasa nbi</label>
+            <input
+              type="radio"
+              id="nbiDesc"
+              name="orderNBI"
+              style="margin-left: 1.2rem"
+              value="Descendente"
+              checked
+              (change)="ordenar('nbi', 'desc')"
+            />
+            <label for="nbiDesc">Mayor tasa nbi</label>
+            <input
+              type="radio"
+              id="nbiNull"
+              name="orderNBI"
+              style="margin-left: 1.2rem"
+              value="anular"
+              (change)="ordenar('nbi', 'anular')"
+            />
+            <label for="nbiNull">Anular</label>
+            <div class="linea"></div>
+          </div>
+          <!-- <div class="col-sm-12 col-md-6 col-lg-4">
+            <label>INV. MUNICIPIO:</label>
+            <div class="slider">
+              <input type="range" min="{{invMinInicial}}" max="{{invMInicial}}" [(ngModel)]="invMMin" (change)="actualizaINVM('min')">
+              <label>min: {{invMMin | number: "0.2-2" | formatoDecimal}}</label>
+            </div>
+            <div class="slider">
+              <input type="range" min="{{invMinInicial}}" max="{{invMInicial}}" [(ngModel)]="invMMax" (change)="actualizaINVM('max')">
+              <label>max: {{invMMax | number: "0.2-2" | formatoDecimal}}</label>
+            </div>
+          </div> -->
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <label>Inversión UPRE:</label
+            ><label class="media-avg"
+              >=> Media:
+              {{ mediaINVU | number : "0.2-2" | formatoDecimal }}</label
+            >
+            <div class="slider">
+              <input
+                type="range"
+                min="{{ invUPREMinIni }}"
+                max="{{ invUPREMaxIni }}"
+                [(ngModel)]="invUPREMin"
+                (change)="
+                  filtrar2(
+                    'inversion_upre_convenio',
+                    invUPREMin,
+                    2,
+                    invUPREMax,
+                    'min'
+                  )
+                "
+              />
+              <label
+                >min:
+                {{ invUPREMin | number : "0.2-2" | formatoDecimal }}</label
+              >
+            </div>
+            <div class="slider">
+              <input
+                type="range"
+                min="{{ invUPREMinIni }}"
+                max="{{ invUPREMaxIni }}"
+                [(ngModel)]="invUPREMax"
+                (change)="
+                  filtrar2(
+                    'inversion_upre_convenio',
+                    invUPREMin,
+                    2,
+                    invUPREMax,
+                    'max'
+                  )
+                "
+              />
+              <label
+                >max:
+                {{ invUPREMax | number : "0.2-2" | formatoDecimal }}</label
+              >
+            </div>
+            <label for="html">Orden:</label>
+            <input
+              type="radio"
+              id="upreAsc"
+              name="orderUPRE"
+              style="margin-left: 1.2rem"
+              value="Ascendente"
+              (change)="ordenar('inversion_upre_convenio', 'asc')"
+            />
+            <label for="upreAsc">Menor Inv.</label>
+            <input
+              type="radio"
+              id="upreDesc"
+              name="orderUPRE"
+              style="margin-left: 1.2rem"
+              value="Descendente"
+              (change)="ordenar('inversion_upre_convenio', 'desc')"
+            />
+            <label for="upreDesc">Mayor Inv.</label>
+            <input
+              type="radio"
+              id="upreNull"
+              name="orderUPRE"
+              style="margin-left: 1.2rem"
+              value="anular"
+              (change)="ordenar('inversion_upre_convenio', 'anular')"
+            />
+            <label for="ipNull">Anular</label>
+            <div class="linea"></div>
+          </div>
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <label>Inversión Percapita UPRE:</label
+            ><label class="media-avg"
+              >=> Media:
+              {{ mediaIP | number : "0.2-2" | formatoDecimal }}</label
+            >
+            <div class="slider">
+              <input
+                type="range"
+                min="{{ ipMinIni }}"
+                max="{{ ipMaxIni }}"
+                [(ngModel)]="ipMin"
+                (change)="
+                  filtrar2('inversion_percapita_upre', ipMin, 2, ipMax, 'min')
+                "
+              />
+              <label
+                >min: {{ ipMin | number : "0.2-2" | formatoDecimal }}</label
+              >
+            </div>
+            <div class="slider">
+              <input
+                type="range"
+                min="{{ ipMinIni }}"
+                max="{{ ipMaxIni }}"
+                [(ngModel)]="ipMax"
+                (change)="
+                  filtrar2('inversion_percapita_upre', ipMin, 2, ipMax, 'max')
+                "
+              />
+              <label
+                >max: {{ ipMax | number : "0.2-2" | formatoDecimal }}</label
+              >
+            </div>
+            <label for="html">Orden:</label>
+            <input
+              type="radio"
+              id="ipAsc"
+              name="orderIP"
+              style="margin-left: 1.2rem"
+              value="Ascendente"
+              checked
+              (change)="ordenar('inversion_percapita_upre', 'asc')"
+            />
+            <label for="ipAsc">Menor Inv. Percapita </label>
+            <input
+              type="radio"
+              id="ipDesc"
+              name="orderIP"
+              style="margin-left: 1.2rem"
+              value="Descendente"
+              (change)="ordenar('inversion_percapita_upre', 'desc')"
+            />
+            <label for="ipDesc">Mayor Inv. Percapita</label>
+            <input
+              type="radio"
+              id="ipNull"
+              name="orderIP"
+              style="margin-left: 1.2rem"
+              value="anular"
+              (change)="ordenar('inversion_percapita_upre', 'anular')"
+            />
+            <label for="ipNull">Anular</label>
+            <div class="linea"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <label>Nº Proyectos por Municipio:</label
+            ><label class="media-avg"
+              >=> Media:
+              {{ mediaNP | number : "0.2-2" | formatoDecimal }}</label
+            >
+            <div class="slider">
+              <input
+                type="range"
+                min="{{ npMinIni }}"
+                max="{{ npMaxIni }}"
+                [(ngModel)]="npMin"
+                (change)="filtrar2('nro_proyectos', npMin, 2, npMax, 'min')"
+              />
+              <label>min: {{ npMin }}</label>
+            </div>
+            <div class="slider">
+              <input
+                type="range"
+                min="{{ npMinIni }}"
+                max="{{ npMaxIni }}"
+                [(ngModel)]="npMax"
+                (change)="filtrar2('nro_proyectos', npMin, 2, npMax, 'max')"
+              />
+              <label>max: {{ npMax }}</label>
+            </div>
+            <label for="html">Orden:</label>
+            <input
+              type="radio"
+              id="npAsc"
+              name="orderNP"
+              style="margin-left: 1.2rem"
+              value="Ascendente"
+              (change)="ordenar('nro_proyectos', 'asc')"
+            />
+            <label for="npAsc">Menor</label>
+            <input
+              type="radio"
+              id="npDesc"
+              name="orderNP"
+              style="margin-left: 1.2rem"
+              value="Descendente"
+              (change)="ordenar('nro_proyectos', 'desc')"
+            />
+            <label for="npDesc">Mayor</label>
+            <input
+              type="radio"
+              id="npNull"
+              name="orderNP"
+              style="margin-left: 1.2rem"
+              value="anular"
+              (change)="ordenar('nro_proyectos', 'anular')"
+            />
+            <label for="npNull">Anular</label>
+            <div class="linea"></div>
+          </div>
+          <!-- <div class="col-sm-12 col-md-6 col-lg-4">
+            <label >Cumple MAE:</label>
+            <div class="slider">
+              <input type="range" min="{{0}}" max="{{100}}" [(ngModel)]="cmMin" (change)="filtrar2('p_cumple_mae',cmMin,2,cmMax,'min')">
+              <label>min: {{cmMin}}</label>
+            </div>
+            <div class="slider">
+              <input type="range" min="{{0}}" max="{{100}}" [(ngModel)]="cmMax" (change)="filtrar2('p_cumple_mae',cmMin,2,cmMax,'max')">
+              <label>max: {{cmMax}}</label>
+            </div>
+            <div class="linea"></div>
+          </div> -->
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <label
+              >Votación obtenida MAS:
+              <p *ngIf="mun" class="votos">
+                => Nacional {{ (votosNacional * 100).toFixed(0) }}% , Municipal
+                {{ (votosMuniciapl * 100).toFixed(0) }}%
+              </p></label
+            >
+            <div class="slider">
+              <select
+                id="partidos"
+                class="form-control"
+                name="partidos"
+                [(ngModel)]="partidoSel"
+                (change)="filtrar2('mae', partidoSel, 1, -1)"
+              >
+                <option value=""></option>
+                <option *ngFor="let row of dts_partidos" [ngValue]="row.mae">
+                  {{ row.mae }}
+                </option>
+              </select>
+              <label *ngIf="!mun">Activos: {{ pm.toString() }}</label>
+              <label *ngIf="mun">Partido MAE: => {{ partidoMae }}</label>
+            </div>
+            <div class="linea"></div>
+          </div>
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <label>Área Proyecto:</label>
+            <div class="slider">
+              <select
+                id="areas"
+                class="form-control"
+                name="areas"
+                [(ngModel)]="areaSel"
+                (change)="filtrar2('area', areaSel, 1, -1)"
+              >
+                <option value=""></option>
+                <option *ngFor="let row of dts_area" [ngValue]="row.area">
+                  {{ row.area }}
+                </option>
+              </select>
+              <label>Activos: {{ area.toString() }}</label>
+            </div>
+            <div class="linea"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <label>Tipo Solicitud Proyecto:</label>
+            <div class="slider">
+              <select
+                id="solicitudes"
+                class="form-control"
+                name="solicitudes"
+                [(ngModel)]="solicitudSel"
+                (change)="filtrar2('estado_compromiso', solicitudSel, 1, -1)"
+              >
+                <option value=""></option>
+                <option
+                  *ngFor="let row of dts_solicitudes"
+                  [ngValue]="row.estado_compromiso"
+                >
+                  {{ row.estado_compromiso }}
+                </option>
+              </select>
+              <label>Activos: {{ tipoSolicitud.toString() }}</label>
+            </div>
+            <!-- <div class="linea"></div> -->
+          </div>
+
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <button
+              class="btn btn-info btn-block"
+              style="margin-bottom: 2rem"
+              (click)="reinicarFiltros()"
+            >
+              Limpiar Filtros
+            </button>
+            <button
+              class="btn btn-success btn-block"
+              (click)="listarProyectos(0)"
+            >
+              Recargar Proyectos
+            </button>
+          </div>
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                background-color: lightcoral;
+                padding: 5px;
+                border-radius: 4px;
+                border: 1px rgb(153, 69, 69) solid;
+              "
+            >
+              <!--<button class="btn btn-primary" (click)="filtrar2('multicriterio_upre',1,1,0)">Multicriterio</button>
+              <button class="btn btn-primary" (click)="filtrar2('criticos',1,1,0)">Críticos</button>-->
+              <div>
+                <label for="critic" style="margin-right: 1rem"
+                  ><strong><h3>Críticos y Urgentes</h3></strong></label
+                >
+                <input
+                  type="checkbox"
+                  id="critic"
+                  #critic
+                  (change)="filtrar2('criticos', critic.checked, 1, 0)"
+                />
+              </div>
+              <div>
+                <label for="multi" style="margin-right: 1rem"
+                  ><strong><h3>Multicriterio UPRE</h3></strong></label
+                >
+                <input
+                  type="checkbox"
+                  id="multi"
+                  #multi
+                  (change)="filtrar2('multicriterio_upre', multi.checked, 1, 0)"
+                />
+              </div>
+            </div>
+            <p class="alerta">
+              <li>{{ proyectosSolicitados }} Proyectos solicitados.</li>
+            </p>
+            <p class="alerta">
+              <li>{{ municipiosVacios }} Municipios sin solicitudes nuevas.</li>
+            </p>
+          </div>
+        </div>
+        <div class="linea"></div>
+        <div class="financiamiento">
+          <label
+            >✔️ PPTO. ASIGNADO Bs.
+            <i>{{ presupuestoAsignado | number : "0.2-2" | formatoDecimal }}</i>
+            GESTION:
+            <select
+              [(ngModel)]="gestionSel"
+              (ngModelChange)="cambiarGestion()"
+              style="width: 70px"
+            >
+              <option *ngFor="let row of dtsGestiones" [ngValue]="row">
+                {{ row }}
+              </option>
+            </select>
+          </label>
+          <label
+            >✔️ PPTO. COMPROMETIDO Bs.
+            <i>{{
+              presupuestoComprometido | number : "0.2-2" | formatoDecimal
+            }}</i>
+            (ESTIMADO)</label
+          >
+          <label
+            >✔️ PPTO. POR COMPROMETER Bs.
+            <i>{{
+              presupuestoPorComprometer | number : "0.2-2" | formatoDecimal
+            }}</i></label
+          >
+        </div>
+        <div class="linea"></div>
+      </div>
+      <!--video inscrustado-->
+      <div *ngIf="pnlVideo">
+        <p class="titulo">{{ elNombrProyecto }}</p>
+        <div *ngFor="let row of arregloURL">
+          <div *ngIf="row.toLowerCase().includes('http')">
+            <p class="rutas">
+              url: {{ row }}
+              <button
+                class="btn-warning"
+                (click)="eliminarURL(row)"
+                title="Eliminar Enlace"
+              >
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </p>
+            <p style="text-align: center">
+              <iframe
+                class="videos-frame frmae-alto"
+                [src]="getVideoIframe(row)"
+                frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </p>
+          </div>
+          <div *ngIf="!row.toLowerCase().includes('http')">
+            <p class="rutas">
+              {{ row }}
+              <button class="btn-warning" (click)="eliminarURL(row)">
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </p>
+          </div>
+        </div>
+        <button
+          class="btn btn-primary videos-frame"
+          style="display: block; margin: 0 auto"
+          (click)="reproducirVideo()"
+          title="Eliminar Contenido"
+        >
+          <i class="fa fa-reply" aria-hidden="true"></i> Retornar
+        </button>
+        <div class="linea"></div>
+      </div>
+      <div *ngIf="totalRecursos" class="poblacion">
+        <label class="info2">Población: {{ poblacion }} hab. </label>
+        <label class="info2">Total Recursos: Bs.{{ totalRecursos }}</label>
+      </div>
+      <div class="table table-responsive" *ngIf="pnlGrilla">
+        <div style="display: flex; justify-content: space-between">
+          <a
+            type="button"
+            class="btn btn-success"
+            style="margin-top: 0.8rem; height: 3.5rem"
+            title="Descargar Listado en Excel"
+            href="{{ urlBack }}15_reportesCompromisosQuery/{{
+              elFiltro ? elFiltro : 'vacio'
+            }}"
+          >
+            <i class="fa fa-download" aria-hidden="true"></i>
+          </a>
+          <label class="titulo pull-right">{{
+            dts_proyectos
+              ? dts_proyectos.length != dts_inicial.length
+                ? dts_proyectos.length +
+                  " registros filtrados de un total de " +
+                  dts_inicial.length +
+                  " registros"
+                : dts_inicial.length + " registros en total"
+              : ""
+          }}</label>
+          <!-- <button class="btn btn-success" style="display: inherit; margin-top: 0.8rem;" (click)="generarReporteGet()">Descargar Listado</button> -->
+        </div>
+        <table
+          class="table table-responsive table-condensed table-hover dt-proyectos"
+          style="font-size: 9pt"
+        >
+          <thead>
+            <tr>
+              <th style="width: 40px">Nº</th>
+              <th (click)="ordenar('departamento')">
+                Departamento <i class="fa fa-sort" aria-hidden="true"></i>
+              </th>
+              <th (click)="ordenar('municipio')">
+                Municipio <i class="fa fa-sort" aria-hidden="true"></i>
+              </th>
+              <th (click)="ordenar('nombreproyecto')">
+                Proyecto <i class="fa fa-sort" aria-hidden="true"></i>
+              </th>
+              <th (click)="ordenar('monto_bs')">
+                Monto (Bs) <i class="fa fa-sort" aria-hidden="true"></i>
+              </th>
+              <th (click)="ordenar('area')">
+                Área <i class="fa fa-sort" aria-hidden="true"></i>
+              </th>
+              <th (click)="ordenar('beneficiario')">
+                Beneficiario <i class="fa fa-sort" aria-hidden="true"></i>
+              </th>
+              <th (click)="ordenar('estado_compromiso')">
+                Tipo Solicitud <i class="fa fa-sort" aria-hidden="true"></i>
+              </th>
+              <th (click)="ordenar('mae')">
+                Mae <i class="fa fa-sort" aria-hidden="true"></i>
+              </th>
+              <th (click)="ordenar('documento_ingreso')">
+                Documento Ingreso <i class="fa fa-sort" aria-hidden="true"></i>
+              </th>
+              <th style="width: 150px" (click)="ordenar('estado_aprobado')">
+                Aprobar<i class="fa fa-sort" aria-hidden="true"></i>
+              </th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td>
+                <select
+                  [(ngModel)]="dep"
+                  (ngModelChange)="filtrar2('departamento', dep, 1, 0)"
+                  style="width: 100px"
+                >
+                  <option
+                    *ngFor="let row of dts_departamentos"
+                    [ngValue]="row.departamento"
+                  >
+                    {{ row.departamento }}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <select
+                  [(ngModel)]="mun"
+                  (ngModelChange)="filtrar2('municipio', mun, 1, 0)"
+                  style="width: 100px"
+                  [disabled]="!dep"
+                >
+                  <option
+                    *ngFor="let row of dts_municipios"
+                    [ngValue]="row.municipio"
+                  >
+                    {{ row.municipio }}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  #filtroNombre
+                  (keyup)="filtrar2('nombreproyecto', filtroNombre.value, 1, 0)"
+                  max="1000"
+                />
+              </td>
+              <td></td>
+              <td>
+                <select
+                  [(ngModel)]="areaSel"
+                  (ngModelChange)="filtrar2('area', areaSel, 1, 0)"
+                  style="width: 100px"
+                >
+                  <option value=""></option>
+                  <option *ngFor="let row of dts_area" [ngValue]="row.area">
+                    {{ row.area }}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  #filtroBeneficiario
+                  (keyup)="
+                    filtrar2('beneficiario', filtroBeneficiario.value, 1, 0)
+                  "
+                  max="500"
+                />
+              </td>
+              <td>
+                <select
+                  [(ngModel)]="solicitudSel"
+                  (ngModelChange)="
+                    filtrar2('estado_compromiso', solicitudSel, 1, 3)
+                  "
+                  style="width: 100px"
+                >
+                  <option value=""></option>
+                  <option
+                    *ngFor="let row of dts_solicitudes"
+                    [ngValue]="row.estado_compromiso"
+                  >
+                    {{ row.estado_compromiso }}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <select
+                  [(ngModel)]="maeSel"
+                  (ngModelChange)="filtrar2('mae', maeSel, 1, 3)"
+                  style="width: 100px"
+                >
+                  <option value=""></option>
+                  <option *ngFor="let row of dts_partidos" [ngValue]="row.mae">
+                    {{ row.mae }}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <select
+                  [(ngModel)]="opcionSel"
+                  (ngModelChange)="
+                    filtrar2('documento_ingreso', opcionSel, 1, 3)
+                  "
+                  style="width: 100px"
+                >
+                  <option value=""></option>
+                  <option
+                    *ngFor="let row of dts_opciones"
+                    [ngValue]="row.documento_ingreso"
+                  >
+                    {{ row.documento_ingreso }}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <select
+                  [(ngModel)]="estado_aprobadoSel"
+                  (ngModelChange)="
+                    filtrar2('estado_aprobado', estado_aprobadoSel, 1, 3)
+                  "
+                  style="width: 100px"
+                >
+                  <option value=""></option>
+                  <option
+                    *ngFor="let row of dts_aprobados"
+                    [ngValue]="row.estado_aprobado"
+                  >
+                    {{ row.estado_aprobado }}
+                  </option>
+                </select>
+              </td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr
+              *ngFor="
+                let row of dts_proyectos
+                  | slice : pagina * 50 : pagina * 50 + 50;
+                let i = index
+              "
+              [ngClass]="{
+                'bg bg-info': row.estado_aprobado == 'APROBADO PRESIDENCIA',
+                'bg bg-success': row.estado_aprobado == 'APROBADO UPRE',
+                'bg btn-danger': row.estado_aprobado == 'DESESTIMADO'
+              }"
+              (dblclick)="mostrarDatosProyecto(row)"
+              id="gs{{ row.id_compromiso }}"
+            >
+              <td data-label="Nº">{{ i + 1 }}</td>
+              <td data-label="Departamento">{{ row.departamento }}</td>
+              <td data-label="Municipio">{{ row.municipio }}</td>
+              <td data-label="Proyecto">{{ row.nombreproyecto }}</td>
+              <td data-label="Monto (Bs)" style="text-align: right">
+                {{ row.monto_bs || 0 | number : "0.2-2" | formatoDecimal }}
+              </td>
+              <td data-label="Área">{{ row.area }}</td>
+              <td data-label="Beneficiario">{{ row.beneficiario }}</td>
+              <td data-label="Tipo Solicitud">{{ row.estado_compromiso }}</td>
+              <td data-label="Mae">{{ row.mae }}</td>
+              <td data-label="Documento Ingreso">
+                {{ row.documento_ingreso }}
+              </td>
+              <td data-label="Aprobar">
+                <div
+                  *ngIf="
+                    camposHabilitados._apk_presidente == false ||
+                    camposHabilitados._apk_monitoreo_dge == false ||
+                    camposHabilitados._apk_monitoreo == false
+                  "
+                >
+                  <button
+                    class="btn btn-warning"
+                    *ngIf="row.estado_aprobado == 'NO APROBADO'"
+                    title="Aprobar"
+                    (click)="confirmarProyecto(row, 'I')"
+                  >
+                    <span class="glyphicon glyphicon-ok-sign"></span>
+                  </button>
+                  <button
+                    class="btn btn-danger"
+                    *ngIf="row.estado_aprobado.startsWith('APROBADO')"
+                    title="Cancelar Aprobación"
+                    (click)="confirmarProyecto(row, 'D')"
+                  >
+                    <span class="glyphicon glyphicon-remove-circle"></span>
+                  </button>
+                </div>
+                <div *ngIf="camposHabilitados._apk_monitoreo == false">
+                  <button
+                    class="btn btn-success"
+                    *ngIf="row.estado_aprobado.startsWith('APROBADO')"
+                    title="Agregar URL Entrega"
+                    (click)="cargarURL(row.id_compromiso, row.url)"
+                  >
+                    <span class="fa fa-video-camera"></span>
+                  </button>
+                </div>
+                <button
+                  class="btn btn-info"
+                  *ngIf="row.url"
+                  title="Reproducir Video"
+                  (click)="
+                    reproducirVideo(
+                      row.url,
+                      row.id_compromiso,
+                      row.nombreproyecto
+                    )
+                  "
+                >
+                  <span class="fa fa-play"></span>
+                </button>
+                <div *ngIf="camposHabilitados._apk_monitoreo_dge == false">
+                  <button
+                    class="btn btn-lila"
+                    *ngIf="row.estado_aprobado.startsWith('APROBADO')"
+                    title="Desestimar"
+                    (click)="confirmarProyecto(row, 'DESESTIMAR')"
+                  >
+                    <span class="glyphicon glyphicon-ban-circle"></span>
+                  </button>
+                </div>
+                <p *ngIf="!row.id_compromiso">
+                  <strong><i>Sin proyectos nuevos en el municipio</i></strong>
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- paginacion -->
+        <nav aria-label="Page navigation example">
+          <ul class="pagination pull-right">
+            <li class="page-item" style="margin-right: 2rem">
+              <label class="titulo">{{
+                "mostrando registros del " +
+                  (pagina * 50 + 1) +
+                  " al " +
+                  (pagina * 50 + 50 > dts_proyectos.length
+                    ? dts_proyectos.length
+                    : pagina * 50 + 50) +
+                  " de un total de " +
+                  dts_proyectos.length
+              }}</label>
+            </li>
+            <li class="page-item">
+              <button
+                class="btn btn-primary page-link"
+                id="anterior"
+                (click)="paginar(-1)"
+              >
+                Anterior
+              </button>
+            </li>
+            <li class="page-item">
+              <button
+                class="btn btn-primary page-link"
+                id="siguiente"
+                (click)="paginar(1)"
+              >
+                Siguiente
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <!-- RESUMEN TECNICO -->
+      <div class="info fade-in" *ngIf="pnlInfo">
+        <div
+          id="monitoreoEtapas"
+          *ngIf="
+            elComp.id_compromiso &&
+            elComp.estado_compromiso == 'COMPROMISO PRESIDENCIAL'
+          "
+        >
+          <app-monitoreo-etapas [data]="elComp"></app-monitoreo-etapas>
+        </div>
+        <label class="info-titulo">
+          <div>{{ nombreproyectoResuman }}</div>
+          RESUMEN TÉCNICO
+          <button
+            *ngIf="resumenTecnico.idCompromiso > 0"
+            class="btn btn-danger pull-right"
+            style="padding: 2px 30px; overflow: auto"
+            title="PDF"
+            (click)="
+              rptResumenTecnico(
+                resumenTecnico.estado,
+                resumenTecnico.idCompromiso
+              )
+            "
+          >
+            <i class="fa fa-file-pdf-o"></i>
+          </button>
+        </label>
+        <div *ngIf="resumenTecnico.idCompromiso > 0">
+          <label
+            >ÁREA: <i>{{ resumenTecnico.area }}</i></label
+          >
+          <label
+            >BENEFICIARIOS: <i>{{ resumenTecnico.beneficiarios }}</i></label
+          >
+          <label
+            >COSTO DEL PROYECTO:
+            <i>{{ resumenTecnico.costoProyecto }}</i></label
+          >
+          <label
+            >COSTO POR BENEFICIARIO:
+            <i>{{ resumenTecnico.costoXBeneficiario }}</i></label
+          >
+          <label class="info-titulo">ALCANCE DEL PROYECTO</label>
+          <label>{{ resumenTecnico.alcance }}</label>
+          <label class="info-titulo">SITUACIÓN ACTUAL</label>
+          <label>{{ resumenTecnico.situacion }}</label>
+        </div>
+        <div *ngIf="resumenTecnico.idCompromiso == 0">
+          <label>SIN DATOS CARGADOS</label>
+        </div>
+        <button
+          class="btn btn-primary btn-block"
+          (click)="mostrarDatosProyecto(0, $event)"
+        >
+          CERRAR INFORMACIÓN
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,136 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div *ngIf="pnl_proyectos && retornar">
+  <button
+    type="button"
+    class="btn btn-primary pull-left"
+    title="Volver Panel"
+    name="btnVolverGv"
+    id="btnVolverGv"
+    (click)="sendMessage(panel)"
+  >
+    <i class="fa fa-reply fa-2x"> </i>
+  </button>
+</div>
+<!--LISTA GRIDVIEW PROYECTOS CONSOLIDADOS-->
+<div class="titulo">
+  <label for="">{{valor}} - {{inputDts.length}} REGISTROS </label>
+</div>
+<button
+  type="button"
+  class="btn btn-success pull-right"
+  title="Descargar Datos"
+  name="btnDescargarExcel"
+  id="btnDescargarExcel"
+  (click)="DescargarExcel()"
+  style="margin-bottom: 1rem;"
+> Descargar Listado <i class="fa fa-file-excel-o"></i>
+</button>
+<div class="table table-responsive" style="text-align: left;" *ngIf="pnl_proyectos">
+  <!-- <table
+    class="table table-responsive table-condensed table-hover dt-proyectos"
+    style="font-size: 18pt;width: 100%;"
+  > -->
+  <table
+    id="example"
+    class="table table-condensed table-hover dt-proyectos"
+    style="font-size: 14pt; width: 100%"
+  >
+    <thead>
+      <tr>
+        <th data-priority="1">Nro.</th>
+        <th data-priority="2">Nombre Proyecto</th>
+        <th data-priority="3">Departamento</th>
+        <th>Municipio</th>
+        <th>Área</th>
+        <th>Tipo Financiamiento</th>
+        <th>Monto UPRE</th>
+        <th>Monto Saldo</th>
+        <th>Avance Físico</th>
+        <th>Avance Fínanciero</th>
+        <th>Empresa</th>
+        <th>Entrega Protocolar</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>
+          <select  [(ngModel)]="dep" (ngModelChange)="cambioDep()" style="width: 100px;">
+            <option *ngFor="let row of dts_departamentos" [ngValue]="row.departamento">
+              {{ row.departamento }}
+            </option>
+          </select>
+        </td>
+        <td>
+          <!-- <select  [(ngModel)]="mun" (ngModelChange)="filtrarMunicipio()" style="width: 100px;">
+            <option *ngFor="let row of dts_municipios" [ngValue]="row.municipio">
+              {{ row.municipio }}
+            </option>
+          </select> -->
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr
+        *ngFor="let row_registros of inputDts; let i = index"
+        [ngClass]="{ 'bg-info': row_registros.entrega_protocolar == 'SI' }"
+      >
+        <td>{{ i + 1 }} <button type="button" class="btn btn-success btn-sm">
+          <i
+            class="fa fa-eye fa-lg"
+            aria-hidden="true"
+            title="Datos Generales del Proyecto"
+            (click)="detalleProyecto(row_registros)"
+          ></i>
+        </button></td>
+        <td>
+         
+          {{ row_registros.nombre_proyecto_sgp }}
+        </td>
+        <td>{{ row_registros.departamento }}</td>
+        <td>{{ row_registros.municipio }}</td>
+        <td>{{ row_registros.area }}</td>
+        <td>{{ row_registros.tipo_financiamiento }}</td>
+        <td>
+          {{ row_registros.monto_upre | number: "0.2-2" | formatoDecimal }}
+        </td>
+        <td>
+          {{ row_registros.saldo_real | number: "0.2-2" | formatoDecimal }}
+        </td>
+        <td>{{ row_registros.avance_fisico | number: "0.2-2" | formatoDecimal}}%</td>
+        <td>{{ row_registros.avance_financiero | number: "0.2-2" | formatoDecimal}}%</td>
+        <td>{{ row_registros.empresa }}</td>
+        <td>{{ row_registros.entrega_protocolar }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div *ngIf="pnl_cabecera">
+  <app-detalle-continuidad
+    [inputDts]="registroFila"
+    (mensajeHijo)="recibeMensaje($event)"
+  ></app-detalle-continuidad>
+</div>
+<div *ngIf="pnl_proyectos && retornar">
+  <button
+    type="button"
+    class="btn btn-primary pull-left"
+    title="Volver Panel"
+    name="btnVolverGv"
+    id="btnVolverGv"
+    (click)="sendMessage(panel)"
+  >
+    <i class="fa fa-reply fa-2x"> </i>
+  </button>
+</div>

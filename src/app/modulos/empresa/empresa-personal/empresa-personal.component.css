@@ -1,0 +1,16 @@
+.dt-experiencia-empleado tfoot input{
+  width: 100% !important;
+}
+.dt-experiencia-empleado tfoot {
+  display: table-header-group !important;
+}
+.dt-empleados tfoot input{
+  width: 100% !important;
+}
+.dt-empleados tfoot {
+  display: table-header-group !important;
+}
+.botonera{
+  display: flex !important;
+  justify-content: space-between;
+}

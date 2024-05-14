@@ -1,0 +1,12 @@
+.texto-vertical-2 {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+}
+.texto-vertical-1 {
+    writing-mode: vertical-lr;
+}
+.texto-vertical-3 {
+  width:20px;
+  word-wrap: break-word;
+  text-align:center;
+}

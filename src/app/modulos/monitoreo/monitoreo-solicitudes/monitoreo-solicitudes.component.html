@@ -1,0 +1,123 @@
+<div class="bg-primary text-white">MONITOREO COMPROMISO PRESIDENCIAL EN GENERAL </div>
+<app-tarjeta-monitoreo *ngIf="dts_compromisoSinResumen"
+class="col col-xs-12 col-sm-3 col-lg-3"
+[inputDts]="dts_compromisoSinResumen"
+[valor]="'COMPROMISOS SIN FORMULARIO RESUMEN'"
+[color]="'azul'"
+[saldo]="false"
+[panel]="'SOLICITUD'"
+(messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+
+<app-tarjeta-monitoreo *ngIf="dts_criticoSinResumen"
+class="col col-xs-12 col-sm-3 col-lg-3"
+[inputDts]="dts_criticoSinResumen"
+[valor]="'CRITICOS SIN FORMULARIO RESUMEN'"
+[color]="'azul'"
+[saldo]="false"
+[panel]="'SOLICITUD'"
+(messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+
+<app-tarjeta-monitoreo *ngIf="dts_compromisoSinMonitoreoProyectistas"
+class="col col-xs-12 col-sm-3 col-lg-3"
+[inputDts]="dts_compromisoSinMonitoreoProyectistas"
+[valor]="'COMPROMISOS SIN MONITOREO PROYECTISTAS'"
+[color]="'azul'"
+[saldo]="false"
+[panel]="'SOLICITUD'"
+(messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+
+<app-tarjeta-monitoreo *ngIf="dts_compromisoSinBeneficiario"
+class="col col-xs-12 col-sm-3 col-lg-3"
+[inputDts]="dts_compromisoSinBeneficiario"
+[valor]="'COMPROMISOS SIN BENEFICIARIO'"
+[color]="'azul'"
+[saldo]="false"
+[panel]="'SOLICITUD'"
+(messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+
+<app-tarjeta-monitoreo *ngIf="dts_criticoSinBeneficiario"
+class="col col-xs-12 col-sm-3 col-lg-3"
+[inputDts]="dts_criticoSinBeneficiario"
+[valor]="'CRITICOS SIN BENEFICIARIOS'"
+[color]="'azul'"
+[saldo]="false"
+[panel]="'SOLICITUD'"
+(messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+
+<app-tarjeta-monitoreo *ngIf="dts_compromisoMontoCero"
+class="col col-xs-12 col-sm-3 col-lg-3"
+[inputDts]="dts_compromisoMontoCero"
+[valor]="'COMPROMISOS CON MONTO CERO'"
+[color]="'azul'"
+[saldo]="false"
+[panel]="'SOLICITUD'"
+(messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<div class="row"></div>
+<div class="bg-primary text-white">MONITOREO COMPROMISO PRESIDENCIAL ETAPAS</div>
+<app-tarjeta-monitoreo *ngIf="dts_compromisoSinEvaluacionPrevia"
+class="col col-xs-12 col-sm-3 col-lg-3"
+[inputDts]="dts_compromisoSinEvaluacionPrevia"
+[valor]="'AUSENCIA DE ETAPA EVALUACION PREVIA'"
+[color]="'verde'"
+[saldo]="false"
+[panel]="'SOLICITUD'"
+(messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo *ngIf="dts_compromisoSinEvaluacionTecnica"
+class="col col-xs-12 col-sm-3 col-lg-3"
+[inputDts]="dts_compromisoSinEvaluacionTecnica"
+[valor]="'AUSENCIA DE ETAPA EVALUACION TÉCNICA'"
+[color]="'verde'"
+[saldo]="false"
+[panel]="'SOLICITUD'"
+(messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo *ngIf="dts_compromisoSinSuscripcionConvenio"
+class="col col-xs-12 col-sm-3 col-lg-3"
+[inputDts]="dts_compromisoSinSuscripcionConvenio"
+[valor]="'AUSENCIA DE ETAPA SUSCRIPCION DE CONVENIO'"
+[color]="'rojo'"
+[saldo]="false"
+[panel]="'SOLICITUD'"
+(messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<div class="row"></div>
+<div class="bg-primary text-white">ETAPA DE CONTRATACION</div>
+<app-tarjeta-monitoreo *ngIf="dts_compromisoSinEtapaContratacionSolicitud"
+class="col col-xs-12 col-sm-3 col-lg-3"
+[inputDts]="dts_compromisoSinEtapaContratacionSolicitud"
+[valor]="'AUSENCIA DE SOLICITUD DE INSCRIPCION PRESUPUESTARIA '"
+[color]="'verde'"
+[saldo]="false"
+[panel]="'SOLICITUD'"
+(messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<app-tarjeta-monitoreo *ngIf="dts_compromisoSinEtapaContratacion"
+class="col col-xs-12 col-sm-3 col-lg-3"
+[inputDts]="dts_compromisoSinEtapaContratacion"
+[valor]="'AUSENCIA DE PROCESO CONTRATACION '"
+[color]="'amarillo'"
+[saldo]="false"
+[panel]="'SOLICITUD'"
+(messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+<div class="row"></div>
+<div class="row"></div>
+
+<div class="bg-primary text-white">SUSCRIPCION DE CONVENIOS</div>
+<app-tarjeta-monitoreo *ngIf="dts_suscripcionConvenio"
+class="col col-xs-12 col-sm-3 col-lg-3"
+[inputDts]="dts_suscripcionConvenio"
+[valor]="'SUSCRIPCION DE CONVENIOS'"
+[color]="'morado'"
+[saldo]="false"
+[panel]="'SOLICITUD'"
+(messageEvent)="recibeMensaje($event)"
+></app-tarjeta-monitoreo>
+

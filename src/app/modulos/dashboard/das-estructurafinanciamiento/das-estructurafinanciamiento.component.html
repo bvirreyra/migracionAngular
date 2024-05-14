@@ -1,0 +1,85 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-center">
+    <span class="glyphicon glyphicon-list"></span>
+    {{ estructura_financiamiento }}
+  </div>
+  <div class="panel-body">
+    <div class="grid-container">
+      <div class="card-box bg-green">
+        <div class="inner col-lg-6 col-md-6 col-sm-6">
+          <h3>{{ monto_total | number : "0.2-2" | formatoDecimal }}</h3>
+          <p>Monto Convenio</p>
+        </div>
+        <div class="inner col-lg-6 col-md-6 col-sm-6">
+          <div *ngIf="estructura_financiamiento == 'INFRAESTRUCTURA'">
+            <h3>
+              {{
+                dts_proyecto.v_monto_modificacion
+                  | number : "0.2-2"
+                  | formatoDecimal
+              }}
+            </h3>
+            <p>Monto Contractual</p>
+          </div>
+        </div>
+        <div class="row"></div>
+        <div class="inner">
+          <h3>
+            {{
+              dts_proyecto.v_monto_liquidopagado
+                | number : "0.2-2"
+                | formatoDecimal
+            }}
+          </h3>
+          <p>Total Desembolsado</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-handshake-o" aria-hidden="true"></i>
+        </div>
+        <a class="card-box-footer" (click)="detallar(estructura_financiamiento)"
+          >ver detalle... <i class="fa fa-arrow-circle-right"></i
+        ></a>
+      </div>
+    </div>
+    <div
+      *ngIf="estructura_financiamiento == 'INFRAESTRUCTURA'"
+      class="col-lg-6 col-md-6 col-sm-6"
+    >
+      <app-radial
+        label="Desembolso"
+        [titulo]="'Avance Financiero'"
+        [actual]="dts_proyecto.v_monto_cierre"
+        [total]="dts_proyecto.v_monto_modificacion"
+        [id]="upre"
+      ></app-radial>
+    </div>
+    <div
+      *ngIf="estructura_financiamiento != 'INFRAESTRUCTURA'"
+      class="col-lg-6 col-md-6 col-sm-6"
+    >
+      <app-radial
+        label="Desembolso"
+        [titulo]="'Avance Financiero'"
+        [actual]="monto_pagado"
+        [total]="monto_total"
+        [id]="upre"
+      ></app-radial>
+    </div>
+    <div
+      *ngIf="estructura_financiamiento == 'INFRAESTRUCTURA'"
+      class="col-lg-6 col-md-6 col-sm-6"
+    >
+      <app-radial
+        label="Avance"
+        [titulo]="'Avance Físico'"
+        [actual]="dts_proyecto.v_avance_fisico"
+        total="100"
+        [id]="upre"
+      ></app-radial>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1529 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div>
+  <button
+    type="button"
+    class="btn btn-primary pull-left"
+    title="Volver Panel"
+    name="btnVolverGv"
+    id="btnVolverGv"
+    (click)="sendMessage('VER_PANELPROYECTOS')"
+  >
+    <i class="fa fa-reply fa-2x"> </i>
+  </button>
+</div>
+<!-- BOTONERA -->
+<div class="pull-right">
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="paneles('DATOS_GENERALES_INICIAL')"
+  >
+    Datos Generales
+  </button>
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="paneles('TABLERO_DATOS')"
+  >
+    Tablero de Datos
+  </button>
+  <button class="btn btn-primary" type="button" (click)="paneles('AUDITORIA')">
+    Auditoría
+  </button>
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="paneles('PROGRAMACION')"
+  >
+    Programación
+  </button>
+</div>
+<!-- FIN DE BOTONERA -->
+<!-- DATOS GENERALES -->
+<div
+  *ngIf="pnl_datosgenerales == true"
+  id="pnl_datosgenerales"
+  name="pnl_datosgenerales"
+>
+  <app-datos-generales
+    [inputDts]="inputDts"
+    [opcion]="'EDI'"
+  ></app-datos-generales>
+</div>
+<!-- FIN DATOS GENERALES -->
+
+<div *ngIf="pnl_tableroDatos == true">
+  <div class="containerCris">
+    <label for="" class="titulo">{{ nombreProyecto }}</label>
+    <div *ngIf="pnlPrincipalFinanciera">
+      <div class="row"></div>
+      <!-- DATOS DEL PROYECTO Y CONVENIO -->
+      <div class="panel panel-primary">
+        <div
+          (click)="switchDatosdelProyecto()"
+          class="panel-heading text-center puntero"
+          title="Mostrar Informacón"
+        >
+          <span class="glyphicon glyphicon-briefcase"></span> Datos del Proyecto
+          - Convenio
+        </div>
+        <div class="panel-body" style="text-align: left" *ngIf="mostrar">
+          <div class="form-group col-lg-2 col-md-2 col-sm-2">
+            <div>
+              <label>Departamento </label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"
+                ><i class="fa fa-map-marker" aria-hidden="true"></i
+              ></span>
+              <input
+                class="form-control"
+                type="text"
+                readonly
+                value="{{ inputDts.v_departamento }}"
+              />
+            </div>
+          </div>
+          <div class="form-group col-lg-2 col-md-2 col-sm-2">
+            <div>
+              <label>Provincia </label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"
+                ><i class="fa fa-map-marker" aria-hidden="true"></i
+              ></span>
+              <input
+                class="form-control"
+                type="text"
+                readonly
+                value="{{ inputDts.v_provincia }}"
+              />
+            </div>
+          </div>
+          <div class="form-group col-lg-2 col-md-2 col-sm-2">
+            <div>
+              <label>Municipio </label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"
+                ><i class="fa fa-map-marker" aria-hidden="true"></i
+              ></span>
+              <input
+                class="form-control"
+                type="text"
+                readonly
+                value="{{ inputDts.v_municipio }}"
+              />
+            </div>
+          </div>
+          <div class="form-group col-lg-2 col-md-2 col-sm-2">
+            <div>
+              <label>Codigo Proy </label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"
+                ><i class="fa fa-map-marker" aria-hidden="true"></i
+              ></span>
+              <input
+                class="form-control"
+                type="text"
+                readonly
+                value="{{ inputDts.v_cod_sgp }}"
+              />
+            </div>
+          </div>
+          <div class="form-group col-lg-2 col-md-2 col-sm-2">
+            <div>
+              <label>Número Convenio </label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"
+                ><i class="fa fa-indent" aria-hidden="true"></i
+              ></span>
+              <input
+                class="form-control"
+                type="text"
+                readonly
+                value="{{ inputDts.v_nroconvenio }}"
+              />
+            </div>
+          </div>
+          <div class="form-group col-lg-2 col-md-2 col-sm-2">
+            <div>
+              <label>Fecha Suscripcion </label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"
+                ><i class="fa fa-indent" aria-hidden="true"></i
+              ></span>
+              <input
+                class="form-control"
+                type="text"
+                readonly
+                value="{{
+                  inputDts.v_fecha_suscripcion_convenio | date : 'dd/MM/yyyy'
+                }}"
+              />
+            </div>
+          </div>
+          <div class="row"></div>
+          <div class="form-group col-lg-2 col-md-2 col-sm-2">
+            <div>
+              <label>Monto Convenio </label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon">Bs.</span>
+              <input
+                class="form-control"
+                type="text"
+                readonly
+                value="{{ monto_convenio | number : '0.2-2' | formatoDecimal }}"
+              />
+            </div>
+          </div>
+          <div class="form-group col-lg-2 col-md-2 col-sm-2">
+            <div>
+              <label>Monto Upre </label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon">Bs.</span>
+              <input
+                class="form-control"
+                type="text"
+                readonly
+                value="{{ monto_upre | number : '0.2-2' | formatoDecimal }}"
+              />
+            </div>
+          </div>
+          <div class="form-group col-lg-2 col-md-2 col-sm-2">
+            <div>
+              <label>Monto Contraparte </label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon">Bs.</span>
+              <input
+                class="form-control"
+                type="text"
+                readonly
+                value="{{
+                  monto_contraparte | number : '0.2-2' | formatoDecimal
+                }}"
+              />
+            </div>
+          </div>
+          <div class="form-group col-lg-2 col-md-2 col-sm-2">
+            <div>
+              <label>Fecha Inicio: </label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"
+                ><i class="fa fa-calendar-check-o" aria-hidden="true"></i
+              ></span>
+              <input
+                class="form-control"
+                type="text"
+                readonly
+                value="{{ inputDts.v_fecha_inicio | date : 'dd/MM/yyyy' }}"
+              />
+            </div>
+          </div>
+          <div class="form-group col-lg-2 col-md-2 col-sm-2">
+            <div>
+              <label>Plazo Ejecución</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"
+                ><i class="fa fa-hourglass" aria-hidden="true"></i
+              ></span>
+              <input
+                class="form-control"
+                type="text"
+                readonly
+                value="{{ inputDts.v_plazo_convenio }}"
+              />
+            </div>
+          </div>
+          <div class="form-group col-lg-2 col-md-2 col-sm-2">
+            <app-upload-file
+              inputTipoDocumento="{{ inputRepositorio }}"
+              inputCodigoProy="{{ inputCodigoProy }}"
+              inputVista="false"
+              inputTipoImagen="{{ inputTipoImagen }}"
+              inputSrc=""
+              inputNombre="{{ inputNombre }}"
+              inputAccion="{{ inputAccion }}"
+            >
+            </app-upload-file>
+          </div>
+          <a class="card-box-footer" (click)="detallar('desembolsos')"
+            >Historial de Desembolsos... <i class="fa fa-arrow-circle-right"></i
+          ></a>
+        </div>
+      </div>
+      <!-- FIN DATOS DEL PROYECTO Y CONVENIO -->
+      <div class="row"></div>
+      <!-- DASHBOARD ESTRUCTURA FINANCIAMIENTO -->
+      <div *ngIf="pnlEstructuraFinanciamiento">
+        <!-- PANEL Y DETALLE MIN EDUCACION -->
+        <div class="col-lg-2 col-md-2 col-sm-2">
+          <div class="card-box bg-blue" *ngIf="tipoConvenio == 20">
+            <div class="inner">
+              <h3>{{ totalProyectoEdu }}</h3>
+              <p>Proyectos Min. Educación</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-university" aria-hidden="true"></i>
+            </div>
+            <a class="card-box-footer" (click)="detallar('educacion')"
+              >ver detalle...<i class="fa fa-arrow-circle-right"></i
+            ></a>
+          </div>
+        </div>
+        <div clas="row"></div>
+        <div *ngIf="pnl_educacion">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+              <span class="glyphicon glyphicon-list"></span> Lista Proyectos
+              Ministerio Educación - Programa {{ elPrograma }}
+            </div>
+            <div class="panel-body" style="text-align: left">
+              <div class="table table-responsive">
+                <table
+                  class="table table-responsive table-condensed table-hover dt-educacion"
+                  style="font-size: 12pt"
+                >
+                  <thead>
+                    <tr>
+                      <th>Nro.</th>
+                      <th>Gestion</th>
+                      <th>Departamento</th>
+                      <th>Provincia</th>
+                      <th>Municipio</th>
+                      <th>Nro Convenio</th>
+                      <th>Fecha Convenio</th>
+                      <th>Nombre Proyecto</th>
+                      <!-- <th>Tipo Convenio</th> -->
+                      <!-- <th>Monto Upre</th> -->
+                      <!-- <th>Plazo Ejecucion</th> -->
+                      <!-- <th>Fecha Inicio</th> -->
+                      <th>Estado Proyecto</th>
+                      <!-- <th>Estado Cierre</th> -->
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <!-- <td></td> -->
+                      <td></td>
+                      <!-- <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td> -->
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let row_registros of dts_proyectosEducacion;
+                        let i = index
+                      "
+                      [ngClass]="{
+                        'bg-info': row_registros._id_seguimiento != ''
+                      }"
+                    >
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ row_registros._gestion }}</td>
+                      <td>{{ row_registros._departamento }}</td>
+                      <td>{{ row_registros._provincia }}</td>
+                      <td>{{ row_registros._municipio }}</td>
+                      <td>{{ row_registros._nro_convenio }}</td>
+                      <td>
+                        {{
+                          row_registros._fecha_convenio | date : "dd/MM/yyyy"
+                        }}
+                      </td>
+                      <td>{{ row_registros._nombreproyecto }}</td>
+                      <!-- <td>{{ row_registros._des_tipo_convenio }}</td> -->
+                      <!-- <td>
+                        {{
+                          row_registros._monto_upre
+                            | number : "0.2-2"
+                            | formatoDecimal
+                        }}
+                      </td>
+                      <td>{{ row_registros._plazo_ejecucion }}</td>
+                      <td>
+                        {{ row_registros._fecha_inicio | date : "dd/MM/yyyy" }}
+                      </td> -->
+                      <td>{{ row_registros._des_estado_proyecto }}</td>
+                      <!-- <td>{{ row_registros._des_estado_cierre }}</td> -->
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row"></div>
+        <!-- FIN PANEL Y DETALLE MIN EDUCACION -->
+        <div class="col-sm-4" *ngFor="let row of dts_estructuraFinanciamiento">
+          <app-das-estructurafinanciamiento
+            [fid_proyecto]="row.id_proyecto"
+            [id_detalle]="row.id_detalle"
+            [monto_upre]="row.monto_upre"
+            [monto_beneficiario]="row.monto_contraparte_beneficiario"
+            [monto_municipal]="row.monto_contraparte_municipal"
+            [monto_gobernacion]="row.monto_contraparte_gobernacion"
+            [estructura_financiamiento]="row.estructura_financiamiento"
+            [monto_pagado]="row.total_pagado || 0"
+            [dts_proyecto]="inputDts"
+            (respuestaPadre)="switchPaneles($event)"
+          ></app-das-estructurafinanciamiento>
+        </div>
+      </div>
+      <div class="row"></div>
+      <!-- HISTORICO DE DESEMBOLSOS -->
+      <div class="grid-tablas">
+        <div *ngIf="pnl_desembolsos">
+          <button
+            type="button"
+            class="btn btn-success pull-left"
+            title="Volver a DashBoard"
+            name="btnVolverGv"
+            id="btnVolverGv"
+            (click)="switchPaneles('DASHBOARD_PRINCIPAL')"
+          >
+            <i class="fa fa-hand-o-left fa-2x"> </i>
+          </button>
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+              <span class="glyphicon glyphicon-list"></span> Desembolsos
+            </div>
+            <div class="panel-body">
+              <!-- <button class="btn btn-success" (click)="listarProyectos()">
+          <span class="glyphicon glyphicon-plus"></span> Registrar Documentos
+        </button> -->
+              <div class="table table-responsive">
+                <table
+                  class="table table-responsive table-condensed table-hover dt-desembolsos"
+                  style="font-size: 12pt"
+                >
+                  <thead>
+                    <tr style="text-align: center">
+                      <th width="40px">Número</th>
+                      <th>Detalle...</th>
+                      <th>Gestión</th>
+                      <th>Monto</th>
+                      <th>Estado</th>
+                      <th>Fecha Consolidado</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let row_registros of dts_desembolsos;
+                        let i = index
+                      "
+                    >
+                      <td>{{ i + 1 }}</td>
+                      <td>
+                        <button
+                          class="btn btn-info"
+                          title="Detalle Desembolsos"
+                          (click)="detallar('detalles', row_registros.gestion)"
+                        >
+                          <span class="glyphicon glyphicon-info-sign"></span>
+                        </button>
+                      </td>
+                      <td>{{ row_registros.gestion }}</td>
+                      <td style="text-align: right">
+                        {{
+                          row_registros.monto_desembolso
+                            | number : "0.2-2"
+                            | formatoDecimal
+                        }}
+                      </td>
+                      <td>{{ row_registros.estado_desembolso }}</td>
+                      <td>
+                        {{
+                          row_registros.fecha_consolidado | date : "dd/MM/yyyy"
+                        }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row"></div>
+      <div *ngIf="pnl_detalles">
+        <div class="panel panel-primary">
+          <div class="panel-heading text-center">
+            <span class="glyphicon glyphicon-list"></span> Detalle Desembolsos
+          </div>
+          <div class="panel-body">
+            <!-- <button class="btn btn-success" (click)="listarProyectos()">
+        <span class="glyphicon glyphicon-plus"></span> Registrar Documentos
+      </button> -->
+            <div class="table table-responsive">
+              <table
+                class="table table-responsive table-condensed table-hover dt-detalles"
+                style="font-size: 12pt"
+              >
+                <thead>
+                  <tr style="text-align: center">
+                    <th width="40px">Número</th>
+                    <th>Estructura Financiamiento</th>
+                    <th>Gestión</th>
+                    <th>Monto</th>
+                    <th>Fecha Consolidado</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr *ngFor="let row_registros of dts_detalles; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ row_registros.estructura_financiamiento }}</td>
+                    <td>{{ row_registros.gestion }}</td>
+                    <td style="text-align: right">
+                      {{
+                        row_registros.monto_desembolso
+                          | number : "0.2-2"
+                          | formatoDecimal
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        row_registros.fecha_consolidado | date : "dd/MM/yyyy"
+                      }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- FIN HISTORICO DE DESEMBOLSOS -->
+
+      <!-- FIN DASHBOARD ESTRUCTURA FINANCIAMIENTO -->
+    </div>
+    <!-- <button class="btn btn-info" (click)="generarReporte()">Generar reporte</button> -->
+    <!-- DASHBOARD SOLO INFRAESTRUCTURA -->
+    <div *ngIf="pnlInfraestructura">
+      <button
+        type="button"
+        class="btn btn-success pull-left"
+        title="Volver a DashBoard"
+        name="btnVolverGv"
+        id="btnVolverGv"
+        (click)="switchPaneles('DASHBOARD_PRINCIPAL')"
+      >
+        <i class="fa fa-hand-o-left fa-2x"> </i>
+      </button>
+      <div class="row"></div>
+      <div class="grid-container">
+        <div class="card-box bg-green">
+          <div class="inner">
+            <h3>
+              {{ montoContratoTotal | number : "0.2-2" | formatoDecimal }}
+            </h3>
+            <p>Monto Convenio</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-building-o" aria-hidden="true"></i>
+          </div>
+          <a class="card-box-footer" (click)="detallar('contratacion')"
+            >ver detalle... <i class="fa fa-arrow-circle-right"></i
+          ></a>
+        </div>
+        <!-- <div class="card-box bg-green">
+        <div class="inner">
+          <h3>{{montoUPRE | number: "0.2-2" | formatoDecimal}}</h3>
+          <p>Monto a Financiar Upre</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-building-o" aria-hidden="true"></i>
+        </div>
+        <a class="card-box-footer" (click)="detallar('contratacion')">ver detalle... <i
+            class="fa fa-arrow-circle-right"></i></a>
+      </div> -->
+        <div class="card-box bg-orange">
+          <div class="inner">
+            <h3>{{ montoContractual | number : "0.2-2" | formatoDecimal }}</h3>
+            <p>Monto a Financiar Upre Final</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-handshake-o" aria-hidden="true"></i>
+          </div>
+          <a class="card-box-footer" (click)="detallar('contractual')"
+            >ver detalle... <i class="fa fa-arrow-circle-right"></i
+          ></a>
+        </div>
+        <div class="card-box bg-green" *ngIf="montoContraparte > 0">
+          <div class="inner">
+            <h3>{{ montoContraparte | number : "0.2-2" | formatoDecimal }}</h3>
+            <p>Monto a Financiar Contraparte</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-building-o" aria-hidden="true"></i>
+          </div>
+          <a class="card-box-footer" (click)="detallar('contratacion')"
+            >ver detalle... <i class="fa fa-arrow-circle-right"></i
+          ></a>
+        </div>
+      </div>
+      <div class="grid-container">
+        <!-- <div class="card-box bg-blue">
+      <div class="inner">
+        <h3>{{totalDesembolsos | number: "0.2-2" | formatoDecimal}}</h3>
+        <p>Total Desembolsos</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-usd" aria-hidden="true"></i>
+      </div>
+      <a class="card-box-footer" (click)="detallar('desembolsos')"
+        >ver detalle... <i class="fa fa-arrow-circle-right"></i
+      ></a>
+    </div> -->
+
+        <!-- <div class="card-box bg-red">
+      <div class="inner">
+        <h3>{{saldoDesembolsar | number: "0.2-2" | formatoDecimal}}</h3>
+        <p>Saldo por Desembolsar</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-exchange" aria-hidden="true"></i>
+      </div>
+      <a class="card-box-footer" (click)="detallar('saldo')"
+        >ver detalle... <i class="fa fa-arrow-circle-right"></i
+      ></a>
+    </div>     -->
+        <!-- <div class="card-box bg-red">
+      <div class="inner">
+        <h3>{{saldoDesembolsar2 | number: "0.2-2" | formatoDecimal}}</h3>
+        <p>Saldo Desembolsar</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-exchange" aria-hidden="true"></i>
+      </div>   
+    </div> -->
+      </div>
+      <div class="grid-container">
+        <div class="card-box bg-orange">
+          <div class="inner">
+            <h3>{{ totalAnticipos | number : "0.2-2" | formatoDecimal }}</h3>
+            <p>Anticipo</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-money" aria-hidden="true"></i>
+          </div>
+          <a class="card-box-footer" (click)="detallar('anticipos')"
+            >ver detalle... <i class="fa fa-arrow-circle-right"></i
+          ></a>
+        </div>
+
+        <div class="card-box bg-blue">
+          <div class="inner">
+            <h3>{{ totalPlanillas | number : "0.2-2" | formatoDecimal }}</h3>
+            <p>Planillas</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-tasks" aria-hidden="true"></i>
+          </div>
+          <a class="card-box-footer" (click)="detallar('planillas')"
+            >ver detalle...<i class="fa fa-arrow-circle-right"></i
+          ></a>
+        </div>
+        <div class="card-box bg-red">
+          <div class="inner">
+            <h3>{{ totalDescuentos | number : "0.2-2" | formatoDecimal }}</h3>
+            <p>Descuentos</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-caret-square-o-down"></i>
+          </div>
+          <a class="card-box-footer" (click)="detallar('descuentos')"
+            >ver detalle...<i class="fa fa-arrow-circle-right"></i
+          ></a>
+        </div>
+        <div class="card-box bg-red">
+          <div class="inner">
+            <h3>{{ totalMultas | number : "0.2-2" | formatoDecimal }}</h3>
+            <p>Multas</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-caret-square-o-down"></i>
+          </div>
+          <a class="card-box-footer" (click)="detallar('descuentos')"
+            >ver detalle...<i class="fa fa-arrow-circle-right"></i
+          ></a>
+        </div>
+      </div>
+      <div class="grid-container">
+        <div class="card-box bg-blue">
+          <div class="inner">
+            <h3>{{ totalAcumuladoSgp | number : "0.2-2" | formatoDecimal }}</h3>
+            <p>Total Desembolsado</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-exchange" aria-hidden="true"></i>
+          </div>
+          <!-- <a class="card-box-footer" (click)="detallar('desembolsos')"
+            >ver detalle... <i class="fa fa-arrow-circle-right"></i
+          ></a> -->
+          <div class="icon">
+            <i class="fa fa-tasks" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="card-box bg-green">
+          <div class="inner">
+            <h3>
+              {{ saldoDesembolsarSgp | number : "0.2-2" | formatoDecimal }}
+            </h3>
+
+            <p>Saldo a Desembolsar</p>
+          </div>
+
+          <div class="icon">
+            <i class="fa fa-tasks" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div *ngIf="chartBarras">
+          <!-- <app-barras [titulo]="'Historial Desembolsos'" [titulos]="titulos" [series]="series" [periodos]="listaPeriodos"></app-barras> -->
+          <app-radial
+            label="Desembolso"
+            [titulo]="'Avance Financiero'"
+            [actual]="totalCancelado"
+            [total]="montoContractual"
+            [id]="upre"
+          ></app-radial>
+          <!-- <app-radial [titulo]="'Porcentaje Desembolsado AP'" [actual]="totalDesembolsos" [total]="montoContractual" [id]="ap" ></app-radial> -->
+          <!-- <app-pie [titulo]="'Tipos de Desembolsos'" [series]="seriesDetalle" [labels]="labelsDetalle" ></app-pie> -->
+        </div>
+        <div *ngIf="chartBarras">
+          <app-radial
+            [titulo]="'Avance Físico'"
+            [actual]="avandeFisico"
+            total="100"
+            [id]="upre"
+            label="Avance"
+          ></app-radial>
+        </div>
+      </div>
+
+      <div class="grid-tablas">
+        <div *ngIf="pnl_anticipos" class="grid-tablas">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+              <span class="glyphicon glyphicon-list"></span> Detalle Anticipo
+            </div>
+            <div class="panel-body" style="text-align: left">
+              <!-- <button class="btn btn-success" data-toggle="modal" style="margin-bottom: 1rem;" data-target="#modalNuevoAnticipo"> -->
+              <button
+                class="btn btn-success"
+                style="margin-bottom: 1rem"
+                (click)="crudAnticipo()"
+                [disabled]="camposHabilitados._financiera"
+              >
+                <span class="glyphicon glyphicon-plus"></span> Nuevo Anticipo
+              </button>
+              <div class="table table-responsive">
+                <table
+                  class="table table-responsive table-condensed table-hover dt-anticipos"
+                  style="font-size: 12pt"
+                >
+                  <thead>
+                    <tr>
+                      <th style="width: 30px">Número</th>
+                      <th>Monto</th>
+                      <th>Detalle</th>
+                      <th>Fecha Pago</th>
+                      <th>Fecha Registro</th>
+                      <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    <tr
+                      *ngFor="let row_registros of dts_anticipos; let i = index"
+                    >
+                      <td style="text-align: right">{{ i + 1 }}</td>
+                      <td>
+                        {{
+                          row_registros.anticipo
+                            | number : "0.2-2"
+                            | formatoDecimal
+                        }}
+                      </td>
+                      <td>{{ row_registros.detalle_anticipo }}</td>
+                      <td>
+                        {{ row_registros.fecha_pago | date : "dd/MM/yyyy" }}
+                      </td>
+                      <td>
+                        {{ row_registros.fecha_registro | date : "dd/MM/yyyy" }}
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-warning"
+                          title="Editar"
+                          (click)="crudAnticipo(row_registros)"
+                          [disabled]="camposHabilitados._financiera"
+                        >
+                          <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                        <button
+                          class="btn btn-danger"
+                          title="Eliminar"
+                          (click)="
+                            crudAnticipo(null, row_registros.id_anticipo)
+                          "
+                          [disabled]="camposHabilitados._financiera"
+                        >
+                          <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--modal registro anticipo -->
+        <div
+          class="modal fade"
+          tabindex="-1"
+          name="modalNuevoAnticipo"
+          id="modalNuevoAnticipo"
+          role="dialog"
+          aria-labelledby="exampleModalCenterTitle"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div
+                class="modal-header"
+                style="background: #0c72ad; color: white"
+              >
+                <button
+                  type="button"
+                  class="close text-white"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span>&times;</span>
+                </button>
+                <h5 class="modal-title" id="exampleModalLabel">
+                  <div *ngIf="!anticipoEditar">Registro Anticipo</div>
+                  <div *ngIf="anticipoEditar">Actualizar Anticipo</div>
+                </h5>
+              </div>
+              <div class="modal-body">
+                <app-anticipo
+                  [idProyecto]="idDelProyecto"
+                  [idSGP]="idDelSGP"
+                  [editar]="anticipoEditar"
+                  [eliminar]="idAnticipoEliminar"
+                  (messageEvent)="recibeMensaje($event)"
+                ></app-anticipo>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="pnl_planillas">
+        <div class="row">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+              <span class="glyphicon glyphicon-list"></span> Planillas
+              Registradas
+            </div>
+            <div class="panel-body" style="text-align: left">
+              <!-- <button class="btn btn-success" data-toggle="modal" style="margin-bottom: 1rem;" data-target="#modalNuevaPlanilla"> -->
+              <button
+                class="btn btn-success"
+                style="margin-bottom: 1rem"
+                (click)="crudPlanilla()"
+                [disabled]="camposHabilitados._financiera"
+              >
+                <span class="glyphicon glyphicon-plus"></span> Nueva Planilla
+              </button>
+              <div class="table table-responsive">
+                <table
+                  class="table table-responsive table-condensed table-hover dt-planillas"
+                  style="font-size: 12pt"
+                >
+                  <thead>
+                    <tr style="text-align: center">
+                      <th width="40px">Número Planilla</th>
+                      <th>Fecha Inicio</th>
+                      <th>Fecha Fin</th>
+                      <th>Detalle Planilla</th>
+                      <th>Monto Planilla</th>
+                      <th>Total Descuento</th>
+                      <th>Liquido a Pagar</th>
+                      <th>Preventivo</th>
+                      <th>Fecha Pago</th>
+                      <th>Estado Planilla</th>
+                      <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    <tr
+                      *ngFor="let row_registros of dts_planillas; let i = index"
+                    >
+                      <td>{{ row_registros.nro_planilla }}</td>
+                      <td>
+                        {{ row_registros.fecha_inicio | date : "dd/MM/yyyy" }}
+                      </td>
+                      <td>
+                        {{ row_registros.fecha_fin | date : "dd/MM/yyyy" }}
+                      </td>
+                      <td>{{ row_registros.detalle_planilla }}</td>
+                      <td style="text-align: right">
+                        {{
+                          row_registros.monto_planilla
+                            | number : "0.2-2"
+                            | formatoDecimal
+                        }}
+                      </td>
+                      <td style="text-align: right">
+                        {{
+                          row_registros.total_descuento
+                            | number : "0.2-2"
+                            | formatoDecimal
+                        }}
+                      </td>
+                      <td style="text-align: right">
+                        {{
+                          row_registros.liquido_apagar
+                            | number : "0.2-2"
+                            | formatoDecimal
+                        }}
+                      </td>
+                      <td>{{ row_registros.preventivo }}</td>
+                      <td>
+                        {{ row_registros.fecha_pago | date : "dd/MM/yyyy" }}
+                      </td>
+                      <td>{{ row_registros.estado }}</td>
+                      <td>
+                        <button
+                          class="btn btn-info"
+                          title="Descuentos"
+                          (click)="
+                            detallar('descuentos', row_registros.nro_planilla)
+                          "
+                        >
+                          <span
+                            class="glyphicon glyphicon-collapse-down"
+                          ></span>
+                        </button>
+                        <button
+                          class="btn btn-warning"
+                          title="Editar"
+                          (click)="crudPlanilla(row_registros)"
+                          [disabled]="camposHabilitados._financiera"
+                        >
+                          <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                        <button
+                          class="btn btn-danger"
+                          title="Eliminar"
+                          (click)="crudPlanilla(null, row_registros)"
+                          [disabled]="camposHabilitados._financiera"
+                        >
+                          <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <app-barras
+          [titulo]="'Historial Planillas'"
+          [titulos]="titulos"
+          [series]="series"
+          [periodos]="listaPeriodos"
+        >
+        </app-barras>
+      </div>
+
+      <div class="row"></div>
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <app-descripcion [inputDts]="inputDts"></app-descripcion>
+      </div>
+    </div>
+    <div *ngIf="pnl_conjunto">
+      <button
+        type="button"
+        class="btn btn-success pull-left"
+        title="Volver a DashBoard"
+        name="btnVolverGv"
+        id="btnVolverGv"
+        (click)="switchPaneles('DASHBOARD_PRINCIPAL')"
+      >
+        <i class="fa fa-hand-o-left fa-2x"> </i>
+      </button>
+      <div class="row"></div>
+      <div>
+        <div class="panel panel-info">
+          <div class="panel-heading text-center">
+            <span class="glyphicon glyphicon-list"></span> Planillas Registradas
+            + Descuentos + Anticipos
+            <div style="text-align: left">
+              <!-- <button class="btn btn-success" data-toggle="modal" style="margin-bottom: 1rem;" data-target="#modalNuevaPlanilla"> -->
+              <button
+                class="btn btn-success"
+                style="margin-bottom: 1rem"
+                (click)="crudPlanilla()"
+                [disabled]="camposHabilitados._financiera"
+              >
+                <span class="glyphicon glyphicon-plus"></span> Nueva Planilla
+              </button>
+            </div>
+          </div>
+          <div class="panel-body" style="text-align: left">
+            <div class="table table-responsive">
+              <table
+                class="table table-responsive table-condensed table-hover dt-planillas2"
+                style="font-size: 12pt"
+              >
+                <thead>
+                  <tr style="text-align: center">
+                    <th>Nro</th>
+                    <th>Nro Pla.</th>
+                    <th>Detalle Planilla</th>
+                    <th>Preventivo</th>
+                    <th>Fecha Pago</th>
+
+                    <th>Monto Planilla</th>
+                    <th>Total Descuento</th>
+                    <th>Descuento Anticipo</th>
+                    <th>Descuento Retención 7%</th>
+                    <th>Descuento por Multas</th>
+                    <th>Otros Descuento</th>
+                    <th>Reposición</th>
+                    <th>Liquido a Pagar</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <!-- <div *ngIf="dts_anticipos.length > 0"> -->
+                  <tr
+                    class="warning"
+                    *ngFor="
+                      let row of dts_anticipos | orderBy : 'fecha_pago' : true;
+                      let i = index
+                    "
+                  >
+                    <td></td>
+                    <td></td>
+                    <td>{{ row.detalle_anticipo }}</td>
+                    <td>==></td>
+                    <td>
+                      {{ row.fecha_pago | date : "dd/MM/yyyy" }}
+                    </td>
+
+                    <td style="text-align: right">
+                      {{ row.anticipo | number : "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">0</td>
+                    <td style="text-align: right">0</td>
+                    <td style="text-align: right">0</td>
+                    <td style="text-align: right">0</td>
+                    <td style="text-align: right">0</td>
+                    <td style="text-align: right">0</td>
+                    <td style="text-align: right">
+                      {{ row.anticipo | number : "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td></td>
+                  </tr>
+                  <!-- </div> -->
+
+                  <tr class="success">
+                    <td></td>
+                    <td></td>
+                    <td>TOTAL</td>
+                    <td>==></td>
+                    <td></td>
+
+                    <td style="text-align: right">
+                      {{
+                        total_monto_planilla | number : "0.2-2" | formatoDecimal
+                      }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ total_descuentos | number : "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ total_desc139 | number : "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ total_desc140 | number : "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ total_desc141 | number : "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ total_desc142 | number : "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ total_desc143 | number : "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{
+                        total_liquido_apagar | number : "0.2-2" | formatoDecimal
+                      }}
+                    </td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let row of dts_planillas2 | orderBy : 'fecha_pago' : true;
+                      let i = index
+                    "
+                  >
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ row.nro_planilla }}</td>
+                    <td>{{ row.detalle_planilla }}</td>
+                    <td>{{ row.preventivo }}</td>
+                    <td>{{ row.fecha_pago | date : "dd/MM/yyyy" }}</td>
+
+                    <td style="text-align: right">
+                      {{
+                        row.monto_planilla | number : "0.2-2" | formatoDecimal
+                      }}
+                    </td>
+                    <td style="text-align: right">
+                      {{
+                        row.total_descuento | number : "0.2-2" | formatoDecimal
+                      }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ row.desc139 | number : "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ row.desc140 | number : "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ row.desc141 | number : "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ row.desc142 | number : "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ row.desc143 | number : "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{
+                        row.liquido_apagar | number : "0.2-2" | formatoDecimal
+                      }}
+                    </td>
+                    <td width="200px">
+                      <div>
+                        <button
+                          class="btn btn-info"
+                          title="Descuentos"
+                          (click)="detallar('descuentos', row.id_planilla)"
+                        >
+                          <span
+                            class="glyphicon glyphicon-collapse-down"
+                          ></span>
+                        </button>
+                        <button
+                          class="btn btn-warning"
+                          title="Editar"
+                          (click)="crudPlanilla(row)"
+                          [disabled]="camposHabilitados._financiera"
+                        >
+                          <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                        <button
+                          class="btn btn-danger"
+                          title="Eliminar"
+                          (click)="crudPlanilla(null, row)"
+                          [disabled]="camposHabilitados._financiera"
+                        >
+                          <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row"></div>
+
+      <div *ngIf="pnl_descuentos">
+        <div class="row">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+              <span class="glyphicon glyphicon-list"></span> Lista Descuentos
+            </div>
+            <div class="panel-body" style="text-align: left">
+              <!-- <button class="btn btn-success" data-toggle="modal" *ngIf="conPlanilla" data-target="#modalNuevoDescuento" style="margin-bottom: 1rem;"> -->
+              <button
+                class="btn btn-success"
+                *ngIf="conPlanilla"
+                (click)="crudDescuento()"
+                style="margin-bottom: 1rem"
+                [disabled]="camposHabilitados._financiera"
+              >
+                <span class="glyphicon glyphicon-plus"></span> Nuevo Descuento
+                para planilla {{ planillaDescuentos }}
+              </button>
+              <div class="table table-responsive">
+                <table
+                  class="table table-responsive table-condensed table-hover dt-planillas"
+                  style="font-size: 12pt"
+                >
+                  <thead>
+                    <tr style="text-align: center">
+                      <th width="40px">Número Planilla</th>
+                      <th>Tipo Descuento</th>
+                      <th>Detalle Descuento</th>
+                      <th>Monto Descuento</th>
+                      <th>Fecha Descuento</th>
+                      <th>Preventivo</th>
+                      <th>Observación</th>
+                      <th>Estado Descuento</th>
+                      <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let row_registros of dts_descuentosGridView;
+                        let i = index
+                      "
+                    >
+                      <td>{{ row_registros.nro_planilla }}</td>
+                      <td>{{ row_registros.tipo_desc }}</td>
+                      <td>{{ row_registros.detalle_descuento }}</td>
+                      <td style="text-align: right">
+                        {{
+                          row_registros.monto_descuento
+                            | number : "0.2-2"
+                            | formatoDecimal
+                        }}
+                      </td>
+                      <td>
+                        {{
+                          row_registros.fecha_descuento | date : "dd/MM/yyyy"
+                        }}
+                      </td>
+                      <td>{{ row_registros.preventivo }}</td>
+                      <td>{{ row_registros.observacion }}</td>
+                      <td>{{ row_registros.estado }}</td>
+                      <td>
+                        <button
+                          class="btn btn-warning"
+                          title="Editar"
+                          (click)="crudDescuento(row_registros)"
+                          [disabled]="camposHabilitados._financiera"
+                        >
+                          <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                        <button
+                          class="btn btn-danger"
+                          title="Eliminar"
+                          (click)="
+                            crudDescuento(null, row_registros.id_descuento)
+                          "
+                          [disabled]="camposHabilitados._financiera"
+                        >
+                          <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--modal registro descuentos -->
+        <div
+          class="modal fade"
+          tabindex="-1"
+          name="modalNuevoDescuento"
+          id="modalNuevoDescuento"
+          role="dialog"
+          aria-labelledby="exampleModalCenterTitle"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div
+                class="modal-header"
+                style="background: #0c72ad; color: white"
+              >
+                <button
+                  type="button"
+                  class="close text-white"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span
+                    aria-hidden="true"
+                    style="font-size: 2rem; font-weight: 800"
+                    >&times;</span
+                  >
+                </button>
+                <h5 class="modal-title" id="exampleModalLabel">
+                  <div *ngIf="!descuentoEditar">
+                    Registro Descuento para planilla {{ planillaDescuentos }}
+                  </div>
+                  <div *ngIf="descuentoEditar">Actualizar Descuento</div>
+                </h5>
+              </div>
+              <div class="modal-body">
+                <app-descuento
+                  [idProyecto]="idDelProyecto"
+                  [idPlanilla]="idDelPlanilla"
+                  [idSGP]="idDelSGP"
+                  [numPlanilla]="planillaDescuentos"
+                  [editar]="descuentoEditar"
+                  [eliminar]="idDescuentoEliminar"
+                  (messageEvent)="recibeMensaje($event)"
+                ></app-descuento>
+              </div>
+              <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="pnl_ampliaciones">
+        <div *ngFor="let item of dts_empresas">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+              LISTADO DE AMPLIACIONES EMPRESA - verison {{ item.nro_version }} :
+              {{ item.descripcion }}
+            </div>
+            <div class="panel-body">
+              <!--LISTA GRIDVIEW AMPLIACION DE PLAZO-->
+              <table
+                class="table table-condensed table-hover dt-listaampliacion"
+              >
+                <thead>
+                  <tr>
+                    <th>Nro.</th>
+                    <th>Fecha Registro</th>
+                    <th>Registro Usuario</th>
+                    <th>Detalle</th>
+                    <!-- <th>Ampliación de Plazo</th> -->
+                    <th>Monto CM</th>
+                    <th>Monto Upre</th>
+                    <th>Monto Contraparte</th>
+                    <th>Fecha Aprobación</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <!-- <td></td> -->
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let row_registros of filtrarVersion(
+                        dts_ampliaciones,
+                        item.nro_version
+                      );
+                      let i = index
+                    "
+                  >
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      {{ row_registros.fecha_registro | date : "dd/MM/yyyy" }}
+                    </td>
+                    <td>{{ row_registros.nombre_completo | uppercase }}</td>
+                    <td>{{ row_registros.descripcion | uppercase }}</td>
+                    <!-- <td>{{ row_registros.plazo }}</td> -->
+                    <td>
+                      {{
+                        row_registros.monto | number : "0.2-2" | formatoDecimal
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        row_registros.monto_upre
+                          | number : "0.2-2"
+                          | formatoDecimal
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        row_registros.monto_contraparte
+                          | number : "0.2-2"
+                          | formatoDecimal
+                      }}
+                    </td>
+                    <td>
+                      {{ row_registros.fecha_aprobacion | date : "dd/MM/yyyy" }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- FIN DASHBOARD SOLO INFRAESTRUCTURA -->
+    <!--modal registro planilla -->
+    <div
+      class="modal fade"
+      tabindex="-1"
+      name="modalNuevaPlanilla"
+      id="modalNuevaPlanilla"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header" style="background: #0c72ad; color: white">
+            <button
+              type="button"
+              class="close text-white"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span style="font-weight: bolder">&times;</span>
+            </button>
+            <h5 class="modal-title" id="exampleModalLabel">
+              <div *ngIf="planillaEditar">Actualizar Planilla</div>
+              <div *ngIf="!planillaEditar">Registro Planilla</div>
+            </h5>
+          </div>
+          <div class="modal-body">
+            <app-planilla
+              [idProyecto]="idDelProyecto"
+              [idSGP]="idDelSGP"
+              [maxPlanilla]="maxPlanilla"
+              [editar]="planillaEditar"
+              (messageEvent)="recibeMensaje($event)"
+            ></app-planilla>
+          </div>
+          <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- PANEL AUDITORIA -->
+<div *ngIf="pnl_auditoria" style="padding-top: 30px">
+  <app-auditoria
+    [idProyecto]="idDelProyecto"
+    [idSGP]="idDelSGP"
+    [nombreProyecto]="nombreProyecto"
+  ></app-auditoria>
+</div>
+<!-- FIN PANEL AUDITORIA -->
+<!-- PANEL PROGRAMACION -->
+<div
+  *ngIf="pnl_programacion"
+  style="margin-top: 2rem; display: inline-block; width: 90%"
+>
+  <app-programacion
+    [inputDts]="inputDts"
+    [unidad]="'FINANCIERA'"
+  ></app-programacion>
+</div>
+<!-- FIN PANEL PROGRAMACION -->

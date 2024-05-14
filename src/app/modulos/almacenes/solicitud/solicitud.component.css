@@ -1,0 +1,6 @@
+.dt-solicitud tfoot input{
+    width: 100% !important;
+}
+.dt-solicitud tfoot {
+    display: table-header-group !important;
+}

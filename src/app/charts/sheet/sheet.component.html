@@ -1,0 +1,54 @@
+<div class="sheet">
+  <button class="btn btn-success" (click)="guardarDato()">Guardar</button>
+<div class="table-container" #tableContainer>
+  <table id="tablaPrincipal" class="hoja" *ngIf="data.length>0" >
+    <thead>
+      <tr>
+        <!-- <th>item.id_inscripcion_presupuestaria </th>
+        <th>item.fid_proyecto</th> -->
+        <th>SOLICITUD 1</th>
+        <th>SOLICITUD 2</th>
+        <th>SOLICITUD 3</th>
+        <th>SOLICITUD 4</th>
+        <th>SOLICITUD 5</th>
+        <th>SOLICITUD 6</th>
+        <th>PRESUPUESTO 1</th>
+        <th>PRESUPUESTO 2</th>
+        <th>PRESUPUESTO 3</th>
+        <th>PRESUPUESTO 4</th>
+        <th>PRESUPUESTO 5</th>
+        <th>PRESUPUESTO 6</th>
+        <!-- <th>item.usr_registro</th>
+        <th>item.fecha_registro</th>
+        <th>item.usr_modifica</th>
+        <th>item.fecha_modifica</th>
+        <th>item.id_estado</th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data; let i = index"  (input)="onCellInput($event)">
+        <!-- <td>{{ item.id_inscripcion_presupuestaria }}</td>
+        <td>{{ item.fid_proyecto }}</td> -->
+        <td contentEditable>{{ item.solicitud1 }}</td>
+        <td contentEditable>{{ item.solicitud2 }}</td>
+        <td contentEditable>{{ item.solicitud3 }}</td>
+        <td contentEditable>{{ item.solicitud4 }}</td>
+        <td contentEditable>{{ item.solicitud5 }}</td>
+        <td contentEditable>{{ item.solicitud6 }}</td>
+        <td contentEditable>{{ item.presupuesto_designado1 }}</td>
+        <td contentEditable>{{ item.presupuesto_designado2 }}</td>
+        <td contentEditable>{{ item.presupuesto_designado3 }}</td>
+        <td contentEditable>{{ item.presupuesto_designado4 }}</td>
+        <td contentEditable>{{ item.presupuesto_designado5 }}</td>
+        <td contentEditable>{{ item.presupuesto_designado6 }}</td>
+        <!-- <td>{{ item.usr_registro }}</td>
+        <td>{{ item.fecha_registro }}</td>
+        <td>{{ item.usr_modifica }}</td>
+        <td>{{ item.fecha_modifica }}</td>
+        <td>{{ item.id_estado }}</td> -->
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</div>

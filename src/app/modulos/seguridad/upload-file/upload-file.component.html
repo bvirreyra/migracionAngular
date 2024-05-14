@@ -1,0 +1,264 @@
+<form name="form" encType="multipart/form-data">
+  <div
+    *ngIf="i_semaforo == 'true'"
+    class="form-group col-lg-6 col-md-6 col-sm-6"
+  >
+    <label for="">Codigo Proyecto:</label>
+    <input
+      type="text"
+      class="input_normal"
+      id="m_codigoproy_file"
+      name="m_codigoproy_file"
+      [(ngModel)]="m_codigoproy_file"
+      required
+    />
+  </div>
+  <div class="row"></div>
+  <div
+    *ngIf="i_semaforo == 'true'"
+    class="form-group"
+    class="col-lg-4 col-md-4 col-sm-4"
+  >
+    <div>
+      <label for="Gestion">Tipo Documento:</label>
+    </div>
+    <div>
+      <select
+        id="m_tipodocumento_file"
+        class="form-control"
+        name="m_tipodocumento_file"
+        [(ngModel)]="m_tipodocumento_file"
+      >
+        <option value="0" disabled="m_tipodocumento_file =='0'">
+          Seleccione...
+        </option>
+        <option value="orden_proceder">Orden de Proceder</option>
+        <option value="planos_proyecto">Planos Proyecto</option>
+        <option value="convenio">Convenio</option>
+        <option value="resolucion_ministerial">Resolución Ministerial</option>
+        <option value="especificaciones_tecnicas">
+          Especificaciones Tecnicas
+        </option>
+        <option value="documento_base">Documento Base</option>
+        <option value="certificacion_presupuestaria">
+          Certificado de Inscripción Presupuestaria
+        </option>
+        <option value="galeria_imagenes">Galeria de Imagenes</option>
+        <option value="formularios">Formularios</option>
+        <option value="contrato">Contrato</option>
+      </select>
+    </div>
+  </div>
+  <div class="row"></div>
+  <div
+    *ngIf="
+      btn_subirarchivo == true ||
+      btn_actualizararchivo == true ||
+      btn_convertirbase64 == true
+    "
+    class="form-group col-lg-12 col-md-12 col-sm-12"
+  >
+    <label for=""
+      >Formatos Permitidos (xlsx, xls, doc, docx, jpeg, jpg, png,pdf)</label
+    >
+    <input
+      type="file"
+      class="form-control"
+      id="inputArchivo"
+      name="inputArchivo"
+      (change)="handleFileInput($event.target.files)"
+      required
+    />
+    <!-- <span id="helpBlock" class="help-block"><b>Archivo Actual:
+    </b>{{LaboratorioModel.NOM_FILE_LAB}}</span> -->
+  </div>
+  <div
+    *ngIf="accion_actualizar == true"
+    class="form-group col-lg-12 col-md-12 col-sm-12"
+  >
+    <label for=""
+      >Formatos Permitidos (xlsx, xls, doc, docx, jpeg, jpg, png,pdf)</label
+    >
+    <input
+      type="file"
+      class="form-control"
+      id="inputArchivo"
+      name="inputArchivo"
+      (change)="handleFileInput($event.target.files)"
+      required
+    />
+    <!-- <span id="helpBlock" class="help-block"><b>Archivo Actual:
+    </b>{{LaboratorioModel.NOM_FILE_LAB}}</span> -->
+  </div>
+</form>
+<div class="row">
+  <div class="upload_file">
+    <div class="detalles">
+      <div *ngIf="i_tipoimagen == 'imagen'" class="nombre">
+        {{ i_nombre_file }}
+      </div>
+      <div *ngIf="i_tipoimagen == 'documento'" class="nombre">
+        {{ i_nombre_file }}
+      </div>
+      <div *ngIf="i_tipoimagen == 'dc'" class="nombre">
+        {{ i_nombre_file }}
+      </div>
+    </div>
+    <div id="documento">
+      <img
+        *ngIf="i_tipoimagen == 'imagen' && i_src == ''"
+        src="assets/imagenes/no_imagen.png"
+        alt="Documento"
+        width="300px"
+        height="300px"
+      />
+      <img
+        *ngIf="i_tipoimagen == 'imagen' && i_src != ''"
+        [src]="i_src | imagen : m_codigoproy_file"
+        alt="Foto"
+        width="300px"
+        height="300px"
+      />
+      <img
+        *ngIf="i_tipoimagen == 'documento' && i_src == ''"
+        src="assets/imagenes/formulario.jpg"
+        alt="Documento"
+        width="200px"
+        height="200px"
+      />
+      <img
+        *ngIf="i_tipoimagen == 'documento' && i_src != ''"
+        src="i_src | imagen:m_codigoproy_file"
+        alt="Documento"
+        width="300px"
+        height="300px"
+      />
+      <div class="row"></div>
+      <div>
+        <div *ngIf="btn_subirarchivo == true">
+          <button
+            type="button"
+            class="btn btn-{{ m_styleBotonSubir }} btn-block"
+            (click)="subirArchivo()"
+            [disabled]="i_estadoboton == 'true'"
+          >
+            <i class="fa fa-save"></i> {{ this.i_btnGuardar }}
+          </button>
+          <!-- <span id="helpBlock" class="help-block"><b>Archivo Actual: </b>{{LaboratorioModel.NOM_FILE_LAB}}</span> -->
+        </div>
+        <div *ngIf="btn_convertirbase64 == true">
+          <button
+            type="button"
+            class="btn btn-{{ m_styleBotonSubir }} btn-block"
+            (click)="convertirBase64()"
+            [disabled]="i_estadoboton == 'true'"
+          >
+            <i class="fa fa-save"></i> {{ this.i_btnGuardar }}
+          </button>
+          <!-- <span id="helpBlock" class="help-block"><b>Archivo Actual: </b>{{LaboratorioModel.NOM_FILE_LAB}}</span> -->
+        </div>
+        <div class="row"></div>
+        <div *ngIf="btn_actualizararchivo == true">
+          <button
+            type="button"
+            class="btn btn-{{ m_styleBotonActualizar }} btn-block"
+            (click)="reemplazarArchivo()"
+          >
+            <i class="fa fa-refresh" aria-hidden="true"></i>
+            {{ this.i_btnActualizar }}
+          </button>
+          <div class="btn-group">
+            <button
+              type="button"
+              class="btn btn-{{ m_styleBotonDescargar }}"
+              name="btnDescargarArchivo"
+              id="btnDescargarArchivo"
+              (click)="obtenerArchivo()"
+              title="Descargar Archivo"
+            >
+              <i class="fa fa-download" aria-hidden="true"></i>
+              {{ this.i_btnDescargar }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-{{ m_styleBotonEliminar }}"
+              name="btnDescargarArchivo"
+              id="btnDescargarArchivo"
+              (click)="eliminarArchivo()"
+              title="Eliminar Archivo"
+            >
+              <i class="fa fa-download" aria-hidden="true"></i>
+              {{ this.i_btnEliminar }}
+            </button>
+          </div>
+        </div>
+        <div *ngIf="accion_visualizar == true">
+          <button
+            type="button"
+            class="btn btn-{{ m_styleBotonDescargar }} btn-block"
+            (click)="obtenerArchivo()"
+            id="btnDescargarArchivo"
+            title="Descargar Archivo"
+          >
+            <i class="fa fa-download" aria-hidden="true"></i>
+            {{ this.i_btnDescargar }}
+          </button>
+        </div>
+        <div *ngIf="accion_actualizar == true">
+          <button
+            type="button"
+            class="btn btn-{{ m_styleBotonActualizar }} btn-block"
+            (click)="reemplazarArchivo()"
+            [disabled]="i_estadoboton == 'true'"
+          >
+            <i class="fa fa-refresh" aria-hidden="true"></i>
+            {{ this.i_btnActualizar }}
+          </button>
+        </div>
+        <div *ngIf="accion_visualizar_eliminar == true">
+          <button
+            type="button"
+            class="btn btn-{{ m_styleBotonDescargar }} btn-block"
+            (click)="obtenerArchivo()"
+            id="btnDescargarArchivo"
+            title="Descargar Archivo"
+          >
+            <i class="fa fa-download" aria-hidden="true"></i>
+            {{ this.i_btnDescargar }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-{{ m_styleBotonEliminar }} btn-block"
+            name="btnDescargarArchivo"
+            id="btnDescargarArchivo"
+            (click)="eliminarArchivo()"
+            title="Eliminar Archivo"
+          >
+            <i class="fa fa-download" aria-hidden="true"></i>
+            {{ this.i_btnEliminar }}
+          </button>
+        </div>
+        <div *ngIf="accion_seleccionar == true">
+          <button
+            type="button"
+            class="btn btn-{{ m_styleBotonSubir }} btn-block"
+            (click)="seleccionarArchivo()"
+            title="Seleccionar Archivo"
+          >
+            <i class="fa fa-check" aria-hidden="true"></i> Marcar
+          </button>
+        </div>
+        <div *ngIf="accion_des_seleccionar == true">
+          <button
+            type="button"
+            class="btn btn-{{ m_styleBotonActualizar }} btn-block"
+            (click)="des_seleccionarArchivo()"
+            title="Seleccionar Archivo"
+          >
+            <i class="fa fa-check" aria-hidden="true"></i> Des Marcar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

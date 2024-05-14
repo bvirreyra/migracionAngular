@@ -1,0 +1,13 @@
+.dt-excepcion tfoot input {
+  width: 100% !important;
+}
+.dt-excepcion tfoot {
+  display: table-header-group !important;
+}
+
+.dt-detalle tfoot input {
+  width: 100% !important;
+}
+.dt-detalle tfoot {
+  display: table-header-group !important;
+}

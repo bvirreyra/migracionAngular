@@ -1,0 +1,163 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div *ngIf="pnl_tableroDatos == true">
+  <div class="containerCris">
+    <div class="row"></div>
+    <div *ngIf="pnl_conjunto">
+      <div class="row">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <div class="pull-left"><b>Monto Convenio:</b> {{montoContratoTotal | number: "0.2-2" | formatoDecimal}}</div>
+            <div class="pull-right"><b>Monto a Financiar Upre:</b> {{montoContractual | number: "0.2-2" | formatoDecimal}}</div>
+            <span class="glyphicon glyphicon-list text-center"></span> Planillas
+            Registradas + Descuentos + Anticipos
+          <br>
+          <div class="pull-right"><b>Saldo a Desembolsar:</b> {{saldoDesembolsarSgp | number: "0.2-2" | formatoDecimal}}</div>
+          </div>
+          <div class="panel-body" style="text-align: left">
+            <div class="table table-responsive">
+              <table
+                class="table table-responsive table-condensed table-hover dt-planillas2"
+                style="font-size: 12pt"
+              >
+                <thead>
+                  <tr style="text-align: center">
+                    <th>Nro</th>
+                    <th>Nro Pla.</th>
+                    <th>Detalle Planilla</th>
+                    <th>Preventivo</th>
+                    <th>Fecha Pago</th>
+
+                    <th>Monto Planilla</th>
+                    <th>Total Descuento</th>
+                    <th>Descuento Anticipo</th>
+                    <th>Descuento Retención 7%</th>
+                    <th>Descuento por Multas</th>
+                    <th>Otros Descuento</th>
+                    <th>Reposición</th>
+                    <th>Liquido a Pagar</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr class="warning" *ngIf="dts_anticipos.length > 0">
+                    <td></td>
+                    <td></td>
+                    <td>{{ dts_anticipos[0].detalle_anticipo }}</td>
+                    <td>==></td>
+                    <td>
+                      {{ dts_anticipos[0].fecha_pago | date: "dd/MM/yyyy" }}
+                    </td>
+
+                    <td style="text-align: right">
+                      {{
+                        dts_anticipos[0].anticipo
+                          | number: "0.2-2"
+                          | formatoDecimal
+                      }}
+                    </td>
+                    <td style="text-align: right">0</td>
+                    <td style="text-align: right">0</td>
+                    <td style="text-align: right">0</td>
+                    <td style="text-align: right">0</td>
+                    <td style="text-align: right">0</td>
+                    <td style="text-align: right">0</td>
+                    <td style="text-align: right">
+                      {{
+                        dts_anticipos[0].anticipo
+                          | number: "0.2-2"
+                          | formatoDecimal
+                      }}
+                    </td>
+                  </tr>
+
+                  <tr class="success">
+                    <td></td>
+                    <td></td>
+                    <td>TOTAL</td>
+                    <td>==></td>
+                    <td></td>
+
+                    <td style="text-align: right">
+                      {{
+                        total_monto_planilla | number: "0.2-2" | formatoDecimal
+                      }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ total_descuentos | number: "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ total_desc139 | number: "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ total_desc140 | number: "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ total_desc141 | number: "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ total_desc142 | number: "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ total_desc143 | number: "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{
+                        total_liquido_apagar | number: "0.2-2" | formatoDecimal
+                      }}
+                    </td>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let row of dts_planillas2 | orderBy: 'fecha_pago':true;
+                      let i = index
+                    "
+                  >
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ row.nro_planilla }}</td>
+                    <td>{{ row.detalle_planilla }}</td>
+                    <td>{{ row.preventivo }}</td>
+                    <td>{{ row.fecha_pago | date: "dd/MM/yyyy" }}</td>
+
+                    <td style="text-align: right">
+                      {{
+                        row.monto_planilla | number: "0.2-2" | formatoDecimal
+                      }}
+                    </td>
+                    <td style="text-align: right">
+                      {{
+                        row.total_descuento | number: "0.2-2" | formatoDecimal
+                      }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ row.desc139 | number: "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ row.desc140 | number: "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ row.desc141 | number: "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ row.desc142 | number: "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{ row.desc143 | number: "0.2-2" | formatoDecimal }}
+                    </td>
+                    <td style="text-align: right">
+                      {{
+                        row.liquido_apagar | number: "0.2-2" | formatoDecimal
+                      }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

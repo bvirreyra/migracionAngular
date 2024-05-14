@@ -1,0 +1,596 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="panel panel-primary">
+  <div class="panel-heading text-center">
+    <span class="fa fa-briefcase"></span> Listado Proyectos Líquido Pagable
+  </div>
+  <div class="panel-body">
+    <!-- SELECCION DEL PERIODO -->
+    <div class="row">
+      <div class="col-sm-12 col-lg-1">
+        <label class="control-label" for="perido"
+          >Por Periodo:
+          <input
+            class="form-control"
+            id="perido"
+            type="checkbox"
+            title="Establecer fechas por mes completo"
+            [(ngModel)]="porPeriodo"
+          />
+        </label>
+      </div>
+      <div class="form-group col-sm-12 col-lg-2">
+        <label class="control-label" for="busqueda">Fecha Inicio: </label>
+        <input
+          class="form-control"
+          id="desde"
+          type="date"
+          [(ngModel)]="f1"
+          (change)="armarPeriodo(f1)"
+        />
+      </div>
+      <div class="form-group col-sm-12 col-lg-2">
+        <label class="control-label" for="busqueda">Fecha Final: </label>
+        <input
+          class="form-control"
+          id="hasta"
+          type="date"
+          [(ngModel)]="f2"
+          (change)="armarPeriodo(f2)"
+        />
+      </div>
+      <div class="form-group col-sm-12 col-lg-2" style="margin-top: 2.5rem">
+        <button
+          class="btn btn-success btn-block"
+          (click)="listarProyectosLP({ f1: f1, f2: f2 })"
+        >
+          <i class="fa fa-refresh"></i> Actualizar
+        </button>
+      </div>
+    </div>
+    <!-- FIN SELECCION DEL PERIODO -->
+    <div *ngIf="dtsMes1.length > 0 || dtsMes2.length > 0">
+      <!-- TABLAS LIQUIDO PAGABLE 3 PERIODOS -->
+      <div class="row">
+        <div class="col-sm-12 col-lg-4">
+          <label for="" class="titulo"
+            >Líquido Pagado {{ periodo1?.texto }}</label
+          >
+          <table
+            class="table table-condensed table-hover"
+            style="font-size: 9pt; font-weight: 800"
+          >
+            <thead>
+              <tr>
+                <th>DEPARTAMENTO</th>
+                <th style="text-align: right">CANTIDAD PROG</th>
+                <th style="text-align: right">MONTO PROG</th>
+                <th style="text-align: right">CANTIDAD PAGOS</th>
+                <th style="text-align: right">MONTO PAGADO</th>
+                <th style="text-align: right">AVANCE (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of dtsMes1; let x = index">
+                <td id="dep1-{{ x + 1 }}">{{ row.departamento }}</td>
+                <td style="text-align: right; background-color: #b4d6fc">
+                  {{ row.cantidadp || 0 }}
+                </td>
+                <td style="text-align: right; background-color: #b4d6fc">
+                  {{ row.montop | number : "0.2-2" | formatoDecimal }}
+                </td>
+                <td style="text-align: right; background-color: #fcc5b9">
+                  {{ row.cantidad || 0 }}
+                </td>
+                <td style="text-align: right; background-color: #fcc5b9">
+                  {{ row.monto | number : "0.2-2" | formatoDecimal }}
+                </td>
+                <td style="text-align: right; background-color: #a6a8a9">
+                  {{
+                    (row.monto * 100) / row.montop
+                      | number : "0.2-2"
+                      | formatoDecimal
+                  }}
+                </td>
+              </tr>
+            </tbody>
+            <tfoot
+              style="
+                background-color: steelblue;
+                color: whitesmoke;
+                text-align: right;
+              "
+            >
+              <tr>
+                <td class="totales">TOTALES:</td>
+                <td class="totales">{{ totalesMes1.cantidadP }}</td>
+                <td class="totales">
+                  {{ totalesMes1.costoP | number : "0.2-2" | formatoDecimal }}
+                </td>
+                <td class="totales">{{ totalesMes1.cantidad }}</td>
+                <td class="totales">
+                  {{ totalesMes1.costo | number : "0.2-2" | formatoDecimal }}
+                </td>
+                <td class="totales">
+                  {{
+                    (totalesMes1.costo * 100) / totalesMes1.costoP
+                      | number : "0.2-2"
+                      | formatoDecimal
+                  }}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <label for="" class="titulo"
+            >Líquido Pagado {{ periodo2?.texto }}</label
+          >
+          <table
+            class="table table-condensed table-hover"
+            style="font-size: 9pt; font-weight: 800"
+          >
+            <thead>
+              <tr>
+                <th>DEPARTAMENTO</th>
+                <th style="text-align: right">CANTIDAD PROG</th>
+                <th style="text-align: right">MONTO PROG</th>
+                <th style="text-align: right">CANTIDAD PAGOS</th>
+                <th style="text-align: right">MONTO PAGADO</th>
+                <th style="text-align: right">AVANCE (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of dtsMes2; let x = index">
+                <td id="dep2-{{ x + 1 }}">{{ row.departamento }}</td>
+                <td style="text-align: right; background-color: #b4d6fc">
+                  {{ row.cantidadp || 0 }}
+                </td>
+                <td style="text-align: right; background-color: #b4d6fc">
+                  {{ row.montop | number : "0.2-2" | formatoDecimal }}
+                </td>
+                <td style="text-align: right; background-color: #fcc5b9">
+                  {{ row.cantidad || 0 }}
+                </td>
+                <td style="text-align: right; background-color: #fcc5b9">
+                  {{ row.monto | number : "0.2-2" | formatoDecimal }}
+                </td>
+                <td style="text-align: right; background-color: #a6a8a9">
+                  {{
+                    (row.monto * 100) / row.montop
+                      | number : "0.2-2"
+                      | formatoDecimal
+                  }}
+                </td>
+              </tr>
+            </tbody>
+            <tfoot
+              style="
+                background-color: steelblue;
+                color: whitesmoke;
+                text-align: right;
+              "
+            >
+              <tr>
+                <td class="totales">TOTALES:</td>
+                <td class="totales">{{ totalesMes2.cantidadP }}</td>
+                <td class="totales">
+                  {{ totalesMes2.costoP | number : "0.2-2" | formatoDecimal }}
+                </td>
+                <td class="totales">{{ totalesMes2.cantidad }}</td>
+                <td class="totales">
+                  {{ totalesMes2.costo | number : "0.2-2" | formatoDecimal }}
+                </td>
+                <td class="totales">
+                  {{
+                    (totalesMes2.costo * 100) / totalesMes2.costoP
+                      | number : "0.2-2"
+                      | formatoDecimal
+                  }}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <label for="" class="titulo"
+            >Líquido Pagado {{ periodo3?.texto }}</label
+          >
+          <table
+            class="table table-condensed table-hover"
+            style="font-size: 9pt; font-weight: 800"
+          >
+            <thead>
+              <tr>
+                <th>DEPARTAMENTO</th>
+                <th style="text-align: right">CANTIDAD PROG</th>
+                <th style="text-align: right">MONTO PROG</th>
+                <th style="text-align: right">CANTIDAD PAGOS</th>
+                <th style="text-align: right">MONTO PAGADO</th>
+                <th style="text-align: right">AVANCE (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of dtsMes3; let x = index">
+                <td id="dep3-{{ x + 1 }}">{{ row.departamento }}</td>
+                <td style="text-align: right; background-color: #b4d6fc">
+                  {{ row.cantidadp || 0 }}
+                </td>
+                <td style="text-align: right; background-color: #b4d6fc">
+                  {{ row.montop | number : "0.2-2" | formatoDecimal }}
+                </td>
+                <td style="text-align: right; background-color: #fcc5b9">
+                  {{ row.cantidad || 0 }}
+                </td>
+                <td style="text-align: right; background-color: #fcc5b9">
+                  {{ row.monto | number : "0.2-2" | formatoDecimal }}
+                </td>
+                <td style="text-align: right; background-color: #a6a8a9">
+                  {{
+                    (row.monto * 100) / row.montop
+                      | number : "0.2-2"
+                      | formatoDecimal
+                  }}
+                </td>
+              </tr>
+            </tbody>
+            <tfoot
+              style="
+                background-color: steelblue;
+                color: whitesmoke;
+                text-align: right;
+              "
+            >
+              <tr>
+                <td class="totales">TOTALES:</td>
+                <td class="totales">{{ totalesMes3.cantidadP || 0 }}</td>
+                <td class="totales">
+                  {{ totalesMes3.costoP | number : "0.2-2" | formatoDecimal }}
+                </td>
+                <td class="totales">{{ totalesMes3.cantidad || 0 }}</td>
+                <td class="totales">
+                  {{ totalesMes3.costo | number : "0.2-2" | formatoDecimal }}
+                </td>
+                <td class="totales">
+                  {{
+                    (totalesMes3.costo * 100) / totalesMes3.costoP
+                      | number : "0.2-2"
+                      | formatoDecimal
+                  }}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+      <!-- FIN TABLAS LIQUIDO PAGABLE 3 PERIODOS -->
+      <div class="row">
+        <div class="col-sm-12 col-lg-4">
+          <app-tacometro
+            [valor]="
+              (totalesMes1.costo * 100) / totalesMes1.costoP | number : '0.2-2'
+            "
+            [titulo]="'Porcentaje Avance ' + periodo1?.texto"
+          ></app-tacometro>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <app-tacometro
+            [valor]="
+              (totalesMes2.costo * 100) / totalesMes2.costoP | number : '0.2-2'
+            "
+            [titulo]="'Porcentaje Avance ' + periodo2?.texto"
+          ></app-tacometro>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <app-tacometro
+            [valor]="
+              (totalesMes3.costo * 100) / totalesMes3.costoP | number : '0.2-2'
+            "
+            [titulo]="'Porcentaje Avance ' + periodo3?.texto"
+          ></app-tacometro>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="dtsPivot.length > 0" style="z-index: 2; position: relative">
+      <div class="row">
+        <div class="col-sm-12 col-lg-9">
+          <app-barras
+            [titulos]="titulosBarDep"
+            [series]="seriesBarDep"
+            [periodos]="periodosBarDep"
+            [alto]="350"
+            [colores]="coloresDeptos"
+            (messageEvent)="recibeMensaje($event, 'departamento')"
+          ></app-barras>
+        </div>
+        <div class="col-sm-12 col-lg-3">
+          <label for="" class="titulo">Líquido Pagado por Departamentos</label>
+          <table
+            class="table table-condensed table-hover"
+            style="font-size: 9pt; font-weight: 800"
+          >
+            <thead>
+              <tr>
+                <th>DEPARTAMENTO</th>
+                <th style="text-align: right">CANTIDAD PAGOS</th>
+                <th style="text-align: right">MONTO PAGADO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of seriesBarDep; let x = index">
+                <td id="dep{{ x + 1 }}">{{ row.name }}</td>
+                <td style="text-align: right">{{ row.data[0] }}</td>
+                <td style="text-align: right">
+                  {{ row.monto | number : "0.2-2" | formatoDecimal }}
+                </td>
+              </tr>
+            </tbody>
+            <tfoot
+              style="
+                background-color: steelblue;
+                color: whitesmoke;
+                text-align: right;
+              "
+            >
+              <tr>
+                <td class="totales">
+                  <button
+                    class="btn btn-info"
+                    title="Desglosar datos por Estructura Financiamiento"
+                    (click)="desglosar('TE')"
+                  >
+                    <i class="fa fa-angle-double-down"></i>
+                  </button>
+                  TOTALES:
+                </td>
+                <td class="totales">{{ totalesDepto.cantidad }}</td>
+                <td class="totales">
+                  {{ totalesDepto.costo | number : "0.2-2" | formatoDecimal }}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+      <div class="grid-deptos" *ngIf="mostrarTE">
+        <div *ngFor="let estruc of dtsEstructuras">
+          <label for="" class="titulo"
+            >Líquido Pagado por Departamento -
+            {{ estruc.estructura_financiamiento }}</label
+          >
+          <table
+            class="table table-condensed table-hover"
+            style="font-size: 9pt; font-weight: 800"
+          >
+            <thead>
+              <tr>
+                <th>DEPARTAMENTO</th>
+                <th style="text-align: right">CANTIDAD PAGOS</th>
+                <th style="text-align: right">MONTO PAGADO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="
+                  let row of filtrarTE(
+                    'estructura',
+                    estruc.estructura_financiamiento
+                  );
+                  let x = index
+                "
+              >
+                <td id="dep{{ x + 1 }}">{{ row.v_departamento }}</td>
+                <td style="text-align: right">{{ row.cantidad }}</td>
+                <td style="text-align: right">
+                  {{ row.monto | number : "0.2-2" | formatoDecimal }}
+                </td>
+              </tr>
+            </tbody>
+            <tfoot
+              style="
+                background-color: steelblue;
+                color: whitesmoke;
+                text-align: right;
+              "
+            >
+              <tr>
+                <td class="totales">TOTALES:</td>
+                <td class="totales">{{ estruc.cantidad }}</td>
+                <td class="totales">
+                  {{ estruc.monto | number : "0.2-2" | formatoDecimal }}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-lg-6">
+          <app-barras
+            [titulos]="titulosEstructura"
+            [series]="dtsSeriesEstructura"
+            [periodos]="dtsEtapasEstructura"
+            [alto]="350"
+            [colores]="coloresEstructura"
+            [multicolumna]="true"
+            (messageEvent)="recibeMensaje($event, 'estructura')"
+          ></app-barras>
+        </div>
+        <div class="col-sm-12 col-lg-6">
+          <app-barras
+            [titulos]="titulosPagos"
+            [series]="dtsSeriesPagos"
+            [periodos]="dtsEtapasPagos"
+            [alto]="350"
+            [colores]="coloresDeptos"
+            [multicolumna]="true"
+            (messageEvent)="armarPagosEstructura($event)"
+          ></app-barras>
+        </div>
+      </div>
+      <div class="row" *ngIf="dtsSeriesPE.length > 0">
+        <div class="col-sm-12 col-lg-6">
+          <app-barras
+            [titulos]="titulosPE"
+            [series]="dtsSeriesPE"
+            [periodos]="dtsEtapasPE"
+            [alto]="350"
+            [colores]="coloresDeptos"
+            [multicolumna]="true"
+            (messageEvent)="recibeMensaje($event, 'estructura')"
+          ></app-barras>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngIf="mostrarGrid"
+      style="overflow-x: auto; z-index: 2; position: relative"
+    >
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 1rem;
+        "
+        *ngIf="dtsProyectos?.length > 0"
+      >
+        <label class="titulo-tabla"
+          >Detalle Planillas Pagadas - Total planillas:
+          {{ totalesDepto.cantidad }} ; Total Monto Pagado:
+          {{ totalesDepto.costo | number : "0.2-2" | formatoDecimal }}</label
+        >
+        <button class="btn btn-success" (click)="reporte('01')">
+          <i class="fa fa-print"></i> Reporte
+        </button>
+        <button class="btn btn-success" (click)="obtenerDTS('tabla-bandeja')">
+          <i class="fa fa-print"></i> Reporte Filtrado
+        </button>
+      </div>
+      <div
+        *ngIf="dtsPivot.length == 0"
+        style="
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 1rem;
+        "
+      >
+        <label *ngIf="periodo3.texto" class="titulo-tabla"
+          >Sin datos para el periodo de {{ periodo3.texto }}</label
+        >
+        <label *ngIf="!periodo3.texto" class="titulo-tabla"
+          >Sin datos para el rango de fechas seleccionado</label
+        >
+      </div>
+      <table
+        id="tabla-bandeja"
+        class="table table-responsive table-condensed table-hover table-striped dt-bandeja"
+        style="font-size: 9pt; z-index: 2"
+      >
+        <thead>
+          <tr>
+            <th>ID SGP</th>
+            <th>DEPARTAMENTO</th>
+            <th>PROVINCIA</th>
+            <th>MUNICIPIO</th>
+            <th style="min-width: 200px">NOMBRE PROYECTO</th>
+            <th>ESTRUCTURA FIN.</th>
+            <th>Nº PLANILLA</th>
+            <th>FECHA INICIO</th>
+            <th>FECHA FIN</th>
+            <th>DETALLE PLANILLA</th>
+            <th>FECHA PAGO</th>
+            <th>LIQUIDO A PAGAR</th>
+            <th>TOTAL DESCUENTOS</th>
+            <th>PREVENTIVO</th>
+            <th>USUARIO REGISTRO</th>
+            <th>FECHA REGISTRO</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td>
+              <select
+                #departamento
+                id="v_departamento"
+                (change)="filtrarDinamico('v_departamento', departamento.value)"
+              >
+                <option
+                  *ngFor="let row of departamentos"
+                  [ngValue]="row.v_departamento"
+                >
+                  {{ row.v_departamento }}
+                </option>
+              </select>
+            </td>
+            <td>
+              <select
+                #provincia
+                id="v_provincia"
+                (change)="filtrarDinamico('v_provincia', provincia.value)"
+              >
+                <option
+                  *ngFor="let row of provincias"
+                  [ngValue]="row.v_provincia"
+                >
+                  {{ row.v_provincia }}
+                </option>
+              </select>
+            </td>
+            <td>
+              <select
+                #municipio
+                id="v_municipio"
+                (change)="filtrarDinamico('v_municipio', municipio.value)"
+              >
+                <option
+                  *ngFor="let row of municipios"
+                  [ngValue]="row.v_municipio"
+                >
+                  {{ row.v_municipio }}
+                </option>
+              </select>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+        <tbody>
+          <tr *ngFor="let row of dtsProyectos">
+            <td>{{ row.id_sgp }}</td>
+            <td>{{ row.v_departamento }}</td>
+            <td>{{ row.v_provincia }}</td>
+            <td>{{ row.v_municipio }}</td>
+            <td>{{ row.nombreproyecto }}</td>
+            <td>{{ row.estructura_financiamiento }}</td>
+            <td>{{ row.nro_planilla }}</td>
+            <td>{{ row.fecha_inicio | date : "dd/MM/yyyy" }}</td>
+            <td>{{ row.fecha_fin | date : "dd/MM/yyyy" }}</td>
+            <td>{{ row.detalle_planilla }}</td>
+            <td>{{ row.fecha_pago | date : "dd/MM/yyyy" }}</td>
+            <td style="text-align: right">
+              {{ row.liquido_apagar | number : "0.2-2" | formatoDecimal }}
+            </td>
+            <td style="text-align: right">
+              {{ row.total_descuento | number : "0.2-2" | formatoDecimal }}
+            </td>
+            <td>{{ row.preventivo }}</td>
+            <td>{{ row.usuario_registro }}</td>
+            <td>{{ row.fecha_registro | date : "dd/MM/yyyy HH:mm:ss" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

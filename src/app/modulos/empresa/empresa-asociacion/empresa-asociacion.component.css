@@ -1,0 +1,23 @@
+.dt-asociaciones tfoot input{
+  width: 100% !important;
+}
+.dt-asociaciones tfoot {
+  display: table-header-group !important;
+}
+.dt-socios tfoot input{
+  width: 100% !important;
+}
+.dt-socios tfoot {
+  display: table-header-group !important;
+}
+.botonera{
+  display: flex !important;
+  justify-content: space-between;
+  max-width: 160px;
+}
+.requerido{
+  border-bottom: #0060df 2px solid;
+}
+.requerido input{
+  background-color: #96c7fb  !important;
+}

@@ -1,0 +1,12 @@
+                                 
+        <div class="sidebar-wrapper">
+              <ul class="nav">                 
+                  <li *ngFor="let row_menu of menus">
+                      <a [routerLink]="['/addUsr']">
+                          <i class="{{row_menu.ICONO}}"></i>
+                          <p>{{row_menu.DESCRIPCION}}</p>
+                      </a>
+                  </li>                 
+              </ul>
+        </div>
+<router-outlet></router-outlet>

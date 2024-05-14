@@ -1,0 +1,7 @@
+{
+  "/seprec/*":{
+    "target":"https://ws.agetic.gob.bo/",
+    "secure":false,
+    "changeOrigin":true
+  }
+}

@@ -1,0 +1,18 @@
+.dt-listaproyectos tfoot input{
+    width: 100% !important;
+}
+.dt-listaproyectos tfoot {
+    display: table-header-group !important;
+}
+.dt-supervision tfoot input{
+    width: 100% !important;
+}
+.dt-supervision tfoot {
+    display: table-header-group !important;
+}
+.col-financiera {
+    background-color: khaki;
+}
+.col-sgp {
+    background-color: rgb(248, 169, 169);
+}

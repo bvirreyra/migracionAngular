@@ -1,0 +1,1224 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="container-fluid">
+  <form action="" name="form">
+    <!-- BUSCADOR DE HOJA DE RUTAS -->
+    <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+      <div class="content-header with-border">
+        <h3 class="content-title text-green">
+          <strong>SIPTA - HOJA DE RUTA</strong>
+        </h3>
+      </div>
+      <div class="content-body">
+        <div class="rowlocal">
+          <div
+            class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"
+          >
+            <div class="panel panel-success">
+              <div class="panel-heading text-center">Busqueda Hoja de Ruta</div>
+              <div class="panel-body" style="padding: 25px">
+                <div class="row">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda"
+                        >Gestión:</label
+                      >
+                      <div class="col-sm-7">
+                        <input
+                          class="form-control"
+                          type="number"
+                          name="gestion"
+                          id="gestion"
+                          [(ngModel)]="m_gestion"
+                          onKeyDown="A(event,this.form.nrohojaderuta)"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda"
+                        >Nro Hoja de Ruta:</label
+                      >
+                      <div class="col-sm-7">
+                        <input
+                          class="form-control"
+                          type="text"
+                          name="nrohojaderuta"
+                          id="nrohojaderuta"
+                          [(ngModel)]="m_nrohojaderuta"
+                          onKeyDown="A(event,this.form.btnBuscarHojadeRuta)"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda"
+                        >Cite:</label
+                      >
+                      <div class="col-sm-7">
+                        <input
+                          class="form-control"
+                          type="text"
+                          name="m_buscaCite"
+                          id="m_buscaCite"
+                          [(ngModel)]="m_buscaCite"
+                          onKeyDown="A(event,this.form.m_referenciabusqueda)"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda"
+                        >Referencia:</label
+                      >
+                      <div class="col-sm-7">
+                        <input
+                          class="form-control"
+                          type="text"
+                          name="m_referenciabusqueda"
+                          id="m_referenciabusqueda"
+                          [(ngModel)]="m_referenciabusqueda"
+                          onKeyDown="A(event,this.form.m_busremitente)"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda"
+                        >Remitente Externo:</label
+                      >
+                      <div class="col-sm-7">
+                        <input
+                          class="form-control"
+                          type="text"
+                          name="m_busremitente"
+                          id="m_busremitente"
+                          [(ngModel)]="m_busremitente"
+                          onKeyDown="A(event,this.form.m_busTipoDoc)"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda"
+                        >Tipo Documento:</label
+                      >
+                      <div class="col-sm-7">
+                        <select
+                          id="m_nombre"
+                          class="form-control"
+                          name="m_busTipoDoc"
+                          id="m_busTipoDoc"
+                          [(ngModel)]="m_busTipoDoc"
+                          (change)="mostrarProyectos()"
+                          onKeyDown="A(event,this.form.btnBuscarHojadeRuta)"
+                        >
+                          <option value=""></option>
+                          <option
+                            *ngFor="
+                              let row_registros of dts_ListaTipoDocumentoHr;
+                              let i = index
+                            "
+                            [ngValue]="
+                              row_registros.descripciondetalleclasificador
+                            "
+                          >
+                            {{ row_registros.descripciondetalleclasificador }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group" *ngIf="m_busTipoDoc.startsWith('PLANILLA DE AVANCE O CERTIFICADO DE AVANCE')">
+                      <label class="control-label col-sm-4" for="busqueda"
+                        >Proyecto:</label
+                      >
+                      <div class="col-sm-7">
+                        <input class="form-control" type="text" autocomplete="off" name="proyecto" id="proyecto" #proyecto list="listaProyectos" (change)="filtrarHRProyectos(proyecto.value)">
+                        <datalist id="listaProyectos" class="datalist">
+                          <div *ngFor="let row of dtsProyectos;">
+                            <option class="form-control" value={{row.formateado}} label={{row.formateado}}>
+                          </div>
+                        </datalist>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-block"
+                      name="btnBuscarHojadeRuta"
+                      id="btnBuscarHojadeRuta"
+                      (click)="BusquedaHojadeRuta()"
+                    >
+                      Buscar
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-block"
+                      (click)="LimpiarBusqueda()"
+                    >
+                      Limpiar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-footer"></div>
+    </div>
+  </form>
+  <!-- FIN DE BUSCADOR DE HOJA DE RUTA -->
+  <!-- RESULTADO BUQUEDA POR HOJA DE RUTA -->
+  <div class="row" name="pnl_resutadohr" id="pnl_resutadohr">
+    <form name="form2">
+      <!-- FORMULARIO HOJA DE RUTA -->
+      <div
+        class="content content-success"
+        name="pnl_hjcabecera"
+        id="pnl_hjcabecera"
+      >
+        <div class="content-header with-border">
+          <h3 class="content-title text-green">
+            <strong>FORMULARIO - HOJA DE RUTA</strong>
+          </h3>
+          <div class="pull-right">
+            <button
+              type="button"
+              class="btn btn-danger btn-circle-sm"
+              (click)="VolverAtras()"
+            >
+              <span class="glyphicon glyphicon-arrow-left"></span>
+            </button>
+          </div>
+        </div>
+        <div class="content-body">
+          <div class="rowlocal">
+            <div
+              class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10"
+            >
+              <div class="panel panel-success">
+                <div class="panel-heading text-center">
+                  Datos Hoja de Ruta ==> {{ m_nrohojaderuta }}
+                </div>
+                <div class="panel-body">
+                  <!-- DATOS CABECERA DE LA HOJA DE RUTA -->
+                  <div class="row">
+                    <div class="form-horizontal">
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >CITE:</label
+                        >
+                        <div class="col-sm-7">
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="cite"
+                            id="cite"
+                            [(ngModel)]="m_cite"
+                            onKeyDown="A(event,this.form.recepcionado)"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Recepcionado(a):</label
+                        >
+                        <div class="col-sm-7">
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="recepcionado"
+                            id="recepcionado"
+                            [(ngModel)]="m_recepcionado"
+                            onKeyDown="A(event,this.form.remitente)"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                      <div *ngIf="m_tipo == 'Externa'" class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Parametro Usuario Externo:</label
+                        >
+                        <div class="col-sm-7">
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="parametro_usuario_externo"
+                            id="parametro_usuario_externo"
+                            [(ngModel)]="m_parametro_usuario_externo"
+                            (change)="BusquedaUsuarioExterno()"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Remitente:</label
+                        >
+                        <div class="col-sm-7">
+                          <div *ngIf="m_tipo == 'Externa'">
+                            <!-- <input
+                              class="form-control"
+                              type="text"
+                              name="remitenteexterno"
+                              id="remitenteexterno"
+                              list="browsers"
+                              [(ngModel)]="m_remitenteexterno"
+                              onKeyDown="A(event,this.form.destinatario)"
+                              (change)="IdRemitenteExterno()"
+                              autocomplete="off"
+                            /> -->
+                            <ng-select2
+                              name="remitenteexterno"
+                              id="remitenteexterno"
+                              width="100%"
+                              [data]="comboSeleccion"
+                              [(ngModel)]="m_idremitenteexterno"
+                            ></ng-select2>
+                          </div>
+                          <div *ngIf="m_tipo == 'Interna'">
+                            <input
+                              class="form-control"
+                              type="text"
+                              name="remitente"
+                              id="remitente"
+                              list="browsers"
+                              [(ngModel)]="m_remitente"
+                              onKeyDown="A(event,this.form.destinatario)"
+                              (change)="IdRemitente()"
+                              autocomplete="off"
+                            />
+                          </div>
+                          <div *ngIf="m_tipo == 'Interna'">
+                            <datalist id="browsers" class="datalist">
+                              <div *ngFor="let row_usuarios of dtsUsuario">
+                                <option
+                                  class="form-control"
+                                  value="{{
+                                    row_usuarios.nombre_completo_usuario
+                                  }}"
+                                  label="{{
+                                    row_usuarios.nombre_completo_usuario
+                                  }}"
+                                ></option>
+                              </div>
+                            </datalist>
+                          </div>
+                          <!-- <div *ngIf="m_tipo == 'Externa'">
+                            <datalist
+                              id="browsers"
+                              class="datalist"
+                              width="800"
+                            >
+                              <div
+                                *ngFor="let row_usuarios of dtsUsuarioExterno"
+                              >
+                                <option
+                                  class="form-control"
+                                  value="{{ row_usuarios.dato_completo }}"
+                                  label="{{ row_usuarios.dato_completo }}"
+                                ></option>
+                              </div>
+                            </datalist>
+                          </div> -->
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Destinatario:</label
+                        >
+                        <div class="col-sm-7">
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="destinatario"
+                            id="destinatario"
+                            list="ListaDestinatario"
+                            [(ngModel)]="m_destinatario"
+                            onKeyDown="A(event,this.form.referencia)"
+                            (change)="IdDestinatario()"
+                            autocomplete="off"
+                          />
+                          <datalist id="ListaDestinatario" class="datalist">
+                            <div *ngFor="let row_usuarios of dtsUsuario">
+                              <option
+                                class="form-control"
+                                value="{{
+                                  row_usuarios.nombre_completo_usuario
+                                }}"
+                                label="{{
+                                  row_usuarios.nombre_completo_usuario
+                                }}"
+                              ></option>
+                            </div>
+                          </datalist>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Referencia:</label
+                        >
+                        <div class="col-sm-7">
+                          <textarea
+                            class="form-control"
+                            type="text"
+                            name="referencia"
+                            id="referencia"
+                            maxlength="500"
+                            rows="4"
+                            [(ngModel)]="m_referencia"
+                            onKeyDown="A(event,this.form.anexos)"
+                          ></textarea>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Anexos:</label
+                        >
+                        <div class="col-sm-7">
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="anexos"
+                            id="anexos"
+                            [(ngModel)]="m_anexos"
+                            onKeyDown="A(event,this.form.fecha)"
+                          />
+                        </div>
+                      </div>
+
+                      <!-- <div class="form-group" *ngFor="let row_registrosanexos of dts_Anexo; let i = index">
+                                                <label *ngIf="i==0" class="control-label col-sm-4" for="anexo1">Anexos:</label>
+                                                <label *ngIf="i!=0" class="control-label col-sm-4" for="anexo1"></label>
+                                                <div class="col-sm-3">
+                                                    <input class="form-control" type="text" name="anexosTipo{{i}}" id="anexosTipo{{i}}" [(ngModel)]="row_registrosanexos.Documento">
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <input class="form-control" type="text" name="anexosDescripcion{{i}}" id="anexosDescripcion{{i}}" [(ngModel)]="row_registrosanexos.Descripcion">
+                                                </div>
+                                            </div> -->
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Fecha:</label
+                        >
+                        <div class="col-sm-7">
+                          <input
+                            class="form-control"
+                            type="date"
+                            name="fecha"
+                            id="fecha"
+                            [(ngModel)]="m_fecha"
+                            onKeyDown="A(event,this.form.hora)"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Hora:</label
+                        >
+                        <div class="col-sm-7">
+                          <input
+                            class="form-control"
+                            type="time"
+                            name="hora"
+                            id="hora"
+                            [(ngModel)]="m_hora"
+                            onKeyDown="A(event,this.form.descripcionrespuesta)"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Des Respuesta:</label
+                        >
+                        <div class="col-sm-7">
+                          <textarea
+                            class="form-control"
+                            type="text"
+                            name="descripcionrespuesta"
+                            id="descripcionrespuesta"
+                            maxlength="500"
+                            rows="4"
+                            [(ngModel)]="m_descripcionrespuesta"
+                            onKeyDown="A(event,this.form.fecharespuesta)"
+                          ></textarea>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Fecha Respuesta:</label
+                        >
+                        <div class="col-sm-7">
+                          <input
+                            class="form-control"
+                            type="date"
+                            name="fecharespuesta"
+                            id="fecharespuesta"
+                            [(ngModel)]="m_fecharespuesta"
+                            onKeyDown="A(event,this.form.tipo)"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Tipo:</label
+                        >
+                        <div class="col-sm-7">
+                          <select
+                            id="tipo"
+                            class="form-control"
+                            name="tipo"
+                            [(ngModel)]="m_tipo"
+                            onKeyDown="A(event,this.form.estado)"
+                          >
+                            <option value="Interna">Interna</option>
+                            <option value="Externa">Externa</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Estado Respuesta:</label
+                        >
+                        <div class="col-sm-7">
+                          <select
+                            id="estadorespuesta"
+                            class="form-control"
+                            name="estadorespuesta"
+                            [(ngModel)]="m_estadorespuesta"
+                            onKeyDown="A(event,this.form.EstadoRespuesta)"
+                          >
+                            <option value="NoAplica">NoAplica</option>
+                            <option value="Recibido">Recibido</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Estado Situacion:</label
+                        >
+                        <div class="col-sm-7">
+                          <select
+                            id="estadosituacion"
+                            class="form-control"
+                            name="estadosituacion"
+                            [(ngModel)]="m_estadosituacion"
+                            onKeyDown="A(event,this.form.EstadoSituacion)"
+                          >
+                            <option value="Recibido">Recibido</option>
+                            <option value="Leido">Leido</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Existe Proveido:</label
+                        >
+                        <div class="col-sm-7">
+                          <select
+                            id="existeproveido"
+                            class="form-control"
+                            name="existeproveido"
+                            [(ngModel)]="m_existeproveido"
+                            onKeyDown="A(event,this.form.ExisteProveido)"
+                          >
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4" for="busqueda"
+                          >Estado:</label
+                        >
+                        <div class="col-sm-7">
+                          <select
+                            id="estado"
+                            class="form-control"
+                            name="estado"
+                            [(ngModel)]="m_estado"
+                            onKeyDown="A(event,this.form.estado)"
+                          >
+                            <option value="Terminado">Terminado</option>
+                            <option value="EnProceso">En Proceso</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="pull-right">
+                        <button
+                          type="button"
+                          name="descargaRep"
+                          id="decargaRep"
+                          class="btn btn-warning"
+                          title="Descargar Hoja de Ruta"
+                          (click)="generarReporte('01')"
+                        >
+                          <i class="fa fa-address-card-o"></i>
+                        </button>
+                        <!-- <a *ngIf="vbtn_hojaderuta==true" title="Descargar Hoja de Ruta" class="btn btn-warning   btn-md" target="_blank" href="{{url_reporte}}/modulos/sipta/rptHojadeRuta.php?gestion={{m_gestion}}&nro={{m_nrohojaderuta}}&pag=5"><i
+                                                        class="fa fa-address-card-o" aria-hidden="true"></i></a> -->
+                        <button
+                          type="button"
+                          class="btn btn-success"
+                          title="Descargar Página"
+                          (click)="generarReporte('03')"
+                        >
+                          <i
+                            class="fa fa-address-card-o"
+                            aria-hidden="true"
+                          ></i>
+                        </button>
+                        <button
+                          type="button"
+                          *ngIf="vbtn_bitacora"
+                          class="btn btn-danger"
+                          title="Descargar Reporte"
+                          (click)="generarReporte('02')"
+                        >
+                          <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        </button>
+                        <!-- <a *ngIf="vbtn_bitacora==true" title="Descargar Reporte" class="btn btn-danger   btn-md" target="_blank" href="{{url_reporte}}/modulos/sipta/rptHistorialProveidos.php?gestion={{m_gestion}}&nro={{m_nrohojaderuta}}"><i
+                                                        class="fa fa-file-pdf-o" aria-hidden="true"></i></a> -->
+                          <button
+                          *ngIf="IdProyecto && NroRegistrosProveido>0"
+                          class="btn btn-info"
+                          title="Ver Revisión"
+                          (click)="verRevision()"
+                        >
+                          <i class="fa fa-check"></i>
+                        </button>
+                        <button
+                          type="button"
+                          *ngIf="vcolumnas_edicion == true"
+                          type="button"
+                          class="btn btn-primary pull-right"
+                          name="btnActualizarCabecera"
+                          id="btnActualizarCabecera"
+                          (click)="ActualizarCabecera()"
+                        >
+                          Actualizar Cabecera
+                        </button>
+                        <!-- <button type="button" class="btn btn-info" *ngIf="modoConsulta" (click)="verRevision()">Revisión Planilla</button> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-footer"></div>
+      </div>
+
+      <!-- FIN FORMULARIO HOJA DE RUTA -->
+      <!-- LISTADO PROVEIDOS -->
+      <div
+        *ngIf="pnlListaProveidos == true"
+        class="content content-success"
+        name="pnl_hjproveidos"
+        id="pnl_hjproveidos"
+      >
+        <div class="content-header with-border">
+          <h3 class="content-title text-green">
+            <strong>PROVEIDOS</strong>
+          </h3>
+          <div class="pull-right">
+            <button
+              type="button"
+              class="btn btn-danger btn-circle-sm"
+              (click)="VolverAtras()"
+            >
+              <span class="glyphicon glyphicon-arrow-left"></span>
+            </button>
+          </div>
+        </div>
+        <div class="content-body">
+          <div class="rowlocal">
+            <div
+              class="col-xs-11 col-sm-11 col-md-11 col-lg-11"
+              style="margin-left: 4%"
+            >
+              <div class="panel panel-success">
+                <div class="panel-heading text-center">
+                  Listado de Proveidos
+                </div>
+                <div class="panel-body" style="padding: 25px">
+                  <!-- INICIO TABLA-->
+                  <div class="row">
+                    <table
+                      class="table table-primary table-striped table-condensed table-hover dt-Proveidos"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Id Proveido</th>
+                          <th>Emisor</th>
+                          <th>Receptor</th>
+                          <th>Contenido</th>
+                          <th>Fecha</th>
+                          <th>Hora</th>
+                          <th>Fecha Recibido</th>
+                          <th>Hora Recibido</th>
+                          <th>Fecha Respuesta</th>
+                          <th>Hora Respuesta</th>
+                          <th>Estado Respuesta</th>
+                          <th>Estado Situación</th>
+                          <th>Estado Recibido</th>
+                          <th>Editar</th>
+                          <th>Eliminar</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          *ngFor="
+                            let row_registros of dtsListaProveidos;
+                            let i = index
+                          "
+                        >
+                          <td>{{ row_registros.indice_proveido }}</td>
+                          <td>{{ row_registros.nombre_usuario_de }}</td>
+                          <td>{{ row_registros.nombre_usuario_para }}</td>
+                          <td>{{ row_registros.contenido }}</td>
+                          <td>
+                            {{ row_registros.fecha | date : "dd/MM/yyyy" }}
+                          </td>
+                          <td>{{ row_registros.hora.substring(0, 8) }}</td>
+                          <td>
+                            {{
+                              row_registros.fecha_recibido | date : "dd/MM/yyyy"
+                            }}
+                          </td>
+                          <td>
+                            {{ row_registros.hora_recibido.substring(0, 8) }}
+                          </td>
+                          <td>
+                            {{
+                              row_registros.fecha_respuesta
+                                | date : "dd/MM/yyyy"
+                            }}
+                          </td>
+                          <td>
+                            {{ row_registros.hora_respuesta.substring(0, 8) }}
+                          </td>
+                          <td>{{ row_registros.estado_respuesta }}</td>
+                          <td>{{ row_registros.estado_situacion }}</td>
+                          <td>{{ row_registros.estado_recibido }}</td>
+                          <td>
+                            <div
+                              *ngIf="
+                                vcolumnas_edicion == true &&
+                                m_estado == 'EnProceso'
+                              "
+                            >
+                              <button
+                                class="btn btn-info btn-circle-sm"
+                                type="button"
+                                data-toggle="modal"
+                                data-target="#modalEditarProveido"
+                                (click)="MuetraProveido(row_registros)"
+                              >
+                                <span class="glyphicon glyphicon-pencil"></span>
+                              </button>
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              *ngIf="
+                                vcolumnas_edicion == true &&
+                                m_estado == 'EnProceso'
+                              "
+                            >
+                              <button
+                                type="button"
+                                class="btn btn-danger btn-circle-sm"
+                                *ngIf="i + 1 == NroRegistrosProveido"
+                                data-toggle="modal"
+                                data-target="#modalEliminaProveido"
+                                (click)="PreEliminaProveido(row_registros)"
+                              >
+                                <span class="glyphicon glyphicon-remove"></span>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- FIN TABLA-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- <div *ngIf="pnlListaProveidos" style="margin: 2rem 0;padding: 0 2rem;">
+                <app-chart-proveidos [numero]="m_nrohojaderuta" [gestion]="m_fecha | date: 'yyyy'"></app-chart-proveidos>
+            </div> -->
+    <!-- FIN FIN LISTADO PROVEIDO -->
+    <!-- INICIO MODAL modalEditarProveido -->
+
+    <!-- FIN MODAL modalEditarProveido -->
+    <!-- INICIO MODAL modalEliminaProveido -->
+    <div
+      class="modal fade"
+      *ngIf="pnlModalEliminaProveido == true"
+      name="modalEliminaProveido"
+      id="modalEliminaProveido"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">
+              :::ATENCIÓN:::
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="alert alert-danger">
+            Está apunto de eliminar el proveido ==>
+            <br />
+            <strong>De:</strong> {{ dtsRegitroProveido.nombre_usuario_de }}
+            <br />
+            <strong>Para:</strong>
+            {{ dtsRegitroProveido.nombre_usuario_para }}
+            <br />
+            <br />
+            <strong>Fecha:</strong>
+            {{ dtsRegitroProveido.fecha | date : "dd/MM/yyyy" }}
+            <br />
+            <strong>Hora:</strong>
+            {{ dtsRegitroProveido.hora.substring(0, 8) }}
+            <br />
+
+            <p>, ¿se encuentra seguro?</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="EliminaProveido(dtsRegitroProveido)"
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- FIN MODAL modalEliminaProveido -->
+    <!-- INICIO MODAL modalEditarProveido -->
+    <div
+      class="modal fade"
+      *ngIf="pnlModalEditarProveido == true"
+      name="modalEditarProveido"
+      id="modalEditarProveido"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">
+              :::ATENCIÓN:::
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="form-horizontal">
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Emisor:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="prov_emisor"
+                      id="prov_emisor"
+                      list="browsers"
+                      [(ngModel)]="m_prov_emisor"
+                      onKeyDown="A(event,this.form.prov_receptor)"
+                      (change)="ProvIdEmisor()"
+                      autocomplete="off"
+                    />
+
+                    <datalist id="browsers" class="datalist">
+                      <div *ngFor="let row_usuarios of dtsUsuario">
+                        <option
+                          class="form-control"
+                          value="{{ row_usuarios.nombre_completo_usuario }}"
+                          label="{{ row_usuarios.nombre_completo_usuario }}"
+                        ></option>
+                      </div>
+                    </datalist>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Receptor:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="prov_receptor"
+                      id="prov_receptor"
+                      list="ListaDestinatario"
+                      [(ngModel)]="m_prov_receptor"
+                      onKeyDown="A(event,this.form.prov_contenido)"
+                      (change)="ProvIdReceptor()"
+                      autocomplete="off"
+                    />
+                    <datalist id="ListaDestinatario" class="datalist">
+                      <div *ngFor="let row_usuarios of dtsUsuario">
+                        <option
+                          class="form-control"
+                          value="{{ row_usuarios.nombre_completo_usuario }}"
+                          label="{{ row_usuarios.nombre_completo_usuario }}"
+                        ></option>
+                      </div>
+                    </datalist>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Contenido:</label
+                  >
+                  <div class="col-sm-7">
+                    <textarea
+                      class="form-control"
+                      type="text"
+                      name="prov_contenido"
+                      id="prov_contenido"
+                      maxlength="500"
+                      rows="4"
+                      [(ngModel)]="m_prov_contenido"
+                      onKeyDown="A(event,this.form.prov_fecharespuesta)"
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Fecha Respuesta:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="date"
+                      name="prov_fecharespuesta"
+                      id="prov_fecharespuesta"
+                      [(ngModel)]="m_prov_fecharespuesta"
+                      onKeyDown="A(event,this.form.prov_horarespuesta)"
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Hora Respuesta:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="time"
+                      name="prov_horarespuesta"
+                      id="prov_horarespuesta"
+                      [(ngModel)]="m_prov_horarespuesta"
+                      onKeyDown="A(event,this.form.prov_estadorespuesta)"
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Estado Respuesta:</label
+                  >
+                  <div class="col-sm-7">
+                    <select
+                      id="prov_estadorespuesta"
+                      class="form-control"
+                      name="prov_estadorespuesta"
+                      [(ngModel)]="m_prov_estadorespuesta"
+                      onKeyDown="A(event,this.form.m_prov_fecha)"
+                    >
+                      <option value="Leido">Leido</option>
+                      <option value="Recibido">Recibido</option>
+                      <option value="Enviado">Enviado</option>
+                      <option value="EnEspera">EnEspera</option>
+                      <option value="Reenviado">Reenviado</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Fecha Situación:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="date"
+                      name="prov_fecha"
+                      id="prov_fecha"
+                      [(ngModel)]="m_prov_fecha"
+                      onKeyDown="A(event,this.form.prov_hora)"
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Hora Situación:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="time"
+                      name="prov_hora"
+                      id="prov_hora"
+                      [(ngModel)]="m_prov_hora"
+                      onKeyDown="A(event,this.form.prov_estadosituacion)"
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Estado Situación:</label
+                  >
+                  <div class="col-sm-7">
+                    <select
+                      id="prov_estadosituacion"
+                      class="form-control"
+                      name="prov_estadosituacion"
+                      [(ngModel)]="m_prov_estadosituacion"
+                      onKeyDown="A(event,this.form.prov_fecharecibido)"
+                    >
+                      <option value="Leido">Leido</option>
+                      <option value="Recibido">Recibido</option>
+                      <option value="Enviado">Enviado</option>
+                      <option value="EnEspera">EnEspera</option>
+                      <option value="Reenviado">Reenviado</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Fecha Recibido:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="date"
+                      name="prov_fecharecibido"
+                      id="prov_fecharecibido"
+                      [(ngModel)]="m_prov_fecharecibido"
+                      onKeyDown="A(event,this.form.prov_horarecibido)"
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Hora Recibido:</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      type="time"
+                      name="prov_horarecibido"
+                      id="prov_horarecibido"
+                      [(ngModel)]="m_prov_horarecibido"
+                      onKeyDown="A(event,this.form.prov_estadorecibido)"
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda"
+                    >Estado Recibido:</label
+                  >
+                  <div class="col-sm-7">
+                    <select
+                      id="prov_estadorecibido"
+                      class="form-control"
+                      name="prov_estadorecibido"
+                      [(ngModel)]="m_prov_estadorecibido"
+                      onKeyDown="A(event,this.form.prov_estadorecibido)"
+                    >
+                      <option value="Leido">Leido</option>
+                      <option value="Recibido">Recibido</option>
+                      <option value="Enviado">Enviado</option>
+                      <option value="EnEspera">EnEspera</option>
+                      <option value="Reenviado">Reenviado</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              name="btnEditarProveido"
+              id="btnEditarProveido"
+              (click)="ActualizaProveido()"
+            >
+              Actualizar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- FIN MODAL modalEditarProveido -->
+  </div>
+  <!-- FIN RESULTADO BUQUEDA POR HOJA DE RUTA -->
+  <!-- RESULTADO BUQUEDA POR REFERENCIA -->
+  <div class="row" name="pnl_resutadoref" id="pnl_resutadoref">
+    <table
+      class="table table-primary table-striped table-condensed table-hover dt-resultadoreferencia"
+    >
+      <thead>
+        <tr>
+          <th>Nro HR</th>
+          <th>CITE</th>
+          <th>Referencia</th>
+          <th>Estado</th>
+          <th>Tipo</th>
+          <th>De</th>
+          <th>Para</th>
+          <th>Usuario Externo</th>
+          <th>Fecha</th>
+          <th>Seleccione...</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr *ngFor="let row_registros of dts_busquedareferencia; let i = index">
+          <td>{{ row_registros.numero }}</td>
+          <td>{{ row_registros.ruta }}</td>
+          <td>{{ row_registros.referencia }}</td>
+          <td>{{ row_registros.estado }}</td>
+          <td>{{ row_registros.tipo }}</td>
+          <td>
+            {{
+              row_registros.tipo == "Externa"
+                ? row_registros.nombre_completo_usuario_externo_de
+                : row_registros.nombre_completo_usuario_de
+            }}
+          </td>
+          <td>{{ row_registros.nombre_completo_usuario_para }}</td>
+          <td>{{ row_registros.NombreCompletoUsuario_ExternoDe }}</td>
+          <td>{{ row_registros.fecha | date : "dd/MM/yyyy" }}</td>
+
+          <td>
+            <button
+              class="btn btn-info btn-circle-sm"
+              type="button"
+              (click)="FiltroBusquedaHojadeRuta(row_registros)"
+            >
+              <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- </form> -->
+</div>
+
+<!-- MODAL FLUJO -->
+<!-- <div *ngIf="pnl_Flujo" class="modal fullscreen-modal fade" id="pnl_Flujo" name="pnl_Flujo" tabindex="-1" role="dialog" aria-labelledby="Insertar_NuevoProveido" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Insertar_NuevoProveido"><b>REGISTRAR FLUJO</b></h5>
+                <button type="button" class="close" (click)="paneles('CERRAR_FLUJO')" aria-label="Close" (click)="limpiaContador()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <app-revision [idProyecto]="IdProyecto" [tipoLista]="'TODOS'" [consulta]="true"></app-revision>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="paneles('CERRAR_FLUJO')">Cerrar</button>              
+            </div>
+        </div>
+    </div>
+</div> -->
+<div
+  class="modal fade"
+  tabindex="-1"
+  name="modalRevision"
+  id="modalRevision"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-lg"
+    style="width: 90%"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad; color: white">
+        <button
+          type="button"
+          class="close text-white"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span>&times;</span>
+        </button>
+        Flujo
+      </div>
+      <div class="modal-body">
+        <!-- <app-revision
+          [idProyecto]="IdProyecto"
+          [tipoLista]="'TODOS'"
+          [consulta]="true"
+          [idCorrespondencia]="m_idcorrespondencia"
+        ></app-revision> -->
+        <div style="margin: 2rem 0; padding: 0 2rem" *ngIf="mostrarRevision">
+          <app-chart-proveidos [numero]="m_nrohojaderuta" [gestion]="m_gestion"></app-chart-proveidos>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

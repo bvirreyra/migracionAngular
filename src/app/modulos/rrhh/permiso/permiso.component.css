@@ -1,0 +1,15 @@
+.dt-usuarios tfoot input {
+  width: 100% !important;
+}
+
+.dt-usuarios tfoot {
+  display: table-header-group !important;
+}
+
+.dt-permisos tfoot input {
+  width: 100% !important;
+}
+
+.dt-permisos tfoot {
+  display: table-header-group !important;
+}

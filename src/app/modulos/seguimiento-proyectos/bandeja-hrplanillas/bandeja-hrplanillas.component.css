@@ -1,0 +1,17 @@
+.dt-bandeja tfoot input {
+  width: 100% !important;
+}
+.dt-bandeja tfoot {
+  display: table-header-group !important;
+}
+
+.botonera{
+  display: flex;
+  justify-content: space-around;
+  align-content: center;
+  max-width: 80px;
+}
+
+td>p{
+  margin: 0 0 2px;
+}

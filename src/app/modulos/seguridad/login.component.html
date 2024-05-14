@@ -1,0 +1,305 @@
+<section class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center user-login-header">
+        <h1>SIGA</h1>
+        <p>{{ tituloLogin }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div
+        class="
+          col-md-4 col-sm-8 col-xs-12 col-md-offset-4 col-sm-offset-2
+          login-image-main
+          text-center
+        "
+      >
+        <div class="row">
+          <div
+            class="alert alert-danger alert-dismissible"
+            id="divAlert"
+            *ngIf="pnl_alerta == true"
+          >
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-hidden="true"
+            >
+              ×
+            </button>
+            <h5>
+              <label for=""
+                >Error al autenticarse, por favor ingrese los datos de forma
+                correcta</label
+              >
+            </h5>
+          </div>
+          <form class="clase-formulario" name="form">
+            <div class="col-md-12 col-sm-12 col-xs-12 user-image-section">
+              <img src="../../../assets/imagenes/logo/icono_login.png" />
+              <!-- <i class="fa fa-user-md"></i> -->
+            </div>
+
+            <div class="checkbox">
+              <label
+                style="font-size: 18pt; text-align: left"
+                class="checkbox-inline"
+              >
+                <input
+                  type="checkbox"
+                  [(ngModel)]="soyEmpresa"
+                  name="chekEmpresa"
+                  (ngModelChange)="limpiaLogin()"
+                  (click)="setChecks()"
+                />
+                <span class="cr"
+                  ><i class="cr-icon glyphicon glyphicon-remove"></i></span
+                ><strong> Soy Empresa </strong>
+              </label>
+            </div>
+            <!-- <div class="checkbox">
+              <label
+                style="font-size: 18pt; text-align: left"
+                class="checkbox-inline"
+              >
+                <input
+                  type="checkbox"
+                  [(ngModel)]="soyMae"
+                  name="chekMae"
+                  (ngModelChange)="limpiaLogin()"
+                  (click)="setChecks()"
+                />
+                <span class="cr"
+                  ><i class="cr-icon glyphicon glyphicon-remove"></i></span
+                ><strong> Soy MAE </strong>
+              </label>
+            </div> -->
+            <div class="col-md-12 col-sm-12 col-xs-12 user-login-box">
+              <div
+                class="form-group has-feedback"
+                id="divUser"
+                *ngIf="soyMae == true"
+              >
+                <input
+                  type="text"
+                  autofocus
+                  class="form-control"
+                  placeholder="Usuario"
+                  name="USU_MAE"
+                  id="USU_MAE"
+                  onKeyDown="A(event,this.form.PASS_MAE)"
+                  #USU_USER="ngModel"
+                  [(ngModel)]="autenticacion.USU_MAE"
+                  autocomplete="off"
+                  required
+                />
+              </div>
+
+              <div
+                class="form-group has-feedback"
+                id="divPass"
+                *ngIf="soyMae == true"
+              >
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Contraseña"
+                  name="PASS_MAE"
+                  id="PASS_MAE"
+                  onKeyDown="A(event,this.form.btnSession)"
+                  #USU_PASS="ngModel"
+                  [(ngModel)]="autenticacion.PASS_MAE"
+                  required
+                />
+              </div>
+              <div
+                class="form-group has-feedback"
+                id="divUser"
+                *ngIf="soyEmpresa == false && soyMae == false"
+              >
+                <input
+                  type="text"
+                  autofocus
+                  class="form-control"
+                  placeholder="Usuario"
+                  name="USU_USER"
+                  id="USU_USER"
+                  onKeyDown="A(event,this.form.USU_PASS)"
+                  #USU_USER="ngModel"
+                  [(ngModel)]="autenticacion.USU_USER"
+                  autocomplete="off"
+                  required
+                />
+              </div>
+
+              <div
+                class="form-group has-feedback"
+                id="divPass"
+                *ngIf="soyEmpresa == false && soyMae == false"
+              >
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Contraseña"
+                  name="USU_PASS"
+                  id="USU_PASS"
+                  onKeyDown="A(event,this.form.btnSession)"
+                  #USU_PASS="ngModel"
+                  [(ngModel)]="autenticacion.USU_PASS"
+                  required
+                />
+              </div>
+              <div
+                class="form-group has-feedback"
+                id="divUser"
+                *ngIf="soyEmpresa == true"
+              >
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="NIT"
+                  name="NIT"
+                  id="NIT"
+                  onKeyDown="A(event,this.form.USU_NIT)"
+                  #NIT="ngModel"
+                  [(ngModel)]="autenticacion.NIT"
+                  required
+                />
+              </div>
+
+              <div
+                class="form-group has-feedback"
+                id="divPass"
+                *ngIf="soyEmpresa == true"
+              >
+                <input
+                  type="text"
+                  autofocus
+                  class="form-control"
+                  placeholder="USUARIO NIT"
+                  name="USU_NIT"
+                  id="USU_NIT"
+                  onKeyDown="A(event,this.form.PASS_NIT)"
+                  #USU_NIT="ngModel"
+                  [(ngModel)]="autenticacion.USU_NIT"
+                  required
+                />
+              </div>
+              <div
+                class="form-group has-feedback"
+                id="divPass"
+                *ngIf="soyEmpresa == true"
+              >
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Contraseña NIT"
+                  name="PASS_NIT"
+                  id="PASS_NIT"
+                  onKeyDown="A(event,this.form.btnSession)"
+                  #USU_PASS="ngModel"
+                  [(ngModel)]="autenticacion.PASS_NIT"
+                  required
+                />
+              </div>
+              <div class="row">
+                <div class="col-xs-2"></div>
+                <!-- /.col -->
+                <div class="col-xs-6">
+                  <input
+                    class="btn btn-primary btn-block btn-flat"
+                    type="button"
+                    value="Iniciar Sesión"
+                    name="btnSession"
+                    id="btnSession2"
+                    (click)="onSubmit()"
+                  />
+                </div>
+                <div class="col-xs-4">
+                  <button
+                    id="btnLimpiar"
+                    class="btn btn-default btn-block btn-flat"
+                    (click) ="limpiarInputs()"
+                  >
+                    Limpiar
+                  </button>
+                </div>
+                <!-- <div class="pull-left">
+                                    <a routerLink='/alta'>
+                                        Registrarse
+                                    </a>
+                                </div> -->
+                <!-- /.col -->
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      style="overflow-y: scroll"
+      id="modalListaRegionales"
+      data-backdrop="static"
+      *ngIf="pnlRegionales == true"
+    >
+      <div class="modal-dialog modalPequeño">
+        <div class="modal-content">
+          <form name="form">
+            <div class="modal-header">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title" id="gridSystemModalLabel">
+                Seleccione Oficina Regional
+              </h4>
+            </div>
+            <div class="modal-body">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>NRO</th>
+                    <th>OFICINA - REGIONAL</th>
+                    <th>Ingresar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let row_registros of dtsRegionales; let i = index"
+                  >
+                    <td>{{ i }}</td>
+                    <td>
+                      {{ row_registros.CODIGO_REGIONAL }}-{{
+                        row_registros.NOMBRE_REGIONAL
+                      }}
+                    </td>
+                    <td>
+                      <button
+                        class="btn btn-info btn-circle-sm"
+                        type="button"
+                        (click)="onSubmit(row_registros.CODIGO_REGIONAL)"
+                      >
+                        <span
+                          class="glyphicon glyphicon-circle-arrow-right"
+                        ></span>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- end row -->
+<router-outlet></router-outlet>

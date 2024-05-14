@@ -1,0 +1,65 @@
+<div>
+  <button type="button" class="btn btn-primary  pull-left" title="Volver Panel" name="btnVolverGv" id="btnVolverGv"
+    (click)="paneles('VER_PANELPROYECTOS')"><i class="fa fa-reply fa-2x">
+    </i></button>
+</div>
+<div class="pull-right">
+  <button class="btn btn-primary" type="button" (click)="paneles('DATOS_GENERALES')">Datos Generales</button>
+  <!-- <button *ngIf="vw_seguimiento ==true" class="btn btn-primary" type="button" (click)="paneles('MAE')">MAE Beneficiaria</button>
+  <button *ngIf="vw_seguimiento ==true" class="btn btn-primary" type="button" (click)="paneles('MODULOS_ITEMS')">Módulos/Items</button> -->
+  <button *ngIf="vw_seguimiento ==true" class="btn btn-primary" type="button" (click)="paneles('FORMULARIOS')">Formularios</button>
+  <button class="btn btn-primary" type="button" (click)="paneles('CONTRATO')">Contrato</button>
+  <button *ngIf="vw_seguimiento ==true" class="btn btn-primary" type="button" (click)="paneles('GARANTIAS')">Garantias</button>
+  <button class="btn btn-primary" type="button" (click)="paneles('EQUIPO_TECNICO')">Equipo Técnico</button>
+  <button class="btn btn-primary" type="button" (click)="paneles('DERECHO_PROPIETARIO')">Derecho Propietario</button>
+  <button class="btn btn-primary" type="button" (click)="paneles('CIERRE_ADMINITRATIVO')">Cierre Adminitrativo</button>
+
+</div>
+<div class="row col-lg-12"><h2>{{nombre_proyecto}}</h2></div>
+
+<div class="row"></div>
+<div>
+  <div *ngIf="pnl_datosgenerales==true" id="pnl_datosgenerales" name="pnl_datosgenerales">
+    <app-datos-generales [inputDts]="inputDts" [opcion] ="'OBS'" ></app-datos-generales>
+  </div>
+</div>
+<!-- <div>
+  <div *ngIf="pnl_mae==true" id="pnl_mae" name="pnl_mae">
+    <app-mae-beneficiaria [inputDts]="inputDts" ></app-mae-beneficiaria>
+  </div>
+</div> -->
+<div>
+  <div *ngIf="pnl_modulositems==true" id="pnl_modulositems" name="pnl_modulositems">
+    <app-modulos-items [inputDts]="inputDts" ></app-modulos-items>
+  </div>
+</div>
+<div>
+  <div *ngIf="pnl_formularios==true" id="pnl_formularios" name="pnl_formularios">
+    <app-formularios [inputDts]="inputDts" ></app-formularios>
+  </div>
+</div>
+<div>
+  <div *ngIf="pnl_contrato==true" id="pnl_contrato" name="pnl_contrato">
+    <app-contrato [inputDts]="inputDts" ></app-contrato>
+  </div>
+</div>
+<div>
+  <div *ngIf="pnl_garantias==true" id="pnl_garantias" name="pnl_garantias">
+    <app-garantias [inputDts]="inputDts"></app-garantias>
+  </div>
+</div>
+<div>
+  <div *ngIf="pnl_equipotecnico==true" id="pnl_equipotecnico" name="pnl_equipotecnico">
+    <app-equipo-tecnico [inputDts]="inputDts"></app-equipo-tecnico>
+  </div>
+</div>
+<div>
+  <div *ngIf="pnl_derechopropietario==true" id="pnl_derechopropietario" name="pnl_derechopropietario">
+    <app-derecho-propietario-legal [inputDts]="inputDts"></app-derecho-propietario-legal>
+  </div>
+</div>
+<div>
+  <div *ngIf="pnl_cierreadminitrativo==true" id="pnl_cierreadminitrativo" name="pnl_cierreadminitrativo">
+    <app-cierre-administrativo-tecnica [inputDts]="inputDts"></app-cierre-administrativo-tecnica>
+  </div>
+</div>

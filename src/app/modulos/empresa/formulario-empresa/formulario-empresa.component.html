@@ -1,0 +1,1136 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="contenedor-modulo">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <span class="fa fa-id-card-o"></span> Formularios
+      <button class="btn btn-info" style="padding: 2px 10px; margin-top: -2px; margin-left: 1rem;" (click)="toggleVerForms = !toggleVerForms">
+        <span class="fa fa-plus-square-o"></span> {{toggleVerForms ? 'Ocultar Formularios':'Ver Formularios'}}
+      </button>
+      <button class="btn btn-info pull-right" style="padding: 2px 10px; margin-top: -2px; margin-left: 1rem;" (click)="nuevoFormulario()" [disabled]="idUsuario === 2000">
+        <span class="fa fa-plus-square-o"></span> Nuevo Formulario
+      </button>
+      <button *ngIf="estadoForm =='INICIADO' && elIdFormulario && contenido?.experiencias.especificas" class="btn btn-warning pull-right" style="padding: 2px 10px; margin-top: -2px;" (click)="validarFormulario()" title="Finalizar Formulario">
+        <span class="fa fa-plus-square-o"></span> Finalizar
+      </button>
+      <button *ngIf="estadoForm =='FINALIZADO' && elIdFormulario" class="btn btn-warning pull-right" style="padding: 2px 10px; margin-top: -2px;" (click)="subirArchivos()" title="Subir Archivos">
+        <span class="fa fa-plus-square-o"></span> Subir Archivos
+      </button>
+    </div>
+    <div class="panel-body">
+      <div>
+        <p class="aviso"> * Cuando haya finalizado el registro de un formulario se genera un código, este permitirá enviar información al sistema de proyectos de la UPRE.</p>
+      </div>
+      <table *ngIf="toggleVerForms" class="table table-responsive table-condensed table-hover dt-formularios" style="font-size: 9pt;">
+        <thead>
+          <tr>
+            <th style="width: 180px; text-align: center;">Acciones</th>
+            <th >Nombre</th>
+            <th >Codigo</th>
+            <th >Estado</th>
+            <th >Fecha Modificación</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+        <tbody>
+          <tr *ngFor="let row of dtsFormularios;"
+          [ngClass]="{ 'bg-info': row.id_formulario === elIdFormulario}">
+            <td style="width: 180px; display: flex;justify-content: space-around;">
+              <button *ngIf="row.estado === 'FINALIZADO'" class="btn btn-success" title="Ver" (click)="cargarFormulario(row)">
+                <span class="fa fa-eye"></span>
+              </button>
+              <!-- <button *ngIf="row.estado === 'FINALIZADO'" class="btn btn-info" title="Panel Reportes" (click)="panelReportes(row)">
+                <span class="fa fa-print"></span>
+              </button> -->
+              <button *ngIf="row.estado !== 'FINALIZADO' || idUsuario==2000" class="btn btn-warning" title="Editar" (click)="editarFormulario(row)">
+                <span class="fa fa-edit"></span>
+              </button>
+              <button *ngIf="row.estado !== 'FINALIZADO'" class="btn btn-danger" title="Eliminar" (click)="eliminarFormulario(row)">
+                <span class="fa fa-trash"></span>
+              </button>
+              <button *ngIf="idUsuario==2000" class="btn btn-purple" title="Clonar" (click)="clonarFormulario(row)">
+                <span class="fa fa-clone"></span>
+              </button>
+            </td>
+            <td >{{row.nombre }}</td>
+            <td >{{row.codigo}} </td>
+            <td >{{row.estado}}</td>
+            <td >{{row.fecha_modifica || row.fecha_registro | date: "dd/MM/yyyy" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="timeline entrada" *ngIf="contenido" id="timeline">
+    <div class="timeline-linea"></div>
+    <div class="timeline-paradas">
+        <button class="btn timeline-fase fase-activa" id="generales" (click)="cambiarFase('generales')">Datos Generales</button>
+        <!-- <button class="btn timeline-fase" id="experiencia" (click)="cambiarFase('experiencia')">Experiencia</button> -->
+        <button class="btn timeline-fase" id="personal" (click)="cambiarFase('personal')">Personal</button>
+        <!-- <button class="btn timeline-fase" id="equipos" (click)="cambiarFase('equipos')">Equipo</button> -->
+    </div>
+  </div>
+  <div *ngIf="fase=='generales'" class="entrada">
+    <div style="margin: 2rem 0 1rem 0;" *ngIf="(dtsAsociaciones.length>0 && estadoForm != 'FINALIZADO') || (asociacion?.asociado && estadoForm == 'FINALIZADO')">
+      <button style="margin-right: 1rem;" class="btn btn-primary" id="datosEmpresa" type="button" (click)="toggleEmpresa('datosEmpresa')">Datos Empresa</button>
+      <button class="btn btn-primary" id="datosAsociacion" type="button" (click)="toggleEmpresa('datosAsociacion')">Datos Asociación</button>
+    </div>
+    <div *ngIf="mostrarAsociacion">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <span class="fa fa-id-card-o"></span> DATOS DE LA ASOCIACIÓN ACCIDENTAL
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-12 col-md-12">
+              <label for="nombre_asociacion">Denominación Asociación Accidental:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-link"></i></span>
+                <input class="form-control" type="text" id="asociacionNombre" [(ngModel)]="asociacion.nombre_asociacion" (input)="actualizarAsociacion()"  list="listaAsociaciones" [readOnly]="estadoForm == 'FINALIZADO'" >
+                <datalist id="listaAsociaciones" class="datalist">
+                  <div *ngFor="let row of dtsAsociaciones; let i = index;">
+                    <option class="form-control" value={{row.nombre_asociacion}} label={{row.nombre_asociacion}}>
+                  </div>
+                </datalist>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-4 col-md-4">
+              <label for="estimonio">Nro. de Testimonio:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-file-text-o"></i></span>
+                <input class="form-control" type="text" name="testimonio" placeholder="100/2022" maxlength="30" [(ngModel)]="asociacion.nro_testimonio" readonly>
+              </div>
+            </div>
+            <div class="form-group col-sm-4 col-lg-4 col-md-4">
+              <label for="lugar_testimonio">Lugar Expedición:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-map-o"></i></span>
+                <input class="form-control" type="text" name="lugar_testimonio" [(ngModel)]="asociacion.lugar_testimonio" placeholder="Lugar testimonio" maxlength="200" readonly>
+              </div>
+            </div>
+            <div class="form-group col-sm-4 col-lg-4 col-md-4">
+              <label for="fecha_expedicion">Fecha Expedición:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i></span>
+                <input class="form-control" type="date" [(ngModel)]="asociacion.fecha_expedicion"  readonly>
+              </div>
+            </div>
+          </div>
+          <table class="table table-responsive table-condensed table-hover dt-asociados" style="font-size: 9pt;">
+            <thead>
+              <tr>
+                <th style="width: 70px;" *ngIf="estadoForm !== 'FINALIZADO'">Representante</th>
+                <th >Razon Social</th>
+                <th >NIT</th>
+                <th >Matrícula</th>
+                <th >Fecha Inscripción</th>
+                <th >Participación</th>
+                <th >Tipo Asociado</th>
+                <th >Representante Legal</th>
+                <th >CI</th>
+                <th >Nro Testimonio</th>
+                <th >Lugar Emisisón</th>
+                <th >Fecha Expedición</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td *ngIf="estadoForm !== 'FINALIZADO'"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row of this.asociacion.asociados">
+                <td *ngIf="estadoForm !== 'FINALIZADO'">
+                  <button class="btn btn-info" title="Seleccionar Representante" (click)="cargarRepresentatesAsociado(row)"><i class="fa fa-user"></i></button>
+                </td>
+                <td >{{row.razon_social }}</td>
+                <td >{{row.nit}} </td>
+                <td >{{row.matricula || row.nro_matricula }}</td>
+                <td >{{row.fecha_inscripcion | date: "dd/MM/yyyy" }}</td>
+                <td >{{row.participacion }} </td>
+                <td >{{row.tipo_asociado ? 'PRINCIPAL':'MIEMBRO' }}</td>
+                <td >{{row.representante_legal?.persona.nombre }}</td>
+                <td >{{row.representante_legal?.persona.documento_identidad}} </td>
+                <td >{{row.representante_legal?.poder.nro_testimonio }}</td>
+                <td >{{row.representante_legal?.poder.lugar_emision }}</td>
+                <td >{{row.representante_legal?.poder.fecha_expedicion | date: "dd/MM/yyyy"  }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <span class="fa fa-id-card-o"></span> Representante Legal de la Asociación
+        </div>
+        <div class="panel-body">
+          <div class="form-group col-sm-12 col-lg-6">
+            <label for="rlAsociacion">Nombre Representante:</label>
+            <div class="input-group" *ngIf="estadoForm ==='FINALIZADO'">
+              <span class="input-group-addon"><i class="fa fa-user"></i> </span>
+              <input class="form-control" type="text" name="rlAsociacion" [(ngModel)]="elRLAsociacion?.persona.nombre" maxlength="200" readonly>
+            </div>
+            <div class="input-group" *ngIf="estadoForm !=='FINALIZADO'">
+              <span class="input-group-addon"><i class="fa fa-user"></i> </span>
+              <input class="form-control" type="text" name="direccion" placeholder="Seleccione Representante Legal para la Asociación" id="representanteNombreAsociacion" [(ngModel)]="elRLAsociacion?.persona.nombre" (input)="actualizarRepresentanteAsociacion()" maxlength="200" list="listaRepresentantesAsociacion" required autocomplete="off">
+              <datalist id="listaRepresentantesAsociacion" class="datalist">
+                <div *ngFor="let row of dtsRepresentantesAsociacion; let i = index;">
+                  <option class="form-control" value={{row.id_representante_legal}} label='{{row.nombre}} {{row.poder_testimonio}}'>
+                </div>
+              </datalist>
+            </div>
+          </div>
+          <div class="form-group col-sm-12 col-lg-4">
+            <label for="pais">Carnet de Identidad:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-id-card"></i> </span>
+              <input class="form-control" type="text" name="direccion" [(ngModel)]="elRLAsociacion?.persona.documento_identidad" maxlength="20" [readonly]="!nuevorep">
+            </div>
+          </div>
+          <div class="form-group col-sm-12 col-lg-2">
+            <button class="btn btn-primary btn-block" style="margin-top: 2.4rem;" (click)="nuevoRLAsociacion()" id="btnNuevoRLA"><i class="fa fa-add"></i> Nuevo Representante</button>
+          </div>
+          <div class="row"></div>
+          <div class="form-group col-sm-12 col-lg-4">
+            <label for="pais">Número de Testimonio:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-file"></i> </span>
+              <input class="form-control" type="text" name="direccion" [(ngModel)]="elRLAsociacion?.poder.nro_testimonio" maxlength="20" [readonly]="!nuevorep">
+            </div>
+          </div>
+          <div class="form-group col-sm-12 col-lg-4">
+            <label for="pais">Lugar de Emisión:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-map-marker"></i> </span>
+              <input class="form-control" type="text" name="direccion" [(ngModel)]="elRLAsociacion?.poder.lugar_emision" maxlength="200" [readonly]="!nuevorep">
+            </div>
+          </div>
+          <div class="form-group col-sm-12 col-lg-4">
+            <label for="pais">Fecha de Expedición:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-calendar"></i> </span>
+              <input class="form-control" type="date" name="direccion" [(ngModel)]="elRLAsociacion?.poder.fecha_expedicion" maxlength="10" [readonly]="!nuevorep">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <span class="fa fa-id-card-o"></span> {{mostrarAsociacion ? 'DATOS EMPRESA LIDER' :'DATOS GENERALES DE LA EMPRESA'}}
+      </div>
+      <div class="panel-body">
+        <div class="form-group col-sm-12 col-lg-12">
+          <label for="nombre">Nombre del proponente o razón social:</label>
+          <div class="input-group requerido">
+            <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+            <input class="form-control" type="text" name="nombre" [(ngModel)]="empresa.razon_social" placeholder="Nombre del propotente" maxlength="250" readonly>
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-4">
+          <label for="tipo">Tipo de Empresa:</label>
+          <div>
+            <label class="radio-inline"><input type="radio" id="nacional" value="Empresa Nacional" name="tipo" [(ngModel)]="empresa.tipo" disabled>Empresa Nacional</label>
+            <label class="radio-inline"><input type="radio" id="extranjera" value="Empresa Extranjera" name="tipo" [(ngModel)]="empresa.tipo" disabled>Empresa Extranjera</label>
+            <label class="radio-inline"><input type="radio" id="otro" value="Otro" name="tipo" [(ngModel)]="empresa.tipo" disabled>Otro</label>
+          </div>
+        </div>
+        <div class="row"></div>
+        <div class="form-group col-sm-12 col-lg-4">
+          <label for="matricula">NIT:</label>
+          <div class="input-group requerido">
+            <span class="input-group-addon"><i class="fa fa-info"></i> </span>
+            <input class="form-control" type="text" name="matricula" [(ngModel)]="empresa.nit" placeholder="NIT" maxlength="20" readonly>
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-4">
+          <label for="matricula">Nº Matrícula de Comercio:</label>
+          <div class="input-group requerido">
+            <span class="input-group-addon"><i class="fa fa-info"></i> </span>
+            <input class="form-control" type="text" name="matricula" [(ngModel)]="empresa.nro_matricula" placeholder="Matrícula de Comercio" maxlength="20" readonly>
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-4">
+          <label for="inscripcion">Fecha Inscripción:</label>
+          <div class="input-group requerido">
+            <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i> </span>
+            <input class="form-control" type="date" name="inscripcion" [(ngModel)]="empresa.fecha_inscripcion" readonly>
+          </div>
+        </div>
+        <div class="row"></div>
+        <div class="form-group col-sm-12 col-lg-4">
+          <label for="telefono">Teléfono:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-phone"></i> </span>
+            <input class="form-control" type="text" name="telefono" [(ngModel)]="empresa.telefono" maxlength="50" readonly>
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-4">
+          <label for="fax">Fax:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-fax"></i> </span>
+            <input class="form-control" type="text" name="fax" [(ngModel)]="empresa.fax" maxlength="50" readonly>
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-4">
+          <label for="correo">Correo Electrónico:</label>
+          <div class="input-group requerido">
+            <span class="input-group-addon"><i class="fa fa-envelope"></i> </span>
+            <input class="form-control" type="text" name="correo" [(ngModel)]="empresa.correo" maxlength="150" readonly>
+          </div>
+        </div>
+        <div class="row"></div>
+        <div class="form-group col-sm-12 col-lg-4">
+          <label for="pais">País:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-map"></i> </span>
+            <input class="form-control" type="text" name="pais" [(ngModel)]="empresa.pais" readonly>
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-4">
+          <label for="ciudad">Ciudad:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-map-marker"></i> </span>
+            <input class="form-control" type="text" name="ciudad" [(ngModel)]="empresa.ciudad" list="listaCiudad" readonly>
+            <!-- <datalist id="listaCiudad" class="datalist">
+              <option *ngFor="let row of dtsCiudades;" class="form-control" value={{row.ciudad}} label={{row.ciudad}}>
+            </datalist> -->
+          </div>
+        </div>
+        <div class="row"></div>
+        <div class="form-group col-sm-12 col-lg-12">
+          <label for="pais">Dirección:</label>
+          <div class="input-group requerido">
+            <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+            <input class="form-control" type="text" name="direccion" [(ngModel)]="empresa.direccion" maxlength="200" readonly>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-primary" *ngIf="!mostrarAsociacion">
+      <div class="panel-heading">
+        <span class="fa fa-id-card-o"></span> Representante Legal
+      </div>
+      <div class="panel-body">
+        <div class="form-group col-sm-12 col-lg-6">
+          <label for="pais">Nombre Representante:</label>
+          <div class="input-group" *ngIf="estadoForm ==='FINALIZADO'">
+            <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+            <input class="form-control" type="text" name="direccion" [(ngModel)]="empresa.representante_legal?.persona.nombre" maxlength="200" readonly>
+          </div>
+          <div class="input-group" *ngIf="estadoForm !=='FINALIZADO'">
+            <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+            <input class="form-control" type="text" name="direccion" placeholder="Seleccione Representante Legal" id="representanteNombre" [(ngModel)]="empresa.representante_legal.persona.nombre" (input)="actualizarRepresentante()" maxlength="200" list="listaRepresentantes" required autocomplete="off">
+            <datalist id="listaRepresentantes" class="datalist">
+              <div *ngFor="let row of dtsRepresentantes; let i = index;">
+                <option class="form-control" value={{row.nombre}} label={{row.nombre}}>
+              </div>
+            </datalist>
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-6">
+          <label for="pais">Carnet de Identidad:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+            <input class="form-control" type="text" name="direccion" [(ngModel)]="empresa.representante_legal?.persona.documento_identidad" maxlength="50" readonly>
+          </div>
+        </div>
+        <div class="row"></div>
+        <div class="form-group col-sm-12 col-lg-4">
+          <label for="pais">Número de Testimonio:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+            <input class="form-control" type="text" name="direccion" [(ngModel)]="empresa.representante_legal?.poder.nro_testimonio" maxlength="50" readonly>
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-4">
+          <label for="pais">Lugar de Emisión:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+            <input class="form-control" type="text" name="direccion" [(ngModel)]="empresa.representante_legal?.poder.lugar_emision" maxlength="200" readonly>
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-4">
+          <label for="pais">Fecha de Expedición:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+            <input class="form-control" type="text" name="direccion" [ngModel]="empresa.representante_legal?.poder.fecha_expedicion | date:'dd/MM/yyyy'" maxlength="10" readonly>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-primary" *ngIf="!mostrarAsociacion">
+      <div class="panel-heading">
+        <span class="fa fa-id-card-o"></span> Datos del Proyecto
+        <button
+          class="btn btn-success pull-right"
+          style="padding: 2px 10px; margin-top: -2px"
+          (click)="validarProyecto()"
+          *ngIf="estadoForm == 'INICIADO'"
+        >
+          <span class="fa fa-save"></span> Guardar Proyecto
+        </button>
+      </div>
+      <div class="panel-body">
+        <div class="form-group col-sm-12 col-lg-12">
+          <label for="proyecto">Nombre del Proyecto:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-building"></i></span>
+            <input class="form-control" type="text" name="proyecto" id="proyecto" [(ngModel)]="proyecto.nombre" maxlength="200" placeholder="nombre del proyecto">
+          </div>
+        </div>
+        <div class="row"></div>
+        <div class="form-group col-sm-12 col-lg-12">
+          <label for="entidad">Entidad / GAM:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+            <input class="form-control" type="text" name="entidad" id="entidad" [(ngModel)]="proyecto.entidad" maxlength="200" placeholder="Nombre de la Entidad / GAM">
+          </div>
+        </div>
+        <div class="row"></div>
+        <div class="form-group col-sm-12 col-lg-6">
+          <label for="pais">Monto Numeral (Bs.):</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-money"></i> </span>
+            <input class="form-control" type="text" name="monto" id="monto" [(ngModel)]="proyecto.monto" (input)="handleInput($event)" (blur)="handleBlur($event)" >
+          </div>
+        </div>
+        <div class="form-group col-sm-12 col-lg-6">
+          <label for="pais">Validez de la Propuesta (Días):</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+            <input class="form-control" type="text" name="validez" id="validez" [(ngModel)]="proyecto.validez" onkeypress="return permite(event, 'solo_num')" maxlength="3" >
+          </div>
+        </div>
+        <div class="row"></div>
+        <div class="form-group col-sm-12 col-lg-12">
+          <label for="pais">Monto Literal:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+            <input class="form-control" type="text" name="monto_literal" [ngModel]="proyecto.monto_literal"readonly>
+          </div>
+        </div>
+      </div>
+    </div>    
+  </div>
+  <!-- <div class="panel panel-primary" *ngIf="fase=='experiencia'">
+    <div class="panel-heading">
+      <span class="fa fa-id-card-o"></span> Experiencia de la Empresa
+    </div>
+    <div class="panel-body">
+      <div style="margin-bottom: 1rem;">
+        <button *ngIf="estadoForm !== 'FINALIZADO'" style="margin-right: 1rem;" class="btn btn-primary" id="total" type="button" (click)="toggleExperiencia('total')">Total</button>
+        <button class="btn btn-primary" id="general" type="button" (click)="toggleExperiencia('general')">General</button>
+        <button style="margin: 0 1rem;" class="btn btn-primary" id="especifica" type="button" (click)="toggleExperiencia('especifica')">Específica</button>
+        <button *ngIf="estadoForm !== 'FINALIZADO'" class="btn btn-success" type="button" (click)="crudFormulario('U',null)"><i class="fa fa-save"></i> Guardar Experiencia</button>
+      </div>
+      <div *ngIf="mostrarExperiencia == 'total'" style="overflow-x: auto;">
+        <div *ngIf="estadoForm === 'INICIADO'">
+          <p class="aviso"> <i class="fa fa-info"></i> Seleccione los registros que serán parte de la experiencia general y específica, puede ver un resumen de las mismas en el apartado <strong>General</strong> y <strong>Específica.</strong></p>
+        </div>
+        <table class="table table-responsive table-condensed table-hover dt-emp-total" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="width: 70px;" *ngIf="estadoForm !== 'FINALIZADO'">Marcar</th>
+              <th >Nombre del Contratante</th>
+              <th >Dirección del Contratante</th>
+              <th >Objeto de Contrato</th>
+              <th >Ubicación</th>
+              <th >Monto Contrato Bs.</th>
+              <th >Monto Contrato $us.</th>
+              <th >Inicio</th>
+              <th >Finalización</th>
+              <th >% Participación</th>
+              <th >Nombre del Socio</th>
+              <th >Profesional Responsable</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td *ngIf="estadoForm !== 'FINALIZADO'"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsExperienciaEmpresa"
+            [ngClass]="{ 'bg-warning': row.fid_empresa !== elIdEmpresa}" title="{{row.razon_social}}">
+              <td *ngIf="estadoForm !== 'FINALIZADO'">
+                <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="row.general" (change)="marcarExperienciaEmpresa(row.id_experiencia_empresa,'general')">General</label><br><br>
+                <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="row.especifica" (change)="marcarExperienciaEmpresa(row.id_experiencia_empresa,'especifica')">Específica</label>
+              </td>
+              <td >{{row.nombre_contratante }}</td>
+              <td >{{row.direccion_contacto}} </td>
+              <td >{{row.objeto_contratacion }}</td>
+              <td >{{row.ubicacion }}</td>
+              <td >{{row.monto_final_contrato_bs || row.monto_contrato_bs  | number: "0.2-2" | formatoDecimal}} </td>
+              <td >{{(row.monto_final_contrato_sus || row.monto_contrato_sus | number: "0.2-2" | formatoDecimal) == 0?''
+                : (row.monto_final_contrato_sus || row.monto_contrato_sus | number: "0.2-2" | formatoDecimal)}}</td>
+              <td >{{row.fecha_inicio_ejecucion || row.fecha_inicio | date: "dd/MM/yyyy" }}</td>
+              <td >{{row.fecha_fin_ejecucion || row.fecha_fin | date: "dd/MM/yyyy"}} </td>
+              <td >{{row.participacion}}</td>
+              <td >{{row.socio }}</td>
+              <td >{{row.profesional_responsable || row.responsable}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="mostrarExperiencia == 'general'" style="overflow-x: auto;">
+        <table class="table table-responsive table-condensed table-hover dt-emp-general" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="width: 70px;" *ngIf="estadoForm !== 'FINALIZADO'">Desmarcar</th>
+              <th >Nombre del Contratante</th>
+              <th >Dirección del Contratante</th>
+              <th >Objeto de Contrato</th>
+              <th >Ubicación</th>
+              <th >Monto Contrato Bs.</th>
+              <th >Monto Contrato $us.</th>
+              <th >Inicio</th>
+              <th >Finalización</th>
+              <th >% Participación</th>
+              <th >Nombre del Socio</th>
+              <th >Profesional Responsable</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td *ngIf="estadoForm !== 'FINALIZADO'"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsExpEmpGeneral"
+            [ngClass]="{ 'bg-warning': row.fid_empresa !== elIdEmpresa}" title="{{row.razon_social}}">
+              <td *ngIf="estadoForm !== 'FINALIZADO'">
+                <input type="checkbox" [(ngModel)]="row.general" (change)="marcarExperienciaEmpresa(row.id_experiencia_empresa,'general')">
+              </td>
+              <td >{{row.nombre_contratante }}</td>
+              <td >{{row.direccion_contacto}} </td>
+              <td >{{row.objeto_contratacion }}</td>
+              <td >{{row.ubicacion }}</td>
+              <td >{{row.monto_final_contrato_bs || row.monto_contrato_bs  | number: "0.2-2" | formatoDecimal}} </td>
+              <td >{{(row.monto_final_contrato_sus || row.monto_contrato_sus | number: "0.2-2" | formatoDecimal) == 0 ? ''
+                : (row.monto_final_contrato_sus || row.monto_contrato_sus | number: "0.2-2" | formatoDecimal)}}</td>
+              <td >{{row.fecha_inicio_ejecucion || row.fecha_inicio | date: "dd/MM/yyyy" }}</td>
+              <td >{{row.fecha_fin_ejecucion || row.fecha_fin | date: "dd/MM/yyyy"}} </td>
+              <td >{{row.participacion}}</td>
+              <td >{{row.socio }}</td>
+              <td >{{row.profesional_responsable || row.responsable}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="mostrarExperiencia == 'especifica'" style="overflow-x: auto;">
+        <table class="table table-responsive table-condensed table-hover dt-emp-especifica" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="width: 70px;" *ngIf="estadoForm !== 'FINALIZADO'">Desmarcar</th>
+              <th >Nombre del Contratante</th>
+              <th >Dirección del Contratante</th>
+              <th >Objeto de Contrato</th>
+              <th >Ubicación</th>
+              <th >Monto Contrato Bs.</th>
+              <th >Monto Contrato $us.</th>
+              <th >Inicio</th>
+              <th >Finalización</th>
+              <th >% Participación</th>
+              <th >Nombre del Socio</th>
+              <th >Profesional Responsable</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td *ngIf="estadoForm !== 'FINALIZADO'"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsExpEmpEspecifica"
+            [ngClass]="{ 'bg-warning': row.fid_empresa !== elIdEmpresa}" title="{{row.razon_social}}">
+              <td *ngIf="estadoForm !== 'FINALIZADO'">
+                <input type="checkbox" [(ngModel)]="row.especifica" (change)="marcarExperienciaEmpresa(row.id_experiencia_empresa,'especifica')">
+              </td>
+              <td >{{row.nombre_contratante }}</td>
+              <td >{{row.direccion_contacto}} </td>
+              <td >{{row.objeto_contratacion }}</td>
+              <td >{{row.ubicacion }}</td>
+              <td >{{row.monto_final_contrato_bs || row.monto_contrato_bs  | number: "0.2-2" | formatoDecimal}} </td>
+              <td >{{(row.monto_final_contrato_sus || row.monto_contrato_sus | number: "0.2-2" | formatoDecimal) == 0 ? ''
+                : (row.monto_final_contrato_sus || row.monto_contrato_sus | number: "0.2-2" | formatoDecimal)}}</td>
+              <td >{{row.fecha_inicio_ejecucion || row.fecha_inicio | date: "dd/MM/yyyy" }}</td>
+              <td >{{row.fecha_fin_ejecucion || row.fecha_fin | date: "dd/MM/yyyy"}} </td>
+              <td >{{row.participacion}}</td>
+              <td >{{row.socio }}</td>
+              <td >{{row.profesional_responsable || row.responsable}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="text-align: left;display: grid;" *ngIf="mostrarExperiencia !=='total' ">
+        <p><i>TOTAL FACTURADO EN DÓLARES AMERICANOS:</i> <strong> {{totalDolares | number: "0.2-2" | formatoDecimal}}</strong></p>
+        <p><i>TOTAL FACTURADO EN BOLIVIANOS:</i> <strong> {{totalBolivianos | number: "0.2-2" | formatoDecimal}}</strong></p>
+      </div>
+    </div>
+  </div> -->
+  <div class="panel panel-primary" *ngIf="fase=='personal'">
+    <div class="panel-heading">
+      <span class="fa fa-id-card-o"></span> Personal de la Empresa
+    </div>
+    <div class="panel-body">
+      <div class="row" *ngIf="estadoForm !='FINALIZADO'">
+        <div class="form-group col-sm-12 col-lg-12 col-md-12">
+          <label for="nombre_asociacion">Agregar Personal:</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-link"></i></span>
+            <input class="form-control" type="text" id="nombrePersonal" (input)="agregarPersonal()" list="listaPersonal" required>
+            <datalist id="listaPersonal" class="datalist" >
+              <div *ngFor="let row of dtsPersonalALL; let i = index;">
+                <option class="form-control" value={{row.nombre}} label={{row.nombre}}>
+              </div>
+            </datalist>
+          </div>
+        </div>
+      </div>
+      <div class="grid-card">
+        <div class="card" *ngFor="let p of dtsPersonal">
+          <div class="card-header" [ngClass]="{ 'select-employe': p.idrep ? p.idrep === elIdrep : p.id_empleado === elIdEmpleado}">
+            <div *ngIf="estadoForm === 'INICIADO'" style="display: flex;justify-content: space-between; margin-bottom: 1rem;">
+              <p>Cargo</p>
+              <strong style="cursor: pointer;" (click)="eliminarPersonal(p.idrep)">✖️</strong>
+            </div>
+            <div *ngIf="estadoForm !== 'INICIADO'">
+              <p>Cargo</p>
+            </div>
+            <h4 *ngIf="estadoForm !== 'INICIADO'">{{p.cargo_actual}}</h4>
+            <div *ngIf="estadoForm === 'INICIADO'">
+              <select id="personaCargo" [(ngModel)]="p.cargo_actual" (ngModelChange)="actualizarCargo(p.id_persona,p.cargo_actual,p.idrep)" >
+                <option *ngFor="let row of dtsCargos" [ngValue]="row.nombre" >
+                  {{row.nombre}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="card-body" (dblclick)="eliminarPersonal(p.idrep)" title="{{estadoForm =='INICIADO'? 'Doble click para EXCLUIR':''}}" >
+            <h3>{{p.nombre}}</h3>
+            <h4>{{p.persona?.documento_identidad || p.numero_documento}}</h4>
+            <p>{{p.profesion}}</p>
+            <i *ngIf="contenido.datos_asociacion?.id_asociacion_accidental">{{p.razon_social}}</i>
+          </div>
+          <div class="card-footer">
+            <!-- <button class="btn btn-primary btn-block" (click)="cargarExperienciaEmpleado(p.experiencias,p.id_empleado,p.idrep)"><i class="fa fa-th-list"></i> EXPERIENCIA</button> -->
+          </div>
+        </div>
+      </div>
+      <div *ngIf="dtsExperienciaEmpleado.length>0 || dtsExpPerGeneral.length>0" id="expEmpleado">
+        <div style="margin: 2rem 0 1rem 0;">
+          <button *ngIf="estadoForm !== 'FINALIZADO'" style="margin-right: 1rem;" class="btn btn-primary" id="per-total" type="button" (click)="toggleExperienciaEmpleado('total')">Total</button>
+          <button class="btn btn-primary" id="per-general" type="button" (click)="toggleExperienciaEmpleado('general')">General</button>
+          <button style="margin: 0 1rem;" class="btn btn-primary" id="per-especifica" type="button" (click)="toggleExperienciaEmpleado('especifica')">Específica</button>
+          <button *ngIf="estadoForm !== 'FINALIZADO'" class="btn btn-success" type="button" (click)="crudFormulario('U',null)"><i class="fa fa-save"></i> Guardar Experiencia</button>
+        </div>
+        <div *ngIf="mostrarExperienciaEmpleado == 'total'">
+          <div *ngIf="estadoForm === 'INICIADO'">
+            <p class="aviso"><i class="fa fa-info"></i> Seleccione los registros que serán parte de la experiencia general y específica, puede ver un resumen de las mismas en el apartado <strong>General</strong> y <strong>Específica.</strong></p>
+          </div>
+          <table  class="table table-responsive table-condensed table-hover dt-per-total" style="font-size: 9pt;">
+            <thead>
+              <tr>
+                <th style="width: 70px;" *ngIf="estadoForm !== 'FINALIZADO'">Marcar</th>
+                <th >Empresa/Entidad</th>
+                <th >Objeto de la obra</th>
+                <th >Monto de la Obra Bs.</th>
+                <th >Cargo</th>
+                <th >Desde</th>
+                <th >Hasta</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+              <td *ngIf="estadoForm !== 'FINALIZADO'"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row of dtsExperienciaEmpleado;"
+              [ngClass]="{ 'bg-info': row.marcado}">
+              <td *ngIf="estadoForm !== 'FINALIZADO'">
+                <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="row.general" (change)="marcarExperienciaEmpleado(row.id_experiencia_empleado,'general')">General</label><br><br>
+                <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="row.especifica" (change)="marcarExperienciaEmpleado(row.id_experiencia_empleado,'especifica')">Específica</label>
+              </td>
+                <td >{{row.nombre_empresa }}</td>
+                <td >{{row.objeto_obra}} </td>
+                <td >{{row.monto_obra | number: "0.2-2" | formatoDecimal}}</td>
+                <td >{{row.cargo || row.cargo_actual}}</td>
+                <td >{{row.fecha_inicio | date: "dd/MM/yyyy" }}</td>
+                <td >{{row.fecha_fin | date: "dd/MM/yyyy" }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="mostrarExperienciaEmpleado == 'general'">
+          <table  class="table table-responsive table-condensed table-hover dt-per-general" style="font-size: 9pt;">
+            <thead>
+              <tr>
+                <th style="width: 70px;" *ngIf="estadoForm !== 'FINALIZADO'">Marcar</th>
+                <th >Empresa/Entidad</th>
+                <th >Objeto de la obra</th>
+                <th >Monto de la Obra Bs.</th>
+                <th >Cargo</th>
+                <th >Desde</th>
+                <th >Hasta</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+              <td *ngIf="estadoForm !== 'FINALIZADO'"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row of dtsExpPerGeneral;"
+              [ngClass]="{ 'bg-info': row.id_formulario === elIdFormulario}">
+              <td *ngIf="estadoForm !== 'FINALIZADO'">
+                <input type="checkbox" [(ngModel)]="row.general" (change)="marcarExperienciaEmpleado(row.id_experiencia_empleado,'general')">
+              </td>
+                <td >{{row.nombre_empresa }}</td>
+                <td >{{row.objeto_obra}} </td>
+                <td >{{row.monto_obra | number: "0.2-2" | formatoDecimal}}</td>
+                <td >{{row.cargo || row.cargo_actual}}</td>
+                <td >{{row.fecha_inicio | date: "dd/MM/yyyy" }}</td>
+                <td >{{row.fecha_fin | date: "dd/MM/yyyy" }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="mostrarExperienciaEmpleado == 'especifica'">
+          <table  class="table table-responsive table-condensed table-hover dt-per-especifica" style="font-size: 9pt;">
+            <thead>
+              <tr>
+                <th style="width: 70px;" *ngIf="estadoForm !== 'FINALIZADO'">Desmarcar</th>
+                <th >Empresa/Entidad</th>
+                <th >Objeto de la obra</th>
+                <th >Monto de la Obra Bs.</th>
+                <th >Cargo</th>
+                <th >Desde</th>
+                <th >Hasta</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+              <td *ngIf="estadoForm !== 'FINALIZADO'"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row of dtsExpPerEspecifica;"
+              [ngClass]="{ 'bg-info': row.id_formulario === elIdFormulario}">
+              <td *ngIf="estadoForm !== 'FINALIZADO'">
+                <input type="checkbox" [(ngModel)]="row.especifica" (change)="marcarExperienciaEmpleado(row.id_experiencia_empleado,'especifica')">
+              </td>
+                <td >{{row.nombre_empresa }}</td>
+                <td >{{row.objeto_obra}} </td>
+                <td >{{row.monto_obra | number: "0.2-2" | formatoDecimal}}</td>
+                <td >{{row.cargo || row.cargo_actual}}</td>
+                <td >{{row.fecha_inicio | date: "dd/MM/yyyy" }}</td>
+                <td >{{row.fecha_fin | date: "dd/MM/yyyy" }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="panel panel-primary" *ngIf="fase=='equipos'">
+    <div class="panel-heading">
+      <span class="fa fa-id-card-o"></span> Equipos
+    </div>
+    <div class="panel-body">
+      <div style="margin: 2rem 0 1rem 0;">
+        <button  *ngIf="estadoForm !== 'FINALIZADO'" class="btn btn-primary" id="totalEquipos" type="button" (click)="toggleEquipos('totalEquipos')">Equipos de Trabajo</button>
+        <button style="margin: 0 1rem;" class="btn btn-primary" id="permanente" type="button" (click)="toggleEquipos('permanente')">Permanente</button>
+        <button style="margin-right: 1rem;" class="btn btn-primary" id="requerido" type="button" (click)="toggleEquipos('requerido')">A requerimiento</button>
+        <button *ngIf="estadoForm !== 'FINALIZADO'" class="btn btn-success" type="button" (click)="crudFormulario('U',null)"><i class="fa fa-save"></i> Guardar Equipamiento</button>
+      </div>
+      <div *ngIf="mostrarEquipos === 'totalEquipos'">
+        <p class="aviso"><i class="fa fa-info"></i> Seleccione los registros que serán parte del equipo de trabajo permanente o a requerimiento, puede ver un resumen de las mismas en los apartados <strong>Permanente y A requerimiento</strong></p>
+        <table  class="table table-responsive table-condensed table-hover dt-totalEquipos" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th *ngIf="estadoForm !== 'FINALIZADO'" style="width: 80px; text-align: center;">Selección</th>
+              <th >Descripción</th>
+              <th >Unidad</th>
+              <th >Cantidad</th>
+              <th >Potencia</th>
+              <th >Capacidad</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td *ngIf="estadoForm !== 'FINALIZADO'"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsEquipos;"
+            [ngClass]="{ 'bg-warning': row.fid_empresa !== elIdEmpresa}" title="{{row.razon_social}}">
+              <td *ngIf="estadoForm !== 'FINALIZADO'">
+                <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="row.permanente" (change)="marcarEquipos(row.id_equipo_trabajo,'permanente')">Permanente</label><br><br>
+                <label style="margin-top: 1rem;" class="checkbox-inline"><input type="checkbox" [(ngModel)]="row.requerido" (change)="marcarEquipos(row.id_equipo_trabajo,'requerido')">Requerido</label>
+              </td>
+              <td >{{row.descripcion }}</td>
+              <td >{{row.unidad}} </td>
+              <td >{{row.cantidad}}</td>
+              <td >{{row.potencia}}</td>
+              <td >{{row.capacidad}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="mostrarEquipos === 'permanente'">
+        <table  class="table table-responsive table-condensed table-hover dt-permanente" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th *ngIf="estadoForm !== 'FINALIZADO'" style="width: 80px; text-align: center;">Desmarcar</th>
+              <th >Descripción</th>
+              <th >Unidad</th>
+              <th >Cantidad</th>
+              <th >Ptencia</th>
+              <th >Capacidad</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td *ngIf="estadoForm !== 'FINALIZADO'"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsPermanentes;"
+            [ngClass]="{ 'bg-warning': row.fid_empresa !== elIdEmpresa}" title="{{row.razon_social}}">
+              <td *ngIf="estadoForm !== 'FINALIZADO'">
+                <input type="checkbox" [(ngModel)]="row.permanente" (change)="marcarEquipos(row.id_equipo_trabajo,'permanente')">
+              </td>
+              <td >{{row.descripcion }}</td>
+              <td >{{row.unidad}} </td>
+              <td >{{row.cantidad}}</td>
+              <td >{{row.potencia}}</td>
+              <td >{{row.capacidad}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="mostrarEquipos === 'requerido'">
+        <table  class="table table-responsive table-condensed table-hover dt-requerido" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th *ngIf="estadoForm !== 'FINALIZADO'" style="width: 80px; text-align: center;">Desmarcar</th>
+              <th >Descripción</th>
+              <th >Unidad</th>
+              <th >Cantidad</th>
+              <th >Potencia</th>
+              <th >Capacidad</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td *ngIf="estadoForm !== 'FINALIZADO'"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsRequeridos;"
+            [ngClass]="{ 'bg-warning': row.fid_empresa !== elIdEmpresa}" title="{{row.razon_social}}">
+              <td *ngIf="estadoForm !== 'FINALIZADO'">
+                <input type="checkbox" [(ngModel)]="row.requerido" (change)="marcarEquipos(row.id_equipo_trabajo,'requerido')">
+              </td>
+              <td >{{row.descripcion }}</td>
+              <td >{{row.unidad}} </td>
+              <td >{{row.cantidad}}</td>
+              <td >{{row.potencia}}</td>
+              <td >{{row.capacidad}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div> -->
+  <div class="footer-nav" *ngIf="fase">
+    <button class="btn btn-info" id="btnRetroceder" [disabled]="fase == 'generales'" title="{{tittleRetroceder}}" (click)="retrocederFase()"><i class="fa fa-arrow-circle-left"></i> Anterior</button>
+    <button class="btn btn-info" id="btnAvanzar" [disabled]="fase == 'personal' && estadoForm == 'FINALIZADO'" title="{{tittleAvanzar}}" (click)="avanzarFase()">Siguiente <i class="fa fa-arrow-circle-right"></i></button>
+  </div>
+</div>
+
+<!--modal nuevo form -->
+<div class="modal fade" tabindex="-1"  name="modalNuevoForm" id="modalNuevoForm" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">
+          <div>Elaborar Nuevo Formulario</div>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;" *ngIf="!estadoForm">
+          <div class="row">
+            <div class="form-group col-sm-12 col-lg-12">
+              <label for="costoTotal">Nombre del Formulario:</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-file-text-o"></i></span>
+                <input class="form-control" type="text" placeholder="nombre formulario" id="nombreForm" [(ngModel)]="nombreNuevoForm" autofocus>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="linea"></div>
+            <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+              <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+              <button class="btn btn-success" type="submit" (click)="iniciarFormulario('uno')" [disabled]="nombreNuevoForm?.length<10"><i class="fa fa-save"></i> Iniciar Formulario</button>
+            </div>
+          </div>
+        </div>
+        <div style="text-align: left;" *ngIf="estadoForm === 'INICIADO'">
+          <h4>Bienvenid@ a un nuevo registro de formulario</h4><br>
+          <p>Para el registro del formulario, tome en cuenta las siguientes consideraciones: <br>
+            Se debe contar con :</p>
+          <ul>
+            <li>Información de la empresa (Revisar el menú <strong>Datos Generales</strong>)</li>
+            <li>Información completa del/ de los representantes legales (Revisar el menú <strong>Datos Generales</strong>)</li>
+            <li>Información de la experiencia de la empresa (Revisar el menú <strong>Experiencia</strong>)</li>
+            <li>Datos del personal (con su experiencia) (Revisar el menú <strong>Personal</strong>)</li>
+            <li>Datos del equipo de trabajo de la empresa (Revisar el menú <strong>Equipo de Trabajo</strong>)</li>
+          </ul>
+          <div class="linea"></div>
+          <div class="row">
+            <button type="submit" class="btn btn-info pull-right" style="margin-right: 15px;" (click)="iniciarFormulario('dos')"><i class="fa fa-check"></i> Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal subir archivo -->
+<div class="modal fade" tabindex="-1"  name="modalArchivos" id="modalArchivos" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">
+          <div>Subir Archivos Complementarios</div>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-group col-sm-10 col-lg-10 col-md-10">
+            <label for="inputArchivo">Agregar/Reemplazar Cronograma de desembolsos:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-open"></i></span>
+              <input class="form-control" type="file"accept="application/pdf" id="inputArchivo" name="inputArchivo" 
+              (change)="handleFileInput($event.target.files)">
+            </div>
+          </div>
+          <div class="form-group col-sm-2 col-lg-2 col-md-2">
+            <button class="btn btn-info pull-right" (click)="subirAnexo()" style="margin-top: 2.5rem;" title="Subir Archivo">
+              <span class="glyphicon glyphicon-open"></span> Adjuntar Archivo
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-sm-12 col-lg-12 col-md-12">
+            <label class="radio-inline"><input type="radio" style="accent-color: #0c72ad;" name="optradio" [(ngModel)]="tipoArchivos" [value]="1"/>Cronograma de desembolsos</label>
+            <label class="radio-inline"><input type="radio" style="accent-color: #0c72ad;" name="optradio" [(ngModel)]="tipoArchivos" [value]="2"/>Análisis de precios unitarios</label>
+            <label class="radio-inline"><input type="radio" style="accent-color: #0c72ad;" name="optradio" [(ngModel)]="tipoArchivos" [value]="3"/>Cronograma de ejecución</label>
+          </div>
+        </div>
+        <div class="grid-download">
+          <div *ngFor="let a of dtsArchivos">
+            <app-upload-file
+                    inputTipoDocumento="empresa"
+                    inputCodigoProy="{{ elIdFormulario }}"
+                    inputVista="false"
+                    inputTipoImagen="documento"
+                    inputSrc=""
+                    inputNombre="{{a}}"
+                    inputAccion="VISUALIZAR"
+                    [disabled]="false"
+                  >
+              </app-upload-file>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal representante asociado-->
+<div class="modal fade" tabindex="-1"  name="modalRepAsociado" id="modalRepAsociado" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">Seleccionar Represtante Legal Asociado</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-group col-sm-12 col-lg-6">
+            <label for="pais">Nombre Representante:</label>
+            <div class="input-group requerido">
+              <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+              <input class="form-control" type="text" placeholder="Seleccione Representante Legal" id="representanteSocio"
+              (input)="cambiarRepresentanteAsociado()" maxlength="100" (ngModel)="asociado.representante_legal?.persona.nombre"
+              list="listaRepAsociado" autocomplete="off" [disabled]="estadoForm == 'FINALIZADO'" autofocus>
+              <datalist id="listaRepAsociado" class="datalist">
+                <div *ngFor="let row of dtsRepresentantesAsociado; let i = index;">
+                  <option class="form-control" value={{row.id_representante_legal}} label='{{row.nombre}} {{row.poder_testimonio}}'>
+                </div>
+              </datalist>
+            </div>
+          </div>
+          <div class="form-group col-sm-12 col-lg-6">
+            <label for="pais">Carnet de Identidad:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+              <input class="form-control" type="text" [(ngModel)]="asociado.representante_legal?.persona.documento_identidad" maxlength="50" readonly>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-sm-12 col-lg-4">
+            <label for="pais">Número de Testimonio:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+              <input class="form-control" type="text" [(ngModel)]="asociado.representante_legal?.poder.nro_testimonio" maxlength="50" readonly>
+            </div>
+          </div>
+          <div class="form-group col-sm-12 col-lg-4">
+            <label for="pais">Lugar de Emisión:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+              <input class="form-control" type="text" name="direccion" [(ngModel)]="asociado.representante_legal?.poder.lugar_emision" maxlength="200" readonly>
+            </div>
+          </div>
+          <div class="form-group col-sm-12 col-lg-4">
+            <label for="pais">Fecha de Expedición:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+              <input class="form-control" type="text" name="direccion" [ngModel]="asociado.representante_legal?.poder.fecha_expedicion" maxlength="10" readonly>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal reportes-->
+<div class="modal fade" tabindex="-1"  name="modalReportes" id="modalReportes" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">Panel Formularios</h5>
+      </div>
+      <div class="modal-body">
+        <div class="reportes">
+          <button class="btn btn-success btn-block" (click)="generarReporte('A1')">Formulario A1</button>
+          <button class="btn btn-success btn-block" (click)="generarReporte('A2A')">Formulario A2A</button>
+          <button class="btn btn-success btn-block" *ngIf="conAsociacion" (click)="generarReporte('A2B')">Formulario A2B</button>
+          <button class="btn btn-success btn-block" *ngIf="conAsociacion" (click)="generarReporte('A2C')">Formulario A2C</button>
+          <button class="btn btn-success btn-block" (click)="generarReporte('A3')">Formulario A3</button>
+          <button class="btn btn-success btn-block" (click)="generarReporte('A4')">Formulario A4</button>
+          <button class="btn btn-success btn-block" (click)="generarReporte('A5')">Formulario A5</button>
+          <button class="btn btn-success btn-block" (click)="generarReporte('A6')">Formulario A6</button>
+          <button class="btn btn-success btn-block" (click)="generarReporte('A7')">Formulario A7</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+.dt-listaampliacion tfoot input{
+    width: 100% !important;
+}
+.dt-listaampliacion tfoot {
+    display: table-header-group !important;
+}

@@ -1,0 +1,84 @@
+<div class="row">
+  <div class="col-xl-12 col-lg-12">
+    <button type="button" class="btn btn-primary pull-right" (click)="NuevoFormulario()">
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> Nuevo Usuario
+    </button>
+
+    <button type="button" class="btn btn-warning pull-right" (click)="ListarUsuarios()">
+        <i class="fa fa-reply" aria-hidden="true"> Listar Usuario</i>
+    </button>
+  </div>
+</div>
+<!-- /*FORMULARIO DE ALTA*/ -->
+<div class="row" *ngIf="pnl_formularioalta==true">
+
+  <form action="" name="form">
+
+    <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-3">
+      <div class="panel panel-success">
+        <div class="panel-heading text-center">{{subtitulo}}</div>
+        <div class="panel-body">
+          <div class="row">
+            <!-- logica -->
+            <div class="form-horizontal ">              
+              <div class="form-group">
+                <label class="control-label col-sm-4" for="usuario">Usuario:</label>
+                <div class="col-sm-7">
+                  <input required class="form-control" type="text" name="usuario" id="usuario"
+                  [(ngModel)]="m_usuario[0].USU_USER">
+                  
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-4" for="usuario">Contraseña:</label>
+                <div class="col-sm-7">
+                  <input required class="form-control" type="text" name="usuario" id="usuario" 
+                 >
+                 
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-4" for="nombres">Nombres:</label>
+                <div class="col-sm-7">
+                  <input required class="form-control" type="text" name="nombres" id="nombres" 
+                     >
+                   
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-4" for="paterno">Apellido Paterno:</label>
+                <div class="col-sm-7">
+                  <input class="form-control" type="text" name="paterno" id="paterno" 
+                    >
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-4" for="materno">Apellido Materno:</label>
+                <div class="col-sm-7">
+                  <input class="form-control" type="text" name="materno" id="materno" 
+                  >
+                </div>
+              </div>
+              
+            </div>
+            <!-- fin logica -->
+          </div>
+        </div>
+        <div class="panel-footer">
+          <div class="row">
+            <div class="col-md-6">
+              <button *ngIf="btn_insertar==true" type="button" class="btn btn-primary btn-block" name="btn_registro" id="btn_registro" (click)="RegistrarUsuario()"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Registrar</button>
+              <button *ngIf="btn_actualizar==true" type="button" class="btn btn-primary btn-block" name="btn_registro" id="btn_registro" (click)="ActualizarUsuario()"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Actualizar</button>
+              
+            </div>
+            <div class="col-md-6">
+              <button type="button" class="btn btn-default btn-block" id="btn_busqueda" name="btn_busqueda" (click)="VolverPanelPrincipal()">
+                <i class="fa fa-undo" aria-hidden="true"></i> Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+

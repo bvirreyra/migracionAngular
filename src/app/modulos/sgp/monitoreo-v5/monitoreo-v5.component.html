@@ -1,0 +1,291 @@
+<div>
+  <button
+    class="btn btn-success"
+    style="padding: 2px 15px; margin-top: 4px"
+    title="Recargar Datos"
+    (click)="ngOnChanges()"
+  >
+    Recargar Datos Nuevo
+  </button>
+</div>
+<div *ngIf="!sinData">
+  <div class="row"></div>
+  <!-- GRAFICA BARRAS -->
+  <div class="col-sm-12 col-lg-8 col-md-8">
+    <app-barras
+      [titulos]="titulosBarDep"
+      [series]="seriesBarDep"
+      [periodos]="periodosBarDep"
+      [alto]="alto"
+      [colores]="coloresDeptos"
+      (messageEvent)="recibeMensaje($event, 'bardep')"
+    ></app-barras>
+  </div>
+  <!-- DATOS DE TABLA POR DEPARTAMENTO -->
+  <div class="col-sm-12 col-lg-4 col-md-4">
+    <!-- <label class="tituloDetalle">Compromisos por Departamento</label> -->
+    <table
+      class="table table-responsive table-condensed table-hover"
+      style="font-size: 9pt; font-weight: bold"
+    >
+      <thead>
+        <tr>
+          <th>DEPARTAMENTO</th>
+          <th style="text-align: right">CANTIDAD</th>
+          <th style="text-align: right">COSTO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of seriesBarDep; let x = index">
+          <td id="dep{{ x + 1 }}">{{ row.name }}</td>
+          <td style="text-align: right">{{ row.data[0] }}</td>
+          <td style="text-align: right">
+            {{ row.monto | number : "0.2-2" | formatoDecimal }}
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="totales">TOTALES:</td>
+          <td class="totales">{{ totalesDepto.cantidad }}</td>
+          <td class="totales">
+            {{ totalesDepto.costo | number : "0.2-2" | formatoDecimal }}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <div class="row"></div>
+  <!-- DATOS DE TABLA POR AREA -->
+  <div class="col-sm-12 col-lg-4 col-md-4">
+    <!-- <label class="tituloDetalle">Compromisos por Departamento</label> -->
+    <table
+      class="table table-responsive table-condensed table-hover"
+      style="font-size: 9pt; font-weight: bold"
+    >
+      <caption>
+        COMPROMISOS POR AREA
+      </caption>
+      <thead>
+        <tr>
+          <th>AREA</th>
+          <th style="text-align: right">CANTIDAD</th>
+          <th style="text-align: right">COSTO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of seriesArea; let x = index">
+          <td id="dep{{ x + 1 }}">{{ row.name }}</td>
+          <td style="text-align: right">{{ row.data[0] }}</td>
+          <td style="text-align: right">
+            {{ row.monto | number : "0.2-2" | formatoDecimal }}
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="totales">TOTALES:</td>
+          <td class="totales">{{ totalesDepto.cantidad }}</td>
+          <td class="totales">
+            {{ totalesDepto.costo | number : "0.2-2" | formatoDecimal }}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <!-- DATOS DE TABLA POR FINANCIAMIENTO -->
+  <div class="col-sm-12 col-lg-4 col-md-4">
+    <!-- <label class="tituloDetalle">Compromisos por Departamento</label> -->
+    <table
+      class="table table-responsive table-condensed table-hover"
+      style="font-size: 9pt; font-weight: bold"
+    >
+      <caption>
+        FINANCIAMIENTO CIF
+      </caption>
+      <thead>
+        <tr>
+          <th>DEPARTAMENTO</th>
+          <th style="text-align: right">CANTIDAD</th>
+          <th style="text-align: right">COSTO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of seriesDepCIF; let x = index">
+          <td id="dep{{ x + 1 }}">{{ row.departamento }}</td>
+          <td style="text-align: right">{{ row.cantidad }}</td>
+          <td style="text-align: right">
+            {{ row.monto | number : "0.2-2" | formatoDecimal }}
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="totales">TOTALES:</td>
+          <td class="totales">{{ totalesDepCIF.cantidad }}</td>
+          <td class="totales">
+            {{ totalesDepCIF.costo | number : "0.2-2" | formatoDecimal }}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <div class="col-sm-12 col-lg-4 col-md-4">
+    <!-- <label class="tituloDetalle">Compromisos por Departamento</label> -->
+    <table
+      class="table table-responsive table-condensed table-hover"
+      style="font-size: 9pt; font-weight: bold"
+    >
+      <caption>
+        FINANCIAMIENTO CIFE
+      </caption>
+      <thead>
+        <tr>
+          <th>DEPARTAMENTO</th>
+          <th style="text-align: right">CANTIDAD</th>
+          <th style="text-align: right">COSTO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of seriesDepCIFE; let x = index">
+          <td id="dep{{ x + 1 }}">{{ row.departamento }}</td>
+          <td style="text-align: right">{{ row.cantidad }}</td>
+          <td style="text-align: right">
+            {{ row.monto | number : "0.2-2" | formatoDecimal }}
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="totales">TOTALES:</td>
+          <td class="totales">{{ totalesDepCIFE.cantidad }}</td>
+          <td class="totales">
+            {{ totalesDepCIFE.costo | number : "0.2-2" | formatoDecimal }}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <div class="row"></div>
+  <!-- GRAFICA DE ETAPAS POR DEPARTAMENTO -->
+  <div class="col-sm-12 col-lg-8 col-md-8" id="barEtapas">
+    <app-bar-categorias
+      *ngIf="seriesBarEtapa.length > 0"
+      [titulos]="titulosDeptoEtapas"
+      [series]="seriesBarEtapaSF"
+      [periodos]="periodosBarEtapa"
+      [alto]="350"
+      [colores]="colores"
+    ></app-bar-categorias>
+  </div>
+  <!-- DATOS DE TABLA POR ETAPAS Y TIPO FINANCIAMIENTO -->
+  <div *ngIf="seriesBarEtapa.length > 0" class="col-sm-12 col-lg-4 col-md-4">
+    <!-- <label class="tituloDetalle">Compromisos por Etapas ({{seriesBarEtapa[0].name}})</label> -->
+    <table
+      class="table table-responsive table-condensed table-hover"
+      style="font-size: 9pt; font-weight: bold"
+    >
+      <thead>
+        <tr>
+          <th>ETAPA</th>
+          <th style="text-align: right">CANTIDAD</th>
+          <th style="text-align: right">COSTO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of seriesBarEtapa" (dblclick)="cargarEtapas(row)">
+          <td class="etapa{{ row.orden }}">{{ row.name }}</td>
+          <td style="text-align: right">{{ row.data[0] }}</td>
+          <td style="text-align: right">
+            {{ row.monto | number : "0.2-2" | formatoDecimal }}
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="totales">TOTALES:</td>
+          <td class="totales">{{ totalesEtapa.cantidad }}</td>
+          <td class="totales">
+            {{ totalesEtapa.costo | number : "0.2-2" | formatoDecimal }}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div *ngIf="dtsDetallado" id="grillaDetalle">
+    <label id="tablaDetalle" class="tituloDetalle">{{
+      tituloGrillaDetalle
+    }}</label>
+    <table
+      class="table table-responsive table-condensed table-hover dt-detalle"
+      style="font-size: 9pt"
+    >
+      <thead>
+        <tr>
+          <th>MUNICIPIO</th>
+          <th>NOMBRE PROYECTO</th>
+          <th>AREA</th>
+          <th>TAREA</th>
+          <th>TIEMPO (días)</th>
+          <th>OBSERVACION</th>
+          <th>MONTO</th>
+          <th>ESTRUCUTRA</th>
+          <th>BENEFICIARIO</th>
+          <th>FINANCIAMIENTO</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr
+          *ngFor="let row of dtsDetallado"
+          (dblclick)="cargarComparativa(row)"
+          [ngClass]="{
+            'bg-warning': row.estado_monitoreo === 'CUMPLIDO',
+            'bg-danger': row.estado_monitoreo == null,
+            'bg-success': row.id_compromiso == elCompromiso?.id_compromiso
+          }"
+        >
+          <td>{{ row.municipio }}</td>
+          <td>{{ row.nombreproyecto }}</td>
+          <td>{{ row.area }}</td>
+          <td>{{ row.nombre_tarea }}</td>
+          <td>{{ row.dias }}</td>
+          <td>{{ row.observacion_monitoreo }}</td>
+          <td style="text-align: right">
+            {{ row.monto_bs | number : "0.2-2" | formatoDecimal }}
+          </td>
+          <td>{{ row.estructura_financiera }}</td>
+          <td>{{ row.beneficiario }}</td>
+          <td>{{ row.tfinanciamiento }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="elCompromiso" id="monitoreoEtapas" class="panel-body col-lg-12">
+    <!-- <app-monitoreo-etapas [data]="elCompromiso"></app-monitoreo-etapas> -->
+    <app-workflow
+      [idCompromiso]="elCompromiso.id_compromiso"
+      [presidencial]="true"
+    ></app-workflow>
+  </div>
+</div>
+<div *ngIf="sinData">
+  <p class="sin-data">
+    Sin datos de compromisos aprobados durante el periodo presidencial
+    seleccionado.
+  </p>
+</div>

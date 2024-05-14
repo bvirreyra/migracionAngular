@@ -1,0 +1,88 @@
+/* .dt-dt-todos tfoot input{
+  width: 100% !important;
+}
+.dt-dt-todos tfoot {
+  display: table-header-group !important;
+} */
+
+:root {
+  --font1: "Heebo", sans-serif;
+  --font2: "Fira Sans Extra Condensed", sans-serif;
+  --font3: "Roboto", sans-serif;
+}
+
+body {
+  font-family: var(--font3);
+  background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+}
+
+.containerCris{
+  width: 90%;
+  text-align: center;
+  padding: 10px 15px;
+  margin: 0 auto;
+}
+
+.division{
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(420px,1fr));
+}
+
+.titulo{
+  color: #0250bb;/*#337ab7;#3c8dbc;*/
+  font-size:large;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+.btn-teal{
+  color: white;
+  background-color: teal;
+}
+.btn-teal:hover{
+  background-color: rgb(3, 104, 104);
+}
+
+.btn-coral{
+  color: white;
+  background-color: coral;
+}
+.btn-coral:hover{
+  background-color: rgb(218, 91, 44);
+}
+.btn-empresas{
+  color: white;
+  background-color: rgb(119, 41, 18);
+}
+.btn-empresas:hover{
+  background-color: rgb(114, 71, 57);
+}
+
+@media (max-width: 600px) {
+  .containerCris {
+    width: 95%;
+    text-align: center;
+    padding: 10px 0;
+    margin: 0 auto;
+  }
+}
+.dt-reporte tfoot input{
+  width: 100% !important;
+}
+.dt-reporte tfoot {
+  display: table-header-group !important;      
+  background-color: steelblue;
+  color:whitesmoke;
+  font-size: 14px;
+  font-weight: bolder;
+}
+.dt-sector tfoot input{
+  width: 100% !important;
+}
+.dt-sector tfoot {
+  display: table-header-group !important;      
+  background-color: steelblue;
+  color:whitesmoke;
+  font-size: 14px;
+  font-weight: bolder;
+}

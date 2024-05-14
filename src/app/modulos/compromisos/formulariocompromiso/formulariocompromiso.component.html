@@ -1,0 +1,428 @@
+<h1>Formulario Eventos</h1>
+<div class="container-fluid">
+    <form action="" name="form">
+      <div class="row">
+        <!-- BUSCADOR DE EVENTOS -->
+        <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+          <div class="content-header with-border">
+            <h3 class="content-title text-green">
+              <strong>COMPROMISOS - LISTA DE COMPROMISOS</strong>
+            </h3>
+          </div>
+          <div class="content-body">
+            <div class="rowlocal ">
+              <div
+                class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4">
+                <div class="panel panel-success">
+                  <div class="panel-heading text-center">B&uacute;squeda de Compromisos</div>
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="form-horizontal ">
+  
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="busqueda">Nombre Evento:</label>
+                            <div class="col-sm-7">
+                              <input class="form-control" type="text" name="s_nombre_evento" id="s_nombre_evento" [(ngModel)]="s_nombre_evento">
+                            </div>
+                        </div>
+
+                        <div class="panel-footer">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <button type="button" class="btn btn-primary btn-block" id="buscarCompromisos" 
+                              name="buscarCompromisos" (click)="buscarCompromisos()">
+                                <i class="fa fa-search" aria-hidden="true"></i> Buscar</button>
+                            </div>
+                            <div class="col-md-6">
+                              <button type="button" class="btn btn-default btn-block" id="LimpiarBusqueda" 
+                              name="LimpiarBusqueda" (click)="LimpiarBusqueda()">
+                                <i class="fa fa-eraser" aria-hidden="true"></i> Limpiar</button>
+                            </div>
+                          </div>
+                        </div>
+  
+  
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="content-footer">
+  
+          </div>
+        </div>
+        <!-- FIN DE EVENTOS -->
+        
+  
+        <!-- LISTADO PROVEIDOS -->
+        <div *ngIf="pnlListaProveidos==true" class="content content-success" name="pnl_hjproveidos" id="pnl_hjproveidos">
+          <div class="content-header with-border">
+            <div class="pull-left">
+                
+                <button class="btn btn-danger btn-circle-sm" type="button" data-toggle="modal"
+                data-target="#modalNuevoMenuRol"
+                (click)="FormNuevoCompromiso()">
+                <strong>+</strong> Nuevo Compromiso</button>
+  
+              </div>
+          </div>
+          <div class="content-body">
+            <div class="rowlocal ">
+              <div
+                class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                <div class="panel panel-success">
+                  <div class="panel-heading text-center">Listado de Compromisos</div>
+                  <div class="panel-body">
+                    <!-- INICIO TABLA-->
+                    <div class="row">
+                      <table class="table table-primary table-striped table-condensed table-hover dt-Compromisos">
+                        <thead>
+                          <tr>
+                            <th>Id</th>                          
+                            <th>Departamento</th>
+                            <th>Provincia</th>
+                            <th>Municipio</th>                          
+                            <th>Nombre Evento</th>
+                            <th>Fecha Evento</th>
+                            <th>Detalle Compromiso</th>
+                            <th>Tipo</th>
+                            <th>Monto</th>
+                            <th>Observaciones</th>
+                            <th>Estado</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                          </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>                                
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                          <tr *ngFor="let row_registros of dts_ListaUsuarios; let i = index " [ngClass]="{'bg-danger':row_registros._descripcion_estado=='INACTIVO'}">
+                            <td>{{row_registros._id_evento}}</td>
+                            <td>{{row_registros._departamento}}</td>
+                            <td>{{row_registros._provincia}}</td>
+                            <td>{{row_registros._municipio}}</td>
+                            <td>{{row_registros._nombre_evento}}</td>
+                            <td>{{row_registros._fecha_evento| date: 'dd/MM/yyyy'}}</td>
+                            <td>{{row_registros._detalle_compromiso}}</td>
+                            <td>{{row_registros._descripcion_tipo}}</td>
+                            <td>{{row_registros._monto}}</td>
+                            <td>{{row_registros._observaciones}}</td>
+                            <td>{{row_registros._descripcion_estado}}</td>
+                            <td>
+                              <button class="btn btn-info btn-circle-sm" type="button" data-toggle="modal"
+                                data-target="#modalEditarProveido"
+                                (click)="MuestraFormConvenioEditar(row_registros)">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                              </button>
+                            </td>
+                            <td>
+                              <button class="btn btn-danger btn-circle-sm" type="button" data-toggle="modal"
+                                data-target="#modalEliminaRegistro" 
+                                (click)="EliminarRegistro(row_registros)">
+                                <span class="glyphicon glyphicon-remove"></span>
+                              </button>
+                            </td>
+  
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- FIN TABLA-->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- FIN FIN LISTADO PROVEIDO -->
+  
+  
+        <!-- INICIO MODAL modalEliminaProveido -->
+        <div class="modal fade" *ngIf="pnlModalEliminaRegistro==true" name="modalEliminaRegistro"
+          id="modalEliminaRegistro" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">:::ATENCIÓN:::</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="alert alert-danger">
+                <p>Está apunto de eliminar el registro.</p>
+                <p>¿Se encuentra seguro?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary"
+                  (click)="EliminaRegistroActual(dtsRegitroProveido._id_evento)">Aceptar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- FIN MODAL modalEliminaProveido -->
+  
+  
+        <!-- INICIO MODAL modalEditarProveido -->
+        <div class="modal fade" *ngIf="pnlModalEditarProveido==true" name="modalEditarProveido" id="modalEditarProveido"
+          tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">:::EDITAR COMPROMISO:::</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="form-horizontal ">
+                    
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Codigo Departamento:</label>
+                      <div class="col-sm-7">
+                        <select id="e_idrol" class="form-control" name="e_fcodigo_departamento" [(ngModel)]="e_fcodigo_departamento" #device (change)="buscarMunicipio(device.value)">
+                          <option *ngFor="let row_dep of dts_ListaDepartamento; let i = index " [ngValue]="row_dep.codigo_departamento" (click)="buscarMunicipio(row_dep.codigo_departamento)" >{{row_dep.nombre}}</option>
+                        </select>
+                      </div>
+                  </div>
+
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Codigo Municipio:</label>
+                      <div class="col-sm-7">
+                        <select id="e_idrol" class="form-control" name="e_fcodigo_municipio" [(ngModel)]="e_fcodigo_municipio">
+                          <option *ngFor="let row_mun of dts_ListaMunicipio; let i = index " [ngValue]="row_mun.codigo_municipio" >{{row_mun.nombre}}</option>
+                        </select>
+                      </div>
+                  </div>
+
+                  
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Nombre Evento:</label>
+                      <div class="col-sm-7">
+                        <input class="form-control" type="text" name="e_nombre_evento" id="e_nombre_evento" list="browsers"
+                          [(ngModel)]="e_nombre_evento"  autocomplete="off">
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Fecha Evento:</label>
+                      <div class="col-sm-7">
+                        <input class="form-control" type="date" name="me_fecha_evento" id="me_fecha_evento" list="browsers"
+                          [(ngModel)]="e_fecha_evento"  autocomplete="off">
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Detalle Compromiso:</label>
+                      <div class="col-sm-7">
+                        <input class="form-control" type="text" name="e_detalle_compromiso" id="e_detalle_compromiso" list="browsers"
+                          [(ngModel)]="e_detalle_compromiso"  autocomplete="off">
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Tipo:</label>
+                      <div class="col-sm-7">
+                        <select id="e_idrol" class="form-control" name="e_fid_tipo" [(ngModel)]="e_fid_tipo">
+                          <option *ngFor="let row_tipo of dts_ListaTipo; let i = index " [ngValue]="row_tipo.id_detalle">{{row_tipo.descripciondetalleclasificador}}</option>
+                        </select>
+                      </div>
+                  </div>
+
+
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Monto:</label>
+                      <div class="col-sm-7">
+                        <input class="form-control" type="text" name="e_monto" id="e_monto" list="browsers"
+                          [(ngModel)]="e_monto"  autocomplete="off">
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Observaciones:</label>
+                      <div class="col-sm-7">
+                        <input class="form-control" type="text" name="e_observaciones" id="e_observaciones" list="browsers"
+                          [(ngModel)]="e_observaciones"  autocomplete="off">
+                      </div>
+                    </div>
+
+
+  
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Estado:</label>
+                      <div class="col-sm-7">
+                        <select id="e_estado" class="form-control" name="e_estado"
+                          [(ngModel)]="e_estado" >
+                          <option value='1'>ACTIVO</option>
+                          <option value='2'>INACTIVO</option>
+                        </select>
+                      </div>
+                    </div>
+  
+                                      
+                  </div>
+                </div>
+  
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" name="btnActualizaCompromiso" id="btnActualizaCompromiso"
+                  (click)="ActualizaCompromiso()">Actualizar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- FIN MODAL modalEditarProveido -->
+  
+  
+        <!-- INICIO MODAL Nuevo -->
+        <div class="modal fade" *ngIf="pnlModalNuevoModulo==true" name="modalNuevoMenuRol" id="modalNuevoMenuRol"
+          tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">:::NUEVO COMPROMISO:::</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="form-horizontal ">
+  
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Codigo Departamento:</label>
+                      <div class="col-sm-7">
+                        <select id="e_idrol" class="form-control" name="e_fcodigo_departamento" [(ngModel)]="e_fcodigo_departamento" #device (change)="buscarMunicipio(device.value)">
+                          <option *ngFor="let row_dep of dts_ListaDepartamento; let i = index " [ngValue]="row_dep.codigo_departamento" (click)="buscarMunicipio(row_dep.codigo_departamento)" >{{row_dep.nombre}}</option>
+                        </select>
+                      </div>
+                  </div>
+
+
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="busqueda">Codigo Municipio:</label>
+                    <div class="col-sm-7">
+                      <select id="e_idrol" class="form-control" name="e_fcodigo_municipio" [(ngModel)]="e_fcodigo_municipio">
+                        <option *ngFor="let row_mun of dts_ListaMunicipio; let i = index " [ngValue]="row_mun.codigo_municipio" >{{row_mun.nombre}}</option>
+                      </select>
+                    </div>
+                </div>
+
+
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Nombre Evento:</label>
+                      <div class="col-sm-7">
+                        <input class="form-control" type="text" name="e_nombre_evento" id="e_nombre_evento" list="browsers"
+                          [(ngModel)]="e_nombre_evento"  autocomplete="off">
+                      </div>
+                    </div>
+
+
+                    
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Fecha Evento:<br /> (aa-mm-dd hh:mm:ss)</label>
+                      <div class="col-sm-7">
+                        <input class="form-control" type="date" name="e_fecha_evento" id="e_fecha_evento" list="browsers"
+                          [(ngModel)]="e_fecha_evento"  autocomplete="off">
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Detalle Compromiso:</label>
+                      <div class="col-sm-7">
+                        <input class="form-control" type="text" name="e_detalle_compromiso" id="e_detalle_compromiso" list="browsers"
+                          [(ngModel)]="e_detalle_compromiso"  autocomplete="off">
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Tipo:</label>
+                      <div class="col-sm-7">
+                        <select id="e_idrol" class="form-control" name="e_fid_tipo" [(ngModel)]="e_fid_tipo">
+                          <option *ngFor="let row_tipo of dts_ListaTipo; let i = index " [ngValue]="row_tipo.id_detalle">{{row_tipo.descripciondetalleclasificador}}</option>
+                        </select>
+                      </div>
+                  </div>
+
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Monto:</label>
+                      <div class="col-sm-7">
+                        <input class="form-control" type="text" name="e_monto" id="e_monto" list="browsers"
+                          [(ngModel)]="e_monto"  autocomplete="off">
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Observaciones:</label>
+                      <div class="col-sm-7">
+                        <input class="form-control" type="text" name="e_observaciones" id="e_observaciones" list="browsers"
+                          [(ngModel)]="e_observaciones"  autocomplete="off">
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="busqueda">Estado:</label>
+                      <div class="col-sm-7">
+                        <select id="e_estado" class="form-control" name="e_estado"
+                          [(ngModel)]="e_estado" >
+                          <option value=''></option>
+                          <option value='1'>ACTIVO</option>
+                          <option value='2'>INACTIVO</option>
+                        </select>
+                      </div>
+                    </div>
+  
+                                      
+                  </div>
+                </div>
+  
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" name="InsertaNuevoMenuRol" id="InsertaNuevoMenuRol"
+                  (click)="InsertaNuevoCompromiso()">Registrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- FIN MODAL modal Nuevo  -->
+  
+  
+      </div>
+    </form>
+  </div>

@@ -1,0 +1,112 @@
+<div id="pnl_unidad" name="pnl_unidad">
+  <h2><P class="text-center">ADM Gestión</P></h2>
+<div class="panel panel-primary">
+  <div class="panel-heading clearfix">
+    <button type="button" class="btn btn-success pull-right" (click)="pre_insercion()">Nuevo Registro
+    </button>
+  </div>
+  <div class="panel-body">
+      <table class="table table-condensed table-hover dt-unidad">
+          <thead>
+              <tr>
+                  <th>Nro.</th>
+                  <th>Gestión</th>
+                  <th>Usuario</th>
+                  <th>Fecha Inicio</th>
+                  <th>Fecha Fin</th>
+                  <th>Estado</th>
+              </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row_registros of dtsADMgestion; let i = index;">
+              <td>{{i+1}}</td>
+              <td>{{row_registros.Gestion}}</td>
+              <td>{{row_registros.nombreUsuario}}</td>
+              <td>{{row_registros.FechaInicio | date: 'dd/MM/yyyy'}}</td>
+              <td>{{row_registros.FechaFin | date: 'dd/MM/yyyy'}}</td>
+              <td>{{row_registros.Estado}}
+                <button *ngIf="row_registros.Estado == 'Actual'" type="button" class="btn btn-warning btn-sm" (click)="pre_edicion(row_registros)">
+                  <i class="fa fa-edit" aria-hidden="true" title="Modificar Registro"></i>
+                </button>
+                <button *ngIf="row_registros.Estado == 'Actual'" type="button" class="btn btn-danger btn-sm" (click)="pre_eliminacion(row_registros)">
+                  <i class="fa fa-remove" aria-hidden="true" title="Eliminar Registro"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+      </table>
+  </div>
+</div>
+</div>
+<div class="modal fade" id="pnl_Guardarregistros" tabindex="-1" role="dialog" aria-labelledby="Insertar_NuevoProveido" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="Insertar_NuevoProveido"><b>NUEVO REGISTRO</b></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-horizontal ">
+              <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda">Gestión:</label>
+                  <div class="col-sm-7">
+                      <input class="form-control" type="number" name="Gestion" id="Gestion" [(ngModel)]="Gestion">
+
+                  </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-4" for="busqueda">Usuario:</label>
+                <div class="col-sm-7">
+                  <select id="e_idrol" class="form-control" name="IdUsuario" [(ngModel)]="IdUsuario">
+                      <option *ngFor="let row_usuario of dts_usuarios; let i = index " [ngValue]="row_usuario.IdUsuario">{{row_usuario.NombreCompletoUsuario}}</option>
+                    </select>
+                </div>
+              </div>
+              <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda">Fecha Inicio:</label>
+                  <div class="col-sm-7">
+                      <input class="form-control" type="date" name="FechaInicio" id="FechaInicio" [(ngModel)]="FechaInicio">
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda">Fecha Fin:</label>
+                  <div class="col-sm-7">
+                      <input class="form-control" type="date" name="FechaFin" id="FechaFin" [(ngModel)]="FechaFin">
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label class="control-label col-sm-4" for="busqueda">Estado:</label>
+                  <div class="col-sm-7">
+                    <select id="Estado" class="form-control" name="Estado" [(ngModel)]="Estado">
+                      <option value='Terminada'>Terminada</option>
+                      <option value='Actual'>Actual</option>
+                    </select>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary" (click)="registroAdmGestion()">Guardar Registros</button>
+          </div>
+      </div>
+  </div>
+</div>
+<div class="modal fade" id="pnl_Eliminarregistros" tabindex="-1" role="dialog" aria-labelledby="Eliminar_proveido" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="Insertar_NuevoProveido"><b>ALERTA</b></h5>
+          </div>
+          <div class="modal-body">
+              Está seguro que desea dar por TERMINADA la gestión {{Gestion}}?
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary" (click)="eliminarAdmGestion()">Confirmar</button>
+          </div>
+      </div>
+  </div>
+</div>

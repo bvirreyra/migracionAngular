@@ -1,0 +1,27 @@
+.titulo{
+  font-size: large;
+  color: #013968;
+  text-decoration: underline;
+  text-align: center;
+  padding: 0 4rem;
+  display: block;
+}
+.infohr{
+  font-size: large;
+  color: white;
+  text-align: center;
+  padding: 0 4rem;
+  background-color: #07a8e7;
+  border-radius: 4px;
+  border: 1px solid #013968;
+}
+.estado{
+  font-size: large;
+  color: white;
+  text-align: center;
+  padding: 0 4rem;
+  background-color: #ff711f;
+  border-radius: 4px;
+  margin: 0 1rem;
+  border: 1px solid #b64c0f;
+}

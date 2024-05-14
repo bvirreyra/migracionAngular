@@ -1,0 +1,24 @@
+/*.container-adicion {
+	background-image: -webkit-linear-gradient(270deg,rgba(83,150,5,1.00) 0%,rgba(255,255,255,1.00) 100%);
+	background-image: -moz-linear-gradient(270deg,rgba(83,150,5,1.00) 0%,rgba(255,255,255,1.00) 100%);
+	background-image: -o-linear-gradient(270deg,rgba(83,150,5,1.00) 0%,rgba(255,255,255,1.00) 100%);
+	background-image: linear-gradient(180deg,rgba(83,150,5,1.00) 0%,rgba(255,255,255,1.00) 100%);
+}*/
+
+.container-adicion .formulario-adicion {
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+	/*background-color: #D9F5BB;*/
+	margin-top: 55px;
+}
+
+.formulario-adicion form table {
+	margin-left: auto;
+	margin-right: auto;
+}
+.container-adicion .barra {
+	background-color: #949191;
+	height: 30px;
+}
+

@@ -1,0 +1,12 @@
+.dt-seguimiento tfoot input{
+    width: 100% !important;
+}
+.dt-seguimiento tfoot {
+    display: table-header-group !important;
+}
+.dt-supervision tfoot input{
+    width: 100% !important;
+}
+.dt-supervision tfoot {
+    display: table-header-group !important;
+}

@@ -1,0 +1,273 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="contenedor-modulo">
+  <div class="panel panel-primary" id="grilla-asociacion">
+    <div class="panel-heading">
+      <span class="fa fa-building"></span> Lista de Asociaciones
+      <button class="btn btn-info pull-right" title="Agregar asociación accidental..." style="padding: 2px 10px; margin-top: -2px;" (click)="abrirFormAsociacion()" >
+        <span class="fa fa-plus-square-o"></span> Agregar...
+      </button>
+    </div>
+    <div class="panel-body">
+      <div style="overflow-x: auto;">
+        <table class="table table-responsive table-condensed table-hover dt-asociaciones" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="max-width: 120px; text-align: center;">Acciones</th>
+              <th >Número de Testimonio</th>
+              <th style="width: 300px;" >Denominación de la Asociación Accidental</th>
+              <th >Lugar Testimonio</th>
+              <th >Fecha Expedición</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsAsociaciones ;"
+            [ngClass]="{ 'bg-success': row.id_asociacion === elIdAsociacion, 'bg-danger':row.activo == 0}">
+              <td style="max-width: 120px;">
+                <div class="botonera">
+                  <button class="btn btn-info" title="Asociados" (click)="listarSocios(row)">
+                    <span class="fa fa-users"></span>
+                  </button>
+                  <button class="btn btn-warning" title="Editar" (click)="abrirFormAsociacion(row)">
+                    <span class="fa fa-edit"></span>
+                  </button>
+                  <button class="btn btn-danger" title="Eliminar" (click)="confirmarEliminacion(row,'D')">
+                    <span class="fa fa-trash"></span>
+                  </button>
+                </div>
+              </td>
+              <td >{{row.testimonio}}</td>
+              <td >{{row.nombre_asociacion}} </td>
+              <td >{{row.lugar_testimonio}}</td>
+              <td >{{row.fecha_expedicion | date: "dd/MM/yyyy"}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-primary" id="grilla-socio" *ngIf="elIdAsociacion && !asociacionEditar">
+    <div class="panel-heading">
+      <span class="fa fa-building"></span> Lista de Asociados
+      <button class="btn btn-info pull-right" title="Agregar Asociado..." style="padding: 2px 10px; margin-top: -2px;" (click)="abrirFormSocio()" >
+        <span class="fa fa-plus-square-o"></span> Agregar...
+      </button>
+    </div>
+    <div class="panel-body">
+      <div style="overflow-x: auto;">
+        <table class="table table-responsive table-condensed table-hover dt-socios" style="font-size: 9pt;">
+          <thead>
+            <tr>
+              <th style="width: 80px; text-align: center;">Acciones</th>
+              <th style="width: 350px;" >Nombre Asociado</th>
+              <th >Porcentaje Participación</th>
+              <th >NIT</th>
+              <th >Matrícula</th>
+              <th >Fecha Inscripción</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let row of dtsSocios ;"
+            [ngClass]="{ 'bg-success': row.id_asociacion === elIdAsociacion, 'bg-danger':row.activo == 0}">
+              <td style="width: 80px;">
+                <div class="botonera">
+                  <button class="btn btn-warning" title="Editar" (click)="abrirFormSocio(row)">
+                    <span class="fa fa-edit"></span>
+                  </button>
+                  <button *ngIf="!row.tipo_asociado" class="btn btn-danger" title="Eliminar" (click)="confirmarEliminacion(row,'D')">
+                    <span class="fa fa-trash"></span>
+                  </button>
+                </div>
+              </td>
+              <td >{{row.razon_social}}</td>
+              <td >{{row.participacion}} </td>
+              <td >{{row.nit}}</td>
+              <td >{{row.matricula}}</td>
+              <td >{{row.fecha_inscripcion | date: "dd/MM/yyyy"}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--modal asociacion -->
+<div class="modal fade" tabindex="-1"  name="modalAsociacion" id="modalAsociacion" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!asociacionEditar">Registrar Asociación Accidental</div><div *ngIf="asociacionEditar">Editar Asociación Accidental</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formAsociacion" (ngSubmit)="crudAsociacion()" autocomplete="off">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-9 col-md-9">
+                <label for="nombre_asociacion">Denominación Asociación Accidental:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-link"></i></span>
+                  <input class="form-control" type="text" name="nombre_asociacion" placeholder="Denominación Asociación Accidental" formControlName="nombre_asociacion" minlength="6" maxlength="100" required autofocus>
+                </div>
+                <span style="color:tomato;" *ngIf="formAsociacion.controls['nombre_asociacion'].touched && formAsociacion.controls['nombre_asociacion'].errors?.required">Este campo es requerido</span>
+                <span style="color:tomato;" *ngIf="formAsociacion.controls['nombre_asociacion'].touched && formAsociacion.controls['nombre_asociacion'].errors?.minLength">El nombre debe tener al mneos 6 caracteres</span>
+              </div>
+              <div class="form-group col-sm-12 col-lg-3 col-md-3">
+                <label for="participacion">Particiapcion (%):</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-link"></i></span>
+                  <input class="form-control" type="text" name="participacion" placeholder="60" formControlName="participacion"  (input)="handleInput($event)" (blur)="handleBlur($event)" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formAsociacion.controls['participacion'].touched && formAsociacion.controls['participacion'].errors?.required">Este campo es requerido</span>
+                <span style="color:tomato;" *ngIf="formAsociacion.controls['participacion'].touched && formAsociacion.controls['participacion'].errors?.min">Rango entre 1 y 100</span>
+                <span style="color:tomato;" *ngIf="formAsociacion.controls['participacion'].touched && formAsociacion.controls['participacion'].errors?.max">Rango entre 1 y 100</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="estimonio">Nro. de Testimonio:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-file-text-o"></i></span>
+                  <input class="form-control" type="text" name="testimonio" placeholder="100/2022" formControlName="testimonio" maxlength="30" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formAsociacion.controls['testimonio'].touched && formAsociacion.controls['testimonio'].errors?.required">Este campo es requerido</span>
+              </div>
+              <div class="form-group col-sm-4 col-lg-4 col-md-4">
+                <label for="lugar_testimonio">Lugar Expedición:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-map-o"></i></span>
+                  <input class="form-control" type="text" name="lugar_testimonio" placeholder="Lugar testimonio" formControlName="lugar_testimonio" maxlength="200" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formAsociacion.controls['lugar_testimonio'].touched && formAsociacion.controls['lugar_testimonio'].errors?.required">Este campo es requerido</span>
+              </div>
+              <div class="form-group col-sm-4 col-lg-4 col-md-4">
+                <label for="fecha_expedicion">Fecha Expedición:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i></span>
+                  <input class="form-control" type="date" name="fecha_expedicion" placeholder="Fecha expedicion" formControlName="fecha_expedicion" max="{{maxFecha}}" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formAsociacion.controls['fecha_expedicion'].touched && formAsociacion.controls['fecha_expedicion'].errors?.required">Este campo es requerido</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formAsociacion.invalid || formAsociacion.pristine">
+                  <div *ngIf="!asociacionEditar"><span class="fa fa-floppy-o"></span> Registrar Asociación</div>
+                  <div *ngIf="asociacionEditar"><span class="fa fa-check"></span> Actualizar Asociación</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal socio -->
+<div class="modal fade" tabindex="-1"  name="modalSocio" id="modalSocio" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel"><div *ngIf="!socioEditar">Registrar Asociado</div><div *ngIf="socioEditar">Editar Asociado</div> </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <form  [formGroup]="formSocio" (ngSubmit)="crudSocio()">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="nit">NIT:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-link"></i></span>
+                  <input class="form-control" type="number" name="nit" placeholder="NIT" formControlName="nit" onkeypress="return permite(event, 'solo_num')" min="999" required readonly>
+                </div>
+                <!-- <span style="color:tomato;" *ngIf="formSocio.controls['nit'].touched && formSocio.controls['nit'].errors?.required">Este campo es requerido</span> -->
+              </div>
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="matricula">Matrícula:</label>
+                <div class="input-group requerido">
+                  <span class="input-group-addon"><i class="fa fa-link"></i></span>
+                  <input class="form-control" type="number" name="matricula" placeholder="123456" formControlName="matricula" onkeypress="return permite(event, 'solo_num')" min="999" required autofocus>
+                </div>
+                <span style="color:tomato;" *ngIf="formSocio.controls['matricula'].touched && formSocio.controls['matricula'].errors?.required">Este campo es requerido</span>
+              </div>
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <button type="button" class="btn btn-info btn-block" (click)="BuscarSocio()" style="margin-top: 24px;"
+                [disabled]="!formSocio.controls['matricula'].value || elIdSocio"><i class="fa fa-search"></i>Buscar</button>
+              </div> 
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-4 col-md-4">
+                <label for="razon_social">Nombre del Asociado:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-file-text-o"></i></span>
+                  <input class="form-control" type="text" name="razon_social" placeholder="razon social" formControlName="razon_social" maxlength="200" required readonly>
+                </div>
+                <span style="color:tomato;" *ngIf="formSocio.controls['razon_social'].touched && formSocio.controls['razon_social'].errors?.required">Este campo es requerido</span>
+              </div>
+              <div class="form-group col-sm-4 col-lg-4 col-md-4">
+                <label for="fecha_inscripcion">Fecha Inscripción:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-map-o"></i></span>
+                  <input class="form-control" type="date" name="fecha_inscripcion" formControlName="fecha_inscripcion" max="{{maxFecha}}" required readonly>
+                </div>
+                <span style="color:tomato;" *ngIf="formSocio.controls['fecha_inscripcion'].touched && formSocio.controls['fecha_inscripcion'].errors?.required">Este campo es requerido</span>
+              </div>
+              <div class="form-group col-sm-4 col-lg-4 col-md-4">
+                <label for="participacion">Porcentaje Participación:</label>
+                <div class="input-group requerido">
+                  <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i></span>
+                  <input class="form-control" type="text" name="participacion" placeholder="10" formControlName="participacion" (input)="handleInput($event)" (blur)="handleBlur($event)" required>
+                </div>
+                <span style="color:tomato;" *ngIf="formSocio.controls['participacion'].touched && formSocio.controls['participacion'].errors?.required">Este campo es requerido</span>
+                <span style="color:tomato;" *ngIf="formSocio.controls['participacion'].touched && formSocio.controls['participacion'].errors?.min">Rango entre 1 y 100</span>
+                <span style="color:tomato;" *ngIf="formSocio.controls['participacion'].touched && formSocio.controls['participacion'].errors?.max">Rango entre 1 y 100</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" style="margin-right: 1rem;" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success" type="submit"  [disabled]="formSocio.invalid || formSocio.pristine">
+                  <div *ngIf="!socioEditar"><span class="fa fa-floppy-o"></span> Registrar Asociado</div>
+                  <div *ngIf="socioEditar"><span class="fa fa-check"></span> Actualizar Asociado</div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

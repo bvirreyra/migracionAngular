@@ -1,0 +1,11 @@
+.dt-equipos tfoot input{
+  width: 100% !important;
+}
+.dt-equipos tfoot {
+  display: table-header-group !important;
+}
+
+.botonera{
+  display: flex !important;
+  justify-content: space-around;
+}

@@ -1,0 +1,12 @@
+.dt-monitoreo tfoot input{
+    width: 100% !important;
+}
+.dt-monitoreo tfoot {
+    display: table-header-group !important;
+}
+.dt-observaciones tfoot input{
+    width: 100% !important;
+}
+.dt-observaciones tfoot {
+    display: table-header-group !important;
+}

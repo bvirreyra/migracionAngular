@@ -1,0 +1,1302 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div>
+  <!-- GRIDVIEW PRINCIPAL -->
+  <div *ngIf="pnl_cabecera == true" name="pnl_cabecera" id="pnl_cabecera">
+    <div class="panel panel-primary">
+      <div class="panel-heading clearfix">
+        <!-- <a title="Descargar Reporte" class="btn btn-danger pull-right   btn-md" target="_blank"
+          href="{{url_reporte}}/modulos/compromisos/rpt_CompromisosV1.php"><i class="fa fa-file-pdf-o"
+            aria-hidden="true"></i></a> -->
+
+        <!-- COMENTADO A SOLICITUD DE JEFATURA TECNICA -->
+        <button
+          type="button"
+          class="btn btn-danger pull-right btn-md"
+          title="Reporte Proyectos"
+          *ngIf="
+            camposHabilitados._proyectista_administrador == false ||
+            camposHabilitados._solicitud_administrador == false
+          "
+          (click)="reportegeneral('03')"
+        >
+          <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary btn-md pull-right"
+          title="Ver Proyectos"
+          (click)="paneles('VER_CABECERA')"
+        >
+          <i class="fa fa-refresh" aria-hidden="true"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-success pull-right"
+          title="Ingreso Nuevo"
+          (click)="paneles('NUEVO_REGISTRO')"
+          [disabled]="camposHabilitados._solicitud_registrar"
+        >
+          <i class="fa fa-plus">Nuevo </i>
+        </button>
+      </div>
+      <!-- <div>
+        <label class="control-label col-sm-2" for="busqueda">Tipo Compromiso:</label>
+        <div class="col-sm-4">
+          <select id="m_filtraEstadoCompromiso" class="form-control" name="m_filtraEstadoCompromiso"
+            [(ngModel)]="m_filtraEstadoCompromiso" (ngModelChange)="filtraListaCompromiso($event)">
+            <option *ngFor="let row of dts_listaEstadoCompromiso " [ngValue]="row.descripciondetalleclasificador">
+
+              {{row.descripciondetalleclasificador}}</option>
+          </select>
+        </div>
+      </div> -->
+      <!-- <div class="row" ></div> -->
+
+      <div class="panel-body">
+        <!-- <table class="table table-responsive dt-compromisos"> -->
+        <div style="text-align: right">
+          <label class="titulo">{{
+            dts_compromisos
+              ? dts_compromisos.length != dts_inicial.length
+                ? dts_compromisos.length +
+                  " REGISTROS FILTRADOS DE UN TOTAL DE " +
+                  dts_inicial.length +
+                  " REGISTROS"
+                : dts_inicial.length + " REGISTROS EN TOTAL"
+              : ""
+          }}</label>
+        </div>
+        <div style="overflow-x: auto">
+          <table class="table table-responsive dt-compromisos">
+            <thead>
+              <tr>
+                <th data-priority="1">.::.</th>
+                <th (click)="ordenar('id_compromiso')">
+                  Codigo <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('gestion')">
+                  Gestión <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('nro_hojaruta')">
+                  HR <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('departamento')">
+                  Departamento <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('provincia')">
+                  Provincia <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('municipio')">
+                  Municipio <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('area')">
+                  Area <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('nombreproyecto')">
+                  Nombre de Proyecto <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('estado_compromiso')">
+                  Tipo Compromiso <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('multicriterio')">
+                  Multicriterio Upre <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('critico')">
+                  Criticos <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('monto_bs_visual')">
+                  Monto en Bs. <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('beneficiario')">
+                  Beneficiario <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('nota_dirigida')">
+                  Nota dirigida a <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('tec_reg_solicitud')">
+                  Registrado por <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('documento_ingreso')">
+                  Documento Ingreso <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('observacion')">
+                  Observación <i class="fa fa-sort"></i>
+                </th>
+                <th (click)="ordenar('contacto')">
+                  Contacto <i class="fa fa-sort"></i>
+                </th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td>
+                  <input
+                    type="text"
+                    #filtroCodigo
+                    (keyup)="filtrar2('id_compromiso', filtroCodigo.value)"
+                    max="6"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    #filtroGestion
+                    (keyup)="filtrar2('gestion', filtroGestion.value)"
+                    max="4"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    #filtroHR
+                    (keyup)="filtrar2('nro_hojaruta', filtroHR.value)"
+                    max="50"
+                  />
+                </td>
+                <td>
+                  <select
+                    [(ngModel)]="departamentoSel"
+                    (ngModelChange)="filtrar2('departamento', departamentoSel)"
+                    style="width: 100px"
+                  >
+                    <option value=""></option>
+                    <option
+                      *ngFor="let row of dts_departamentos"
+                      [ngValue]="row.departamento"
+                    >
+                      {{ row.departamento }}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  <select
+                    [(ngModel)]="provinciaSel"
+                    (ngModelChange)="filtrar2('provincia', provinciaSel)"
+                    style="width: 80px"
+                  >
+                    <option value=""></option>
+                    <option
+                      *ngFor="let row of dts_provincias"
+                      [ngValue]="row.provincia"
+                    >
+                      {{ row.provincia }}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  <select
+                    [(ngModel)]="municipioSel"
+                    (ngModelChange)="filtrar2('municipio', municipioSel)"
+                    style="width: 80px"
+                  >
+                    <option value=""></option>
+                    <option
+                      *ngFor="let row of dts_municipios"
+                      [ngValue]="row.municipio"
+                    >
+                      {{ row.municipio }}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  <select
+                    [(ngModel)]="areaSel"
+                    (ngModelChange)="filtrar2('area', areaSel)"
+                    style="width: 50px"
+                  >
+                    <option value=""></option>
+                    <option *ngFor="let row of dts_areas" [ngValue]="row.area">
+                      {{ row.area }}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    #filtroProyecto
+                    (keyup)="filtrar2('nombreproyecto', filtroProyecto.value)"
+                    max="50"
+                  />
+                </td>
+                <td>
+                  <select
+                    [(ngModel)]="estadoSel"
+                    (ngModelChange)="filtrar2('estado_compromiso', estadoSel)"
+                    style="width: 80px"
+                  >
+                    <option value=""></option>
+                    <option
+                      *ngFor="let row of dts_estados"
+                      [ngValue]="row.estado_compromiso"
+                    >
+                      {{ row.estado_compromiso }}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  <select
+                    [(ngModel)]="multicriterioSel"
+                    (ngModelChange)="
+                      filtrar2('multicriterio', multicriterioSel)
+                    "
+                    style="width: 80px"
+                  >
+                    <option value=""></option>
+                    <option
+                      *ngFor="let row of dts_multicriterio"
+                      [ngValue]="row.multicriterio"
+                    >
+                      {{ row.multicriterio }}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  <select
+                    [(ngModel)]="criticoSel"
+                    (ngModelChange)="filtrar2('critico', criticoSel)"
+                    style="width: 80px"
+                  >
+                    <option value=""></option>
+                    <option
+                      *ngFor="let row of dts_critico"
+                      [ngValue]="row.critico"
+                    >
+                      {{ row.critico }}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    #filtroMonto
+                    (keyup)="filtrar2('monto_bs_visual', filtroMonto.value)"
+                    max="50"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    #filtroBeneficiario
+                    (keyup)="filtrar2('beneficiario', filtroBeneficiario.value)"
+                    max="200"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    #filtroDirigida
+                    (keyup)="filtrar2('nota_dirigida', filtroDirigida.value)"
+                    max="40"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    #filtroRegistrado
+                    (keyup)="
+                      filtrar2('tec_reg_solicitud', filtroRegistrado.value)
+                    "
+                    max="50"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    #filtroIngreso
+                    (keyup)="filtrar2('documento_ingreso', filtroIngreso.value)"
+                    max="50"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    #filtroObservacion
+                    (keyup)="filtrar2('observacion', filtroObservacion.value)"
+                    max="50"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    #filtroContacto
+                    (keyup)="filtrar2('contacto', filtroContacto.value)"
+                    max="50"
+                  />
+                </td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr
+                *ngFor="
+                  let row_registros of dts_compromisos
+                    | slice : pagina * 20 : pagina * 20 + 20;
+                  let i = index
+                "
+              >
+                <td>
+                  <div class="btn-group btn-group-sm">
+                    <button
+                      *ngIf="
+                        row_registros.estado_compromiso !=
+                        'COMPROMISO DESESTIMADO'
+                      "
+                      type="button"
+                      class="btn btn-warning btn-block"
+                      (click)="paneles('EDITA_REGISTRO', row_registros)"
+                      [disabled]="camposHabilitados._solicitud_registrar"
+                      title="Actualizar Registro"
+                    >
+                      <i class="fa fa-edit" aria-hidden="true"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-info btn-block"
+                      (click)="paneles('VER_DETALLE', row_registros)"
+                      title="Ver Bandeja"
+                    >
+                      <i class="fa fa-id-card" aria-hidden="true"></i>
+                    </button>
+                    <button
+                      *ngIf="
+                        row_registros.estado_compromiso !=
+                        'COMPROMISO DESESTIMADO'
+                      "
+                      type="button"
+                      class="btn btn-primary btn-block"
+                      data-toggle="modal"
+                      data-target="#modalFormularioResumen"
+                      (click)="paneles('FORMULARIO_RESUMEN', row_registros)"
+                      title="Formulario Resumen"
+                    >
+                      <i class="fa fa-file-text" aria-hidden="true"></i>
+                    </button>
+                    <button
+                      *ngIf="
+                        row_registros.estado_compromiso !=
+                          'COMPROMISO DESESTIMADO' &&
+                        row_registros.estado_compromiso !=
+                          'COMPROMISO PRESIDENCIAL'
+                      "
+                      type="button"
+                      class="btn btn-danger btn-block"
+                      data-toggle="modal"
+                      data-target="#modalEliminaCabecera"
+                      (click)="paneles('ELIMINA_CABECERA', row_registros)"
+                      title="Eliminar Registro"
+                      [disabled]="
+                        camposHabilitados._solicitud_administrador == true &&
+                        camposHabilitados._administrador_plataforma == true
+                      "
+                    >
+                      <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-success btn-block"
+                      (click)="reportes('02', row_registros.id_compromiso)"
+                      title="Reporte General"
+                    >
+                      <i class="fa fa-print" aria-hidden="true"></i>
+                    </button>
+                    <button
+                      *ngIf="
+                        row_registros.estado_compromiso !=
+                          'COMPROMISO DESESTIMADO' &&
+                        row_registros.estado_compromiso !=
+                          'COMPROMISO PRESIDENCIAL'
+                      "
+                      type="button"
+                      class="btn btn-plomo btn-block"
+                      (click)="
+                        paneles('PRIORIZAR', row_registros.id_compromiso)
+                      "
+                      title="Priorizar"
+                      [disabled]="
+                        camposHabilitados._solicitud_administrador == true &&
+                        camposHabilitados._administrador_plataforma == true
+                      "
+                    >
+                      <i class="fa fa-check-circle" aria-hidden="true"></i>
+                    </button>
+                    <!-- <button
+                      *ngIf="
+                        row_registros.estado_compromiso ==
+                        'COMPROMISO PRESIDENCIAL' && (camposHabilitados._administrador_plataforma==false || camposHabilitados._adm_monitoreo_solicitud==false 
+                        || camposHabilitados._usr_monitoreo_solicitud==false  
+                        || camposHabilitados._usr_legal_monitoreo_solicitud==false 
+                        || camposHabilitados._usr_financiero_monitoreo_solicitud==false
+                        || camposHabilitados._solicitud_administrador==false)
+                      "
+                      type="button"
+                      class="btn btn-morado btn-block"
+                      (click)="paneles('REGISTRO_MONITOREO', row_registros)"                      
+                      title="Registro Monitoreo"
+                    >
+                      <i class="fa fa-cogs" aria-hidden="true"></i>
+                    </button> -->
+                  </div>
+                </td>
+                <td>{{ row_registros.id_compromiso }}</td>
+                <td>{{ row_registros.gestion }}</td>
+                <td>{{ row_registros.nro_hojaruta }}</td>
+                <td>{{ row_registros.departamento }}</td>
+                <td>{{ row_registros.provincia }}</td>
+                <td>{{ row_registros.municipio }}</td>
+                <td>{{ row_registros.area }}</td>
+                <td>{{ row_registros.nombreproyecto }}</td>
+                <td>{{ row_registros.estado_compromiso }}</td>
+                <td>{{ row_registros.multicriterio }}</td>
+                <td>{{ row_registros.critico }}</td>
+                <td>{{ row_registros.monto_bs_visual }}</td>
+                <td>{{ row_registros.beneficiario }}</td>
+                <td>{{ row_registros.nota_dirigida }}</td>
+                <td>{{ row_registros.tec_reg_solicitud }}</td>
+                <td>{{ row_registros.documento_ingreso }}</td>
+                <td>{{ row_registros.observacion }}</td>
+                <td>{{ row_registros.contacto }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- paginacion -->
+        <nav aria-label="Page navigation example">
+          <ul class="pagination pull-right">
+            <li class="page-item" style="margin-right: 2rem">
+              <label class="titulo">{{
+                "mostrando registros del " +
+                  (pagina * 20 + 1) +
+                  " al " +
+                  (pagina * 20 + 20 > dts_compromisos.length
+                    ? dts_compromisos.length
+                    : pagina * 20 + 20) +
+                  " de un total de" +
+                  dts_compromisos.length
+              }}</label>
+            </li>
+            <li class="page-item">
+              <button
+                class="btn btn-primary page-link"
+                id="anterior"
+                (click)="paginar(-1)"
+              >
+                Anterior
+              </button>
+            </li>
+            <li class="page-item">
+              <button
+                class="btn btn-primary page-link"
+                id="siguiente"
+                (click)="paginar(1)"
+              >
+                Siguiente
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <!-- FINAL GRIDVIEW PRINCIPAL -->
+  <!-- GRIDVIEW DETALLE -->
+  <div *ngIf="pnl_cabeceradetalle == true">
+    <div class="panel panel-primary">
+      <div class="panel-heading clearfix" style="text-align: center">
+        <button
+          type="button"
+          class="btn btn-success pull-right"
+          title="Ingreso Nuevo"
+          (click)="paneles('NUEVO_DETALLE')"
+          [disabled]="camposHabilitados._solicitud_registrar"
+        >
+          <i class="fa fa-plus">Nuevos </i>
+        </button>
+        <label for="" style="margin-top: 10px; font-size: large"
+          >{{ m_idcompromiso }} - {{ m_nombreproyecto }}</label
+        >
+        <button
+          type="button"
+          class="btn btn-primary pull-left"
+          title="Volver anterior"
+          (click)="paneles('VOLVER_CABECERA')"
+        >
+          <i class="fa fa-reply fa-2x"> </i>
+        </button>
+      </div>
+
+      <div class="panel-body">
+        <table class="table table-responsive dt-compromisos_detalle">
+          <thead>
+            <tr>
+              <th data-priority="1">.::.</th>
+              <th>Remitente</th>
+              <th>Nro Hoja de Ruta</th>
+              <th>Fecha Ingreso</th>
+              <th>Nota dirigida a...</th>
+              <th>Beneficiario</th>
+              <th>Documento Ingreso</th>
+              <th>Adjuntos</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr
+              *ngFor="let row_detalle of dts_compromisosdetalle; let i = index"
+            >
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <button
+                    *ngIf="
+                      (vw_btnEditar == true &&
+                        m_estado_cabecera != 'COMPROMISO DESESTIMADO' &&
+                        m_estado_cabecera != 'COMPROMISO PRESIDENCIAL') ||
+                      camposHabilitados._proyectista_administrador == false ||
+                      camposHabilitados._administrador_plataforma == false
+                    "
+                    type="button"
+                    class="btn btn-warning btn-block"
+                    (click)="paneles('EDITA_DETALLE', row_detalle)"
+                    [disabled]="camposHabilitados._solicitud_editar"
+                    title="Actualizar Registro"
+                  >
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button
+                    *ngIf="
+                      (vw_btnEliminar == true &&
+                        m_estado_cabecera != 'COMPROMISO DESESTIMADO' &&
+                        m_estado_cabecera != 'COMPROMISO PRESIDENCIAL') ||
+                      camposHabilitados._administrador_plataforma == false
+                    "
+                    type="button"
+                    class="btn btn-danger btn-block"
+                    data-toggle="modal"
+                    data-target="#modalEliminaDetalle"
+                    (click)="paneles('ELIMINA_DETALLE', row_detalle)"
+                    title="Eliminar Registro"
+                  >
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-success btn-block"
+                    title="Reporte"
+                    (click)="reportes('01', row_detalle.id)"
+                  >
+                    <i class="fa fa-print"></i>
+                  </button>
+                </div>
+              </td>
+              <td>{{ row_detalle.remitente }}</td>
+              <td>{{ row_detalle.nro_hojaruta }}</td>
+              <td>{{ row_detalle.fecha_ingreso | date : "dd/MM/yyyy" }}</td>
+              <td>{{ row_detalle.nota_dirigida }}</td>
+              <td>{{ row_detalle.beneficiario }}</td>
+              <td>{{ row_detalle.documento_ingreso }}</td>
+              <td>{{ row_detalle.adjuntos }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- FINAL GRIDVIEW DETALLE -->
+  <!-- FORMULARIO CABECERA -->
+  <div *ngIf="pnl_formularioregistro == true">
+    <form action="" enctype="multipart/form-data">
+      <div class="row">
+        <div class="form-horizontal">
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Codigo Departamento:</label
+            >
+            <div class="col-sm-7">
+              <select
+                id="m_departamento"
+                class="form-control"
+                name="m_departamento"
+                [(ngModel)]="m_departamento"
+                #device
+                (ngModelChange)="buscarMunicipio($event)"
+                onKeyDown="A(event,this.form.m_municipio)"
+                [disabled]="m_estadoSolicitud == 'COMPROMISO PRESIDENCIAL'"
+                required
+              >
+                <option
+                  *ngFor="let row_dep of dts_ListaDepartamento"
+                  [ngValue]="row_dep.codigo_departamento"
+                >
+                  {{ row_dep.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Codigo Municipio:</label
+            >
+            <div class="col-sm-7">
+              <select
+                id="m_municipio"
+                class="form-control"
+                name="m_municipio"
+                [(ngModel)]="m_municipio"
+                onKeyDown="A(event,this.form.m_fuente)"
+                [disabled]="m_estadoSolicitud == 'COMPROMISO PRESIDENCIAL'"
+                required
+              >
+                <option
+                  *ngFor="let row_mun of dts_ListaMunicipio; let i = index"
+                  [ngValue]="row_mun.codigo_municipio"
+                >
+                  {{ row_mun.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda">Fuente:</label>
+            <div class="col-sm-7">
+              <select
+                id="m_fuente"
+                class="form-control"
+                name="m_fuente"
+                [(ngModel)]="m_fuente"
+                onKeyDown="A(event,this.form.m_gestion)"
+                [disabled]="m_estadoSolicitud == 'COMPROMISO PRESIDENCIAL'"
+                required
+              >
+                <option value="TGN">TGN</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Gestión:</label
+            >
+            <div class="col-sm-7">
+              <input
+                class="form-control"
+                type="text"
+                name="m_gestion"
+                id="m_gestion"
+                list="browsers"
+                [(ngModel)]="m_gestion"
+                onKeyDown="A(event,this.form.m_area)"
+                autocomplete="off"
+                [disabled]="m_estadoSolicitud == 'COMPROMISO PRESIDENCIAL'"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda">Area:</label>
+            <div class="col-sm-7">
+              <select
+                id="m_area"
+                class="form-control"
+                name="m_area"
+                [(ngModel)]="m_area"
+                onKeyDown="A(event,this.form.m_nombreproyecto)"
+                [disabled]="m_estadoSolicitud == 'COMPROMISO PRESIDENCIAL'"
+                required
+              >
+                <option *ngFor="let row_area of dts_ListaArea; let i = index">
+                  {{ row_area.descripcion }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Nombre Proyecto:</label
+            >
+            <div class="col-sm-7">
+              <input
+                class="form-control"
+                type="text"
+                name="m_nombreproyecto"
+                id="m_nombreproyecto"
+                list="browsers"
+                [(ngModel)]="m_nombreproyecto"
+                onKeyDown="A(event,this.form.m_montoBs)"
+                autocomplete="off"
+                [disabled]="
+                  m_estadoSolicitud == 'COMPROMISO PRESIDENCIAL' &&
+                  camposHabilitados._proyectista_administrador == true &&
+                  camposHabilitados._administrador_plataforma == true
+                "
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Monto en Bs:</label
+            >
+            <div class="col-sm-7">
+              <input
+                class="form-control"
+                type="text"
+                name="m_montoBs"
+                id="m_montoBs"
+                list="browsers"
+                [(ngModel)]="m_montoBs"
+                (ngModelChange)="setMontoSus()"
+                onKeyDown="A(event,this.form.m_estadoSolicitud)"
+                autocomplete="off"
+                [disabled]="m_estadoSolicitud == 'COMPROMISO PRESIDENCIAL'"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Monto en $us:</label
+            >
+            <div class="col-sm-7">
+              <input
+                class="form-control"
+                type="text"
+                name="m_montoSus"
+                id="m_montoSus"
+                list="browsers"
+                [(ngModel)]="m_montoSus"
+                autocomplete="off"
+                readonly
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Estado Solicitud:</label
+            >
+            <div class="col-sm-7">
+              <select
+                id="m_estadoSolicitud"
+                class="form-control"
+                name="m_estadoSolicitud"
+                [(ngModel)]="m_estadoSolicitud"
+                (ngModelChange)="filtraListaCompromiso($event)"
+                onKeyDown="A(event,this.form.m_contacto)"
+                required
+                [disabled]="m_estadoSolicitud == 'COMPROMISO PRESIDENCIAL'"
+              >
+                <option
+                  *ngFor="let row of dts_listaEstadoCompromiso"
+                  [ngValue]="row.descripciondetalleclasificador"
+                >
+                  {{ row.descripciondetalleclasificador }}
+                </option>
+              </select>
+              <!-- <select id="m_estadoSolicitud" class="form-control" name="m_estadoSolicitud"
+              [(ngModel)]="m_estadoSolicitud">
+              <option value='COMPROMISO PRESIDENCIAL'>COMPROMISO PRESIDENCIAL</option>
+              <option value='COMPROMISO DE CONTINUIDAD'>COMPROMISO DE CONTINUIDAD</option>
+            </select> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="m_contacto"
+              >Contacto:</label
+            >
+            <div class="col-sm-7">
+              <textarea
+                class="form-control"
+                cols="80"
+                rows="3"
+                name="m_contacto"
+                id="m_contacto"
+                [(ngModel)]="m_contacto"
+              ></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Observacion:</label
+            >
+            <div class="col-sm-7">
+              <textarea
+                class="form-control"
+                cols="80"
+                rows="3"
+                name="m_observacion"
+                id="m_observacion"
+                [(ngModel)]="m_observacion"
+                onKeyDown="A(event,this.form.m_gestion)"
+              ></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Beneficiario:</label
+            >
+            <div class="col-sm-7">
+              <select
+                id="m_beneficiarioC"
+                class="form-control"
+                name="m_beneficiarioC"
+                [(ngModel)]="m_beneficiarioC"
+              >
+                <option
+                  *ngFor="
+                    let row_beneficiario of dts_compromisosdetalle;
+                    let i = index
+                  "
+                  [ngValue]="row_beneficiario.beneficiario"
+                >
+                  {{ row_beneficiario.beneficiario }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="pull-right">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="paneles('VOLVER_CABECERA')"
+            >
+              Cerrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              *ngIf="btnRegistraCabecera == true"
+              name="btnRegistraCabecera"
+              id="btnRegistraCabecera"
+              (click)="InsertaCabecera()"
+            >
+              Registrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              *ngIf="btnEditaCabecera == true"
+              name="btnEditaCabecera"
+              id="btnEditaCabecera"
+              (click)="EditaCabecera()"
+            >
+              Editar
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- FIN FORMULARIO CABECERA -->
+  <!-- FORMULARIO DETALLE -->
+  <div *ngIf="pnl_formulariodetalle == true">
+    <form action="" enctype="multipart/form-data">
+      <div class="row">
+        <div class="form-horizontal">
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Remitente:</label
+            >
+            <div class="col-sm-7">
+              <input
+                class="form-control"
+                type="text"
+                name="m_remitente"
+                id="m_remitente"
+                list="browsers"
+                [(ngModel)]="m_remitente"
+                autocomplete="off"
+                onKeyDown="A(event,this.form.m_nrohojaderuta)"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Nro Hoja de Ruta:</label
+            >
+            <div class="col-sm-7">
+              <input
+                class="form-control"
+                type="text"
+                name="m_nrohojaderuta"
+                id="m_nrohojaderuta"
+                list="browsers"
+                [(ngModel)]="m_nrohojaderuta"
+                autocomplete="off"
+                onKeyDown="A(event,this.form.m_fechaingreso)"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Fecha Ingreso:</label
+            >
+            <div class="col-sm-7">
+              <input
+                class="form-control"
+                type="date"
+                name="m_fechaingreso"
+                id="m_fechaingreso"
+                list="browsers"
+                [(ngModel)]="m_fechaingreso"
+                autocomplete="off"
+                onKeyDown="A(event,this.form.m_notadirigida)"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Nota Dirigida:</label
+            >
+            <div class="col-sm-7">
+              <textarea
+                class="form-control"
+                cols="20"
+                rows="4"
+                name="m_notadirigida"
+                id="m_notadirigida"
+                autocomplete="off"
+                [(ngModel)]="m_notadirigida"
+                onKeyDown="A(event,this.form.m_beneficiario)"
+              >
+              </textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Beneficiario:</label
+            >
+            <div class="col-sm-7">
+              <input
+                class="form-control"
+                type="text"
+                name="m_beneficiario"
+                id="m_beneficiario"
+                list="browsers"
+                [(ngModel)]="m_beneficiario"
+                autocomplete="off"
+                onKeyDown="A(event,this.form.m_documentoIngreso)"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Documento:</label
+            >
+            <div class="col-sm-7">
+              <!-- <input class="form-control" type="text" name="m_documentoIngreso" id="m_documentoIngreso" list="browsers"
+                [(ngModel)]="m_documentoIngreso" autocomplete="off" onKeyDown="A(event,this.form.m_adjuntos)"> -->
+              <select
+                id="m_documentoIngreso"
+                class="form-control"
+                name="m_documentoIngreso"
+                [(ngModel)]="m_documentoIngreso"
+                onKeyDown="A(event,this.form.m_adjuntos)"
+                required
+              >
+                <option
+                  *ngFor="let row of dts_documentoPresentado"
+                  [ngValue]="row.descripciondetalleclasificador"
+                >
+                  {{ row.descripciondetalleclasificador }}
+                </option>
+              </select>
+              <!-- <small class="bg-info">{{m_documentoIngreso}}</small> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Adjuntos:</label
+            >
+            <div class="col-sm-7">
+              <textarea
+                class="form-control"
+                cols="20"
+                rows="4"
+                name="m_adjuntos"
+                id="m_adjuntos"
+                autocomplete="off"
+                [(ngModel)]="m_adjuntos"
+              >
+              </textarea>
+            </div>
+          </div>
+          <div class="form-group" *ngIf="dts_lista">
+            <label class="control-label col-sm-4" for="busqueda"
+              >Documentos Presentados:</label
+            >
+            <div class="col-sm-7">
+              <label
+                for=""
+                style="color: #0060df; text-align: center"
+                class="form-control"
+                >Area del proyecto: {{ m_area }}</label
+              >
+              <div class="grid-lista">
+                <div
+                  *ngFor="let elemento of dts_lista; let i = index"
+                  style="text-align: left"
+                >
+                  <label
+                    class="checkbox-inline"
+                    id="lab{{ elemento.id_detalle }}"
+                  >
+                    <input
+                      type="checkbox"
+                      class="check text-left"
+                      id="c{{ elemento.id_detalle }}"
+                    />
+                    {{ elemento.descripciondetalleclasificador }}
+                  </label>
+                </div>
+              </div>
+              <div
+                class="grid-lista"
+                style="
+                  border: #0060df 2px solid;
+                  border-radius: 4px;
+                  padding: 8px;
+                  margin-top: 12px;
+                "
+              >
+                <div
+                  *ngFor="let elemento of dts_radius; let i = index"
+                  style="text-align: left"
+                >
+                  <label class="radio-inline" id="lab{{ elemento.id_detalle }}">
+                    <input
+                      type="radio"
+                      name="opcional"
+                      class="check text-left"
+                      id="c{{ elemento.id_detalle }}"
+                    />
+                    {{ elemento.descripciondetalleclasificador }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pull-right">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="paneles('VOLVER_DETALLE')"
+            >
+              Cerrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              *ngIf="btnRegistraDetalle == true"
+              name="btnRegistraDetalle"
+              id="btnRegistraDetalle"
+              (click)="InsertaDetalle()"
+            >
+              Registrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              *ngIf="btnEditaDetalle == true"
+              name="btnEditaDetalle"
+              id="btnEditaDetalle"
+              (click)="EditaDetalle()"
+            >
+              Editar
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- FIN FORMULARIO DETALLE -->
+  <!-- MODAL PARA ELIMINAR CABECERA -->
+  <div
+    class="modal fade"
+    *ngIf="pnlModalEliminaCabecera == true"
+    name="modalEliminaCabecera"
+    id="modalEliminaCabecera"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">:::ATENCIÓN:::</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="alert alert-danger">
+          Está apunto de eliminar un registro ==>
+          <br />
+          <p>, ¿se encuentra seguro?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Cerrar
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="this.eliminaCompromiso(dtsEliminarCabecera.id_compromiso)"
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- FIN MODAL PARA ELIMINAR CABECERA -->
+  <!-- MODAL PARA ELIMINAR DETALLE -->
+  <div
+    class="modal fade"
+    *ngIf="pnlModalEliminaDetalle == true"
+    name="modalEliminaDetalle"
+    id="modalEliminaDetalle"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">:::ATENCIÓN:::</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="alert alert-danger">
+          Está apunto de eliminar un registro ==>
+          <br />
+          <p>, ¿se encuentra seguro?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Cerrar
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="this.eliminaDetalle(dtsEliminarDetalle)"
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- FIN MODAL PARA ELIMINAR DETALLE -->
+  <!-- MODAL PARA PRIORIZAR -->
+  <div *ngIf="pnl_modalPriorizacion == true">
+    <div
+      class="modal fade"
+      name="modalPriorizar"
+      id="modalPriorizar"
+      data-backdrop="static"
+      data-keyboard="false"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalPriorizar"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">
+              :::PRIORIZAR:::
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div>
+            <app-priorizacion
+              [id_compromiso]="id_compromiso"
+              (respuestaPadre)="paneles($event)"
+            ></app-priorizacion>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- FIN MODAL PARA PRIORIZAR -->
+  <!-- MODAL FORMULARIO RESUMEN -->
+  <div *ngIf="pnl_modalFormularioResumen == true">
+    <div
+      class="modal fade"
+      name="modalFormularioResumen"
+      id="modalFormularioResumen"
+      data-backdrop="static"
+      data-keyboard="false"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalFormularioResumen"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">
+              :::RESUMEN TECNICO COMPROMISO PRESIDENCIAL:::
+            </h5>
+            <button
+              type="button"
+              class="close"
+              (click)="paneles('CIERRA_MODAL_FORMULARIO_RESUMEN')"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div>
+            <app-formulario-resumen
+              [dts_registro]="dts_registro"
+              (respuestaPadre)="paneles($event)"
+            ></app-formulario-resumen>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- FIN MODAL FORMULARIO RESUMEN-->
+  <!-- PANEL FORMULARIO MONITOREO-->
+  <div *ngIf="pnl_monitoreo == true">
+    <app-monitoreo-compromiso
+      [dts_registro]="dts_registro"
+      (respuestaPadre)="paneles($event)"
+    ></app-monitoreo-compromiso>
+  </div>
+  <!-- FIN PANEL FORMULARIO MONITOREO-->
+</div>

@@ -1,0 +1,257 @@
+<div id="pnl_unidad" name="pnl_unidad">
+  <div class="panel panel-primary">
+    <div class="panel-heading" style="text-align: center">
+      GESTION UNIDAD ORGANIZACIONAL
+      <button
+        type="button"
+        class="btn btn-success pull-right"
+        (click)="limpiarCargoModal()"
+        data-toggle="modal"
+        data-target="#modalCargo"
+        style="padding: 2px 10px; margin-top: -2px"
+      >
+        Nuevo Cargo
+      </button>
+    </div>
+    <div class="panel-body">
+      <table class="table table-condensed table-hover dt-unidad">
+        <thead>
+          <tr>
+            <th style="width: 40px">Nro.</th>
+            <th>Código Padre</th>
+            <th style="width: 400px">Nombre</th>
+            <th style="width: 400px">Descripcion</th>
+            <th>Código</th>
+            <th>Prefijo</th>
+            <th>Tipo Unidad</th>
+            <th style="width: 100px">Seleccione...</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+        <tbody>
+          <tr *ngFor="let row_registros of dts_unidad; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ row_registros.codigo_padre }}</td>
+            <td>{{ row_registros.nombre }}</td>
+            <td>{{ row_registros.descripcion }}</td>
+            <td>{{ row_registros.codigo }}</td>
+            <td>{{ row_registros.prefijo }}</td>
+            <td>{{ row_registros.tipo_unidad }}</td>
+            <td>
+              <div>
+                <button
+                  type="button"
+                  class="btn btn-warning"
+                  data-toggle="modal"
+                  data-target="#modalCargo"
+                  (click)="cargarCargo(row_registros)"
+                  [disabled]="row_registros.id_unidad == 153"
+                  title="Modificar Registro"
+                >
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="confirmar(row_registros.id_unidad)"
+                  title="Anular Cargo"
+                  [disabled]="row_registros.id_unidad == 153"
+                >
+                  <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!--modal insert/edit unidad organizaional-->
+      <div
+        class="modal fade"
+        name="modalCargo"
+        id="modalCargo"
+        role="dialog"
+        aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true"
+      >
+        <div
+          class="modal-dialog modal-dialog-centered modal-lg"
+          role="document"
+        >
+          <div class="modal-content">
+            <div class="modal-header" style="background: #0c72ad; color: white">
+              <button
+                type="button"
+                class="close text-white"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span>&times;</span>
+              </button>
+              <h5 class="modal-title" id="exampleModalLabel">
+                <div *ngIf="!actualizando">Registrar Nuevo Cargo</div>
+                <div *ngIf="actualizando">Actualizar Cargo</div>
+              </h5>
+            </div>
+            <div class="modal-body" style="overflow: hidden">
+              <div class="row">
+                <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                  <label for="nombre">Padre:</label>
+                  <div class="input-group">
+                    <span class="input-group-addon"
+                      ><i class="glyphicon glyphicon-link"></i
+                    ></span>
+                    <select
+                      class="form-control"
+                      style="width: 100%"
+                      [(ngModel)]="fidPadre"
+                    >
+                      <option
+                        *ngFor="let row of dtsPadres"
+                        [ngValue]="row.id_unidad"
+                      >
+                        {{ row.nombre }} {{ row.descripcion }}
+                        {{ row.prefijo }} {{ row.codigo }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                  <label for="nombre">Tipo Unidad:</label>
+                  <div class="input-group">
+                    <span class="input-group-addon"
+                      ><i class="fa fa-th-large"></i
+                    ></span>
+                    <select
+                      class="form-control"
+                      style="width: 100%"
+                      [(ngModel)]="fidTipo"
+                    >
+                      <option [ngValue]="1">CARGO</option>
+                      <option [ngValue]="2">UNIDAD/AREA</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                  <label for="nombre">Nombre:</label>
+                  <div class="input-group">
+                    <span class="input-group-addon"
+                      ><i class="glyphicon glyphicon-link"></i
+                    ></span>
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="nombre"
+                      placeholder="cargo"
+                      [(ngModel)]="nombre"
+                      max="150"
+                      onkeypress="return permite(event, 'num_car')"
+                    />
+                  </div>
+                </div>
+                <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                  <label for="fechaSolicitud">Descripción:</label>
+                  <div class="input-group">
+                    <span class="input-group-addon"
+                      ><i class="glyphicon glyphicon-calendar"></i
+                    ></span>
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="descripcion"
+                      placeholder="descripcion"
+                      [(ngModel)]="descripcion"
+                      max="150"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                  <label for="fechaSolicitud">Código:</label>
+                  <div class="input-group">
+                    <span
+                      class="input-group-addon"
+                      (click)="nuevoElemento('codigo')"
+                      title="Agregar nuevo código"
+                      ><i class="glyphicon glyphicon-calendar"></i
+                    ></span>
+                    <select
+                      class="form-control"
+                      style="width: 100%"
+                      [(ngModel)]="codigo"
+                    >
+                      <option
+                        *ngFor="let row of dtsCodigos"
+                        [ngValue]="row.cod_padre"
+                      >
+                        {{ row.cod_padre }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                  <label for="fechaSolicitud">Prefijo:</label>
+                  <div class="input-group">
+                    <span class="input-group-addon"
+                      ><i class="glyphicon glyphicon-calendar"></i
+                    ></span>
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="prefijo"
+                      placeholder="prefijo"
+                      [(ngModel)]="prefijo"
+                      max="4"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="linea"></div>
+                <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    style="margin-right: 1rem"
+                    data-dismiss="modal"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    class="btn btn-success"
+                    id="registrar"
+                    type="button"
+                    (click)="crudCargo(null, 'U')"
+                  >
+                    <div *ngIf="!actualizando">
+                      <span class="glyphicon glyphicon-floppy-disk"></span>
+                      Registrar Cargo
+                    </div>
+                    <div *ngIf="actualizando">
+                      <span class="glyphicon glyphicon-ok"></span> Actualizar
+                      Cargo
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

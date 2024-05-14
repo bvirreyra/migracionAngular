@@ -1,0 +1,1106 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="clearfix" style="margin-bottom: 1rem">
+  <button
+    type="button"
+    class="btn btn-info"
+    (click)="switchReportes()"
+    *ngIf="filtraArea == 'undefined' || filtraArea == null"
+  >
+    REPORTES
+  </button>
+  <button
+    *ngIf="btn_regiones == true"
+    type="button"
+    class="btn btn-info btn-md pull-right"
+    (click)="paneles('VER_TARJETAS_REGIONES')"
+  >
+    <i class="fa fa-id-card" aria-hidden="true" title="Ver Regiones"></i>
+  </button>
+</div>
+<!-- TARJETAS DE REGIONES Y NACIONAL -->
+<div *ngIf="pnl_regiones == true">
+  <div>
+    <div
+      class="container-fluid bg-trasparent my-4 p-3"
+      style="position: relative"
+    >
+      <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
+        <!-- TARJETA OCCIDENTE -->
+        <div class="col-lg-3">
+          <div class="card h-100 shadow-sm">
+            <div class="titulo">Occidente</div>
+            <img
+              src="../../../../assets/imagenes/archivo_central/region_occidente.png"
+              class="card-img-top"
+              alt="..."
+            />
+            <div class="card-body">
+              <div class="text-center my-4">
+                <button
+                  class="btn btn-card"
+                  type="button"
+                  (click)="accesoPorTarjetaRegion('OCCIDENTE')"
+                >
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- TARJETA CENTRO -->
+        <div class="col-lg-3">
+          <div class="card h-100 shadow-sm">
+            <div class="titulo">Centro</div>
+            <img
+              src="../../../../assets/imagenes/archivo_central/region_centro.png"
+              class="card-img-top"
+              alt="..."
+            />
+            <div class="card-body">
+              <div class="text-center my-4">
+                <button
+                  class="btn btn-card"
+                  type="button"
+                  (click)="accesoPorTarjetaRegion('CENTRO')"
+                >
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- TARJETA ORIENTE -->
+        <div class="col-lg-3">
+          <div class="card h-100 shadow-sm">
+            <div class="titulo">Oriente</div>
+            <img
+              src="../../../../assets/imagenes/archivo_central/region_oriente.png"
+              class="card-img-top"
+              alt="..."
+            />
+            <div class="card-body">
+              <div class="text-center my-4">
+                <button
+                  class="btn btn-card"
+                  type="button"
+                  (click)="accesoPorTarjetaRegion('ORIENTE')"
+                >
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- TARJETA NACIONAL -->
+        <div class="col-lg-3">
+          <div class="card h-100 shadow-sm">
+            <div class="titulo">Nacional</div>
+            <img
+              src="../../../../assets/imagenes/archivo_central/nacional.png"
+              class="card-img-top"
+              alt="..."
+            />
+            <div class="card-body">
+              <div class="text-center my-4">
+                <button
+                  class="btn btn-card"
+                  type="button"
+                  (click)="accesoPorTarjetaRegion('NACIONAL')"
+                >
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- BOTON REPORTES -->
+<div *ngIf="pnl_reportes == true">
+  <app-reportes></app-reportes>
+</div>
+
+<!-- VISTA UNO -->
+<div name="pnl_listaproyecto" id="pnl_listaproyecto">
+  <!--REFRESCA GRIDVIEW -->
+  <div class="clearfix" style="margin-bottom: 1rem">
+    <button
+      *ngIf="btn_refrescar == true"
+      type="button"
+      class="btn btn-success btn-md pull-right"
+      (click)="manejoRoles()"
+    >
+      <i class="fa fa-refresh" aria-hidden="true" title="Ver Proyectos"></i>
+    </button>
+    <button
+      *ngIf="filtraArea == 'undefined' || filtraArea == null"
+      class="btn btn-default"
+      id="conti"
+      type="button"
+      (click)="filtraProyectosContinuidad()"
+    >
+      {{ botonContinuidad }}
+    </button>
+    <button
+      *ngIf="btn_refrescar_tarjetas == true"
+      type="button"
+      class="btn btn-success btn-md pull-right"
+      (click)="accesoPorTarjetaRegion(m_accesoDepartamento)"
+    >
+      <i class="fa fa-refresh" aria-hidden="true" title="Ver Proyectos"></i>
+    </button>
+    <button
+      *ngIf="btn_nuevoProyecto == true"
+      type="button"
+      class="btn btn-primary pull-right"
+      (click)="paneles('VER_FORMULARIO_INSERT')"
+      title="Nuevo Proyecto"
+    >
+      <i class="fa fa-plus-square"></i>
+    </button>
+  </div>
+  <!--LISTA GRIDVIEW PROYECTOS CONSOLIDADOS-->
+  <div style="text-align: right">
+    <label class="titulo">{{
+      dts_seguimiento
+        ? dts_seguimiento.length != dts_inicial.length
+          ? dts_seguimiento.length +
+            " registros filtrados de un total de " +
+            dts_inicial.length +
+            " registros"
+          : dts_inicial.length + " registros en total"
+        : ""
+    }}</label>
+  </div>
+
+  <table
+    class="table table-responsive table-condensed table-hover dt-seguimiento"
+    style="font-size: 9pt"
+  >
+    <thead style="position: sticky;top: 50px;">
+      <tr>
+        <th>Nro.</th>
+        <th (click)="ordenar('_id_sgp')">
+          Cod Sgp <i class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+        <th (click)="ordenar('_gestion')">
+          Gestion <i class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+        <th (click)="ordenar('_departamento')">
+          Departamento <i class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+        <th (click)="ordenar('_provincia')">
+          Provincia <i class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+        <th (click)="ordenar('_municipio')">
+          Municipio <i class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+        <th (click)="ordenar('_nro_convenio')">
+          Nro Convenio <i class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+        <th (click)="ordenar('_fecha_convenio')">
+          Fecha Convenio <i class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+        <th (click)="ordenar('_nombreproyecto')">
+          Nombre Proyecto <i class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+        <th (click)="ordenar('_datos_responsable')">
+          Responsable <i class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+        <!-- <th>Tipo Convenio</th> -->
+        <!-- <th>Monto Upre</th>
+        <th>Plazo Ejecucion</th> -->
+        <th (click)="ordenar('_fecha_inicio')">
+          Fecha Inicio <i class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+        <th (click)="ordenar('_des_estado_proyecto')">
+          Estado Proyecto <i class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+        <th (click)="ordenar('v_avance_fisico')">
+          Avance Fisico <i class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+        <th (click)="ordenar('v_avance_financiero')">
+          Avance Financiero <i class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+        <!-- <th>Estado Cierre</th> -->
+
+        <th *ngIf="!vistaFinanciera" style="width: 120px;">Código ETA</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <!-- <td></td>
+        <td></td> -->
+        <td></td>
+        <td>
+          <input
+            type="text"
+            #filtroSGP
+            (keyup)="filtrar2('_id_sgp', filtroSGP.value)"
+            max="6"
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            #filtroGestion
+            (keyup)="filtrar2('_gestion', filtroGestion.value)"
+            max="4"
+          />
+        </td>
+        <td>
+          <select
+            [(ngModel)]="dep"
+            (ngModelChange)="filtrar2('_departamento', dep)"
+            style="width: 100px"
+          >
+            <option
+              *ngFor="let row of dts_departamentos"
+              [ngValue]="row._departamento"
+            >
+              {{ row._departamento }}
+            </option>
+          </select>
+        </td>
+        <td>
+          <select
+            [(ngModel)]="prov"
+            (ngModelChange)="filtrar2('_provincia', prov)"
+            style="width: 100px"
+          >
+            <option
+              *ngFor="let row of dts_provincias"
+              [ngValue]="row._provincia"
+            >
+              {{ row._provincia }}
+            </option>
+          </select>
+        </td>
+        <td>
+          <select
+            [(ngModel)]="mun"
+            (ngModelChange)="filtrar2('_municipio', mun)"
+            style="width: 100px"
+          >
+            <option
+              *ngFor="let row of dts_municipios"
+              [ngValue]="row._municipio"
+            >
+              {{ row._municipio }}
+            </option>
+          </select>
+        </td>
+        <td>
+          <input
+            type="text"
+            #filtroConvenio
+            (keyup)="filtrar2('_nro_convenio', filtroConvenio.value)"
+            max="20"
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            #filtroFechaConvenio
+            (keyup)="filtrar2('_fecha_convenio', filtroFechaConvenio.value)"
+            max="10"
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            #filtroProyecto
+            (keyup)="filtrar2('_nombreproyecto', filtroProyecto.value)"
+            max="10"
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            #filtroResponsable
+            (keyup)="filtrar2('_datos_responsable', filtroResponsable.value)"
+            max="20"
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            #filtroFechaInicio
+            (keyup)="filtrar2('v_fecha_inicio', filtroFechaInicio.value)"
+            max="20"
+          />
+        </td>
+        <td>
+          <select
+            [(ngModel)]="estado"
+            (ngModelChange)="filtrar2('_des_estado_proyecto', estado)"
+            style="width: 100px"
+          >
+            <option
+              *ngFor="let row of dts_estados"
+              [ngValue]="row._des_estado_proyecto"
+            >
+              {{ row._des_estado_proyecto }}
+            </option>
+          </select>
+        </td>
+        <td>
+          <input
+            type="text"
+            #filtroFisico
+            (keyup)="filtrar2('v_avance_fisico', filtroFisico.value)"
+            max="5"
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            #filtroFinanciero
+            (keyup)="filtrar2('v_avance_financiero', filtroFinanciero.value)"
+            max="5"
+          />
+        </td>
+        <td *ngIf="!vistaFinanciera"></td>
+        <td></td>
+      </tr>
+    </tfoot>
+
+    <tbody>
+      <tr
+        *ngFor="
+          let row_registros of dts_seguimiento
+            | filtra : campo : valor
+            | slice : pagina * 10 : pagina * 10 + 10
+        "
+      >
+        <!-- <tr *ngFor="let row_registros of dts_seguimiento ; let i = index"> -->
+        <td>{{ row_registros.fila }}</td>
+        <td>{{ row_registros._id_sgp }}</td>
+        <td>{{ row_registros._gestion }}</td>
+        <td>{{ row_registros._departamento }}</td>
+        <td>{{ row_registros._provincia }}</td>
+        <td>{{ row_registros._municipio }}</td>
+        <td>{{ row_registros._nro_convenio }}</td>
+        <td>{{ row_registros._fecha_convenio | date : "dd/MM/yyyy" }}</td>
+        <td>{{ row_registros._nombreproyecto }}</td>
+        <td>{{ row_registros._datos_responsable }}</td>
+        <!-- <td>{{ row_registros._des_tipo_convenio }}</td> -->
+        <!-- <td>
+            {{ row_registros._monto_upre | number: "0.2-2" | formatoDecimal }}
+          </td>
+          <td>{{ row_registros._plazo_ejecucion }}</td> -->
+        <td>{{ row_registros.v_fecha_inicio | date : "dd/MM/yyyy" }}</td>
+        <td>{{ row_registros._des_estado_proyecto }}</td>
+        <td>{{ row_registros.v_avance_fisico }}</td>
+        <td>{{ row_registros.v_avance_financiero }}</td>
+        <td *ngIf="!vistaFinanciera" style="width: 120px;">
+          <input
+            class="form-control"
+            name="codigoeta{{ row_registros._id_proyecto }}"
+            id="codigoeta{{ row_registros._id_proyecto }}"
+            autocomplete="off"
+            value="{{ row_registros.cod_eta }}"
+            (change)="preEditaCodigoEta(row_registros._id_proyecto)"
+            [disabled]="camposHabilitados._financiera"
+            list="codigosETAS"
+          />
+          <datalist id="codigosETAS" class="datalist">
+            <option *ngFor="let row of dtsCodigosETAS;" class="form-control" value={{row.codigo_eta}} label="{{row.entidad}} - {{row.codigo_eta}}">
+          </datalist>
+        </td>
+        <!-- <td>{{ row_registros._des_estado_cierre }}</td> -->
+        <td>
+          <button
+            *ngIf="filtraArea == 'undefined' || filtraArea == null"
+            type="button"
+            class="btn btn-primary btn-block"
+            title="Datos Generales del Proyecto"
+            (click)="paneles('VER_RESUMEN', row_registros)"
+          >
+            <i class="fa fa-eye" aria-hidden="true"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-info btn-block"
+            title="Técnica"
+            (click)="paneles('VER_TECNICA', row_registros)"
+          >
+            <i class="fa fa-wrench" aria-hidden="true"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-success btn-block"
+            title="Financiera"
+            (click)="paneles('VER_FINANCIERO', row_registros)"
+          >
+            <i class="fa fa-strikethrough" aria-hidden="true"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger btn-block"
+            title="Legal"
+            (click)="paneles('VER_LEGAL', row_registros)"
+          >
+            <i class="fa fa-balance-scale" aria-hidden="true"></i>
+          </button>
+          <!-- <button type="button" class="btn btn-warning btn-block" (click)="paneles('VER_ALERTAS', row_registros)"
+              title="Alerta">
+              <i class="fa fa fa-bell" aria-hidden="true"></i></button> -->
+          <button
+            *ngIf="filtraArea == 'undefined' || filtraArea == null"
+            type="button"
+            class="btn btn-warning btn-block"
+            (click)="paneles('REGISTRAR_OBSERVACION', row_registros)"
+            title="Registro Observacion"
+            [disabled]="camposHabilitados._tecnica"
+          >
+            <i class="fa fa fa-bell" aria-hidden="true"></i>
+          </button>
+          <button
+            *ngIf="filtraArea == 'undefined' || filtraArea == null"
+            type="button"
+            class="btn btn-info btn-block"
+            title="Asignar"
+            (click)="paneles('ASIGNACION', row_registros)"
+            [disabled]="
+              camposHabilitados._encargado_departamental &&
+              camposHabilitados._responsable_region
+            "
+          >
+            <i class="fa fa-id-badge" aria-hidden="true"></i>
+          </button>
+        </td>
+      </tr>
+      <!-- </cdk-virtual-scroll-viewport> -->
+    </tbody>
+  </table>
+  <!-- paginacion -->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination pull-right">
+      <li class="page-item" style="margin-right: 2rem">
+        <label class="titulo">{{
+          "mostrando registros del " +
+            (pagina * 10 + 1) +
+            " al " +
+            (pagina * 10 + 10 > dts_seguimiento.length
+              ? dts_seguimiento.length
+              : pagina * 10 + 10) +
+            " de un total de " +
+            dts_seguimiento.length
+        }}</label>
+      </li>
+      <li class="page-item">
+        <button
+          class="btn btn-info page-link"
+          id="anterior"
+          (click)="paginar(-1)"
+        >
+          Anterior
+        </button>
+      </li>
+      <li class="page-item">
+        <button
+          class="btn btn-info page-link"
+          id="siguiente"
+          (click)="paginar(1)"
+        >
+          Siguiente
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<!-- PANEL NUEVO PROYECTO -->
+<div
+  *ngIf="pnl_nuevoproyecto == true"
+  name="pnl_nuevoproyecto"
+  id="pnl_nuevoproyecto"
+>
+  <!-- <app-proyecto-nuevo  (panel_proy)="paneles($event)" ></app-proyecto-nuevo> -->
+</div>
+<!-- PANEL DATOS GENERALES-->
+<div
+  *ngIf="pnl_datos_generales == true"
+  name="pnl_datos_generales"
+  id="pnl_datos_generales"
+>
+  <app-datos-generales
+    [inputDts]="inputDts"
+    [opcion]="'INS'"
+    (panel_proy)="paneles($event)"
+  ></app-datos-generales>
+</div>
+<!-- PANEL RESUMEN-->
+<div *ngIf="pnl_resumen == true" name="pnl_resumen" id="pnl_resumen">
+  <app-resumen
+    [inputDts]="inputDts"
+    (panel_proy)="paneles($event)"
+  ></app-resumen>
+</div>
+<!-- PANEL TECNICA -->
+<div *ngIf="pnl_tecnica == true" name="pnl_tecnica" id="pnl_tecnica">
+  <app-bandeja-tecnica
+    [inputDts]="inputDts"
+    (panel_proy)="paneles($event)"
+    (enviaPadre)="refrescaPadre($event)"
+  ></app-bandeja-tecnica>
+</div>
+<!-- PANEL FINANCIERO -->
+<div *ngIf="pnl_financiero == true" name="pnl_financiero" id="pnl_financiero">
+  <app-bandeja-financiero
+    [inputDts]="inputDts"
+    (panel_proy)="paneles($event)"
+    (enviaPadre)="refrescaPadre($event)"
+  ></app-bandeja-financiero>
+</div>
+<!-- PANEL LEGAL -->
+<div *ngIf="pnl_legal == true" name="pnl_legal" id="pnl_legal">
+  <app-bandeja-legal
+    [inputDts]="inputDts"
+    (panel_proy)="paneles($event)"
+    (enviaPadre)="refrescaPadre($event)"
+  ></app-bandeja-legal>
+</div>
+<!-- PANEL ALERTAS -->
+<div *ngIf="pnl_alerta == true" name="pnl_alerta" id="pnl_alerta">
+  <app-bandeja-observaciones
+    [inputDts]="inputDts"
+    (panel_proy)="paneles($event)"
+  ></app-bandeja-observaciones>
+</div>
+
+<!--MODAL ASIGNACION DE RESPONABLA DEL PROYECTO -->
+<div
+  class="modal fade"
+  name="modalAsignacion"
+  id="modalAsignacion"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad; color: white">
+        <button
+          type="button"
+          class="close text-white"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">
+          Asignar Técnico a proyecto {{ m_nombreproyecto }}
+        </h5>
+      </div>
+      <div class="modal-body" style="overflow: hidden">
+        <div class="row">
+          <div class="form-group col-sm-12 col-lg-12 col-md-12">
+            <label class="control-label text-left" for="busqueda"
+              >Servidor(a):</label
+            >&nbsp;&nbsp;
+            <!-- <select class="form-control" [(ngModel)]="tecnico" (ngModelChange)="changeTecnico()">
+                <option *ngFor="let row of dts_tecnicos" [ngValue]="row">
+                  {{row._usu_app}} {{row._usu_apm}} {{row._usu_nom}}
+                </option>
+              </select> -->
+            <ng-select2
+              [width]="400"
+              [data]="comboSeleccion"
+              [(ngModel)]="tecnico"
+              (ngModelChange)="changeTecnico()"
+            >
+            </ng-select2>
+          </div>
+        </div>
+        <div class="row" *ngIf="historial" style="text-align: center">
+          <label style="font-size: smaller; color: #3c8dbc">ASIGNACIONES</label>
+          <table
+            class="table table-responsive table-condensed table-hover"
+            style="font-size: 8pt"
+          >
+            <thead>
+              <tr>
+                <th>Nro.</th>
+                <th>Fecha Registro</th>
+                <th>Servidor(a)</th>
+                <th>Estado</th>
+                <th>Fecha Modificación</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let row of dts_historial; let i = index"
+                [ngClass]="{ 'bg-success': row.estado == 'ASIGNADO' }"
+              >
+                <td>{{ i + 1 }}</td>
+                <td>{{ row.fecha_registro | date : "dd/MM/yyyy" }}</td>
+                <td>{{ row.nombre }}</td>
+                <td>{{ row.estado }}</td>
+                <td>{{ row.fecha_modificacion | date : "dd/MM/yyyy" }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="registrarAsignacion()"
+        >
+          Asignar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--MODAL OBSERVACION AL PROYECTO-->
+<div *ngIf="pnl_observacionproyecto == true">
+  <div
+    class="modal fade"
+    name="modalObservacionProyecto"
+    id="modalObservacionProyecto"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+    data-keyboard="false"
+    data-backdrop="static"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background: #0c72ad; color: white">
+          <button
+            type="button"
+            class="close text-white"
+            (click)="paneles('CIERRA_MODAL_OBSERVACION_PROYECTO')"
+            aria-label="Cerrar"
+          >
+            <span>&times;</span>
+          </button>
+          <h5 class="modal-title" id="exampleModalLabel">
+            REGISTRO DE OBSERVACION AL PROYECTO: {{ inputDts._nombreproyecto }}
+          </h5>
+        </div>
+        <div class="modal-body" style="overflow: hidden">
+          <app-observar-proyecto
+            [inputDts]="inputDts"
+            (enviaPadre)="refrescaPadre($event)"
+          >
+          </app-observar-proyecto>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            (click)="paneles('CIERRA_MODAL_OBSERVACION_PROYECTO')"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- INICIO NUEVO PROYECTO -->
+<div
+  class="row"
+  *ngIf="pnl_nuevoproyecto == true"
+  name="pnl_nuevoproyecto"
+  id="pnl_nuevoproyecto"
+>
+  <div class="pull-left">
+    <button
+      type="button"
+      class="btn btn-primary"
+      title="Volver Panel"
+      name="btnVolverGv"
+      id="btnVolverGv"
+      (click)="paneles('VER_PANELPROYECTOS')"
+    >
+      <i class="fa fa-reply fa-2x"> </i>
+    </button>
+  </div>
+  <div
+    class="col-lg-7 col-md-7 col-sm-7 col-lg-offset-3 col-md-offset-3 col-sm-offset-3"
+  >
+    <form action="" method="post" enctype="multipart/form-data">
+      <div class="panel panel-primary">
+        <div class="panel-heading clearfix"></div>
+        <div class="panel-body">
+          <div class="bg-primary text-white">NUEVO PROYECTO</div>
+
+          <div class="form-group">
+            <div>
+              <label for="Gestion">Nombre del Proyecto:</label>
+            </div>
+            <div>
+              <input
+                class="form-control"
+                id="m_nombreproyecto"
+                maxlength="200"
+                rows="4"
+                autocomplete="off"
+                name="m_nombreproyecto"
+                placeholder="Introdusca el nombre completo del proyecto como esta en el CONVENIO"
+                [(ngModel)]="m_nombreproyecto"
+                onKeyDown="A(event,this.form.m_descripcionproyecto)"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <div>
+              <label for="Gestion">Nombre del Proyecto en Solicitud:</label>
+            </div>
+            <div>
+              <ng-select2
+                name="nombreCompromisoPresidencial"
+                [width]="600"
+                [data]="dts_compromisosPresidenciales"
+                [(ngModel)]="m_proyectosolicitud"
+                [gModelOptions]="{ standalone: true }"
+              ></ng-select2>
+            </div>
+          </div>
+          <div class="form-group">
+            <div>
+              <label for="Gestion">Descripción del Proyecto:</label>
+            </div>
+            <div>
+              <input
+                class="form-control"
+                id="m_descripcionproyecto"
+                maxlength="200"
+                rows="4"
+                name="m_descripcionproyecto"
+                autocomplete="off"
+                [(ngModel)]="m_descripcionproyecto"
+                onKeyDown="A(event,this.form.m_tipoproyecto)"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label for="Gestion">Tipo de Proyecto:</label>
+            </div>
+            <div>
+              <select
+                id="m_tipoproyecto"
+                class="form-control"
+                name="m_tipoproyecto"
+                [(ngModel)]="m_tipoproyecto"
+                onKeyDown="A(event,this.form.m_entidadbeneficiaria)"
+              >
+                <option value="0">Seleccione...</option>
+                <option
+                  *ngFor="let row_registros of dts_TipoProyecto"
+                  [ngValue]="row_registros.id"
+                >
+                  {{ row_registros.descripcion }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row"></div>
+          <div class="form-group col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label for="Gestion">Entidad beneficiaria:</label>
+            </div>
+            <div>
+              <select
+                id="m_entidadbeneficiaria"
+                class="form-control"
+                name="m_entidadbeneficiaria"
+                [(ngModel)]="m_entidadbeneficiaria"
+                onKeyDown="A(event,this.form.m_detallebeneficiario)"
+              >
+                <option value="0" disabled="m_entidadbeneficiaria =='0'">
+                  Seleccione...
+                </option>
+                <option
+                  *ngFor="let row_registros of dts_EntidadBeneficiaria"
+                  [ngValue]="row_registros.id"
+                >
+                  {{ row_registros.descripcion }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group col-lg-8 col-md-8 col-sm-8">
+            <div>
+              <label for="Gestion">Detalle beneficiario:</label>
+            </div>
+            <div>
+              <input
+                class="form-control"
+                id="m_detallebeneficiario"
+                maxlength="200"
+                rows="4"
+                name="m_detallebeneficiario"
+                autocomplete="off"
+                [(ngModel)]="m_detallebeneficiario"
+                onKeyDown="A(event,this.form.m_departamento)"
+                required
+              />
+            </div>
+          </div>
+          <div class="row"></div>
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label for="Gestion">Departamento:</label>
+            </div>
+            <div>
+              <select
+                id="m_departamento"
+                class="form-control"
+                name="m_departamento"
+                [(ngModel)]="m_departamento"
+                #device
+                (change)="buscarMunicipio(device.value)"
+                onKeyDown="A(event,this.form.m_municipio)"
+              >
+                <option value="0">Seleccione...</option>
+                <option
+                  *ngFor="let row_dep of dts_ListaDepartamento; let i = index"
+                  [ngValue]="row_dep.codigo_departamento"
+                  (click)="buscarMunicipio(row_dep.codigo_departamento)"
+                >
+                  {{ row_dep.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <!-- <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+                      <div>
+                          <label for="Gestion">Provincia:</label>
+                      </div>
+                      <div>
+                          <select id="m_provincia" class="form-control" name="m_provincia" [(ngModel)]="m_provincia"
+                              (change)="filtraMunicipio()" onKeyDown="A(event,this.form.m_municipio)">
+                              <option value='0' disabled="m_provincia =='0'">Seleccione...</option>
+                              <option *ngFor="let row_registros of dts_provinciafiltrada"
+                                  [ngValue]="row_registros.codigo_provincia">{{row_registros.nombre}}
+                              </option>
+                          </select>
+                      </div>
+                  </div> -->
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label for="Gestion">Municipio:</label>
+            </div>
+            <div>
+              <select
+                id="m_municipio"
+                class="form-control"
+                name="m_municipio"
+                [(ngModel)]="m_municipio"
+                onKeyDown="A(event,this.form.m_nroconvenio)"
+              >
+                <option value="0" disabled="m_municipio =='0'">
+                  Seleccione...
+                </option>
+                <option
+                  *ngFor="let row_mun of dts_ListaMunicipio; let i = index"
+                  [ngValue]="row_mun.codigo_municipio"
+                >
+                  {{ row_mun.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="panel-heading clearfix"></div>
+
+          <div class="bg-primary text-white col-lg-12 col-md-12 col-sm-12">
+            DATOS DEL CONVENIO
+          </div>
+
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label for="Gestion">Numero:</label>
+            </div>
+            <div>
+              <input
+                class="form-control"
+                id="m_nroconvenio"
+                maxlength="200"
+                rows="4"
+                name="m_nroconvenio"
+                autocomplete="off"
+                placeholder="NUMERO DE CONVENIO"
+                [(ngModel)]="m_nroconvenio"
+                onKeyDown="A(event,this.form.m_fechaconvenio)"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label for="Gestion">Fecha Suscripción:</label>
+            </div>
+            <div>
+              <input
+                class="form-control"
+                id="m_fechaconvenio"
+                maxlength="200"
+                rows="4"
+                name="m_fechaconvenio"
+                placeholder="dd/mm/YYYY"
+                [(ngModel)]="m_fechaconvenio"
+                onKeyDown="A(event,this.form.m_plazoconvenio)"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label for="Gestion">Plazo de Ejecución:</label>
+            </div>
+            <div>
+              <input
+                class="form-control"
+                type="number"
+                id="m_plazoconvenio"
+                maxlength="200"
+                rows="4"
+                name="m_plazoconvenio"
+                placeholder="DIAS CALENDARIO"
+                [(ngModel)]="m_plazoconvenio"
+                onKeyDown="A(event,this.form.m_montofinanciadoupre)"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label for="Gestion">Monto financiado UPRE:</label>
+            </div>
+            <div>
+              <input
+                class="form-control"
+                id="m_montofinanciadoupre"
+                maxlength="200"
+                rows="4"
+                name="m_montofinanciadoupre"
+                [(ngModel)]="m_montofinanciadoupre"
+                onKeyDown="A(event,this.form.m_montocontrapartebeneficiario)"
+                required
+              />
+            </div>
+          </div>
+          <div class="row"></div>
+          <div class="form-group row" class="col-lg-3 col-md-3 col-sm-3">
+            <div>
+              <label for="Gestion">Monto Contraparte Beneficiario:</label>
+            </div>
+            <div>
+              <input
+                class="form-control"
+                id="m_montocontrapartebeneficiario"
+                maxlength="200"
+                rows="4"
+                name="m_montocontrapartebeneficiario"
+                [(ngModel)]="m_montocontrapartebeneficiario"
+                onKeyDown="A(event,this.form.m_montocontrapartegobernacion)"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group row" class="col-lg-3 col-md-3 col-sm-3">
+            <div>
+              <label for="Gestion">Monto Contraparte Gobernación:</label>
+            </div>
+            <div>
+              <input
+                class="form-control"
+                id="m_montocontrapartegobernacion"
+                maxlength="200"
+                rows="4"
+                name="m_montocontrapartegobernacion"
+                [(ngModel)]="m_montocontrapartegobernacion"
+                onKeyDown="A(event,this.form.m_montocontrapartemunicipio)"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group row" class="col-lg-3 col-md-3 col-sm-3">
+            <div>
+              <label for="Gestion">Monto Contraparte Municipio:</label>
+            </div>
+            <div>
+              <input
+                class="form-control"
+                id="m_montocontrapartemunicipio"
+                maxlength="200"
+                rows="4"
+                name="m_montocontrapartemunicipio"
+                [(ngModel)]="m_montocontrapartemunicipio"
+                required
+              />
+            </div>
+          </div>
+          <!-- <div class="form-group" class="col-lg-3 col-md-3 col-sm-3">
+            <div>
+              <label for="Gestion">Monto total de convenio:</label>
+            </div>
+            <div>
+              <input
+                class="form-control"
+                id="m_montototalconvenio"
+                maxlength="200"
+                rows="4"
+                name="m_montototalconvenio"
+                [(ngModel)]="m_montototalconvenio"
+                onKeyDown="A(event,this.form.m_departamento)"
+                required
+              />
+            </div>
+          </div> -->
+          <div class="row"></div>
+          <div class="panel-footer">
+            <button
+              type="button"
+              class="btn btn-success btn-block"
+              value="REGISTRAR"
+              name="btnRegistrar"
+              id="btnRegistrar"
+              *ngIf="
+                m_nombreproyecto != '' &&
+                m_descripcionproyecto != '' &&
+                m_tipoproyecto != '' &&
+                m_entidadbeneficiaria != '' &&
+                m_detallebeneficiario != '' &&
+                m_departamento != '' &&
+                m_municipio != '' &&
+                m_nroconvenio != '' &&
+                m_fechaconvenio != '' &&
+                m_plazoconvenio != '' &&
+                m_montofinanciadoupre != '' &&
+                m_montocontrapartebeneficiario != '' &&
+                m_montocontrapartegobernacion != '' &&
+                m_montocontrapartemunicipio != '' &&
+                m_proyectosolicitud != ''
+              "
+              title="Guardar Seguimiento"
+              (click)="inserta_seguimiento_seg()"
+            >
+              Registrar
+            </button>
+            <!-- <button type="button" class="btn btn-success btn-block" value="ACTUALIZAR" name="btnActualizar"
+                          id="btnActualizar" (click)="actualiza_seguimiento()"
+                          title="Guardar Seguimiento">Actualizar</button> -->
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

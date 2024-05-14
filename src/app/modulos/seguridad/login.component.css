@@ -1,0 +1,108 @@
+.contenedor-login {
+	width: 25rem;
+	margin-left: auto;
+	margin-right: auto;
+}
+.contenedor-login .cuenta-nueva {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+
+
+.user-login-header,.login-image-main{
+    margin-top: 15px;
+}
+.user-login-header h1{
+    font-size: 35px;
+    color:#474747;
+}
+.user-login-header p,.last-part p{
+    color:#868686;
+}
+.user-login-header span{
+    color:#fff;
+    font-weight: 600;
+}
+
+.login-image-main{
+    padding: 30px;
+    background-color:#fff;
+    border-radius:5px;
+	box-shadow: 0 0 5px 0 #9c9c9c;
+	border:1px solid #1224ec;
+}
+
+.user-image-section img{
+    background-color: #618fec;
+    background-size: 150px;
+    padding:10px;
+    height:150px;
+	width:150px;
+	font-size: 8em;
+    border-radius: 50%;
+}
+.user-login-box,.last-part{
+    padding:20px;
+}
+.form-control.mayus
+{
+	text-transform: uppercase!important;
+}
+
+.checkbox label:after,
+.radio label:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.checkbox .cr,
+.radio .cr {
+  position: relative;
+  display: inline-block;
+  border: 1px solid #a9a9a9;
+  border-radius: .25em;
+  width: 1.3em;
+  height: 1.3em;
+  float: left;
+  margin-right: .5em;
+}
+
+.radio .cr {
+  border-radius: 50%;
+}
+
+.checkbox .cr .cr-icon,
+.radio .cr .cr-icon {
+  position: absolute;
+  font-size: .8em;
+  line-height: 0;
+  top: 50%;
+  left: 15%;
+}
+
+.radio .cr .cr-icon {
+  margin-left: 0.04em;
+}
+
+.checkbox label input[type="checkbox"],
+.radio label input[type="radio"] {
+  display: none;
+}
+
+.checkbox label input[type="checkbox"]+.cr>.cr-icon,
+.radio label input[type="radio"]+.cr>.cr-icon {
+  opacity: 0;
+}
+
+.checkbox label input[type="checkbox"]:checked+.cr>.cr-icon,
+.radio label input[type="radio"]:checked+.cr>.cr-icon {
+  opacity: 1;
+}
+
+.checkbox label input[type="checkbox"]:disabled+.cr,
+.radio label input[type="radio"]:disabled+.cr {
+  opacity: .5;
+}

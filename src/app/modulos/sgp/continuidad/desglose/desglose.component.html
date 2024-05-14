@@ -1,0 +1,126 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+
+<div class="containerCris">
+  <!-- <button
+    type="button"
+    class="btn btn-primary pull-left"
+    title="Volver Panel"
+    name="btnVolverGv"
+    id="btnVolverGv"
+    (click)="retornar()"
+  >
+    <i class="fa fa-reply fa-2x"> </i>
+  </button> -->
+
+  <div style="text-align: center; color: #3c8dbc">
+    <label for="">Total Proyectos Entregados</label>
+  </div>
+  <table
+    class="table table-bordered"
+    style="font-size: medium; margin-top: 5rem"
+  >
+    <thead class="thead-dark">
+      <th>Proyectos Entregados</th>
+      <th>Monto en Bolivianos</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ proyectosEntregados }}</td>
+        <td>{{ montoPE | number : "0.2-2" | formatoDecimal }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <br /><br /><br />
+  <div style="text-align: center; color: #3c8dbc">
+    <label for="">Proyectos Entregados por Departamento</label>
+  </div>
+  <table
+    id="regional"
+    class="table table-bordered dt-regionales"
+    style="font-size: small"
+  >
+    <thead class="thead-dark">
+      <tr>
+        <th>Departamento</th>
+        <th>Número de Proyectos</th>
+        <th>%</th>
+        <th>Monto en Bolivianos</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let row of porRegionales; let i = index">
+        <td>{{ row.departamento }}</td>
+        <td>{{ row.cantidad }}</td>
+        <td>
+          {{
+            (row.cantidad * 100) / proyectosEntregados
+              | number : "0.2-2"
+              | formatoDecimal
+          }}
+          %
+        </td>
+        <td>{{ row.monto | number : "0.2-2" | formatoDecimal }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td style="text-align: right"><STRONG>TOTAL</STRONG></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+  <br /><br /><br />
+  <div style="text-align: center; color: #3c8dbc">
+    <label for="">Proyectos Entregados por Sector</label>
+  </div>
+  <table
+    id="sector"
+    class="table table-bordered dt-sectores"
+    style="font-size: small"
+  >
+    <thead class="thead-dark">
+      <tr>
+        <th>Sector</th>
+        <th>Número de Proyectos</th>
+        <th>%</th>
+        <th>Monto en Bolivianos</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let row of porSectores; let i = index">
+        <td>{{ row.sector }}</td>
+        <td>{{ row.cantidad }}</td>
+        <td>
+          {{
+            (row.cantidad * 100) / proyectosEntregados
+              | number : "0.2-2"
+              | formatoDecimal
+          }}
+          %
+        </td>
+        <td>{{ row.monto | number : "0.2-2" | formatoDecimal }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td style="text-align: right"><STRONG>TOTAL</STRONG></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- <div class="row">
+    <app-revision [idProyecto]=12 [tipoLista]="'TECNICA'"></app-revision>
+  </div> -->
+  <button class="btn btn-warning" style="display: none" (click)="reporte()">
+    reporte
+  </button>
+</div>

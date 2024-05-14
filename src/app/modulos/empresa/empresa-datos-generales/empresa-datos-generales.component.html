@@ -1,0 +1,284 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="contenedor-modulo">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <span class="fa fa-id-card-o"></span> Datos Generales {{idUsuario == 2000 ? ' - NIT: '+ elNIT: ''}}
+      <button *ngIf="idUsuario == 2000" class="btn btn-info pull-right" style="padding: 2px 20px; margin-top: -4px;" data-toggle="modal" data-target="#modalEmpresas">
+        <i class="fa fa-plus"></i> Buscar NIT
+      </button>
+    </div>
+    <div class="panel-body" *ngIf="empresa">
+      <div class="form-group col-sm-12 col-lg-12">
+        <label for="nombre">Nombre del proponente o razón social:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+          <input class="form-control" type="text" name="nombre" [(ngModel)]="empresa.razon_social" placeholder="Nombre del propotente" maxlength="250" readonly>
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-4">
+        <label for="tipo">Tipo de Empresa:</label>
+        <div>
+          <label class="radio-inline"><input type="radio" id="nacional" value="Empresa Nacional" name="tipo" [(ngModel)]="empresa.tipo" disabled>Empresa Nacional</label>
+          <label class="radio-inline"><input type="radio" id="extranjera" value="Empresa Extranjera" name="tipo" [(ngModel)]="empresa.tipo" disabled>Empresa Extranjera</label>
+          <label class="radio-inline"><input type="radio" id="otro" value="Otro" name="tipo" [(ngModel)]="empresa.tipo" disabled>Otro</label>
+        </div>
+      </div>
+      <div class="row"></div>
+      <div class="form-group col-sm-12 col-lg-4">
+        <label for="matricula">Nº Matrícula de Comercio:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-info"></i> </span>
+          <input class="form-control" type="text" name="matricula" [(ngModel)]="empresa.matricula" placeholder="Matrícula de Comercio" maxlength="20" readonly>
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-4">
+        <label for="inscripcion">Fecha Inscripción:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i> </span>
+          <input class="form-control" type="date" name="inscripcion" [(ngModel)]="empresa.fecha_inscripcion" readonly>
+        </div>
+      </div>
+      <div class="row"></div>
+      <div class="form-group col-sm-12 col-lg-4">
+        <label for="telefono">Teléfono:</label>
+        <div class="input-group requerido">
+          <span class="input-group-addon"><i class="fa fa-phone"></i> </span>
+          <input class="form-control" type="text" name="telefono" [(ngModel)]="empresa.telefono" maxlength="50" autocomplete="off" (input)="handleInput($event)">
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-4">
+        <label for="fax">Fax:</label>
+        <div class="input-group requerido">
+          <span class="input-group-addon"><i class="fa fa-fax"></i> </span>
+          <input class="form-control" type="text" name="fax" [(ngModel)]="empresa.fax" maxlength="50" autocomplete="off" (input)="handleInput($event)">
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-4">
+        <label for="correo">Correo Electrónico:</label>
+        <div class="input-group requerido">
+          <span class="input-group-addon"><i class="fa fa-envelope"></i> </span>
+          <input class="form-control" type="email" name="correo" [(ngModel)]="empresa.correo" maxlength="150" autocomplete="off">
+        </div>
+      </div>
+      <div class="row"></div>
+      <div class="form-group col-sm-12 col-lg-4">
+        <label for="pais">País:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-map"></i> </span>
+          <input class="form-control" type="text" name="pais" [(ngModel)]="empresa.pais" readonly>
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-4">
+        <label for="ciudad">Ciudad:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-map-marker"></i> </span>
+          <input class="form-control" type="text" name="ciudad" [(ngModel)]="empresa.ciudad" list="listaCiudad" readonly>
+          <datalist id="listaCiudad" class="datalist">
+            <option *ngFor="let row of dtsCiudades;" class="form-control" value={{row.ciudad}} label={{row.ciudad}}>
+          </datalist>
+        </div>
+      </div>
+      <div class="row"></div>
+      <div class="form-group col-sm-12 col-lg-12">
+        <label for="pais">Dirección:</label>
+        <div class="input-group requerido">
+          <span class="input-group-addon"><i class="fa fa-building"></i> </span>
+          <input class="form-control" type="text" name="direccion" [(ngModel)]="empresa.direccion" maxlength="200">
+        </div>
+      </div>
+      <div class="row"></div>
+      <div class="botonera">
+        <button class="btn btn-warning" (click)="actualizarFundempresa()">ACTUALIZAR DESDE SEPREC</button>
+        <button class="btn btn-primary" (click)="crudEmpresa(empresa)">GUARDAR DATOS</button>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <span class="fa fa-users"></span> Representantes Legales
+    </div>
+    <div class="panel-body">
+      <div class="grid-cards">
+        <div *ngFor="let row of representantes" class="card">
+          <div class="card-titulo {{(row.num_id && row.poder_testimonio && row.poder_lugar_emision && row.poder_fecha_expedicion )?'ct-ok':'ct-bad'}}"><input type="text" style="width: 100%;text-align: center;" class="input-ghost" [(ngModel)]="row.nombre" maxlength="250"></div>
+          <div class="card-body">
+            <h4>Nº de Cédula de Identidad: <strong><input type="text" class="input-ghost" [(ngModel)]="row.num_id" maxlength="40"></strong></h4>
+            <h4>Nº de testimonio: <strong><input type="text" class="input-ghost" [(ngModel)]="row.poder_testimonio" maxlength="20" autocomplete="off"></strong></h4>
+            <h4>Lugar de emisión: <strong><input type="text" class="input-ghost" [(ngModel)]="row.poder_lugar_emision" maxlength="150" autocomplete="off"></strong></h4>
+            <h4>Fecha de expedición: <strong><input type="date" class="input-ghost" [(ngModel)]="row.poder_fecha_expedicion"></strong></h4>
+          </div>
+          <div class="card-botonera">
+            <button class="btn btn-danger card-b" (click)="limpiarRepresentante(row.id_representante_legal)">LIMPIAR</button>
+            <button class="btn btn-primary card-b" (click)="crudRepresentante('U',row.id_representante_legal,row)">ACTUALIZAR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal INICIAL -->
+<div class="modal fade" tabindex="-1"  name="modalMatricula" id="modalMatricula" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <h5 class="modal-title" id="exampleModalLabel">Seleccionar Matrícula</h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left;">
+          <div class="matriculas-grid">
+            <div *ngFor="let row of dtsMatriculas" class="card matricula" (click)="seleccionarMatricula( row.IdMatricula)">
+              <img src="../../../../assets/imagenes/empresa/matricula.jpg"  alt="MATRICULA" class="card-img">
+              <h4>{{row.IdMatricula}}</h4>
+              <p>{{row.RazonSocial}}</p>
+              <strong>* Activo</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal buscador empresas -->
+<div class="modal fade" tabindex="-1"  name="modalEmpresas" id="modalEmpresas" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad;color: white;">
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">Buscar Empresa</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-group col-sm-6 col-lg-4">
+            <label for="pais">NIT:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-eercast"></i> </span>
+              <input class="form-control" type="text" [(ngModel)]="buscar.nit" maxlength="20" autocomplete="off">
+            </div>
+          </div>
+          <div class="form-group col-sm-6 col-lg-4">
+            <label for="pais">Razón Social:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-copyright"></i> </span>
+              <input class="form-control" type="text" [(ngModel)]="buscar.razon_social" maxlength="200" autocomplete="off">
+            </div>
+          </div>
+          <div class="form-group col-sm-6 col-lg-4" style="margin-top: 2.4rem;">
+            <button class="btn btn-primary btn-block" (click)="buscarEmpresas()"><span class="fa fa-search-plus"></span> Buscar</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-sm-6 col-lg-8">
+            <label for="pais">Texto Parcial:</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-commenting"></i> </span>
+              <input class="form-control" type="text" [(ngModel)]="buscar.parcial" maxlength="200" autocomplete="off">
+            </div>
+          </div>
+          <div class="form-group col-sm-6 col-lg-4" style="margin-top: 2.4rem;">
+            <button class="btn btn-info btn-block" (click)="buscarContenido()" ><span class="fa fa-search"></span> Buscar Contenido</button>
+          </div>
+        </div>
+        <div class="row" *ngIf="coincidenciasEmpresa.length>0" style="overflow-x: auto;">
+          <table class="table table-responsive table-condensed table-hover" style="font-size: 9pt; margin: 5px 15px;">
+            <thead>
+              <tr>
+                <th style="width: 50px;">Seleccionar</th>
+                <th >NIT</th>
+                <th >Matrícula</th>
+                <th >Razon Social</th>
+                <th >Fecha Inscripción</th>
+                <th >Ciudad</th>
+                <th >Dirección</th>
+                <th >Teléfono</th>
+                <th >Correo</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row of coincidenciasEmpresa;">
+                <td >
+                  <button class="btn btn-success btn-block" title="Seleccionar" (click)="cargarEmpresa(row)">
+                    <span class="fa fa-check"></span>
+                  </button>
+                </td>
+                <td >{{row.nit }}</td>
+                <td >{{ row.matricula}} </td>
+                <td >{{ row.razon_social}}</td>
+                <td >{{ row.fecha_inscripcion | date: "dd/MM/yyyy"}}</td>
+                <td >{{ row.ciudad }}</td>
+                <td >{{ row.direccion }}</td>
+                <td >{{ row.telefono }}</td>
+                <td >{{ row.correo}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row" *ngIf="coincidenciasContenido.length>0" style="overflow-x: auto;">
+          <table class="table table-responsive table-condensed table-hover" style="font-size: 9pt; margin: 5px 15px;">
+            <thead>
+              <tr>
+                <th style="width: 50px;">Seleccionar</th>
+                <th >NIT</th>
+                <th >Matrícula</th>
+                <th >Razón Social</th>
+                <th >ID Empresa</th>
+                <th >Código</th>
+                <th >Nombre Formulario</th>
+                <th >Estado</th>
+                <th >Fecha Registro</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row of coincidenciasContenido;">
+                <td >
+                  <button class="btn btn-success btn-block" title="Seleccionar" (click)="cargarEmpresa(row)">
+                    <span class="fa fa-edit"></span>
+                  </button>
+                </td>
+                <td >{{row.nit }}</td>
+                <td >{{ row.matricula}} </td>
+                <td >{{ row.razon_social}}</td>
+                <td >{{ row.fid_empresa }}</td>
+                <td >{{ row.codigo }}</td>
+                <td >{{ row.nombre }}</td>
+                <td >{{ row.estado}}</td>
+                <td >{{ row.fecha_registro | date: "dd/MM/yyyy"}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

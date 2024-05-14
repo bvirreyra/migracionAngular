@@ -1,0 +1,6 @@
+.dt-experiencia-empresa tfoot input{
+  width: 100% !important;
+}
+.dt-experiencia-empresa tfoot {
+  display: table-header-group !important;
+}

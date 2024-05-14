@@ -1,0 +1,6 @@
+.dt-grupoFuncionario tfoot input {
+  width: 100% !important;
+}
+.dt-grupoFuncionario tfoot {
+  display: table-header-group !important;
+}

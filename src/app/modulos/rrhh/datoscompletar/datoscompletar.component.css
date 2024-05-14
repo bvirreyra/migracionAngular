@@ -1,0 +1,7 @@
+.dt-Proveidos tfoot input {
+  width: 100% !important;
+}
+
+.dt-Proveidos tfoot {
+  display: table-header-group !important;
+}

@@ -1,0 +1,18 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="panel panel-primary">
+  <div class="panel-heading text-center">
+    <span class="glyphicon glyphicon-list"></span> Listado de Reportes habilitados
+  </div>
+  <div class="panel-body" style="text-align: left;">
+    <div class="grid-lista">
+      <div *ngFor="let row_registros of dts_listareportes; let i = index">
+        <div class="form-comtrol" style="margin-bottom: 1rem;">
+          <button class="btn btn-success btn-block" style="padding: 3px 12px;" 
+          (click)="generarReporte(row_registros)">{{i+1}}.{{row_registros.descripcion}} <i class="glyphicon glyphicon-print"></i></button>
+        </div>      
+    </div>
+    </div>
+  </div>
+</div>

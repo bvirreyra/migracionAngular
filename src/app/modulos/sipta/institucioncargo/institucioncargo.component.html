@@ -1,0 +1,97 @@
+<div id="pnl_gridviewcargo" name="pnl_gridviewcargo">
+    <h2>
+        <P class="text-center">CREAR CARGO</P>
+    </h2>
+    <div class="panel panel-primary">
+        <div class="panel-heading clearfix">
+            <button type="button" class="btn btn-success pull-right" (click)="paneles('NUEVO_CARGO')">Nuevo Cargo
+      </button>
+            <button type="button" class="btn btn-primary  pull-left" title="Volver Inicio" name="volver" id="volver" (click)="sendMessage()">
+      <i class="fa fa-reply fa-2x"></i>
+      </button>
+        </div>
+        <div class="panel-body">
+            <table class="table table-condensed table-hover dt-cargo">
+                <thead>
+                    <tr>
+                        <th>Nro.</th>
+                        <th>Institucion</th>
+                        <th>Cargo</th>
+                        <th>Estado</th>
+                        <th>Seleccione...</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr *ngFor="let row_registros of dts_cargo; let i = index;">
+                        <td>{{i+1}}</td>
+                        <td>{{row_registros.institucion}}</td>
+                        <td>{{row_registros.cargo}}</td>
+                        <td>{{row_registros.Estado}}</td>
+                        <td>
+                            <div>
+                                <button type="button" class="btn btn-warning btn-md" (click)="editarcargopre(row_registros)">
+                          <i class="fa fa-edit" aria-hidden="true" title="Editar Cargo"></i>
+                          </button>
+                                <button type="button" class="btn btn-info" (click)="envio_formulario(row_registros)">
+                            <i class="fa fa-users" aria-hidden="true" title="Agregar Funcionario"></i>
+                          </button>
+                                <button type="button" class="btn btn-danger" (click)="envio_estado(row_registros)">
+                            <i class="fa fa-trash" aria-hidden="true" title="Eliminar Registro"></i>
+                          </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--imprimir en html-->
+<!--{{id_institucion}}-->
+<!--------------////////////////////////----------PANEL DE FORMULARIO NUEVO CARGO-----------////////////////////////////////////////////////-->
+<div class="content content-success" name="pnl_formulariocargo" id="pnl_formulariocargo">
+    <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10">
+        <div>
+            <button type="button" class="btn btn-primary  pull-left" title="Volver Inicio" name="volver" id="volver" (click)="paneles('VER_GRIDVIEW_CARGO')">
+        <i class="fa fa-reply fa-2x"></i></button>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading text-center">NUEVO CARGO</div>
+            <div class="panel-body">
+            </div>
+            <div class="form-horizontal ">
+
+                <div class="form-group">
+                    <label class="control-label col-sm-3">NOMBRE DEL CARGO:</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" type="text" name="m_nombrecargo" id="m_nombrecargo" [(ngModel)]="m_nombrecargo">
+                    </div>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-success btn-block" value="INSERTAR" name="btnInsertarcargo" id="btnInsertarcargo" (click)="insertarcargo()" title="Guardar Cargo">Guardar Cargo
+                    </button>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-success btn-block" value="MODIFICA" name="btnActualizarcargo" id="btnActualizarcargo" (click)="editarcargo()" title="Modificar Cargo">Modificar Cargo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- INTRODUCIENDO EL COMPONENTE CARGO-->
+<div *ngIf='pnlDatos==true'>
+    <app-frmdatos [inputIdInstitucion]="inputIdInstitucion" [inputIdCargo]="inputIdCargo">
+    </app-frmdatos>
+</div>

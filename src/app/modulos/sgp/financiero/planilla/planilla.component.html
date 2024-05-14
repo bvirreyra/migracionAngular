@@ -1,0 +1,99 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<!-- <div>
+  <button type="button" class="btn btn-primary  pull-left" title="Volver Panel" name="btnVolverGv"
+      id="btnVolverGv" (click)="sendMessage('planillas')"><i class="fa fa-reply fa-2x">
+      </i></button>
+</div> -->
+<div style="text-align: left;">
+  <form  [formGroup]="formPlanilla" (ngSubmit)="registrarPlanilla()">
+    <div class="row">
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="busqueda">Estructura Financiamiento:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+          <select
+            class="form-control"
+            formControlName="estructuraFinanciamiento"
+            (ngModelChange)="cambioEstructura()"
+            
+          >
+            <option
+              *ngFor="let row of dts_estructuras"
+              [ngValue]="row.descripciondetalleclasificador"
+            >
+              {{ row.descripciondetalleclasificador }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="planilla">Número Planilla:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+          <input class="form-control" type="number" name="planilla" placeholder="Planilla" formControlName="numeroPlanilla" min="1" max="15" >
+          <!-- <span style="color:tomato;" *ngIf="formPlanilla.controls['numeroPlanilla'].touched && formPlanilla.controls['numeroPlanilla'].errors?.required">Este campo es requerido</span> -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label  for="fechaInicio">Fecha Inicio:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+          <input class="form-control" type="date" name="fechaInicio" formControlName="fechaInicio" maxlength="10" >
+          <!-- <span style="color:tomato;" *ngIf="formPlanilla.controls['fechaInicio'].touched && formPlanilla.controls['fechaInicio'].errors?.required">Este campo es requerido</span> -->
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="fechaFin">Fecha Fin:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+          <input class="form-control" type="date" name="fechaFin" formControlName="fechaFin" maxlength="10" >
+          <!-- <span style="color:tomato;" *ngIf="formPlanilla.controls['fechaFin'].touched && formPlanilla.controls['fechaFin'].errors?.required">Este campo es requerido</span> -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="montoPlanilla">Monto Planilla:</label>
+        <div class="input-group">
+          <span class="input-group-addon">Bs.</span>
+          <input class="form-control" type="number" name="montoPlanilla" placeholder="Monto Planilla" formControlName="montoPlanilla" min="0" max="100000000" required>
+          <span style="color:tomato;" *ngIf="formPlanilla.controls['montoPlanilla'].touched && formPlanilla.controls['montoPlanilla'].errors?.required">Este campo es requerido</span>
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="preventivo">Preventivo:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon  glyphicon-file"></i></span>
+          <input type="text" class="form-control" name="preventivo" placeholder="Preventivo" id="preventivo" maxlength="150" formControlName="preventivo">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label for="fechaPago">Fecha Pago:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+          <input class="form-control" type="date" name="fechaPago" formControlName="fechaPago" maxlength="10" id="FechaPago" max="{{ maxFechaPago }}" min="{{ minFechaPago }}" required>
+          <span style="color:tomato;" *ngIf="formPlanilla.controls['fechaPago'].touched && formPlanilla.controls['fechaPago'].errors?.required">Este campo es requerido</span>
+        </div>
+      </div>
+      <div class="form-group col-sm-12 col-lg-6 col-md-6">
+        <label class="control-label pull-left" for="detalle">Detalle Planilla:</label>
+        <textarea class="form-control" name="detalle" placeholder="Detalle Planilla" id="detalle" cols="30" rows="4" formControlName="detallePlanilla" required></textarea>
+        <span style="color:tomato;" *ngIf="formPlanilla.controls['detallePlanilla'].touched && formPlanilla.controls['detallePlanilla'].errors?.required">Este campo es requerido</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-12 col-lg-12 col-md-12 text-right">
+        <button class="btn btn-success" type="submit"  [disabled]="formPlanilla.invalid">
+          <div *ngIf="!editar">Registrar Planilla</div>{{formPlanilla.invalid}}
+          <div *ngIf="editar">Actualizar Planilla</div>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

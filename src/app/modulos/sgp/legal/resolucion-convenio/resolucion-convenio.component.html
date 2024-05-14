@@ -1,0 +1,200 @@
+<div id="pnl_listaderecho" name="pnl_listaderecho" class="card card-body">
+  <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+    <div class="content-header with-border">
+      <h3 class="content-title text-green">
+        <strong
+          >RESOLUCIÓN DE CONVENIO - PROYECTO:
+          <b>{{ nombre_proyecto }}</b></strong
+        >
+      </h3>
+    </div>
+    <div class="content-body">
+      <div class="row">
+        <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+        <div class="col-lg-offset-2 col-lg-8">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">RESOLUCIÓN DE CONVENIO</div>
+            <div class="panel-body">
+              <!-- PANEL FORMULARIO -->
+              <div *ngIf="pnl_formulario">
+                <form>
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <div class="row">
+                        <label
+                          class="control-label col-sm-4 text-left"
+                          for="informe"
+                          >Número de Resolución:
+                        </label>
+                        <div class="col-sm-6">
+                          <input
+                            class="form form-control"
+                            maxlength="100"
+                            autocomplete="off"
+                            name="nro_resolucionconvenio"
+                            id="nro_resolucionconvenio"
+                            [(ngModel)]="
+                              datos_resolucionconvenio.nro_resolucionconvenio
+                            "
+                            [disabled]="camposHabilitados._juridica"
+                            onKeyDown="A(event,this.form.fecha_resolucion)"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label
+                          class="control-label col-sm-4 text-left"
+                          for="informe"
+                          >Fecha Resolución:
+                        </label>
+                        <div class="col-sm-6">
+                          <input
+                            type="text"
+                            class="form form-control"
+                            maxlength="10"
+                            autocomplete="off"
+                            name="fecha_resolucion"
+                            id="fecha_resolucion"
+                            [(ngModel)]="
+                              datos_resolucionconvenio.fecha_resolucion
+                            "
+                            [disabled]="camposHabilitados._juridica"
+                            onKeyDown="A(event,this.form.fecha_notificacion)"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label
+                          class="control-label col-sm-4 text-left"
+                          for="informe"
+                          >Fecha Notificación:
+                        </label>
+                        <div class="col-sm-6">
+                          <input
+                            type="text"
+                            class="form form-control"
+                            maxlength="10"
+                            autocomplete="off"
+                            name="fecha_notificacion"
+                            id="fecha_notificacion"
+                            [(ngModel)]="
+                              datos_resolucionconvenio.fecha_notificacion
+                            "
+                            [disabled]="camposHabilitados._juridica"
+                            onKeyDown="A(event,this.form.tipo_resolucion)"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div>
+                        <label class="control-label col-sm-4 text-left"
+                          >Estado:</label
+                        >
+                      </div>
+                      <div class="col-sm-6">
+                        <select
+                          id="tipo_resolucion"
+                          class="form-control"
+                          name="tipo_resolucion"
+                          [(ngModel)]="datos_resolucionconvenio.tipo_resolucion"
+                          [disabled]="camposHabilitados._juridica"
+                        >
+                          <option value="0">Seleccione...</option>
+                          <option
+                            *ngFor="
+                              let row_con of dts_ListaTipoResolucionConvenio;
+                              let i = index
+                            "
+                            [ngValue]="row_con.descripciondetalleclasificador"
+                          >
+                            {{ row_con.descripciondetalleclasificador }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <label
+                          class="control-label col-sm-4 text-left"
+                          for="informe"
+                          >Observacion:
+                        </label>
+                        <div class="col-sm-6">
+                          <textarea
+                            class="form-control"
+                            name="observacion"
+                            id="observacion"
+                            [(ngModel)]="datos_resolucionconvenio.observacion"
+                            [disabled]="camposHabilitados._juridica"
+                            onKeyDown="A(event,this.form.monto_contraparte_beneficiario)"
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      class="form-group"
+                      *ngIf="
+                        datos_resolucionconvenio.nro_resolucionconvenio != '' &&
+                        datos_resolucionconvenio.fecha_resolucion != '' &&
+                        datos_resolucionconvenio.fecha_notificacion != '' &&
+                        datos_resolucionconvenio.tipo_resolucion != '' &&
+                        datos_resolucionconvenio.tipo_resolucion != '0'
+                      "
+                    >
+                      <div
+                        class="row"
+                        *ngIf="camposHabilitados._juridica == false"
+                      >
+                        <label
+                          class="control-label col-sm-4 text-left"
+                          for="telefonos"
+                          >Archivo Resolución Convenio:
+                        </label>
+                        <div class="col-sm-6">
+                          <app-upload-file
+                            inputTipoDocumento="resolucion_convenio"
+                            inputCodigoProy="{{ id_sgp }}"
+                            inputVista="false"
+                            inputTipoImagen="aa"
+                            inputSrc=""
+                            inputNombre="Nuevo Archivo"
+                            inputAccion="{{ inputAccion }}"
+                            (enviaPadre)="refrescaPadre($event)"
+                          >
+                          </app-upload-file>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div *ngIf="pnl_descarga == true">
+                <div
+                  class="text-center"
+                  *ngFor="let row_reg of dts_listaResolucionConvenio"
+                >
+                  <app-upload-file
+                    inputTipoDocumento="resolucion_convenio"
+                    inputCodigoProy="{{ id_sgp }}"
+                    inputVista="false"
+                    inputTipoImagen="documento"
+                    inputSrc=""
+                    inputNombre="{{ row_reg.nombre_archivo }}"
+                    inputAccion="VISUALIZAR"
+                  >
+                  </app-upload-file>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

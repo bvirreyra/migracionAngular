@@ -1,0 +1,207 @@
+<div *ngIf="cargando" class="loading">
+    <div class="spin"></div>
+</div>
+<div class="container-fluid">
+  <div class="row" name="pnlListaCites" id="pnlListaCites">
+        <div class="content content-success" name="pnlListaCites" id="pnlListaCites">
+        <div class="content-header with-border">
+            <h3 class="content-title text-green">
+                <strong>CONSULTA CITES</strong>
+            </h3>
+            <div *ngIf="this.registro" class="pull-right">
+               <button type="button" class="btn btn-danger btn-circle-sm" (click)="LimpiarBusqueda()">
+                   <span class="glyphicon glyphicon-arrow-left"></span>
+               </button>
+           </div>
+        </div>
+        <div class="content-body">
+            <div class="rowlocal">
+                <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4" name="pnl_busquedaCite" id="pnl_busquedaCite">
+                    <div class="panel panel-success">
+                        <div class="panel-heading text-center">Búsqueda Cite</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-horizontal ">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Gestión:</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="text" name="gestion" id="gestion" [(ngModel)]="dtsBuscaCite.gestion">
+                                            <!-- <input class="form-control" type="text" name="gestion" id="gestion" [(ngModel)]="dtsBuscaCite.gestion" onKeyDown="A(event,this.form.numero_cite)"> -->
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Tipo Cite:</label>
+                                        <div class="col-sm-7">
+                                          <select id="m_nombre" class="form-control" name="tipo_cite" id="tipo_cite" [(ngModel)]="dtsBuscaCite.tipo_cite">
+                                              <option value=''> </option>
+                                              <option *ngFor="let row_registros of dtsTipoCites; let i = index;" [ngValue]="row_registros._id">{{row_registros._descripcion}}</option>
+                                          </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Nro. de Cite:</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="number" name="numero_cite" id="numero_cite" [(ngModel)]="dtsBuscaCite.numero_cite">
+                                            <!-- <input class="form-control" type="text" name="numero_cite" id="numero_cite" [(ngModel)]="dtsBuscaCite.numero_cite" onKeyDown="A(event,this.form.btnBuscarNroCite)"> -->
+                                        </div>
+                                    </div>                                   
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Asunto/Referencia:</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="text" name="referencia" id="referencia" [(ngModel)]="dtsBuscaCite.referencia">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="busqueda">Estado:</label>
+                                        <div class="col-sm-7">
+                                            <select id="m_nombre" class="form-control" name="estado" id="estado" [(ngModel)]="dtsBuscaCite.estado">
+                                                <option value=''> </option>
+                                                <option *ngFor="let row_registros of dtsEstados; let i = index;" [ngValue]="row_registros.id">{{row_registros.nombre}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-block" name="btnBuscarNroCite" id="btnBuscarNroCite" (click)="busquedaCite()">Buscar</button>
+                                    <button type="button" class="btn btn-primary btn-block" (click)="LimpiarBusqueda()">Limpiar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rowlocal" name="pnl_resutadoCite" id="pnl_resutadoCite">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <!-- <div class="pull-right">
+                                <a title="Descargar Reporte" class="btn btn-danger" target="_blank" 
+                                   href="{{url_reporte}}/modulos/sispre/rptHistorialCites.php?gestion={{dtsBuscaCite.gestion}}&tipo={{dtsBuscaCite.tipo_cite}}&nro={{dtsBuscaCite.numero_cite}}&asunto={{dtsBuscaCite.referencia}}&estado={{dtsBuscaCite.estado}}">
+                                   <i class="fa fa-file-pdf-o" aria-hidden="true"> Descargar Reporte</i></a>
+                            </div> -->
+                        </div>
+                        <div class="panel panel-success">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <table class="table dt-tipoCite">
+                                        <thead>
+                                            <tr>
+                                                <th width="10%" align="center">Fecha Registro</th>
+                                                <th width="15%" align="center">Registrado Por</th>
+                                                <th width="20%">CITE</th>
+                                                <th width="10%" align="center">Nro. Cite</th>
+                                                <th width="40%">Asunto / Referencia</th>
+                                                <th width="10%" align="center">Estado</th>
+                                                <th width="10%" align="center">Seleccione...</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                            <tr *ngFor="let row_registros of dtsCites; let i = index;">
+                                                <td width="10%" align="center">{{row_registros._fecha_registro | date:'dd/MM/yyyy'}}</td>
+                                                <td width="15%" align="center">{{row_registros._usuario}}</td>
+                                                <td width="20%">{{row_registros._tipocite}}</td>
+                                                <td width="10%" align="center">{{row_registros._numero_cite}}</td>
+                                                <td width="40%">{{row_registros._asunto_referencia}}</td>
+                                                <td width="40%">{{row_registros._estado}}</td>
+                                                <td width="10%" align="center">
+                                                    <button type="button" class="btn btn-info btn-circle-sm" (click)="visualizaRegistro(row_registros)">
+                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="registro" class="rowlocal" name="pnl_actualizaCite" id="pnl_actualizaCite">
+                    <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                        <div class="panel panel-success">
+                            <div class="panel-heading text-center"><strong>Número de Cite: {{registroCite.numero_cite}}</strong></div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="busqueda">Tipo de Cite:</label>
+                                            <div class="col-sm-8">
+                                                <input class="form-control" type="text" name="TipoCite" id="TipoCite" [(ngModel)]="registroCite.cite" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="busqueda">Usuario:</label>
+                                            <div class="col-sm-8" *ngIf="!btnVerificaRol">
+                                                <input class="form-control" type="text" name="Usuario" id="Usuario" [(ngModel)]="registroCite.usuario" disabled>                                            </div>
+                                            <div class="col-sm-8" *ngIf="registroCite.id_estado == 5 && btnVerificaRol">
+                                                <input class="form-control" type="text" name="Usuario" id="Usuario" [(ngModel)]="registroCite.usuario" disabled>
+                                            </div>
+                                            <div class="col-sm-8" *ngIf="registroCite.id_estado != 5 && btnVerificaRol">
+                                                <input class="form-control" type="text" name="Usuario" id="Usuario" list="ListaDestinatario" [(ngModel)]="registroCite.usuario" autocomplete="off">
+                                                <datalist id="ListaDestinatario" class="datalist">
+                                                    <div *ngFor="let row_usuarios of dts_usuario">
+                                                        <option class="form-control"
+                                                            value={{row_usuarios._nombre_completo}}
+                                                            label={{row_usuarios._nombre_completo}}>
+                                                    </div>
+                                                </datalist>
+                                            </div>
+                                        </div>                                       
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="busqueda">Fecha Registro:</label>
+                                            <div class="col-sm-8" *ngIf="!btnVerificaRol">
+                                                <input class="form-control" type="date" name="FechaRegistro" id="FechaRegistro" [(ngModel)]="registroCite.fecha_registro" disabled>
+                                            </div>
+                                            <div class="col-sm-8" *ngIf="btnVerificaRol">
+                                                <input class="form-control" type="date" name="FechaRegistro" id="FechaRegistro" [(ngModel)]="registroCite.fecha_registro">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="busqueda">Asunto o Referencia:</label>
+                                            <div class="col-sm-8" *ngIf="!btnVerificaRol">
+                                                <textarea class="form-control" id="AsuntoReferencia" maxlength="250" rows="5" name="AsuntoReferencia" [(ngModel)]="registroCite.asunto_referencia" disabled></textarea>
+                                            </div>
+                                            <div class="col-sm-8" *ngIf="btnVerificaRol">
+                                                <textarea class="form-control" id="AsuntoReferencia" maxlength="250" rows="5" name="AsuntoReferencia" [(ngModel)]="registroCite.asunto_referencia"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="busqueda">Estado:</label>
+                                            <div class="col-sm-8" *ngIf="!btnVerificaRol">
+                                                <input class="form-control" type="text" name="Estado" id="Estado" [(ngModel)]="registroCite.estado" disabled>
+                                            </div>
+                                            <div class="col-sm-8" *ngIf="btnVerificaRol">
+                                                <select id="Estado" class="form-control" name="Estado" id="Estado" [(ngModel)]="registroCite.id_estado">
+                                                    <option *ngFor="let row_registros of dtsEstados; let i = index;" [ngValue]="row_registros.id">{{row_registros.nombre}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="busqueda">Descripción del Estado:</label>
+                                            <div class="col-sm-8" *ngIf="!btnVerificaRol">
+                                                <textarea class="form-control" id="Descripcion" maxlength="200" rows="5" name="Descripcion" [(ngModel)]="registroCite.descripcion" disabled></textarea>
+                                            </div>
+                                            <div class="col-sm-8" *ngIf="btnVerificaRol">
+                                                <textarea class="form-control" id="Descripcion" maxlength="200" rows="5" name="Descripcion" [(ngModel)]="registroCite.descripcion"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pull-right" *ngIf="btnVerificaRol">
+                                        <button type="button" class="btn btn-primary pull-right " name="btnActualizar" id="btnActualizar" (click)="actualizaCite()">Actualizar
+                                            Cite</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

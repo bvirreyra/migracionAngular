@@ -1,0 +1,37 @@
+.grid-charts{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+}
+.alerta-desfase{
+  color: #F2f2f2;
+  font-weight: 800;
+  background-color: #FF4560;
+  padding: 5PX;
+  width: 100%;
+  position: relative;
+  top: -150px;
+  text-align: center;
+}
+.detalle{
+  position: relative;
+  top: -150px;
+}
+
+.sin-data{
+  padding: 30px;
+  font-size: 20px;
+  text-align: center;
+  background-color: rgb(86, 184, 184);
+  border:1px solid teal;
+  color: whitesmoke;
+  border-radius: 4px;
+}
+
+@media (max-width:500px){
+  .alerta-desfase{
+    top: -70px;
+  }
+  .detalle{
+    top: -70px;
+  }
+}

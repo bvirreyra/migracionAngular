@@ -1,0 +1,113 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<!-- <div id="pnl_gridview_items" name="pnl_gridview_items"> -->
+
+<!--REFRESCA GRIDVIEW -->
+<div class="panel-heading clearfix">
+  <button type="button" class="btn btn-success btn-md pull-right" (click)="paneles('VER_LISTAPROYECTOS')">
+    <i class="fa fa-refresh" aria-hidden="true" title="Ver Proyectos"></i>
+  </button>
+</div>
+<div class="row">
+  <div class="page-header">
+    <h2>{{m_titulo}}</h2>
+  </div>
+  <div>
+    <table class="table table-condensed table-hover dt-listaproyectos">
+      <thead>
+        <tr>
+          <th>Nro.</th>
+          <th>Gestion</th>
+          <th>Departamento</th>
+          <th>Provincia</th>
+          <th>Municipio</th>
+          <th>Cod Migracion</th>
+          <th>Cod Proyecto Fin</th>
+          <th width="400px">Nomb Proyecto Fin</th>
+          <th>Convenio Fin</th>
+          <th>Monto Upre Fin</th>
+          <th>Cod Proyecto Sgp</th>
+          <th>Cod Asignado Sgp</th>
+          <th width="400px">Nomb Proyecto Sgp</th>
+          <th>Convenio Sgp</th>
+          <th>Monto Upre Sgp</th>
+          <th>Plazo Ejecucion</th>
+          <th>Estado Proy Sgp</th>
+          <th>Desembolsos...</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr *ngFor="let row_registros of dts_listaproyectos | groupBy:'id_proyecto';let x=index ">
+
+          <td>{{x+1}}</td>
+          <td>{{row_registros.value[0]['gestion']}}</td>
+          <td>{{row_registros.value[0]['departamento']}}</td>
+          <td>{{row_registros.value[0]['provincia']}}</td>
+          <td>{{row_registros.value[0]['municipio']}}</td>
+          <td>{{row_registros.value[0]['cod_migracion']}}</td>
+          <td class="col-financiera">{{row_registros.value[0]['id_proyecto']}}</td>
+          <td class="col-financiera">{{row_registros.value[0]['nomb_finanzas']}}</td>
+          <td class="col-financiera">{{row_registros.value[0]['convenio_financiera']}}</td>
+          <td class="col-financiera">{{row_registros.value[0]['monto_upre_financiera']}}</td>
+          <td class="col-sgp">{{row_registros.value[0]['codigo_sgp']}}</td>
+          <td width="200px">
+            <div class="input-group">
+              <input type="number" class="input_small" id="{{row_registros.key}}" name="{{row_registros.key}}">
+              <span class="input-group-btn">
+              <button type="button" class="btn btn-warning btn-md" (click)="pre_edita()">
+                <i class="fa fa-edit" aria-hidden="true" title="Editar"></i>
+              </button>
+              <button type="button" class="btn btn-danger btn-md" (click)="inactiva(row_registros.key)">
+                <i class="fa fa-window-close" aria-hidden="true" title="De baja"></i>                
+              </button>
+            </span>
+            </div>
+          </td>
+          <td class="col-sgp">{{row_registros.value[0]['nomb_sgp']}}</td>
+          <td class="col-sgp">{{row_registros.value[0]['convenio_sgp']}}</td>
+          <td class="col-sgp">{{row_registros.value[0]['monto_financiamiento_upre']}}</td>
+          <td>{{row_registros.value[0]['plazo_ejecucion']}}</td>
+          <td>{{row_registros.value[0]['estado_proyecto_sgp']}}</td>
+          <td>
+            <table class="table table-striped table-hover ">
+              <tbody>
+                <tr *ngFor="let row_registros2 of row_registros.value; let i = index;">
+                  <td>{{i+1}}</td>
+                  <td>{{row_registros2.gestion_desembolso}}</td>
+                  <td>{{row_registros2.monto_desembolso}}</td>
+                  <td>{{row_registros2.fecha_consolidado | date: 'dd/MM/yyyy'}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

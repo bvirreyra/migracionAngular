@@ -1,0 +1,13 @@
+.rojo{
+    background-color: rgb(236, 171, 171);
+    text-align: center;
+    color: rgb(0, 0, 0);
+    font-size: 2rem;
+}
+
+.verde{
+    background-color: rgb(185, 240, 185);
+    text-align: center;
+    color: rgb(0, 0, 0);
+    font-size: 2rem;
+}

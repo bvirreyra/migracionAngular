@@ -1,0 +1,40 @@
+.dt-bandeja tfoot input{
+  width: 100% !important;
+}
+.dt-bandeja tfoot {
+  display: table-header-group !important;
+}
+
+td>select{
+  min-width: 100px;
+  color:steelblue;
+  font-weight: 800;
+}
+td>button{
+  padding: 1px 30px;
+  margin-right: 1rem;
+}
+
+.titulo{
+  font-weight: 700;
+  text-decoration: underline;
+  font-size:large;
+  color: rgb(16, 98, 165);
+  display: flex;
+  justify-content: center;
+}
+.titulo-tabla{
+  font-weight: 700;
+  font-size:xx-large;
+  color: rgb(16, 98, 165);
+}
+
+.grid-deptos{
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  gap:1rem
+}
+
+input[type="checkbox"]{
+  accent-color: steelblue;
+}

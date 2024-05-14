@@ -1,0 +1,124 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="panel panel-primary" style="width: 90%; margin: 0 auto;" *ngIf="!consulta">
+  <div class="panel-heading text-center">
+    <span class="glyphicon glyphicon-ok"></span> LISTADO DE REVISION
+  </div>
+  <div class="panel-body">
+    <div id="checks" *ngIf="false">
+      <div class="grid-lista">
+        <div  *ngFor="let elemento of dts_lista; let i = index;" style="text-align: left;">
+          <label class="checkbox-inline" id="lab{{elemento.id_detalle}}" >
+            <input type="checkbox" class="check text-left" id="c{{ elemento.id_detalle }}"/>
+            {{elemento.descripciondetalleclasificador}}
+          </label>
+        </div>
+      </div>
+      <div class="linea"></div>
+      <div class="text-center" *ngFor="let row_reg of dts_anexo">
+          <app-upload-file
+            inputTipoDocumento="{{row_reg.tipo}}"
+            inputCodigoProy="{{ idProyecto }}"
+            inputVista="false"
+            inputTipoImagen="dc"
+            inputSrc=""
+            inputNombre="{{ row_reg.ruta.substring(row_reg.ruta.lastIndexOf('/')+1)}}"
+            inputAccion="VISUALIZAR"
+            inputBotonDescargar="Descargar Informe Revisión"
+          >
+          </app-upload-file>
+      </div>
+    </div>
+    <div class="linea"></div>
+    <div class="row">
+      <div class="form-group col-sm-12 col-lg-12 col-md-12" style="text-align: left;">
+        <label for="observacion">Observación Revisión:</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+          <textarea class="form-control" id="observacion" [(ngModel)]="observacion" placeholder="Obsrevación" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="text-align: left;">
+      <div class="form-group col-sm-6 col-lg-6 col-md-6">
+        <label for="">Seleccione Informe de Revisión (pdf):</label>
+        <input type="file" class="form-control" accept="application/pdf" id="inputArchivo" name="inputArchivo" (change)="handleFileInput($event.target.files)"/>
+      </div>
+      <div style="display: flex; justify-content: space-between;padding-left: 10px;">
+        <div class="form-group col-sm-3 col-lg-3 col-md-3">
+          <button class="btn btn-info pull-right" (click)="subirAnexo()" style="margin-top: 2.5rem;" [disabled]="adjuntarAnexo" title="Solo registra Anexo si ya se tiene revisión registrada">
+            <span class="glyphicon glyphicon-open"></span> Adjuntar Informe
+          </button>
+        </div>
+        <div class="form-group col-sm-3 col-lg-3 col-md-3">
+          <button class="btn btn-success pull-right" (click)="registrarRevison()" style="margin-top: 2.5rem;" title="Registra Revisión + Anexo (si se cargo archivo)">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+             {{dts_revision?.length > 0 ? "Actualizar" : "Guardar "}} Revisión
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="panel panel-primary" style="width: 90%; margin: 0 auto;" *ngIf="consulta && false">
+  <div class="panel-heading text-center">
+    <span class="glyphicon glyphicon-ok"></span> LISTADOS DE REVISION CONSOLIDADO
+  </div>
+  <div class="panel-body">
+    <label>Revisión Financiera</label>
+    <div class="grid-lista" *ngIf="dts_listaFinanciera">
+      <div *ngFor="let elemento of dts_listaFinanciera; let i = index;" style="text-align: left;">
+        <label class="checkbox-inline text-info" id="lab{{elemento.id_detalle}}" >
+          <input type="checkbox" class="check text-left" id="c{{ elemento.id_detalle }}" disabled />
+          {{elemento.descripciondetalleclasificador}}
+        </label>
+      </div>
+    </div>
+    <div *ngIf="!dts_listaFinanciera || !dts_listaFinanciera[0]">
+      <label class="text-info font-italic">Aún sin revisión por parte de la Unidad Administrativa Financiera</label>
+    </div>
+    <div class="linea"></div>
+    <label>Revisión Jurídica</label>
+    <div class="grid-lista" *ngIf="dts_listaJuridica">
+      <div *ngFor="let elemento of dts_listaJuridica; let i = index;" style="text-align: left;">
+        <label class="checkbox-inline text-info" id="lab{{elemento.id_detalle}}" >
+          <input type="checkbox" class="check text-left" id="c{{ elemento.id_detalle }}" disabled/>
+          {{elemento.descripciondetalleclasificador}}
+        </label>
+      </div>
+    </div>
+    <div *ngIf="!dts_listaJuridica || !dts_listaJuridica[0]">
+      <label class="text-info font-italic">Aún sin revisión por parte de la Unidad Juridica</label>
+    </div>
+    <div class="linea"></div>
+    <label>Revisión Técnica</label>
+    <div class="grid-lista" *ngIf="dts_listaTecnica">
+      <div *ngFor="let elemento of dts_listaTecnica; let i = index;" style="text-align: left;">
+        <label class="checkbox-inline text-info" id="lab{{elemento.id_detalle}}" >
+          <input type="checkbox" class="check text-left" id="c{{ elemento.id_detalle }}" disabled/>
+          {{elemento.descripciondetalleclasificador}}
+        </label>
+      </div>
+    </div>
+    <div *ngIf="!dts_listaTecnica || !dts_listaTecnica[0]">
+      <label class="text-info font-italic">Aún sin revisión por parte de la Unidad Técnica</label>
+    </div>
+    <div class="linea"></div>
+    <div class="grid-lista">
+      <div class="text-center" *ngFor="let row_reg of dts_anexo">
+        <app-upload-file
+          inputTipoDocumento="{{row_reg.tipo}}"
+          inputCodigoProy="{{ idProyecto }}"
+          inputVista="false"
+          inputTipoImagen="dc"
+          inputSrc=""
+          inputNombre="{{ row_reg.ruta.substring(row_reg.ruta.lastIndexOf('/')+1)}}"
+          inputAccion="VISUALIZAR"
+          inputBotonDescargar="Descargar Informe Revisión"
+        >
+        </app-upload-file>
+      </div>
+    </div>
+  </div>
+</div>

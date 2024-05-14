@@ -1,0 +1,229 @@
+.dt-emp-total tfoot input{
+  width: 100% !important;
+}
+.dt-emp-total tfoot {
+  display: table-header-group !important;
+}
+.dt-emp-general tfoot input{
+  width: 100% !important;
+}
+.dt-emp-general tfoot {
+  display: table-header-group !important;
+}
+.dt-emp-especifica tfoot input{
+  width: 100% !important;
+}
+.dt-emp-especifica tfoot {
+  display: table-header-group !important;
+}
+.dt-per-total tfoot input{
+  width: 100% !important;
+}
+.dt-per-total tfoot {
+  display: table-header-group !important;
+}
+.dt-per-general tfoot input{
+  width: 100% !important;
+}
+.dt-per-general tfoot {
+  display: table-header-group !important;
+}
+.dt-per-especifica tfoot input{
+  width: 100% !important;
+}
+.dt-per-especifica tfoot {
+  display: table-header-group !important;
+}
+.dt-totalEquipos tfoot input{
+  width: 100% !important;
+}
+.dt-totalEquipos tfoot {
+  display: table-header-group !important;
+}
+.dt-permanente tfoot input{
+  width: 100% !important;
+}
+.dt-permanente tfoot {
+  display: table-header-group !important;
+}
+.dt-requerido tfoot input{
+  width: 100% !important;
+}
+.dt-requerido tfoot {
+  display: table-header-group !important;
+}
+
+.timeline{
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin: 20px 0 30px 0;
+}
+.timeline-linea{
+  width: 40%;
+  border-top: #0e7fe1 5px solid;
+  margin-top: 15px
+}
+.timeline-paradas{
+  display: flex;
+  justify-content: space-between;
+  width: 40%;
+  position: absolute
+}
+.timeline-fase{
+  background-color: #0e7fe1;
+  color: white;
+  border-radius: 6px;
+}
+.fase-activa, .timeline-fase:hover{
+  background-color: #14abf1;
+}
+
+.linea {
+  border-top: 1px solid #2f6a8b;
+  height: 2px;
+  padding: 0;
+  margin: 0 0 5px 0;
+}
+.botonera{
+  display: flex !important;
+  justify-content: space-between;
+}
+
+/**CARDDS EMPLEADO***/
+.card {  
+  background: #fff;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, .5), 0 0 6px rgba(0, 0, 0, .4);
+  transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
+  border: 0;
+  border-radius: 8px;
+  display: grid;
+}
+
+.card:hover{
+  transform: scale(1.02);
+  /* box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06); */
+  /* cursor: pointer; */
+} 
+
+.grid-card{
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
+  gap: 2rem;
+  /* grid-template-columns: repeat(auto-fill, minmax(100px, 40%)); */
+}
+
+.card-header{
+  background-color: #9ccc65;
+  padding: 5px 10px;
+  align-self: flex-start;
+}
+.card-header>h4{
+  color: #5c5c5c;
+  margin: 5px 0;
+  border-bottom: 1px solid #5c5c5c;
+}
+.card-header>div>p{
+  color: #5c5c5c;
+  margin-bottom: 2px;
+  font-size: 0.8em;
+}
+.card-body{
+  padding: 0 10px;
+  text-align: center;
+  font-weight: 700;
+}
+.card-body>p{
+  letter-spacing: 0.1em;
+  /* min-height: 40px; */
+}
+.card-body>i{
+  font-size: smaller;
+  font-style: italic;
+}
+/* .card-body>h3{
+  min-height: 85px;
+} */
+.card-body>h4{
+  /* min-height: 40px; */
+  letter-spacing: 0.25em;
+}
+.card-footer{
+  align-self: flex-end;
+  min-height: 4rem;
+  background-color: #0379b5;
+  border-radius: 0 0 8px 8px;
+}
+.card-footer>button{
+  border-radius: 0 0 2px 2px;
+  padding: 20px 10px;
+}
+
+td>input[type=checkbox],td>label>input[type=checkbox] {
+  transform: scale(1.8);
+  accent-color: #14abf1;
+}
+
+#personaCargo{
+  color: #5c5c5c;
+  margin: 5px 0;
+  border-bottom: 1px solid #5c5c5c !important;
+  background-color: transparent;
+  font-size: 16px;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+  border: 1px solid transparent;
+  width: 100%;
+}
+
+.aviso{
+  background-color: #76cdf9;
+  color: #0379b5;
+  border: #0daeff 1px solid;
+  border-left: #0daeff 8px solid;
+  padding: 10px;
+}
+
+.entrada{
+  animation: fadeIn 1.2s;
+}
+
+.grid-download{
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  padding: 0 15px;
+}
+.footer-nav{
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+.footer-nav button{
+  width: 14%;
+  padding: 2px 0;
+}
+
+.requerido{
+  border-bottom: #0060df 2px solid;
+}
+
+.requerido input{
+  background-color: #96c7fb  !important;
+}
+
+.reportes{
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
+  gap: 1rem;
+}
+
+.btn-purple{
+  background-color: mediumpurple;
+  color: white;
+}
+
+.select-employe{
+  background-color: #96c7fb;
+}

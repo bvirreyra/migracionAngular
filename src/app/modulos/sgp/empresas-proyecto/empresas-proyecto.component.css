@@ -1,0 +1,46 @@
+.dt-empresas tfoot input{
+    width: 100% !important;
+}
+.dt-empresas tfoot {
+    display: table-header-group !important;
+}
+.dt-listaproyectos tfoot input{
+    width: 100% !important;
+}
+.dt-listaproyectos tfoot {
+    display: table-header-group !important;
+}
+.tarjeta {  
+    text-align: center;
+    color: white;
+    padding: 3rem 1.5rem 1rem 1rem;
+    margin: 2rem 0;
+    border:3px solid #2a2a2a;
+    border-radius:22px;
+    cursor: pointer;
+    transition: scale .3s;
+    font-size: 24px;
+  }
+  .tarjeta:hover{
+    transform: scale(1.01);
+  }
+
+  .azul{
+    background: linear-gradient(#000046, #1cb5e0 60%);
+  }
+
+  .verde{
+    background: linear-gradient(#042e01, #13ac53 60%);
+  }
+
+  .amarillo{
+    background: linear-gradient(#4d4b01, #afa62b 60%);
+  }
+
+  .rojo{
+    background: linear-gradient(#660101, #c72727 60%);
+  }
+
+  .plomo{
+    background: linear-gradient(#01252e, #3f9aa7 60%);
+  }

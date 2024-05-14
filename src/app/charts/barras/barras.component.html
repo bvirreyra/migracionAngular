@@ -1,0 +1,20 @@
+
+  <div style="text-align:center" *ngIf="chartOptions">
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [title]="chartOptions.title"
+      [yaxis]="chartOptions.yaxis"
+      [legend]="chartOptions.legend"
+      [dataLabels]= "chartOptions.dataLabels"
+      [theme]= "chartOptions.theme"
+      [tooltip]= "chartOptions.tooltip"
+      [stroke]="chartOptions.stroke"
+      [plotOptions]="chartOptions.plotOptions"
+      [responsive]="chartOptions.responsive"
+      [colors]="chartOptions.colors"
+    ></apx-chart>
+  </div>
+  
+  

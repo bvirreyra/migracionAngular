@@ -1,0 +1,6 @@
+.dt-ListaFichaTecnica tfoot input{
+    width: 100% !important;
+}
+.dt-ListaFichaTecnica tfoot {
+    display: table-header-group !important;
+}

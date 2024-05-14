@@ -1,0 +1,221 @@
+<div id="pnl_listaderecho" name="pnl_listaderecho" class="card card-body">
+  <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+    <div class="content-header with-border">
+      <h3 class="content-title text-green">
+        <strong>OBSERVACIONES - PROYECTO: <b>{{ nombre_proyecto }}</b></strong>
+      </h3>
+      <div class="pull-right">
+        <button class="btn btn-primary" type="button" (click)="paneles('NUEVA_OBSERVACION')">
+          <i class="fa fa-plus-square" aria-hidden="true" title="Nueva Observacion"></i>
+        </button>
+      </div>
+    </div>
+    <div class="content-body">
+      <!-- FORMULARIO DE REGISTRO -->
+      <div class="col-lg-offset-2 col-lg-8" *ngIf="pnl_formularioRegistro == true">
+        <div class="panel panel-primary">
+          <div class="panel-heading text-center">
+            REGISTRO DE OBSERVACIONES AL PROYECTO
+          </div>
+          <div class="panel-body">
+            <div>
+              <div class="form-horizontal">
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="informe">Proyecto:
+                    </label>
+                    <div class="col-sm-6">
+                      <textarea class="form form-control" maxlength="2000" rows="2" [(ngModel)]="nombre_proyecto"
+                        readonly style="resize: none"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="informe">Departamento:
+                    </label>
+                    <div class="col-sm-6">
+                      <input class="form form-control" maxlength="2000" [(ngModel)]="departamento" readonly />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="informe">Municipio:
+                    </label>
+                    <div class="col-sm-6">
+                      <input class="form form-control" maxlength="2000" [(ngModel)]="municipio" readonly />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="informe">Unidad:
+                    </label>
+                    <div class="col-sm-6">
+                      <select class="form form-control" [(ngModel)]="m_unidad">
+                        <option value="UNIDAD ADMINISTRATIVA FINANCIERA">
+                          UNIDAD ADMINISTRATIVA FINANCIERA
+                        </option>
+                        <option value="UNIDAD TECNICA">UNIDAD TECNICA</option>
+                        <option value="UNIDAD JURIDICA">UNIDAD JURIDICA</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="informe">Situación Actual:
+                    </label>
+                    <div class="col-sm-6">
+                      <textarea class="form form-control" maxlength="5000" rows="10" style="resize: none"
+                        [(ngModel)]="m_situacionActual"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="informe">Tareas Pendientes:
+                    </label>
+                    <div class="col-sm-6">
+                      <textarea class="form form-control" maxlength="5000" rows="10" style="resize: none"
+                        [(ngModel)]="m_tareasPendientes"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="porcentaje">Observacion dirigida a:</label>
+                    <div class="col-sm-6">
+                      <select class="form form-control" [(ngModel)]="m_observacionDirigida">
+                        <option value="EMPRESA">EMPRESA</option>
+                        <option value="MAE">MAE</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="telefonos">Fecha Inicio:
+                    </label>
+                    <div class="col-sm-6">
+                      <input type="date" class="form form-control" maxlength="2000" [(ngModel)]="m_fechaInicio" />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="telefonos">Fecha Fin:
+                    </label>
+                    <div class="col-sm-6">
+                      <input type="date" class="form form-control" maxlength="2000" [(ngModel)]="m_fechaFin" />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <label class="control-label col-sm-4 text-left" for="porcentaje">Estado Cumplimiento:</label>
+                    <div class="col-sm-6">
+                      <select class="form form-control" [(ngModel)]="m_estadoCumplimiento">
+                        <option value="EN PROCESO">EN PROCESO</option>
+                        <option value="CUMPLIDO">CUMPLIDO</option>
+                        <option value="INCUMPLIDO">INCUMPLIDO</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-lg-offset-4 col-sm-6 text-center">
+                      <button type="button" id="btnRegistrar" namde="btnRegistrar" class="btn btn-success btn-block"
+                        title="Guardar Registro" *ngIf="btn_guardar == true" (click)="paneles('REGISTRA_OBSERVACION')">
+                        <i class="fa fa-save" aria-hidden="true"></i> Guardar
+                      </button>
+                      <button type="button" id="btnModificar" namde="btnModificar" class="btn btn-warning btn-block"
+                        title="Modificar Registro" *ngIf="btn_editar == true"
+                        (click)="paneles('REGISTRA_EDICION_OBSERVACION')">
+                        <i class="fa fa-save" aria-hidden="true"></i>
+                        Modificar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- FIN FORMULARIO DE REGISTRO -->
+
+      <!-- LISTADO DE OBSERVACIONES -->
+      <div class="row" *ngIf="pnl_listaObservacion == true">
+        <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+        <div class="col-lg-offset-2 col-lg-8">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+              LISTADO DE OBSERVACIONES - {{ filtro }}
+            </div>
+            <div class="panel-body">
+              <div>
+                <table class="table table-responsive dt-observaciones" id="data-table">
+                  <thead>
+                    <tr>
+                      <th>.::.</th>
+                      <th>Observacion de la Unidad</th>
+                      <th>Situación Actual</th>
+                      <th>Pendientes</th>
+                      <th>Estado Observacion</th>
+                      <th>Fecha Observacion</th>
+                      <th>Fecha Fin Observacion</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    <tr *ngFor="
+                        let row_registros of dts_listaObservacion;
+                        let i = index
+                      ">
+                      <td>
+                        <button type="button" class="btn btn-warning btn-md"
+                          *ngIf="s_usu_id==row_registros.usuario_registro" name="btn_editar" id="btn_editar"
+                          (click)="paneles('EDITA_OBSERVACION',row_registros)">
+                          <i class="fa fa-edit" aria-hidden="true" title="Actualizar Registro"></i>
+                        </button>
+                        <button class="btn btn-danger" type="button"
+                          (click)="paneles('CAMBIO_ESTADO_OBSERVACION',row_registros)">
+                          <i class="fa fa-window-close" aria-hidden="true" title="Dar de Baja"></i>
+                        </button>
+                      </td>
+                      <td>{{ row_registros.unidad }}</td>
+                      <td>{{ row_registros.situacion_actual }}</td>
+                      <td>{{ row_registros.pendientes }}</td>
+                      <td>{{ row_registros.estado_observacion }}</td>
+                      <td>
+                        {{ row_registros.fecha_inicio | date: "dd/MM/yyyy" }}
+                      </td>
+                      <td>
+                        {{ row_registros.fecha_fin | date: "dd/MM/yyyy" }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- FIN LISTADO DE OBSERVACIONES -->
+    </div>
+  </div>
+</div>

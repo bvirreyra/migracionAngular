@@ -1,0 +1,269 @@
+<div id="pnl_seguimiento" name="pnl_seguimiento" class="card card-body">
+  <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+    <div class="content-header with-border">
+      <h3 class="content-title text-green">
+        <strong
+          >SEGUIMIENTO A EJECUCION DE PROYECTO
+          {{ seguimiento.nombreproyecto }}</strong
+        >
+      </h3>
+    </div>
+    <div class="content-body" *ngIf="habilita_formulario">
+      <div class="row">
+        <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+        <div class="col-lg-offset-2 col-lg-8">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+              REGISTRO DE SEGUIMIENTO DE PROYECTO
+            </div>
+            <div class="panel-body">
+              <div>
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="informe"
+                        >Proyecto:
+                      </label>
+                      <div class="col-sm-6">
+                        <textarea
+                          class="form form-control"
+                          maxlength="2000"
+                          rows="2"
+                          [(ngModel)]="seguimiento.nombreproyecto"
+                          readonly
+                          style="resize: none"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="informe"
+                        >Departamento:
+                      </label>
+                      <div class="col-sm-6">
+                        <input
+                          class="form form-control"
+                          maxlength="2000"
+                          [(ngModel)]="seguimiento.departamento"
+                          readonly
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="informe"
+                        >Municipio:
+                      </label>
+                      <div class="col-sm-6">
+                        <input
+                          class="form form-control"
+                          maxlength="2000"
+                          [(ngModel)]="seguimiento.municipio"
+                          readonly
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="habilita_porcentaje">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="informe"
+                        >Porcentaje de Avance:
+                      </label>
+                      <div class="col-sm-6">
+                        <input
+                          id="avancefisico"
+                          maxlength="3"
+                          name="avancefisicio"
+                          class="form-control"
+                          [(ngModel)]="seguimiento.avancefinanciero"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="porcentaje"
+                        >Estado de Proyecto:</label
+                      >
+                      <div class="col-sm-6">
+                        <select
+                          class="form form-control"
+                          [(ngModel)]="seguimiento.estadoproyecto"
+                        >
+                          <option
+                            *ngFor="
+                              let row_reg of dts_estadoProyecto;
+                              let i = index
+                            "
+                            [ngValue]="row_reg.descripciondetalleclasificador"
+                          >
+                            {{ row_reg.descripciondetalleclasificador }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="informe"
+                        >Unidad:
+                      </label>
+                      <div class="col-sm-6">
+                        <input
+                          class="form form-control"
+                          maxlength="2000"
+                          [(ngModel)]="seguimiento.unidad"
+                          readonly
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="informe"
+                        >Situación Actual:
+                      </label>
+                      <div class="col-sm-6">
+                        <textarea
+                          class="form form-control"
+                          maxlength="5000"
+                          rows="10"
+                          style="resize: none"
+                          [(ngModel)]="seguimiento.situacionactual"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="informe"
+                        >Tareas Pendientes:
+                      </label>
+                      <div class="col-sm-6">
+                        <textarea
+                          class="form form-control"
+                          maxlength="5000"
+                          rows="10"
+                          style="resize: none"
+                          [(ngModel)]="seguimiento.tareaspendientes"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="telefonos"
+                        >Fecha Inicio:
+                      </label>
+                      <div class="col-sm-6">
+                        <input
+                          type="date"
+                          class="form form-control"
+                          maxlength="2000"
+                          readonly
+                          [(ngModel)]="seguimiento.fechainicio"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="telefonos"
+                        >Fecha Fin:
+                      </label>
+                      <div class="col-sm-6">
+                        <input
+                          type="date"
+                          class="form form-control"
+                          maxlength="2000"
+                          [(ngModel)]="seguimiento.fechafin"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="porcentaje"
+                        >Estado Cumplimiento:</label
+                      >
+                      <div class="col-sm-6">
+                        <select
+                          class="form form-control"
+                          [(ngModel)]="seguimiento.estadocumplimiento"
+                        >
+                          <option
+                            *ngFor="
+                              let row_reg of dts_estadoCumplimiento;
+                              let i = index
+                            "
+                            [ngValue]="row_reg.descripciondetalleclasificador"
+                          >
+                            {{ row_reg.descripciondetalleclasificador }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-lg-offset-4 col-sm-6 text-center">
+                        <button
+                          type="button"
+                          id="btnRegistrar"
+                          namde="btnRegistrar"
+                          class="btn btn-success btn-block"
+                          title="Guardar Registro"
+                          *ngIf="habilitaGuardar"
+                          (click)="insertaSeguimientoEjecucion()"
+                        >
+                          <i class="fa fa-save" aria-hidden="true"></i> Guardar
+                        </button>
+                        <button
+                          type="button"
+                          id="btnModificar"
+                          namde="btnModificar"
+                          class="btn btn-warning btn-block"
+                          title="Modificar Registro"
+                          *ngIf="habilitaModificar"
+                          (click)="actualizaSeguimientoEjecucion()"
+                        >
+                          <i class="fa fa-save" aria-hidden="true"></i>
+                          Modificar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

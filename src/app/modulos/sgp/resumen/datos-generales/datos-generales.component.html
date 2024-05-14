@@ -1,0 +1,605 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div class="row" *ngIf="pnl_nuevoproyecto==true" name="pnl_nuevoproyecto" id="pnl_nuevoproyecto">
+  <div class="
+      col-lg-8 col-md-8 col-sm-8 col-lg-offset-2 col-md-offset-2 col-sm-offset-2
+    ">
+    <form action="" method="post" enctype="multipart/form-data">
+      <div class="panel panel-primary">
+        <div class="panel-heading clearfix"></div>
+        <div class="panel-body">
+          <div class="bg-primary text-white">DATOS DEL PROYECTO</div>
+          <!-- /*NOMBRE DEL PROYECTO*/ -->
+          <div class="form-group">
+            <div>
+              <label for="proyecto">Nombre del Proyecto:</label>
+            </div>
+            <div>
+              <input class="form-control" id="m_nombreproyecto" maxlength="500" autocomplete="off"
+                [(ngModel)]="_proyecto_cabecera._nombreproyecto" name="m_nombreproyecto"
+                [disabled]="camposHabilitados._administrador" />
+            </div>
+          </div>
+          <div class="row"></div>
+          <!-- /*DESCRIPCION DEL PROYECTO*/ -->
+          <div class="form-group">
+            <div>
+              <label for="descripcion">Descripción del Proyecto:</label>
+            </div>
+            <div>
+              <textarea class="form-control" autocomplete="off" rows="4" name="m_descripcionproyecto"
+                id="m_descripcionproyecto" [(ngModel)]="_proyecto_cabecera._descripcion_proyecto"
+                style="resize: none; text-align: justify" [disabled]="camposHabilitados._tecnica"></textarea>
+            </div>
+          </div>
+          <!-- /*GESTION*/ -->
+          <div class="row"></div>
+          <div class="form-group col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label for="descripcion">Gestión:</label>
+            </div>
+            <div>
+              <input type="text" class="form-control" id="m_gestion" name="m_gestion" autocomplete="off"
+                [(ngModel)]="_proyecto_cabecera._gestion" [disabled]="camposHabilitados._administrador" />
+            </div>
+          </div>
+          <!-- /*DEPARTAMENTO*/ -->
+          <div class="form-group col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Departamento:</label>
+            </div>
+            <div>
+              <select id="m_departamento" class="form-control" name="m_departamento"
+                [disabled]="camposHabilitados._administrador" [(ngModel)]="_proyecto_cabecera._cod_departamento"
+                (ngModelChange)="
+                filtradoMunicipio(_proyecto_cabecera._cod_departamento)
+                ">
+                <option value="0" [disabled]="_proyecto_cabecera._cod_departamento == '0'"
+                  [selected]="_proyecto_cabecera._cod_departamento == '0'"
+                  [hidden]="!(_proyecto_cabecera._cod_departamento == '0')">
+                  Seleccione...
+                </option>
+                <option *ngFor="let row_dep of dts_ListaDepartamento; let i = index"
+                  [ngValue]="row_dep.codigo_departamento">
+                  {{ row_dep.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <!-- /*MUNICIPIO*/ -->
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Municipio:</label>
+            </div>
+            <div>
+              <select id="m_municipio" class="form-control" name="m_municipio"
+                [(ngModel)]="_proyecto_cabecera._cod_municipio" [disabled]="camposHabilitados._administrador">
+                <option value="0" [disabled]="_proyecto_cabecera._cod_municipio == '0'"
+                  [selected]="_proyecto_cabecera._cod_municipio == '0'"
+                  [hidden]="!(_proyecto_cabecera._cod_municipio == '0')">
+                  Seleccione...
+                </option>
+                <option *ngFor="let row_mun of dts_ListaMunicipio; let i = index" [ngValue]="row_mun.codigo_municipio">
+                  {{ row_mun.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row"></div>
+          <!-- /*AREA*/ -->
+          <div class="form-group col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Área:</label>
+            </div>
+            <div>
+              <select id="m_area" class="form-control" name="m_area" [(ngModel)]="_proyecto_cabecera._cod_area"
+                [disabled]="camposHabilitados._tecnica" (ngModelChange)="setTipoClasificacion()">
+                <option value="0" [disabled]="_proyecto_cabecera._cod_area == '0'"
+                  [selected]="_proyecto_cabecera._cod_area == '0'" [hidden]="!(_proyecto_cabecera._cod_area == '0')">
+                  Seleccione...
+                </option>
+                <option *ngFor="let row_area of dts_ListaArea; let i = index" [ngValue]="row_area.id">
+                  {{ row_area.descripcion }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <!-- /*CLASIFICACIÓN*/ -->
+          <div class="form-group col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Clasificación:</label>
+            </div>
+            <div>
+              <select id="m_clasificacion" class="form-control" name="m_clasificacion"
+                [(ngModel)]="_proyecto_cabecera._cod_clasificacion" [disabled]="camposHabilitados._tecnica"
+                (ngModelChange)="setSubArea()">
+                <option value="0" [disabled]="_proyecto_cabecera._cod_clasificacion == '0'"
+                  [selected]="_proyecto_cabecera._cod_clasificacion == '0'"
+                  [hidden]="!(_proyecto_cabecera._cod_clasificacion == '0')">
+                  Seleccione...
+                </option>
+                <option *ngFor="let row_clas of filtradoClasificacion(dts_ListaClasificacion,_proyecto_cabecera._cod_area); let i = index
+                  " [ngValue]="row_clas.id">
+                  {{ row_clas.descripcion }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <!-- /*SUB ÁREA*/ -->
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Sub área:</label>
+            </div>
+            <div>
+              <select id="m_sub_area" class="form-control" name="m_sub_area"
+                [(ngModel)]="_proyecto_cabecera._cod_sub_area" [disabled]="camposHabilitados._tecnica">
+                <option value="0" [disabled]="_proyecto_cabecera._cod_sub_area == '0'"
+                  [selected]="_proyecto_cabecera._cod_sub_area == '0'"
+                  [hidden]="!(_proyecto_cabecera._cod_sub_area == '0')">
+                  Seleccione...
+                </option>
+                <option *ngFor="
+                    let row_sub of filtradoSubArea(
+                      dts_ListaSubArea,
+                      _proyecto_cabecera._cod_clasificacion
+                    );
+                    let i = index
+                  " [ngValue]="row_sub.id">
+                  {{ row_sub.descripcion }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row"></div>
+          <!-- /*ENTIDAD CONTRATANTE*/ -->
+          <div class="form-group col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Entidad Contratante:</label>
+            </div>
+            <div>
+              <select id="m_entidad_contratante" class="form-control" name="m_entidad_contratante"
+                [(ngModel)]="_proyecto_cabecera._cod_entidad_contratante" [disabled]="camposHabilitados._juridica"
+                (ngModelChange)="setTipoFinanciamiento()">
+                <option value="0" [disabled]="
+                    _proyecto_cabecera._cod_entidad_contratante == '0'
+                  " [selected]="
+                    _proyecto_cabecera._cod_entidad_contratante == '0'
+                  " [hidden]="
+                    !(_proyecto_cabecera._cod_entidad_contratante == '0')
+                  ">
+                  Seleccione...
+                </option>
+                <option *ngFor="
+                    let row_ent of dts_ListaEntidadContratante;
+                    let i = index
+                  " [ngValue]="row_ent.id">
+                  {{ row_ent.descripcion }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <!-- /*TIPO FINANCIAMIENTO*/ -->
+          <div class="form-group col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Tipo Financiamiento:</label>
+            </div>
+            <div>
+              <select id="m_tipo_financiamiento" class="form-control" name="m_tipo_financiamiento"
+                [(ngModel)]="_proyecto_cabecera._cod_tipo_financiamiento" [disabled]="camposHabilitados._tecnica">
+                <option value="0" [disabled]="
+                    _proyecto_cabecera._cod_tipo_financiamiento == '0'
+                  " [selected]="
+                    _proyecto_cabecera._cod_tipo_financiamiento == '0'
+                  " [hidden]="
+                    !(_proyecto_cabecera._cod_tipo_financiamiento == '0')
+                  ">
+                  Seleccione...
+                </option>
+                <option *ngFor="
+                    let row_fin of filtradoTipoFinanciamiento(
+                      dts_ListaTipoFinanciamiento,
+                      _proyecto_cabecera._cod_entidad_contratante
+                    );
+                    let i = index
+                  " [ngValue]="row_fin.id">
+                  {{ row_fin.descripcion }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <!-- /*ENTIDAD BENEFICIARIA*/ -->
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Entidad Beneficiaria:</label>
+            </div>
+            <div>
+              <select id="m_entidad_beneficiaria" class="form-control" name="m_entidad_beneficiaria"
+                [(ngModel)]="_proyecto_cabecera._cod_entidadbeneficiaria" [disabled]="camposHabilitados._tecnica">
+                <option value="0" [disabled]="
+                    _proyecto_cabecera._cod_entidadbeneficiaria == '0'
+                  " [selected]="
+                    _proyecto_cabecera._cod_entidadbeneficiaria == '0'
+                  " [hidden]="
+                    !(_proyecto_cabecera._cod_entidadbeneficiaria == '0')
+                  ">
+                  Seleccione...
+                </option>
+                <option *ngFor="
+                    let row_ben of dts_ListaEntidadBeneficiaria;
+                    let i = index
+                  " [ngValue]="row_ben.id">
+                  {{ row_ben.descripcion }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <!-- /*NOMBRE BENEFICIARIO*/ -->
+          <div class="row"></div>
+          <div class="form-group col-lg-12 col-md-12 col-sm-12">
+            <div>
+              <label>Beneficiario:</label>
+            </div>
+            <div>
+              <input class="form-control" id="m_nombrebeneficiario" maxlength="550" name="m_nombrebeneficiario"
+                autocomplete="off" [(ngModel)]="_proyecto_cabecera._nombre_beneficiario"
+                [disabled]="camposHabilitados._tecnica" />
+            </div>
+          </div>
+          <div class="row"></div>
+          <!-- /*LOCALIZACION*/ -->
+          <div class="form-group col-lg-9 col-md-9 col-sm-9">
+            <div>
+              <label for="descripcion">Localización:</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
+              <input class="form-control" name="m_localizacion" id="m_localizacion" autocomplete="off"
+                [(ngModel)]="_proyecto_cabecera._localizacion" [disabled]="camposHabilitados._tecnica" />
+            </div>
+          </div>
+          <!-- /*POBLACION BENEFICIADA*/ -->
+          <div class="form-group col-lg-3 col-md-3 col-sm-3">
+            <div>
+              <label for="descripcion">Población:</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+              <input class="form-control" name="m_poblacion" id="m_poblacion" autocomplete="off"
+                [(ngModel)]="_proyecto_cabecera._poblacion_beneficiada" [disabled]="camposHabilitados._tecnica" />
+            </div>
+          </div>
+          <div class="row"></div>
+          <!-- /*SUPERFICIE*/ -->
+          <div class="form-group col-lg-3 col-md-3 col-sm-3">
+            <div>
+              <label for="descripcion">Superficie:</label>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-addon">m2</span>
+              <input class="form-control" name="m_superficie" id="m_superficie" autocomplete="off"
+                [(ngModel)]="_proyecto_cabecera._superficie" [disabled]="camposHabilitados._tecnica" />
+            </div>
+          </div>
+          <!-- /*FECHA INICIO*/ -->
+          <div class="form-group col-lg-3 col-md-3 col-sm-3">
+            <div>
+              <label for="descripcion">Fecha Inicio:</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+              <input type="text" maxlength="10" class="form-control" name="m_fec_inicio" id="m_fec_inicio"
+                [(ngModel)]="_proyecto_cabecera._fecha_inicio" [disabled]="camposHabilitados._tecnica" />
+            </div>
+          </div>
+          <!-- /*PLAZO EJECUCION*/ -->
+          <div class="form-group col-lg-3 col-md-3 col-sm-3">
+            <div>
+              <label for="descripcion">Plazo Ejecución del Convenio:</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+              <input class="form-control" maxlength="9" name="m_plazo_ejecucion" id="m_plazo_ejecucion"
+                autocomplete="off" [(ngModel)]="_proyecto_cabecera._plazo_ejecucion"
+                [disabled]="camposHabilitados._tecnica" />
+            </div>
+          </div>
+          <!-- /*ENTREGA PROVISIONAL*/ -->
+          <div class="form-group col-lg-3 col-md-3 col-sm-3">
+            <div>
+              <label for="descripcion">Entrega Provisional:</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+              <input type="text" class="form-control" name="m_provisional" id="m_provisional"
+                [(ngModel)]="_proyecto_cabecera._entrega_provisional" [disabled]="camposHabilitados._tecnica" />
+            </div>
+          </div>
+          <!-- /*ENTREGA DEFINITIVA*/ -->
+          <div class="form-group col-lg-3 col-md-3 col-sm-3">
+            <div>
+              <label for="descripcion">Entrega Definitiva:</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+              <input type="text" class="form-control" name="m_definitiva" id="m_definitiva"
+                [(ngModel)]="_proyecto_cabecera._entrega_definitiva" [disabled]="camposHabilitados._tecnica" />
+            </div>
+          </div>
+          <!-- /*BLOQUE DE LOS ESTADOS DEL PROYECTO*/ -->
+          <div class="panel-heading clearfix"></div>
+          <div class="bg-primary text-white col-lg-12 col-md-12 col-sm-12">
+            AVANCE DEL PROYECTO
+          </div>
+          <!-- /*ESTADO GENERAL DEL PROYECTO*/ -->
+          <div class="form-group col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Estado del Proyecto:</label>
+            </div>
+            <div>
+              <select id="m_estado_proyecto" class="form-control" name="m_estado_proyecto"
+                [(ngModel)]="_proyecto_cabecera._estado_proyecto" [disabled]="camposHabilitados._tecnica">
+                <option value="0" [disabled]="_proyecto_cabecera._estado_proyecto == '0'"
+                  [selected]="_proyecto_cabecera._estado_proyecto == '0'"
+                  [hidden]="!(_proyecto_cabecera._estado_proyecto == '0')">
+                  Seleccione...
+                </option>
+                <option *ngFor="
+                    let row_estProy of dts_ListaEstadoProyecto;
+                    let i = index
+                  " [ngValue]="row_estProy.id_detalle">
+                  {{ row_estProy.descripciondetalleclasificador }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row"></div>
+          <!-- /*ESTADO FISICO*/ -->
+          <div class="form-group col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Estado Físico:</label>
+            </div>
+            <div>
+              <select id="m_estado_fisico" class="form-control" name="m_estado_fisico"
+                [(ngModel)]="_proyecto_cabecera._estado_fisico" [disabled]="camposHabilitados._tecnica">
+                <option value="0" [disabled]="_proyecto_cabecera._estado_fisico == '0'"
+                  [selected]="_proyecto_cabecera._estado_fisico == '0'"
+                  [hidden]="!(_proyecto_cabecera._estado_fisico == '0')">
+                  Seleccione...
+                </option>
+                <option *ngFor="
+                    let row_estFis of dts_ListaEstadoFisico;
+                    let i = index
+                  " [ngValue]="row_estFis.id_detalle">
+                  {{ row_estFis.descripciondetalleclasificador }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <!-- /*ESTADO FINANCIERO*/ -->
+          <div class="form-group col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Estado Financiero:</label>
+            </div>
+            <div>
+              <select id="m_estado_financiero" class="form-control" name="m_estado_financiero"
+                [(ngModel)]="_proyecto_cabecera._estado_financiero" [disabled]="camposHabilitados._financiera">
+                <option value="0" [disabled]="_proyecto_cabecera._estado_financiero == '0'"
+                  [selected]="_proyecto_cabecera._estado_financiero == '0'"
+                  [hidden]="!(_proyecto_cabecera._estado_financiero == '0')">
+                  Seleccione...
+                </option>
+                <option *ngFor="
+                    let row_estFin of dts_ListaEstadoFinanciero;
+                    let i = index
+                  " [ngValue]="row_estFin.id_detalle">
+                  {{ row_estFin.descripciondetalleclasificador }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <!-- /*ESTADO CIERRE*/ -->
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Estado Cierre:</label>
+            </div>
+            <div>
+              <select id="m_estado_cierre" class="form-control" name="m_estado_cierre"
+                [(ngModel)]="_proyecto_cabecera._estado_cierre" [disabled]="camposHabilitados._cierre">
+                <option value="0" [disabled]="_proyecto_cabecera._estado_cierre == '0'"
+                  [selected]="_proyecto_cabecera._estado_cierre == '0'"
+                  [hidden]="!(_proyecto_cabecera._estado_cierre == '0')">
+                  Seleccione...
+                </option>
+                <option *ngFor="
+                    let row_estCie of dts_ListaEstadoCierre;
+                    let i = index
+                  " [ngValue]="row_estCie.id_detalle">
+                  {{ row_estCie.descripciondetalleclasificador }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row"></div>
+          <!-- /*BLOQUE DEL CONVENIO*/ -->
+          <div class="panel-heading clearfix"></div>
+          <div class="bg-primary text-white col-lg-12 col-md-12 col-sm-12">
+            DATOS DEL CONVENIO
+          </div>
+          <!-- /*TIPO CONVENIO*/ -->
+          <div class="form-group col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Tipo de Convenio:</label>
+            </div>
+            <div>
+              <input class="form-control" id="m_tipo_convenio"  name="m_tipo_convenio" autocomplete="off"
+              [(ngModel)]="m_tipoconvenio" [disabled]="true" />
+
+              <!-- <select id="m_tipo_convenio" class="form-control" name="m_tipo_convenio"
+                [(ngModel)]="_proyecto_cabecera._tipo_convenio" [disabled]="camposHabilitados._juridica">
+                <option value="0" [disabled]="_proyecto_cabecera._tipo_convenio == '0'"
+                  [selected]="_proyecto_cabecera._tipo_convenio == '0'"
+                  [hidden]="!(_proyecto_cabecera._tipo_convenio == '0')">
+                  Seleccione...
+                </option>
+                <option *ngFor="let row_con of dts_ListaTipoConvenio; let i = index" [ngValue]="row_con.id_detalle">
+                  {{ row_con.descripciondetalleclasificador }}
+                </option>
+              </select> -->
+            </div>
+          </div>
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Numero de Convenio:</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-bookmark"></i></span>
+              <input class="form-control" id="m_nroconvenio" maxlength="50" name="m_nroconvenio" autocomplete="off"
+                placeholder="NUMERO DE CONVENIO" [(ngModel)]="_proyecto_cabecera._nro_convenio" [disabled]="true" />
+            </div>
+          </div>
+          <!-- /*FECHA DE CONVENIO*/ -->
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Fecha Suscripción:</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+              <input type="text" class="form-control" id="m_fechaconvenio" name="m_fechaconvenio" maxlength="10"
+                [(ngModel)]="_proyecto_cabecera._fecha_convenio" [disabled]="true" />
+            </div>
+          </div>
+          <div class="row"></div>
+          <!-- /*MONTO UPRE*/ -->
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Monto financiado UPRE:</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon">Bs.</span>
+              <input class="form-control" id="m_monto_upre" maxlength="30" name="m_monto_upre" autocomplete="off"
+                [(ngModel)]="m_monto_upre" [disabled]="true" />
+            </div>
+          </div>
+          <!-- /*MONTO CONTRAPARTE BENEFICIARIO*/ -->
+          <div class="form-group row" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Monto Contraparte Beneficiario:</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon">Bs.</span>
+              <input class="form-control" id="m_monto_contraparte_beneficiario" maxlength="200"
+                name="m_monto_contraparte_beneficiario" autocomplete="off"
+                [(ngModel)]="m_monto_contraparte_beneficiario" [disabled]="true" />
+            </div>
+          </div>
+          <div class="form-group row" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Monto Contraparte Gobernación:</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon">Bs.</span>
+              <input class="form-control" id="m_monto_contraparte_gobernacion" name="m_monto_contraparte_gobernacion"
+                autocomplete="off" [(ngModel)]="m_monto_contraparte_gobernacion" [disabled]="true" />
+            </div>
+          </div>
+          <div class="row"></div>
+          <div class="form-group row" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Monto Contraparte Municipio:</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon">Bs.</span>
+              <input class="form-control" id="m_monto_contraparte_municipal" maxlength="200"
+                name="m_monto_contraparte_municipal" autocomplete="off" [(ngModel)]="m_monto_contraparte_municipal"
+                [disabled]="true" />
+            </div>
+          </div>
+          <div class="form-group" class="col-lg-4 col-md-4 col-sm-4">
+            <div>
+              <label>Monto total de Convenio:</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon">Bs.</span>
+              <input class="form-control" id="_monto_contrato" maxlength="200" name="_monto_contrato" autocomplete="off"
+                [(ngModel)]="m_monto_convenio" [disabled]="true" />
+            </div>
+          </div>
+          <div class="row"></div>
+
+          <div class="col-lg-6" *ngIf="pnl_convenio_sgp == true">
+            <div *ngFor="let row_reg of dts_ConvenioSgp" class="col-lg-4">
+
+              <app-upload-file inputTipoDocumento="{{row_reg.repositorio}}" inputCodigoProy="{{ row_reg.codigo }}"
+                inputVista="false" inputTipoImagen="documento" inputSrc="" inputNombre="{{ row_reg.nombre_archivo }}"
+                (enviaPadre)="refrescaPadre($event)" inputAccion="VISUALIZAR">
+              </app-upload-file>
+            </div>            
+          </div>
+          <div class="col-lg-6" *ngIf="pnl_adenda == true">
+            <div *ngFor="let row_adenda of dts_lista_adenda" class="col-lg-4">
+              <app-upload-file inputTipoDocumento="adenda" inputCodigoProy="{{ row_adenda.fid_sgp }}" inputVista="false"
+                inputTipoImagen="documento" inputSrc="" inputNombre="{{ row_adenda.nombre_archivo }}"
+                inputAccion="VISUALIZAR">
+              </app-upload-file>
+            </div>       
+          </div>      
+       
+          <div class="row"></div>
+          <div>
+            <div class="row"></div>
+            <div class="bg-primary text-white">UBICACIÓN GEOGRÁFICA</div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-4">
+              <div>
+                <label for="descripcion">Latitud:</label>
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
+                <input class="form-control" name="m_latitud" id="m_latitud" autocomplete="off"
+                  [(ngModel)]="_proyecto_cabecera._latitud" [disabled]="camposHabilitados._tecnica" />
+              </div>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-4">
+              <div>
+                <label for="descripcion">Longitud:</label>
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"></i></span>
+                <input class="form-control" name="m_longitud" id="m_longitud" autocomplete="off"
+                  [(ngModel)]="_proyecto_cabecera._longitud" [disabled]="camposHabilitados._tecnica" />
+              </div>
+            </div>
+            <div  class="col-lg-offset-2 col-lg-8 col-md-8 col-sm-8">
+              <div class="map" id="map" name="map"></div>
+            </div>
+          </div>
+          <!-- <div class="center-block" *ngIf="pnl_georeferenciacion==true"> -->
+
+
+          <div class="form-group" class="col-lg-12 col-md-12 col-sm-12">
+            <div>
+              <label>
+                <p></p>
+              </label>
+            </div>
+            <button class="btn btn-block btn-success" *ngIf="opcion == 'INS'" value="Guardar"
+              (click)="insertaProyectoCabecera()">
+              <i class="fa fa-save"></i>
+              Guardar
+            </button>
+            <button class="btn btn-block btn-warning" *ngIf="opcion != 'INS' && opcion != 'OBS' 
+            && (camposHabilitados._tecnica==false || camposHabilitados._juridica==false || camposHabilitados._financiera==false || camposHabilitados._cierre==false || camposHabilitados._administrador==false  )" 
+              value="Guardar"
+              (click)="actualizaProyectoCabecera()">
+              <i class="fa fa-pencil"></i>
+              Actualizar
+            </button>
+          </div>
+          <div class="panel-footer">
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

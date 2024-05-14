@@ -1,0 +1,6 @@
+.dt-institucion tfoot input{
+    width: 100% !important;
+}
+.dt-institucion tfoot {
+    display: table-header-group !important;
+}

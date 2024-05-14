@@ -1,0 +1,30 @@
+.dt-correos tfoot input{
+  width: 100% !important;
+}
+.dt-correos tfoot {
+  display: table-header-group !important;
+}
+
+.dt-mensajes tfoot input{
+  width: 100% !important;
+}
+.dt-mensajes tfoot {
+  display: table-header-group !important;
+}
+
+.dt-interops tfoot input{
+  width: 100% !important;
+}
+.dt-interops tfoot {
+  display: table-header-group !important;
+}
+
+input[type="text"],textarea {
+  text-transform: none !important;
+}
+
+.botonera{
+  width: 150px;
+  display: flex;
+  justify-content: space-between;
+}

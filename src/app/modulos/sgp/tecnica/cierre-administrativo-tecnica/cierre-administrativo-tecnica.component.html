@@ -1,0 +1,143 @@
+<div id="pnl_listaderecho" name="pnl_listaderecho" class="card card-body">
+  <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+    <div class="content-header with-border">
+      <h3 class="content-title text-green">
+        <strong
+          >CIERRE ADMINISTRATIVO TECNICA - PROYECTO:
+          <b>{{ nombre_proyecto }}</b></strong
+        >
+      </h3>
+    </div>
+    <div class="content-body">
+      <div class="row">
+        <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+        <div class="col-lg-offset-2 col-lg-8">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">CIERRE ADMINISTRATIVO</div>
+            <div class="panel-body">
+              <div *ngIf="pnl_formulario">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="porcentaje"
+                        >Estado de Cierre:</label
+                      >
+                      <div class="col-sm-6">
+                        <select
+                          class="form form-control"
+                          [(ngModel)]="cierre_administrativo.estadocierre"  
+                          [disabled]="camposHabilitados._cierre"                        
+                        >
+                          <option
+                            *ngFor="
+                              let row_reg of dts_estadoCierreAdministratvo;
+                              let i = index
+                            "
+                            [ngValue]="row_reg.descripciondetalleclasificador"
+                          >
+                            {{ row_reg.descripciondetalleclasificador }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="informe"
+                        >Descripción:
+                      </label>
+                      <div class="col-sm-6">
+                        <textarea
+                          class="form form-control"
+                          maxlength="5000"
+                          rows="10"
+                          [(ngModel)]="cierre_administrativo.descripcion"
+                          style="resize: none"
+                          [disabled]="camposHabilitados._cierre==true"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <label
+                        class="control-label col-sm-4 text-left"
+                        for="telefonos"
+                        >Archivo Cierre Administrativo:
+                      </label>
+                      <div class="col-sm-6">
+                        <label for="">Formatos Permitidos (pdf)</label>
+                        <input
+                          type="file"
+                          class="form-control"
+                          id="inputArchivo"
+                          name="inputArchivo"
+                          (change)="handleFileInput($event.target.files)"
+                          required
+                          [disabled]="camposHabilitados._cierre==true "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-lg-offset-4 col-sm-6 text-center">
+                        <button *ngIf="btn_Registra==true"
+                          type="button"
+                          class="btn btn-success btn-block"
+                          title="Guardar Registro"
+                          (click)="subirArchivoInsertaCierre()"
+                          [disabled]="
+                            cierre_administrativo.estadocierre == '' ||
+                            cierre_administrativo.descripcion == '' ||
+                            camposHabilitados._cierre ==true "
+                          
+                        >
+                          <i class="fa fa-save" aria-hidden="true"></i> Guardar Registro
+                        </button>
+                        <button *ngIf="btn_Actualiza==true"
+                          type="button"
+                          class="btn btn-success btn-block"
+                          title="Guardar Registro"
+                          (click)="actualizarArchivo()"
+                          [disabled]="
+                            cierre_administrativo.estadocierre == '' ||
+                            cierre_administrativo.descripcion == '' ||
+                            camposHabilitados._cierre ==true "
+                          
+                        >
+                          <i class="fa fa-save" aria-hidden="true"></i> Actualizar Registro
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="pnl_descarga">
+                <div
+                  class="text-center"                 
+                >
+                  <app-upload-file
+                    inputTipoDocumento="cierre_administrativo"
+                    inputCodigoProy="{{ id_sgp }}"
+                    inputVista="false"
+                    inputTipoImagen="documento"
+                    inputSrc=""
+                    inputNombre="{{cierre_administrativo.nombrearchivo }}"
+                    inputAccion="VISUALIZAR"
+                  >
+                  </app-upload-file>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    </div>
+  </div>
+</div>

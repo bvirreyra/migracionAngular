@@ -1,0 +1,400 @@
+<div *ngIf="pnl_listacontactos==true" id="pnl_listacontactos" name="pnl_listacontactos" class="card card-body">
+  <div class="content content-success" name="pnl_busqueda" id="pnl_busqueda">
+    <div class="content-header with-border">
+      <h3 class="content-title text-green">
+        <strong
+          >CONTACTOS - TECNICA PROYECTO: <b>{{ nombre_proyecto }}</b></strong
+        >
+      </h3>
+      <div class="pull-right">
+        <button
+          class="btn btn-primary"
+          type="button"
+          (click)="paneles('NUEVO_CONTACTO')"
+          *ngIf="camposHabilitados._administrador_plataforma==false || camposHabilitados._tecnica==false"
+          [disabled]="camposHabilitados._tecnica"
+        >
+          <i
+            class="fa fa-plus-square"
+            aria-hidden="true"
+            title="Nuevo Contacto"
+          ></i>
+        </button>
+      </div>
+    </div>
+    <div class="content-body">
+      <div class="row" *ngFor="let item of dts_listaempresaversion">
+        <!-- <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4"> -->
+        <div class="col-lg-offset-2 col-lg-8">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+              DATOS DE CONTACTOS EMPRESA: {{ item.descripcion }}
+            </div>
+            <div class="panel-body">
+              <!--LISTA GRIDVIEW SUPERVISION-->
+              <table
+                class="table table-condensed table-hover dt-listacontactos"
+              >
+                <thead>
+                  <tr>
+                    <th>Nro.</th>
+                    <th>Tipo Contacto</th>
+                    <th>Detalle</th>
+                    <th>Correo</th>
+                    <th>telefonos</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let row_registros of filtradocontactos(
+                        dts_listacontactos,
+                        item.nro_version
+                      );
+                      let i = index
+                    "
+                    [ngClass]="{ 'bg-danger': row_registros.id_estado == 0 }"
+                  >
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      {{ row_registros.tipo_contacto | uppercase }}
+                    </td>
+                    <td>{{ row_registros.descripcion | uppercase }}</td>
+                    <td>{{ row_registros.email | lowercase }}</td>
+                    <td style="text-align: justify">
+                      {{ row_registros.telefonos }}
+                    </td>
+                    <td>
+                      <button
+                        *ngIf="
+                          row_registros.habilita_edicion == 1 &&
+                          row_registros.tipo_contacto != 'EMPRESA'
+                        "
+                        type="button"
+                        class="btn btn-warning btn-md"
+                        (click)="abrirEdicion(row_registros)"
+                        [disabled]="camposHabilitados._tecnica"
+                      >
+                        <i
+                          class="fa fa-edit"
+                          aria-hidden="true"
+                          title="Modificar contacto"
+                        ></i>
+                      </button>
+                      <button
+                        *ngIf="
+                          row_registros.habilita_edicion == 1 &&
+                          row_registros.tipo_contacto == 'EMPRESA'
+                        "
+                        type="button"
+                        class="btn btn-warning btn-md"
+                        (click)="abrirEdicionEmpresa(row_registros)"
+                        [disabled]="camposHabilitados._tecnica"
+                      >
+                        <i
+                          class="fa fa-edit"
+                          aria-hidden="true"
+                          title="Modificar Empresa"
+                        ></i>
+                      </button>
+                      <button
+                        *ngIf="
+                          row_registros.habilita_edicion == 1 &&
+                          row_registros.tipo_contacto != 'EMPRESA'
+                        "
+                        type="button"
+                        class="btn btn-danger btn-md"
+                        (click)="abrirEliminacion(row_registros)"
+                        [disabled]="camposHabilitados._tecnica"
+                      >
+                        <i
+                          class="fa fa-trash"
+                          aria-hidden="true"
+                          title="Eliminar contacto"
+                        ></i></button
+                      ><br />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content-footer"></div>
+  </div>
+</div>
+<!-- INICIO MODAL CONTACTOS -->
+<div
+  class="modal fade"
+  name="modalContactos"
+  id="modalContactos"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Contactos</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="porcentaje"
+                  >Tipo Contacto:</label
+                >
+                <div class="col-sm-6">
+                  <select
+                    class="form form-control"
+                    [(ngModel)]="id_tipoContacto"
+                    (ngModelChange)="obtieneTipoContacto()"
+                  >
+                    <option
+                      *ngFor="
+                        let row_reg of dts_listaTipoContacto;
+                        let i = index
+                      "
+                      [ngValue]="row_reg.id_detalle"
+                    >
+                      {{ row_reg.descripciondetalleclasificador }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="informe"
+                  >Detalle:
+                </label>
+                <div class="col-sm-6">
+                  <input
+                    class="form form-control"
+                    maxlength="2000"
+                    [(ngModel)]="contactos.descripcion"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="informe"
+                  >Correo:
+                </label>
+                <div class="col-sm-6">
+                  <input
+                    class="form form-control"
+                    maxlength="200"
+                    [(ngModel)]="contactos.email"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="telefonos"
+                  >Telefonos:
+                </label>
+                <div class="col-sm-6">
+                  <input
+                    class="form form-control"
+                    maxlength="2000"
+                    [(ngModel)]="contactos.telefonos"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning"
+          name="btnModificar"
+          id="btnModificar"
+          (click)="actualizaContactos()"
+        >
+          Modificar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          name="btnRegistrar"
+          id="btnRegistrar"
+          (click)="insertaContactos()"
+        >
+          Registrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL CONTACTOS-->
+
+<!-- INICIO MODAL EMPRESA-->
+<div
+  class="modal fade"
+  name="modalEmpresa"
+  id="modalEmpresa"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Contactos</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-horizontal">
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="porcentaje"
+                  >Tipo Contacto:</label
+                >
+                <div class="col-sm-6">
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="contactos.tipocontacto"
+                    readonly
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="informe"
+                  >Detalle:
+                </label>
+                <div class="col-sm-6">
+                  <input
+                    class="form form-control"
+                    maxlength="2000"
+                    [(ngModel)]="contactos.descripcion"
+                    
+                  />
+                </div>                
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="informe"
+                  >Correo:
+                </label>
+                <div class="col-sm-6">
+                  <input
+                    class="form form-control"
+                    maxlength="200"
+                    [(ngModel)]="contactos.email"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <label class="control-label col-sm-4 text-left" for="telefonos"
+                  >Telefonos:
+                </label>
+                <div class="col-sm-6">
+                  <input
+                    class="form form-control"
+                    maxlength="2000"
+                    [(ngModel)]="contactos.telefonos"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning"
+          name="btnModificar"
+          id="btnModificar"
+          (click)="actualizaContactos()"
+        >
+          Modificar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL EMPRESA-->
+
+<!-- INICIO MODAL ELIMINACION -->
+<div
+  class="modal fade"
+  id="modalEliminacion"
+  name="modalEliminacion"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="Eliminar_proveido"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><b>ALERTA</b></h5>
+      </div>
+      <div class="modal-body">
+        Está seguro que desea Eliminar el registro seleccionado?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="eliminaContactos()"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL ELMINACION-->

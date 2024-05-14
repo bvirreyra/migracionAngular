@@ -1,0 +1,1073 @@
+<div *ngIf="cargando" class="loading">
+  <div class="spin"></div>
+</div>
+<div *ngIf="esAdmin">
+  <div class="division">
+    <div class="panel panel-success">
+      <div class="panel-heading text-center">
+        <button
+          class="btn btn-success pull-left"
+          style="padding: 2px 10px; margin-top: -2px"
+          (click)="abrirFormCites()"
+        >
+          <span class="glyphicon glyphicon-plus"></span> Documentos por Usuario
+        </button>
+        <span class="glyphicon glyphicon-list"></span> Gestión Tipos Documentos
+        <button
+          class="btn btn-success pull-right"
+          style="padding: 2px 10px; margin-top: -2px"
+          (click)="abrirFormTipos()"
+        >
+          <span class="glyphicon glyphicon-plus"></span> Nuevo Tipo Documento
+        </button>
+      </div>
+      <div class="panel-body" style="text-align: left">
+        <div class="table table-responsive">
+          <table
+            class="table table-responsive table-condensed table-hover table-striped dt-tipos"
+            style="font-size: 9pt"
+          >
+            <thead>
+              <tr>
+                <th>Documento</th>
+                <th style="width: 100px">Abreviatura</th>
+                <!-- <th>Via</th> -->
+                <th>Descripción</th>
+                <th>Plantilla</th>
+                <th>Modelo</th>
+                <th style="width: 80px">Opciones</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <!-- <td></td> -->
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr *ngFor="let row of dtsTiposCitesAll; let i = index">
+                <td>{{ row.documento }}</td>
+                <td>{{ row.abreviatura }}</td>
+                <!-- <td><div *ngIf="row.via"><i class="fa fa-check-square-o"></i></div></td> -->
+                <td>{{ row.descripcion }}</td>
+                <td>{{ row.plantilla }}</td>
+                <td>{{ row.modelo }}</td>
+                <td class="botonera">
+                  <button
+                    class="btn btn-warning"
+                    title="Editar"
+                    (click)="abrirFormTipos(row)"
+                  >
+                    <span class="glyphicon glyphicon-edit"></span>
+                  </button>
+                  <button
+                    *ngIf="row.uso == 0"
+                    class="btn btn-danger"
+                    title="Eliminar"
+                    (click)="anularTipo(row)"
+                  >
+                    <span class="glyphicon glyphicon-trash"></span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="linea"></div>
+</div>
+<div class="division">
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <select
+        class="pull-left iform-control"
+        title="Filtro Gestión"
+        [(ngModel)]="gestionSel"
+        (change)="cambiarGestion(idUsuario)"
+        style="color: #1b6692"
+      >
+        <option *ngFor="let row of dtsGestiones" [ngValue]="row">
+          {{ row }}
+        </option>
+      </select>
+      <button
+        class="btn btn-info pull-left"
+        style="padding: 2px 10px; margin: -2px 0 0 4px"
+        (click)="listarDocumentosRecientes('' + idUsuario, gestionSel)"
+      >
+        <span class="glyphicon glyphicon-refresh"></span> Recargar
+      </button>
+      <span class="glyphicon glyphicon-list"></span> Documentos Recientes
+      <button
+        class="btn btn-success pull-right"
+        style="padding: 2px 10px; margin-top: -2px"
+        (click)="abrirFormDocumento()"
+        [disabled]="gestionSel != gestionActual"
+      >
+        <span class="glyphicon glyphicon-plus"></span> Nuevo Documento
+      </button>
+    </div>
+    <div class="panel-body" style="text-align: left">
+      <div class="table table-responsive">
+        <table
+          class="table table-responsive table-condensed table-hover dt-documentos1"
+          id="tabladocs"
+          style="font-size: 9pt"
+        >
+          <thead>
+            <tr>
+              <th>id_documento</th>
+              <th>Código</th>
+              <th>Referencia</th>
+              <th>Fecha</th>
+              <th>Remitente</th>
+              <th style="width: 40px">Opciones</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr
+              *ngFor="let row of dtsDocumentosUsuario; let i = index"
+              [ngClass]="{ 'bg-danger': row.activo == 0 }"
+            >
+              <td>{{ row.id_documento }}</td>
+              <td>{{ row.codigo }}</td>
+              <td style="display: block">
+                <div style="color: #337ab7">{{ row.referencia }}</div>
+                <div>{{ row.destinatario }}</div>
+              </td>
+              <td>{{ row.fecha_registro | date : "dd/MM/yyyy HH:mm:ss" }}</td>
+              <td>{{ row.remitente }}</td>
+              <td>
+                <button
+                  *ngIf="row.activo == 1 && row.usuario_registro == idUsuario"
+                  class="btn btn-warning"
+                  title="Editar"
+                  (click)="abrirFormDocumento(row)"
+                >
+                  <span class="glyphicon glyphicon-edit"></span>
+                </button>
+                <label *ngIf="row.activo == 0" style="color: orangered"
+                  >ANULADO</label
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button
+        class="btn btn-info btn-block"
+        title="Historial de Cites"
+        (click)="hitorial_cites()"
+      >
+        Cites de la Unidad y/o Área
+      </button>
+      <div style="margin-top: 1rem;" *ngIf="cites_historicos">
+        <table
+          class="table table-responsive table-condensed table-hover dt-documentos2"
+          style="font-size: 9pt"
+        >
+          <thead>
+            <tr>
+              <th>Tipo Cite</th>
+              <th>Código</th>
+              <th>Referencia</th>
+              <th>Fecha</th>
+              <th>Remitente</th>
+              <th style="width: 40px">Opciones</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr
+              *ngFor="let row_total of dtsDocumentos; let i = index"
+              [ngClass]="{ 'bg-danger': row_total.activo == 0 }"
+            >
+              <td>{{ row_total.documento }}</td>
+              <td>{{ row_total.codigo }}</td>
+              <td style="display: block">
+                <div style="color: #337ab7">{{ row_total.referencia }}</div>
+                <div>{{ row_total.destinatario }}</div>
+              </td>
+              <td>
+                {{ row_total.fecha_registro | date : "dd/MM/yyyy HH:mm:ss" }}
+              </td>
+              <td>{{ row_total.remitente }}</td>
+              <td>
+                <label *ngIf="row_total.activo == 0" style="color: orangered"
+                  >ANULADO</label
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-info">
+    <div class="panel-heading text-center">
+      <button
+        class="btn btn-primary pull-right"
+        style="padding: 2px 10px; margin-top: -2px"
+        (click)="abrirFormDocumento()"
+        [disabled]="true"
+      >
+        <span class="glyphicon glyphicon-plus"></span> Tipo Gráfica
+      </button>
+      <span class="fa fa-pie-chart"></span> Documentos Por Tipo
+    </div>
+    <div class="panel-body" style="text-align: left">
+      <app-pie
+        [titulo]="tituloPie"
+        [series]="seriesPie"
+        [labels]="labelsPie"
+        [radio]="330"
+        (messageEvent)="recibeMensaje($event, 'pie')"
+      ></app-pie>
+      <app-barras
+        [titulos]="titulosBarras"
+        [series]="seriesBarras"
+        [periodos]="periodosBarras"
+        [alto]="330"
+        (messageEvent)="recibeMensaje($event, 'barras')"
+      ></app-barras>
+    </div>
+  </div>
+</div>
+
+<!--modal documento -->
+<div
+  class="modal fade"
+  tabindex="-1"
+  name="modalDocumento"
+  id="modalDocumento"
+  role="dialog"
+  aria-labelledby="exampleModalDocumento"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad; color: white">
+        <button
+          type="button"
+          class="close text-white"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">
+          <div *ngIf="!documentoEditar">Generar Documento</div>
+          <div *ngIf="documentoEditar">Actualizar Documento</div>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left">
+          <form [formGroup]="formDocumento" (ngSubmit)="registrarDocumento()">
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="cantidad">Tipo Documento:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-folder"></i
+                  ></span>
+                  <!-- <select class="form-control" formControlName="fidTipo" (change)="onChangeModelo()" required>
+                    <option *ngFor="let row of dtsTiposCites"  [ngValue]="row.id_tipo_cite"  [ngClass]="{ 'resaltado': [ 3,4,76,82,90,112].includes(row.id_tipo_cite)}">
+                      {{row.documento}}
+                    </option>
+                  </select> -->
+                  <input
+                    class="form-control"
+                    formControlName="descTipo"
+                    autocomplete="off"
+                    (change)="onChangeModelo()"
+                    required
+                    list="listaTipoCites"
+                    autofocus
+                  />
+                  <datalist id="listaTipoCites" class="datalist">
+                    <div *ngFor="let row of dtsTiposCites; let i = index">
+                      <option
+                        class="form-control"
+                        value="{{ row.documento }}"
+                        label="{{ row.documento }}"
+                      ></option>
+                    </div>
+                  </datalist>
+                </div>
+                <span
+                  style="color: tomato; font-style: italic"
+                  *ngIf="
+                    formDocumento.controls['descTipo'].touched &&
+                    formDocumento.controls['descTipo'].errors?.required
+                  "
+                  >Este campo es requerido<br
+                /></span>
+                <span
+                  style="color: rgb(18, 126, 250); font-style: italic"
+                  *ngIf="!formDocumento.controls['descTipo'].valid"
+                  >Debe seleccionar un tipo de documento específico</span
+                >
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="descripcion">{{
+                  elModelo.includes("-Area")
+                    ? "Modelo CITE referencial:"
+                    : "Último CITE generado:"
+                }}</label>
+                <label
+                  style="
+                    color: #0c72ad;
+                    font-style: italic;
+                    padding-top: 5px;
+                    display: block;
+                  "
+                  title="{{
+                    elModelo.includes('-Area')
+                      ? 'Tipo de Documento aún no generado en la gestión'
+                      : ''
+                  }}"
+                  >{{ elModelo }}
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="descripcion">Remitente:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-user"></i
+                  ></span>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="remitente"
+                    placeholder="Remitente"
+                    formControlName="remitente"
+                    maxlength="200"
+                    required
+                    readonly
+                  />
+                </div>
+                <span
+                  style="color: tomato"
+                  *ngIf="
+                    formDocumento.controls['remitente'].touched &&
+                    formDocumento.controls['remitente'].errors?.required
+                  "
+                  >Este campo es requerido</span
+                >
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="descripcion">Cargo Remitente:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-briefcase"></i
+                  ></span>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="remitenteCargo"
+                    placeholder="Cargo Remitente"
+                    formControlName="remitenteCargo"
+                    maxlength="200"
+                    required
+                    readonly
+                  />
+                </div>
+                <span
+                  style="color: tomato"
+                  *ngIf="
+                    formDocumento.controls['remitenteCargo'].touched &&
+                    formDocumento.controls['remitenteCargo'].errors?.required
+                  "
+                  >Este campo es requerido</span
+                >
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="descripcion">Destinatario:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-user"></i
+                  ></span>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="destinatario"
+                    autocomplete="off"
+                    placeholder="Destinatario"
+                    (change)="
+                      encontrarCargo(
+                        formDocumento.controls['destinatario'].value,
+                        'destinatarioCargo'
+                      )
+                    "
+                    formControlName="destinatario"
+                    maxlength="200"
+                    list="listaDestinatario"
+                    required
+                  />
+                  <datalist id="listaDestinatario" class="datalist">
+                    <div *ngFor="let row of dtsUsuarios; let i = index">
+                      <option
+                        class="form-control"
+                        value="{{ row.nombre_completo_usuario }}"
+                        label="{{ row.nombre_completo_usuario }}"
+                      ></option>
+                    </div>
+                  </datalist>
+                  <span
+                    style="color: tomato"
+                    *ngIf="
+                      formDocumento.controls['destinatario'].touched &&
+                      formDocumento.controls['destinatario'].errors?.required
+                    "
+                    >Este campo es requerido</span
+                  >
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="descripcion">Cargo Destinatario:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-briefcase"></i
+                  ></span>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="destinatarioCargo"
+                    placeholder="Cargo Destinatario"
+                    formControlName="destinatarioCargo"
+                    maxlength="200"
+                    required
+                    readonly
+                  />
+                </div>
+                <span
+                  style="color: tomato"
+                  *ngIf="
+                    formDocumento.controls['destinatarioCargo'].touched &&
+                    formDocumento.controls['destinatarioCargo'].errors?.required
+                  "
+                  >Este campo es requerido</span
+                >
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="descripcion">Vía:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-user"></i
+                  ></span>
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="via"
+                    name="via"
+                    autocomplete="off"
+                    placeholder="Vía"
+                    (change)="
+                      encontrarCargo(
+                        formDocumento.controls['via'].value,
+                        'viaCargo'
+                      )
+                    "
+                    formControlName="via"
+                    maxlength="200"
+                    list="listaDestinatario"
+                  />
+                  <datalist id="listaVia" class="datalist">
+                    <div *ngFor="let row of dtsUsuarios; let i = index">
+                      <option
+                        class="form-control"
+                        value="{{ row.nombre_completo_usuario }}"
+                        label="{{ row.nombre_completo_usuario }}"
+                      ></option>
+                    </div>
+                  </datalist>
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-lg-6 col-md-6">
+                <label for="descripcion">Cargo Vía:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-briefcase"></i
+                  ></span>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="viaCargo"
+                    placeholder="Cargo Vía"
+                    formControlName="viaCargo"
+                    maxlength="200"
+                    readonly
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-lg-12 col-md-12">
+                <label for="cantidad">Referencia:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-comment"></i
+                  ></span>
+                  <textarea
+                    class="form-control"
+                    id="via"
+                    name="referencia"
+                    placeholder="Referencia"
+                    formControlName="referencia"
+                    cols="30"
+                    rows="2"
+                    (change)="onChangeReferencia()"
+                    required
+                  ></textarea>
+                </div>
+                <span
+                  style="color: tomato"
+                  *ngIf="
+                    formDocumento.controls['referencia'].touched &&
+                    formDocumento.controls['referencia'].errors?.required
+                  "
+                  >Este campo es requerido</span
+                >
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <div *ngIf="elCodigo" class="pull-left">
+                  <label
+                    style="color: #0c72ad; font-style: italic; font-size: large"
+                    >Código generado: {{ elCodigo }}</label
+                  >
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  style="margin-right: 1rem"
+                  data-dismiss="modal"
+                >
+                  Cancelar
+                </button>
+                <button
+                  class="btn btn-success"
+                  type="submit"
+                  [disabled]="
+                    formDocumento.invalid ||
+                    formDocumento.pristine ||
+                    !usuariosCorrectos
+                  "
+                >
+                  <div *ngIf="!documentoEditar">
+                    <span class="fa fa-floppy-o"></span> Generar Documento
+                  </div>
+                  <div *ngIf="documentoEditar">
+                    <span class="fa fa-check"></span> Actualizar Documento
+                  </div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal tipo -->
+<div
+  class="modal fade"
+  tabindex="-1"
+  name="modalTipo"
+  id="modalTipo"
+  role="dialog"
+  aria-labelledby="exampleModalTipo"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad; color: white">
+        <button
+          type="button"
+          class="close text-white"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">
+          <div *ngIf="!tipoEditar">Crear Tipo Cite</div>
+          <div *ngIf="tipoEditar">Actualizar Tipo Cite</div>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: left">
+          <form [formGroup]="formTipo" (ngSubmit)="registrarTipoCite()">
+            <div class="row">
+              <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                <label for="cantidad">Documento:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-book"></i
+                  ></span>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="documento"
+                    placeholder="Documento"
+                    formControlName="documento"
+                    maxlength="100"
+                    required
+                    autofocus
+                  />
+                </div>
+                <span
+                  style="color: tomato"
+                  *ngIf="
+                    formTipo.controls['documento'].touched &&
+                    formTipo.controls['documento'].errors?.required
+                  "
+                  >Este campo es requerido</span
+                >
+              </div>
+              <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                <label for="descripcion">Abreviatura:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-cc"></i
+                  ></span>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="abreviatura"
+                    placeholder="Abreviatura"
+                    formControlName="abreviatura"
+                    maxlength="20"
+                    required
+                  />
+                </div>
+                <span
+                  style="color: tomato"
+                  *ngIf="
+                    formTipo.controls['abreviatura'].touched &&
+                    formTipo.controls['abreviatura'].errors?.required
+                  "
+                  >Este campo es requerido</span
+                >
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                <label for="descripcion">Descripción:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-comment"></i
+                  ></span>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="descripcion"
+                    placeholder="Descripción"
+                    formControlName="descripcion"
+                    maxlength="100"
+                    required
+                  />
+                </div>
+                <span
+                  style="color: tomato"
+                  *ngIf="
+                    formTipo.controls['descripcion'].touched &&
+                    formTipo.controls['descripcion'].errors?.required
+                  "
+                  >Este campo es requerido</span
+                >
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                <label for="cantidad">Plantilla :</label>
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-barcode"></i
+                  ></span>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="plantilla"
+                    placeholder="plantillaDocumento.odt"
+                    formControlName="plantilla"
+                    maxlength="100"
+                    style="text-transform: none"
+                  />
+                </div>
+              </div>
+              <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                <label for="descripcion">Modelo:</label>
+                <div class="input-group">
+                  <span class="input-group-addon"
+                    ><i class="fa fa-code"></i
+                  ></span>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="modelo"
+                    placeholder="UPRE/$OFI/$TIP/$MOS/$COR/$GES"
+                    formControlName="modelo"
+                    maxlength="100"
+                    style="text-transform: none"
+                    required
+                  />
+                </div>
+                <span
+                  style="color: tomato"
+                  *ngIf="
+                    formTipo.controls['modelo'].touched &&
+                    formTipo.controls['modelo'].errors?.required
+                  "
+                  >Este campo es requerido</span
+                >
+              </div>
+            </div>
+            <div class="row">
+              <div class="linea"></div>
+              <div class="col-sm-12 col-lg-12 col-md-12 text-right">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  style="margin-right: 1rem"
+                  data-dismiss="modal"
+                >
+                  Cancelar
+                </button>
+                <button
+                  class="btn btn-success"
+                  type="submit"
+                  [disabled]="formTipo.invalid || formTipo.pristine"
+                >
+                  <div *ngIf="!tipoEditar">
+                    <span class="fa fa-floppy-o"></span> Crear Tipo Cite
+                  </div>
+                  <div *ngIf="tipoEditar">
+                    <span class="fa fa-check"></span> Actualizar TIpo Cite
+                  </div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal cite por usuario -->
+<div
+  class="modal fade"
+  tabindex="-1"
+  name="modalCite"
+  id="modalCite"
+  role="dialog"
+  aria-labelledby="exampleModalCite"
+  aria-hidden="true"
+  (blur)="cambiarGestion(idUsuario)"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #0c72ad; color: white">
+        <button
+          type="button"
+          class="close text-white"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span>&times;</span>
+        </button>
+        <h5 class="modal-title" id="exampleModalLabel">
+          Asignar Tipos Documentos Permitidos por Usuario
+        </h5>
+      </div>
+      <div class="modal-body" style="text-align: left">
+        <div class="row">
+          <div class="form-group col-sm-12 col-lg-12 col-md-12">
+            <label for="descripcion">Usuario:</label>
+            <select
+              class="pull-right iform-control"
+              title="Filtro Gestión"
+              [(ngModel)]="gestionSel"
+              (change)="cambiarGestion('U'+usuarioCite.usu_id)"
+              style="color: #1b6692"
+            >
+              <option *ngFor="let row of dtsGestiones" [ngValue]="row">
+                {{ row }}
+              </option>
+            </select>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-user"></i></span>
+              <input
+                class="form-control"
+                type="text"
+                id="usuario"
+                name="usuario"
+                autocomplete="off"
+                placeholder="Nombre Usuario"
+                #usuarioCompleto
+                (change)="desplegarUsuario(usuarioCompleto.value)"
+                maxlength="100"
+                list="listaUsuarios"
+                autofocus
+              />
+              <datalist id="listaUsuarios" class="datalist">
+                <div *ngFor="let row of dtsUsuarios; let i = index">
+                  <option
+                    class="form-control"
+                    value="{{ row.nombre_completo_usuario }}"
+                    label="{{ row.nombre_completo_usuario }}"
+                  ></option>
+                </div>
+              </datalist>
+            </div>
+          </div>
+        </div>
+        <div class="division-modal" *ngIf="usuarioCite">
+          <div class="datos">
+            <label class="propiedad">Nombres: </label>
+            <label class="detalle">{{ usuarioCite.usu_nom }}</label>
+            <label class="propiedad">Apellido Paterno: </label>
+            <label class="detalle">{{ usuarioCite.usu_app }}</label>
+            <label class="propiedad">Apellido Materno: </label>
+            <label class="detalle">{{ usuarioCite.usu_apm }}</label>
+            <label class="propiedad">Cuenta: </label>
+            <label class="detalle">{{ usuarioCite.usu_user }}</label>
+            <label class="propiedad">C.I.: </label>
+            <label class="detalle">{{ usuarioCite.usu_ci }}</label>
+            <label class="propiedad">E-Mail: </label>
+            <label class="detalle">{{ usuarioCite.usu_email }}</label>
+            <label class="propiedad">Celular: </label>
+            <label class="detalle">{{ usuarioCite.usu_cel }}</label>
+            <label class="propiedad">Area: </label>
+            <label class="detalle">{{ usuarioCite.usu_area }}</label>
+            <label class="propiedad">Cargo: </label>
+            <label class="detalle">{{ usuarioCite.usu_cargo }}</label>
+            <label class="propiedad">Interno: </label>
+            <label class="detalle">{{ usuarioCite.nro_interno }}</label>
+            <label class="propiedad">Unidad/Área: </label>
+            <label class="detalle">{{ usuarioCite.unidad }}</label>
+            <!-- <label class="propiedad">Oficina: </label>
+            <label *ngIf="usuarioCite.unidad" class="detalle">{{usuarioCite.unidad}}</label>
+            <select *ngIf="!usuarioCite.oficina" class="detalle" style="margin-left: 1rem; padding: 2px 5px;" [(ngModel)]="nuevaOficina" name="nuevaOficina">
+              <option value="0"> Seleccione...</option>
+              <option *ngFor="let row of dtsOficinas" [ngValue]="row.id_detalle">{{row.descripciondetalleclasificador}}</option>
+            </select> -->
+          </div>
+          <div class="cites">
+            <div *ngFor="let row of dtsTiposCitesAll">
+              <label
+                class="checkbox-inline text-info"
+                id="lab{{ row.id_tipo_cite }}"
+                style="font-size: 1.4rem"
+              >
+                <input
+                  type="checkbox"
+                  class="check text-left"
+                  id="c{{ row.id_tipo_cite }}"
+                />
+                {{ row.documento }} - {{ row.modelo }}
+              </label>
+            </div>
+          </div>
+        </div>
+        <div style="margin: 10px" *ngIf="usuarioCite">
+          <button
+            type="submit"
+            (click)="registrarUsuariosTipo()"
+            class="btn btn-success btn-block"
+          >
+            Guardar Cambios
+          </button>
+        </div>
+        <div class="linea"></div>
+        <div class="table table-responsive" *ngIf="usuarioCite">
+          <table
+            class="table table-responsive table-condensed table-hover dt-docuser"
+            style="font-size: 8pt"
+          >
+            <thead>
+              <tr>
+                <th>id_documento</th>
+                <th>Tipo Cite</th>
+                <th>Código</th>
+                <th>Documento</th>
+                <th>Fecha</th>
+                <th>Remitente</th>
+                <th style="width: 80px">Opciones</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr
+                *ngFor="let row_adm of dtsDocumentosUsuario; let i = index"
+                [ngClass]="{ 'bg-danger': row_adm.activo == 0 }"
+              >
+                <td>{{ row_adm.id_documento }}</td>
+                <td>{{ row_adm.documento }}</td>
+                <td>{{ row_adm.codigo }}</td>
+                <td style="display: block">
+                  <div style="color: #337ab7">{{ row_adm.referencia }}</div>
+                  <div>{{ row_adm.destinatario }}</div>
+                </td>
+                <td>
+                  {{ row_adm.fecha_registro | date : "dd/MM/yyyy HH:mm:ss" }}
+                </td>
+                <td>{{ row_adm.remitente }}</td>
+                <td class="botonera">
+                  <button
+                    *ngIf="row_adm.activo == 1"
+                    class="btn btn-danger"
+                    title="Anular"
+                    (click)="anularDocumento(row_adm)"
+                  >
+                    <span class="fa fa-trash"></span>
+                  </button>
+                  <button
+                    *ngIf="row_adm.activo == 0"
+                    class="btn btn-success"
+                    title="Activar"
+                    (click)="anularDocumento(row_adm)"
+                  >
+                    <span class="fa fa-check"></span>
+                  </button>
+                  <button
+                    class="btn btn-dangerous"
+                    title="Intentar Eliminar"
+                    (click)="anularDocumento(row_adm, 'DF')"
+                  >
+                    <span class="fa fa-window-close"></span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button
+            class="btn btn-info btn-block"
+            title="Historial de Cites"
+            (click)="hitorial_cites_adm()"
+          >
+            Cites de la Unidad y/o Área
+          </button>
+          <div *ngIf="vwHitorial_cites_adm">
+            <table
+              class="table table-responsive table-condensed table-hover dt-docuser2"
+              style="font-size: 8pt"
+            >
+              <thead>
+                <tr>
+                  <th>id_documento</th>
+                  <th>Tipo Cite</th>
+                  <th>Código</th>
+                  <th>Documento</th>
+                  <th>Fecha</th>
+                  <th>Remitente</th>
+                  <th style="width: 80px">Opciones</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tfoot>
+              <tbody>
+                <tr
+                  *ngFor="let row_adm of dtsDocumentos; let i = index"
+                  [ngClass]="{ 'bg-danger': row_adm.activo == 0 }"
+                >
+                  <td>{{ row_adm.id_documento }}</td>
+                  <td>{{ row_adm.documento }}</td>
+                  <td>{{ row_adm.codigo }}</td>
+                  <td style="display: block">
+                    <div style="color: #337ab7">{{ row_adm.referencia }}</div>
+                    <div>{{ row_adm.destinatario }}</div>
+                  </td>
+                  <td>
+                    {{ row_adm.fecha_registro | date : "dd/MM/yyyy HH:mm:ss" }}
+                  </td>
+                  <td>{{ row_adm.remitente }}</td>
+                  <td class="botonera">
+                    <button
+                      *ngIf="row_adm.activo == 1"
+                      class="btn btn-danger"
+                      title="Anular"
+                      (click)="anularDocumento(row_adm)"
+                    >
+                      <span class="fa fa-trash"></span>
+                    </button>
+                    <button
+                      *ngIf="row_adm.activo == 0"
+                      class="btn btn-success"
+                      title="Activar"
+                      (click)="anularDocumento(row_adm)"
+                    >
+                      <span class="fa fa-check"></span>
+                    </button>
+                    <button
+                      class="btn btn-dangerous"
+                      title="Intentar Eliminar"
+                      (click)="anularDocumento(row_adm, 'DF')"
+                    >
+                      <span class="fa fa-window-close"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

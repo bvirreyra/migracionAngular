@@ -1,0 +1,37 @@
+.dt-cabecera tfoot input {
+  width: 100% !important;
+}
+
+.dt-cabecera tfoot {
+  display: table-header-group !important;
+}
+
+.dt-proyectos tfoot input {
+  width: 100% !important;
+}
+
+.dt-proyectos tfoot {
+  display: table-header-group !important;
+}
+
+
+.grid-lista{
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(100px,1fr));
+  gap: 0.5rem;
+}
+
+.consulta{
+ color: #1d96ff;
+ font-weight: 800; 
+}
+
+.botonera{
+  width: 150px;
+  display: flex;
+  justify-content: space-between;
+}
+
+thead{
+  font-size: 12px;  
+}

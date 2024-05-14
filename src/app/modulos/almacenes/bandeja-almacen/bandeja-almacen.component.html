@@ -1,0 +1,10 @@
+<div class="containerCris">
+  <label for="" class="titulo">Módulo de Almacenes UPRE</label>
+  <div *ngIf="administrador && conStorage">
+    <app-administrador></app-administrador>
+    <div class="linea"></div>
+  </div>
+  <div *ngIf="conStorage">
+    <app-solicitud></app-solicitud>
+  </div>
+</div>

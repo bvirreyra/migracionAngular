@@ -1,0 +1,100 @@
+:root {
+    --font1: "Heebo", sans-serif;
+    --font2: "Fira Sans Extra Condensed", sans-serif;
+    --font3: "Roboto", sans-serif;
+  }
+  
+  body {
+    font-family: var(--font3);
+    text-align: center;
+    /* background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%); */
+  }
+  
+  h2 {
+    font-weight: 700;
+    border: 1px solid #eee;
+    border-radius:8px;
+    padding:2px 4px;
+    margin-top: 1rem;
+  }
+  
+  h1 {
+    font-weight: 600;
+    font-size: 5rem;
+    border: 1px solid #eee;
+    border-radius:8px;
+    margin-bottom: 2rem;
+    margin-top: 1.2rem;
+  }
+  
+  span{
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-top: 1rem;
+    font-weight: 500;
+  }
+  .label{
+    padding: 0;
+  }
+  
+  p {
+    font-size: 2.2rem;
+    font-weight: 400;
+  }
+
+  h3 {
+      color:#2a2a2a;
+      margin-top: 0.1rem;
+      margin-bottom: 2.1rem;
+      
+  }
+
+  /* .montos{
+    font-size: 5rem;
+  } */
+  
+  
+ .tarjeta {  
+    text-align: center;
+    color: white;
+    padding: 3rem 1.5rem 1rem 1rem;
+    margin: 2rem 0;
+    border:3px solid #2a2a2a;
+    border-radius:22px;
+    cursor: pointer;
+    transition: scale .3s;
+    height: 30rem;
+  }
+  .tarjeta:hover{
+    transform: scale(1.01);
+  }
+
+  .azul{
+    background: linear-gradient(#000046, #1cb5e0 60%);
+  }
+
+  .verde{
+    background: linear-gradient(#042e01, #13ac53 60%);
+  }
+
+  .amarillo{
+    background: linear-gradient(#4d4b01, #afa62b 60%);
+  }
+
+  .rojo{
+    background: linear-gradient(#660101, #c72727 60%);
+  }
+
+  .plomo{
+    background: linear-gradient(#01252e, #3f9aa7 60%);
+  }
+  .morado{
+    background: linear-gradient(#2628a1, #4648a3 60%);
+  }
+  .dt-reporte tfoot input {
+    width: 100% !important;
+  }
+  .dt-reporte tfoot {
+    display: table-header-group !important;
+  }
+  

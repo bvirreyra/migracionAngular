@@ -1,0 +1,46 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="content content-success">
+      <div class="content-header with-border">
+        <h3 class="content-title text-green">
+          <strong>Inventario Físico Valorado</strong>
+        </h3>
+      </div>
+      <div class="content-body">
+        <div class="rowlocal " >
+          <div class="col-xs-offset-1 col-sm-offset-3 col-md-offset-3 col-lg-offset-4 col-xs-10 col-sm-5 col-md-5 col-lg-4">
+            <div class="panel panel-success">
+              <div class="panel-heading text-center">Seleccione fecha a generar el reporte</div>
+              <div class="panel-body">
+                <div class="row">
+                  <!-- Logica -->
+                  <div class="form-horizontal ">
+                    <div class="form-group">
+                      <!-- <label class="control-label col-sm-4" for="fechaini">Fecha Inicio:</label>
+                      <div class="col-sm-7">
+                        <input class="form-control" type="date" name="fechaini" value={{this.fechasrv}}> 
+                      </div>
+                    </div> -->
+                    <div class="form-group">
+                      <label class="control-label col-sm-4" for="submenu">Fecha Reporte:</label>
+                      <div class="col-sm-7">
+                        <input class="form-control" type="date" name="fechafin"  id="fechafin"
+                          [(ngModel)]="m_fechafin" onKeyDown="A(event,this.form.btnBuscarFecha)">
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>              
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-footer">
+          <input type="text" class="form-control" id="montodesembolsoparcial" name="montodesembolsoparcial">
+          <button type="button" class="btn btn-primary btn-block" (click)="BuscarFecha()" name="btnBuscarFecha" id="btnBuscarFecha" >Buscar</button>
+          <button type="button" class="btn btn-primary btn-block">Limbiar</button>
+      </div>
+    </div>
+  </div>
+</div>

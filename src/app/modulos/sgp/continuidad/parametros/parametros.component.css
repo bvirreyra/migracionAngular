@@ -1,0 +1,21 @@
+.containerCris{
+    width: 90%;
+    text-align: center;
+    padding: 10px 15px;
+    margin: 0 auto;
+  }
+
+  .titulo{
+      color: #3c8dbc;
+      text-align: center;
+      font-size: medium;
+  }
+  
+  @media (max-width: 600px) {
+    .containerCris {
+      width: 90%;
+      text-align: center;
+      padding: 10px 0;
+      margin: 0 auto;
+    }
+  }

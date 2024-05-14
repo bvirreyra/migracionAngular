@@ -1,0 +1,18 @@
+.dt-seguimiento tfoot input{
+    width: 100% !important;
+}
+.dt-seguimiento tfoot {
+    display: table-header-group !important;
+}
+.dt-boletas tfoot input{
+    width: 100% !important;
+}
+.dt-boletas tfoot {
+    display: table-header-group !important;
+}
+.dt-items tfoot input{
+    width: 100% !important;
+}
+.dt-items tfoot {
+    display: table-header-group !important;
+}

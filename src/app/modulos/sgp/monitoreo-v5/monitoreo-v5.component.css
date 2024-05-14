@@ -1,0 +1,80 @@
+.dt-detalle tfoot input{
+  width: 100% !important;
+}
+.dt-detalle tfoot {
+  display: table-header-group !important;
+}
+.bg-alerta{
+  background-color: #ffa27e;
+}
+.bg-sin-etapas{
+  background-color: #fbe1c5;
+}
+.bg-concluido{
+  background-color: rgb(109, 221, 133);
+}
+.btn-etapa{
+  width: 60px;
+}
+
+tr:hover{
+  background-color: #d6eefc !important;
+}
+.tituloDetalle{
+  color: steelblue;
+  text-decoration: underline;
+  font-size: large;
+  width: 100%;
+  text-align: center;
+  font-weight: 800;
+}
+
+.grid-charts{
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(450px,1fr));
+}
+
+.table-ini{
+  font-size: 9px;
+}
+
+.sin-data{
+  padding: 30px;
+  font-size: 20px;
+  text-align: center;
+  background-color: rgb(86, 184, 184);
+  border:1px solid teal;
+  color: whitesmoke;
+  border-radius: 4px;
+}
+
+.etapa1{
+  background-color: #47d5fc;
+}
+.etapa2{
+  background-color: #76d7c4;
+}
+.etapa3{
+  background-color: #f1c40f;
+}
+.etapa4{
+  background-color: #f39c12;
+}
+.etapa5{
+  background-color: #f77245;
+}
+
+.totales{
+  text-align: right;
+  background-color: steelblue;
+  color:whitesmoke;
+  font-size: 14px;
+  font-weight: bolder;
+}
+
+
+@media (max-width:500px){
+  .btn-etapa{
+    width: 40px;
+  }
+}

@@ -1,0 +1,63 @@
+<div class="row"></div>
+<div class="col-sm-12 col-lg-12 col-md-12">
+  <div id="tarjeta" class="tarjeta {{ color }}" (click)="detallar(panel)">
+    <h2>{{ titulo }}</h2>
+    <h1>{{ cantidad }}</h1>
+    <span class="label"></span>
+    <h3><strong>Total</strong></h3>
+
+    <hr style="border-top: 1px solid #eee" />
+  </div>
+</div>
+<div class="col-sm-12 col-lg-12 col-md-12" *ngIf="muestra_tabla == true">
+  <div class="pull-right">
+    <!-- <a
+      type="button"
+      class="btn btn-success"
+      
+      title="Descargar Listado en Excel"
+      href="{{ urlBack }}17_listaReporteExcel/{{panel}}"
+    >
+      <i class="fa fa-download" aria-hidden="true"></i>
+    </a> -->
+    <button class="btn btn-success" style="padding: 1px 5px;" (click)="descargarArchivoExcel()">Generar Excel</button>
+  </div>
+  <div>
+    <br>
+    <app-barras
+      [titulos]="'grafica'"
+      [series]="seriesBarDep"
+      [periodos]="periodosBarDep"
+      [alto]="alto"
+      [colores]="coloresDeptos"
+      (messageEvent)="recibeMensaje($event, 'bardep')"
+    ></app-barras>
+</div>
+<br>
+  <table
+    id="{{ panel }}"
+    class="table table-responsive table-condensed table-hover dt-reporte"
+    style="font-size: 9pt"
+  >
+    <thead>
+      <tr>
+        <th>DEPARTAMENTO</th>
+        <th style="text-align: right">CANTIDAD</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let row of dtsDatosTabla; let x = index">
+        <td id="dep{{ x + 1 }}">{{ row.departamento }}</td>
+        <td style="text-align: right">{{ row.cantidad }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td style="text-align: right"><STRONG>TOTAL</STRONG></td>
+        <td style="text-align: right"></td>
+      </tr>
+    </tfoot>
+  </table>  
+   
+</div>

@@ -1,0 +1,21 @@
+<div id="baseCharts" >
+  <label class="titulo">{{tituloComponente}}</label><br>
+  <label class="infohr">{{infoHR}}</label>
+  <label *ngIf="dtsProveidos[0]?.estado_hr == 'Terminado'" class="estado">{{dtsProveidos[0]?.estado_hr}}</label>
+  <div *ngIf="dtsSeriesLinea.length>0">
+    <app-line
+      [titulos]="titulosLinea"
+      [series]="dtsSeriesLinea"
+      [periodos]="dtsPeriodosLinea"
+      [nombresPeriodos]="dtsPeriodosNombre"
+      [alto]="350"
+      [colores]="colores"
+      [data]="dataExtra"
+      (messageEvent)="recibeMensaje($event, 'linea')"
+    ></app-line>
+  </div>
+  <label class="infohr">
+    FECHA INICIO: {{fmin | date : "dd/MM/yyyy HH:mm:ss"}} - {{dtsProveidos[0]?.estado_hr == 'Terminado'?'FECHA FIN':'FECHA ACTUAL'}}: {{fmax | date : "dd/MM/yyyy HH:mm:ss"}} - TOTAL TIEMPO: {{tiempoTotal}} días
+  </label>
+</div>
+

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <base href="/" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>.::SIGA::.</title>
+
+    <script language="JavaScript">
+
+        function A(e, t) {
+            var k = null;
+            (e.keyCode) ? k = e.keyCode : k = e.which;
+            if (k == 13) (!t) ? B() : t.focus();
+        }
+        function B() {
+            document.forms[0].submit();
+            return true;
+        }
+    </script>
+    <script type="text/javascript">
+        function ponerMayusculas(nombre) {
+            nombre.value = nombre.value.toUpperCase();
+        }
+        function ponerMinusculas(nombre) {
+            nombre.value = nombre.value.toLowerCase();
+        }
+    </script>
+    <script type="text/javascript">
+        function aMayusculas(obj, id) {
+            obj = obj.toUpperCase();
+            document.getElementById(id).value = obj;
+        }
+    </script>
+    <script type="text/javascript" language="javascript">
+        function permite(elEvento, permitidos) {
+            // Variables que definen los caracteres permitidos
+            var numeros = "0123456789";
+            var caracteres = " abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+            var fono ="0123456789 -";
+            var monto ="0123456789.";
+            var numeros_caracteres = numeros + caracteres;
+            var teclas_especiales = [8, 9, 32, 39];
+            var teclas_especiales2 = [8, 9];
+            var opcion=permitidos;
+            // 8 = BackSpace, 9 tab, 32 espacio, 39 apostrofe
+      
+      
+            // Seleccionar los caracteres a partir del parámetro de la función
+            switch (permitidos) {
+              case 'num':
+                  permitidos = numeros;
+                  break;
+              case 'car':
+                  permitidos = caracteres;
+                  break;
+              case 'num_car':
+                  permitidos = numeros_caracteres;
+                  break;
+              case 'solo_num':
+                  permitidos = numeros;
+                  break;
+              case 'fono':
+                  permitidos = fono;
+                  break;
+              case 'monto':
+                  permitidos = monto;
+                  break;
+            }
+      
+            // Obtener la tecla pulsada 
+            var evento = elEvento || window.event;
+            var codigoCaracter = evento.charCode || evento.keyCode;
+            var teclado = evento.keyCode;
+            var caracter = String.fromCharCode(codigoCaracter);
+        
+            // Comprobar si la tecla pulsada es alguna de las teclas especiales
+            // (teclas de borrado y flechas horizontales)
+            var tecla_especial = false;               
+            if (opcion!='solo_num' && opcion!='fono' && opcion!='monto') {
+                for (var i in teclas_especiales) {
+                    if (codigoCaracter == teclas_especiales[i]) {
+                        tecla_especial = true;
+                        break;
+                    }
+                }
+            }else{
+                for (var i in teclas_especiales2) {
+                    if (codigoCaracter == teclas_especiales2[i]) {
+                        tecla_especial = true;
+                        break;
+                    }
+                }
+            }
+            if(teclado == 37 || teclado == 39){
+                tecla_especial = true;
+            }
+            // Comprobar si la tecla pulsada se encuentra en los caracteres permitidos
+            // o si es una tecla especial
+            return permitidos.indexOf(caracter) != -1 || tecla_especial;
+        }
+      </script>
+    <!-- <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script> -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" /> -->
+    <!-- <script src="https://cdn.ckeditor.com/4.17.1/full-all/ckeditor.js"></script> -->
+</head>
+
+<body>
+    <div class="container-fluid" style="width: 99vw !important;">
+        <div class="container-banner">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 fondo  hidden-xs">
+                <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+                    <img src="assets/imagenes/logo/logo_upre_2021.png" name='logo' id='logo' alt="Placeholder image" width="190" height="60" >
+                </div>
+                <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10 center hidden-xs">
+                    <!-- <hr> -->
+                    <h2 style="margin-top: 16px; color: rgb(17, 46, 70);font-weight: 400; letter-spacing: 4px;">Sistema Integrado de Gestión Administrativa SIGA</h2>
+                    <!-- <hr> -->
+                </div>
+                <div class="visible-xs-6 hidden-sm hidden-md hidden-lg">
+                    <h1 class="text-white">SIGA</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <app-root>Cargando...</app-root>
+            </div>
+        </div>
+    </div>
+    <!-- script -->
+
+    <!-- <script src="assets/js/pdfFromHTMLCarta.js"></script>
+    <script src="assets/js/pdfCertNoAfiliacion.js"></script> -->
+    
+</body>
+
+</html>

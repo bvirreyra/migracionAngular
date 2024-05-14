@@ -1,0 +1,62 @@
+<div class="bg-primary text-white" >FORMULARIOS</div>
+<div *ngFor="let row_registro of dts_listadocumentos | orderBy:'fecha':true;" class="col-lg-3">
+  <app-upload-file 
+    inputTipoDocumento="formularios" 
+    inputCodigoProy={{m_codigoproyecto}} 
+    inputVista="false"
+    inputTipoImagen="documento" 
+    inputSrc=''
+    inputNombre={{row_registro.archivo}}
+    (enviaPadre)="refrescaPadre($event)"
+    inputAccion='VISUALIZAR'
+    >
+  </app-upload-file>
+</div>
+<div *ngIf="pnl_derechopropietario==true">
+  <div class="row"></div>
+  <div class="bg-primary text-white" >DERECHO PROPIETARIO</div>
+    <div class="form-group " class="col-lg-4 col-md-4 col-sm-4">
+        <div class="input-group">
+            <span class="input-group-addon">%.</span>
+            <label for="Gestion">Porcentaje Desembolso:</label>
+        </div>
+        <div>
+            <input class="form-control" type="text" id="m_porcentaje_desembolso" 
+                name="m_porcentaje_desembolso" placeholder="Porcentaje Desembolso" [(ngModel)]="m_porcentaje_desembolso"
+                >
+        </div>
+    </div>
+    <div class="form-group " class="col-lg-4 col-md-4 col-sm-4">
+        <div>
+            <label for="Gestion">Desembolso:</label>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon">Bs.</span>
+            <input class="form-control" type="text" id="m_desembolso" 
+                name="m_desembolso" placeholder="Desembolso" [(ngModel)]="m_desembolso"
+                >
+        </div>
+    </div>
+    <div class="form-group " class="col-lg-4 col-md-4 col-sm-4">
+        <div>
+            <label for="Gestion">Fecha Desembolso:</label>
+        </div>
+        <div>
+            <input class="form-control" type="text" id="m_fecha_desembolso" 
+                name="m_fecha_desembolso" placeholder="DIAS CALENDARIO" [ngModel]="m_fecha_desembolso | date:'dd/MM/yyyy'" (ngModelChange)="m_fecha_desembolso"  
+                >
+        </div>
+    </div>
+    <div  class="col-lg-6">
+        <app-upload-file 
+        inputTipoDocumento="certificacion_presupuestaria" 
+        inputCodigoProy={{m_codigoproyecto}} 
+        inputVista="false"
+        inputTipoImagen="documento" 
+        inputSrc='' 
+        inputNombre={{doc_cert_presupuestaria}}
+        (enviaPadre)="refrescaPadre($event)" 
+        inputAccion='VISUALIZAR'>
+        </app-upload-file>
+    </div>
+</div>

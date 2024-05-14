@@ -1,0 +1,82 @@
+<div class="sidebar">
+      <ul class="list-group mnu-main" *ngIf="menus">
+            <span class="list-group-item success-header text-center">MÓDULO</span>
+            <li class="list-group-item mnu" *ngFor="let row_menu of menus">
+                  <a routerLink='/{{row_menu.ruta}}/{{s_idcon}}/{{row_menu.id_modulo}}'>
+                        <i class="{{row_menu.icono}}"></i> {{row_menu.nombre }} 
+                        
+                  </a>
+            </li>
+
+            <!--<li class="list-group-item mnu" *ngFor="let row_menu of menus">
+                  <a routerLink='/usuarios/hojaderuta'>
+                        <i class="{{row_menu.icono}}"></i> Usuarios
+                  </a>
+            </li>-->
+
+            <li class="list-group-item item-warning">
+                  <a routerLink='/cambiopassword/{{s_idcon}}'>
+                        <i class="fa fa-refresh fa-2x"></i> Cambio Contraseña
+                  </a>
+            </li>
+            <li class="list-group-item item-alert">
+                  <a routerLink='/' (click)="cerrarsesion()">
+                        <i class="fa fa-ban fa-2x"></i> Cerrar Sesiónn
+                  </a>
+            </li>
+      </ul>
+      <ul class="list-group mnu-main" *ngIf="menusEmpresa.length > 0">
+            <span class="list-group-item success-header text-center">MÓDULOS</span>
+            <li class="list-group-item mnu" *ngFor="let row_menu of menusEmpresa">
+                  <a routerLink='/{{row_menu.ruta}}/{{s_nit}}/{{s_nit_usu}}/{{s_nit_pass}}/{{row_menu.id_modulo}}'>
+                        <i class="{{row_menu.icono}}"></i> {{row_menu.nombre }} 
+                        
+                  </a>
+            </li>
+
+            <!--<li class="list-group-item mnu" *ngFor="let row_menu of menus">
+                  <a routerLink='/usuarios/hojaderuta'>
+                        <i class="{{row_menu.icono}}"></i> Usuarios
+                  </a>
+            </li>-->
+
+            <li class="list-group-item item-warning">
+                  <a routerLink='/cambiopassword/{{s_idcon}}'>
+                        <i class="fa fa-refresh fa-2x"></i> Cambio Contraseña
+                  </a>
+            </li>
+            <li class="list-group-item item-alert">
+                  <a routerLink='/' (click)="cerrarsesion()">
+                        <i class="fa fa-ban fa-2x"></i> Cerrar Sesiónn
+                  </a>
+            </li>
+      </ul>
+      <ul class="list-group mnu-main" *ngIf="menusEmpresaMAE.length > 0">
+            <span class="list-group-item success-header text-center">MÓDULOS</span>
+            <li class="list-group-item mnu" *ngFor="let row_menu of menusEmpresaMAE">
+                  <a routerLink='/{{row_menu.ruta}}/{{s_id_usu}}/{{s_usu_mae}}'>
+                        <i class="{{row_menu.icono}}"></i> {{row_menu.nombre }} 
+                        
+                  </a>
+            </li>
+
+            <!--<li class="list-group-item mnu" *ngFor="let row_menu of menus">
+                  <a routerLink='/usuarios/hojaderuta'>
+                        <i class="{{row_menu.icono}}"></i> Usuarios
+                  </a>
+            </li>-->
+
+            <li class="list-group-item item-warning">
+                  <a routerLink='/cambiopassword/{{s_idcon}}'>
+                        <i class="fa fa-refresh fa-2x"></i> Cambio Contraseña
+                  </a>
+            </li>
+            <li class="list-group-item item-alert">
+                  <a routerLink='/' (click)="cerrarsesion()">
+                        <i class="fa fa-ban fa-2x"></i> Cerrar Sesiónn
+                  </a>
+            </li>
+      </ul>
+</div>
+
+<router-outlet></router-outlet>

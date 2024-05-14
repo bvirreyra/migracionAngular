@@ -1,0 +1,424 @@
+<!-- PANEL BANDEJA -->
+<div *ngIf="pnlBandeja == true">
+  <!-- BARRA SUPERIOR -->
+
+  <div class="panel-heading clearfix" style="text-align: center">
+    <input
+      class="pull-left"
+      type="month"
+      name="periodo_reporte"
+      max="9999-12-31"
+      id="periodo_reporte"
+      [(ngModel)]="m_periodo_programacion"
+    />
+    <button
+      type="button"
+      class="btn btn-danger pull-left btn-md"
+      title="Reporte Proyectos"
+      (click)="reporteProgramacion()"
+    >
+      <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+    </button>
+    <button
+      type="button"
+      class="btn btn-success pull-right"
+      title="Ingreso Nuevo"
+      (click)="paneles('NUEVA_PROGRAMACION')"
+    >
+      <i class="fa fa-plus">Nuevos </i>
+    </button>
+    <label for="" style="margin-top: 10px; font-size: large"
+      >{{ dts_registro._id_proyecto }} -
+      {{ dts_registro._nombreproyecto }}</label
+    >
+
+    <!-- <button
+      type="button"
+      class="btn btn-primary pull-left"
+      title="Volver anterior"
+      (click)="enviarRespuestaPadre('VOLVER_CABECERA')"
+    >
+      <i class="fa fa-reply fa-2x"> </i>
+    </button> -->
+  </div>
+  <!-- TABLA DE HITOS -->
+
+  <div class="panel-body col-lg-offset-2 col-lg-8">
+    <table
+      *ngIf="unidad == 'TECNICA'"
+      class="table table-responsive dt-monitoreo-compromiso"
+    >
+      <thead>
+        <tr>
+          <th data-priority="1">.::.</th>
+          <th>Nro Programacion</th>
+          <th>Periodo</th>
+          <th>Estructura Fin.</th>
+          <th>Det. Programacion</th>
+          <th>Nro. Planilla</th>
+          <th>Monto</th>
+          <th>Avance Fisico</th>
+          <th>Ubicacion</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr *ngFor="let row of dts_programacion; let i = index">
+          <td>
+            <button
+              *ngIf="
+                i == 0 || camposHabilitados._administrador_plataforma == false
+              "
+              type="button"
+              class="btn btn-warning btn-block"
+              (click)="paneles('EDITA_PROGRAMACION', row)"
+              title="Actualizar Registro"
+            >
+              <i class="fa fa-edit"></i>
+            </button>
+            <button
+              *ngIf="
+                i == 0 || camposHabilitados._administrador_plataforma == false
+              "
+              type="button"
+              class="btn btn-danger btn-block"
+              (click)="paneles('ELIMINA_PROGRAMACION', row)"
+              title="Eliminar Registro"
+            >
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+          </td>
+          <td>{{ row.id_programacion }}</td>
+          <td>{{ row.periodo | date : "MM/yyyy" }}</td>
+          <td>{{ row.estructura_financiamiento }}</td>
+          <td>{{ row.detalle }}</td>
+          <td>{{ row.nro_planilla }}</td>
+          <td>{{ row.monto_programado }}</td>
+          <td>{{ row.avance_fisico }}</td>
+          <td>{{ row.ubicacion }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table
+      *ngIf="unidad == 'FINANCIERA'"
+      class="table table-responsive dt-monitoreo-compromiso"
+    >
+      <thead>
+        <tr>
+          <th data-priority="1">.::.</th>
+          <th>Nro Programacion</th>
+          <th>Periodo</th>
+          <th>Estructura Fin.</th>
+          <th>Det. Programacion</th>
+          <th>Nro. Planilla</th>
+          <th>Monto</th>
+          <th>Ubicacion</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr *ngFor="let row of dts_programacion; let i = index">
+          <td>
+            <button
+              *ngIf="
+                i == 0 || camposHabilitados._administrador_plataforma == false
+              "
+              type="button"
+              class="btn btn-warning btn-block"
+              (click)="paneles('EDITA_PROGRAMACION', row)"
+              title="Actualizar Registro"
+            >
+              <i class="fa fa-edit"></i>
+            </button>
+            <button
+              *ngIf="
+                i == 0 || camposHabilitados._administrador_plataforma == false
+              "
+              type="button"
+              class="btn btn-danger btn-block"
+              (click)="paneles('ELIMINA_PROGRAMACION', row)"
+              title="Eliminar Registro"
+            >
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+          </td>
+          <td>{{ row.id_programacion }}</td>
+          <td>{{ row.periodo | date : "MM/yyyy" }}</td>
+          <td>{{ row.estructura_financiamiento }}</td>
+          <td>{{ row.detalle }}</td>
+          <td>{{ row.nro_planilla }}</td>
+          <td>{{ row.monto_programado }}</td>
+          <td>{{ row.ubicacion }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row"></div>
+  <button
+    class="btn btn-success btn-block"
+    (click)="resumenFinanciero()"
+    type="button"
+  >
+    Ver Resumen Financiero
+  </button>
+  <div *ngIf="pnlResumenFinanciero">
+    <app-resumen-financiero [inputDts]="dts_registro"></app-resumen-financiero>
+  </div>
+  <div class="row"></div>
+
+  <div class="row col-lg-12 col-md-12 col-sg-12" *ngIf="grafica == true">
+    <app-monitoreo-etapas [data]="dts_registro"></app-monitoreo-etapas>
+  </div>
+</div>
+<!-- FIN PANEL BANDEJA -->
+<!-- FORMULARIO MONITOREO -->
+<div *ngIf="pnlFormulario == true" class="col-lg-offset-2 col-lg-8">
+  <div>
+    <button
+      type="button"
+      class="btn btn-primary pull-left"
+      title="Volver a Bandeja"
+      (click)="paneles('VISTA_PROGRAMACION')"
+    >
+      <i class="fa fa-reply fa-2x"> </i>
+    </button>
+  </div>
+  <form #f="ngForm" action="" enctype="multipart/form-data">
+    <div class="panel panel-primary">
+      <div class="panel-heading clearfix">
+        {{ dts_registro._id_proyecto }} -
+        {{ dts_registro._nombreproyecto }}
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="form-horizontal">
+            <!-- <div class="form-group">
+              <label class="control-label col-sm-4">Tipo Financiamiento:</label>
+              <div class="col-sm-7">
+                <select
+                  id="tipo_financiamiento"
+                  name="tipo_financiamiento"
+                  class="form-control"
+                  [(ngModel)]="datos_monitoreo.tipo_financiamiento"
+                  (ngModelChange)="buscaEtapas()"
+                  [disabled]="sTipoFinanciamiento"
+                >
+                  <option
+                    *ngFor="let row_tf of dts_tf"
+                    [ngValue]="row_tf.tipo_financiamiento"
+                  >
+                    {{ row_tf.tipo_financiamiento }}
+                  </option>
+                </select>
+              </div>
+            </div> -->
+
+            <div class="form-group">
+              <label class="control-label col-sm-4">Periodo:</label>
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="month"
+                  name="periodo"
+                  #periodo="ngModel"
+                  max="9999-12-31"
+                  id="periodo"
+                  [(ngModel)]="datos_programacion.periodo"
+                  onKeyDown="A(event,this.form.detalle)"
+                  required
+                />
+                <span
+                  style="color: tomato"
+                  *ngIf="!periodo.valid && periodo.touched"
+                  >El dato es requerido</span
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4"
+                >Estructura Financiamiento:</label
+              >
+              <div class="col-sm-7">
+                <select
+                  id="estructura_financiamiento"
+                  name="estructura_financiamiento"
+                  #estructura_financiamiento="ngModel"
+                  class="form-control"
+                  [(ngModel)]="datos_programacion.estructura_financiamiento"
+                  required
+                >
+                  <option *ngFor="let row_ef of dts_EstructuraFinanciamiento">
+                    {{ row_ef.descripciondetalleclasificador }}
+                  </option>
+                </select>
+                <span
+                  style="color: tomato"
+                  *ngIf="
+                    !estructura_financiamiento.valid &&
+                    estructura_financiamiento.touched
+                  "
+                  >El dato es requerido</span
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4">Hoja de Ruta:</label>
+              <div class="col-sm-7">
+                <textarea
+                  class="form-control"
+                  name="detalle"
+                  #detalle="ngModel"
+                  id="detalle"
+                  [(ngModel)]="datos_programacion.detalle"
+                  autocomplete="off"
+                  onKeyDown="A(event,this.form.nro_planilla)"
+                  required
+                ></textarea>
+                <span
+                  style="color: tomato"
+                  *ngIf="!detalle.valid && detalle.touched"
+                  >El dato es requerido</span
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4">Nro Planilla:</label>
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="number"
+                  name="nro_planilla"
+                  id="nro_planilla"
+                  #nro_planilla="ngModel"
+                  [(ngModel)]="datos_programacion.nro_planilla"
+                  onKeyDown="A(event,this.form.monto_programado)"
+                  required
+                />
+                <span
+                  style="color: tomato"
+                  *ngIf="!nro_planilla.valid && nro_planilla.touched"
+                  >El dato es requerido</span
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4">Monto en Bs:</label>
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="monto_programado"
+                  id="monto_programado"
+                  #monto_programado="ngModel"
+                  [(ngModel)]="datos_programacion.monto_programado"
+                  onKeyDown="A(event,this.form.avance_fisico)"
+                  required
+                />
+                <span
+                  style="color: tomato"
+                  *ngIf="!monto_programado.valid && monto_programado.touched"
+                  >El dato es requerido</span
+                >
+              </div>
+            </div>
+            <div class="form-group" *ngIf="unidad == 'TECNICA'">
+              <label class="control-label col-sm-4">Avance Físico:</label>
+              <div class="col-sm-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="avance_fisico"
+                  id="avance_fisico"
+                  #avance_fisico="ngModel"
+                  [(ngModel)]="datos_programacion.avance_fisico"
+                  onKeyDown="A(event,this.form.ubicacion)"
+                  required
+                />
+                <span
+                  style="color: tomato"
+                  *ngIf="!avance_fisico.valid && avance_fisico.touched"
+                  >El dato es requerido</span
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-4"
+                >{{ unidad == "TECNICA" ? "Ubicación" : "Responsable" }}:</label
+              >
+              <div class="col-sm-7">
+                <select
+                  id="ubicacion"
+                  name="ubicacion"
+                  #ubicacion="ngModel"
+                  class="form-control"
+                  [(ngModel)]="datos_programacion.ubicacion"
+                  required
+                >
+                  <option *ngFor="let row_up of dts_UbicacionProgramacion">
+                    {{ row_up.descripciondetalleclasificador }}
+                  </option>
+                </select>
+                <span
+                  style="color: tomato"
+                  *ngIf="!ubicacion.valid && ubicacion.touched"
+                  >El dato es requerido</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <!-- <div class="pull-right"> -->
+
+        <button
+          type="button"
+          *ngIf="btnRegistra == true"
+          class="btn btn-success btn-block"
+          name="btnRegistra"
+          id="btnRegistra"
+          (click)="InsertaProgramacion()"
+          [disabled]="f.invalid || !datos_programacion.monto_programado > 0"
+        >
+          Registrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning btn-block"
+          *ngIf="btnEdita == true"
+          name="btnEdita"
+          id="btnEdita"
+          (click)="EditaProgramacion()"
+          [disabled]="f.invalid"
+        >
+          Editar
+        </button>
+        <!-- </div> -->
+      </div>
+    </div>
+  </form>
+</div>
